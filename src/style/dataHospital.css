@@ -1,0 +1,40 @@
+
+
+.container{
+    text-align: center;
+
+}
+
+.img-hpt{
+    height: 100px;
+    width: 160px;
+ 
+}
+
+.hospital-table>td{
+    text-align: center;
+    width: 50px;
+    height: 50px;
+}
+
+.title-content{
+    text-align: left;
+}
+
+.btn1{
+    text-align: right;
+    line-height: 50px;
+}
+.container7 {
+    position: absolute;
+    top: 610px;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    background:#A9D6E5 ;
+    padding: 20px;
+    border-radius: 10px;
+    
+  
+    align-items: center;
+    
+  }

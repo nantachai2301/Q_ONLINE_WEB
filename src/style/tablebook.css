@@ -1,0 +1,14 @@
+.ShowData {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 0 5px;
+}
+
+#tableContainer {
+  margin-top: 20px;
+  font-size: 18px;
+}

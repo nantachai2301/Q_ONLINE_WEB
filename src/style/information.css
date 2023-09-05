@@ -1,0 +1,56 @@
+
+.container11 {
+    top: 600px;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    background:#ffffff ;
+    padding: 20px;
+    border-radius: 10px;
+
+}
+
+.btn1{
+    
+    margin-left: 800px;
+    width: 100px;
+}
+
+.btn2{
+    
+    margin-left: 800px;
+    width: 100px;
+}
+
+
+
+.img-ht{
+    margin-top: 20px;
+    margin-left: 400px;
+    margin-right: 400px;
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 300px;
+}
+
+.container-info{
+    display: contents;
+}
+
+.form-group-h{
+    margin-left: 350px;
+}
+
+.title-content1{
+    margin-bottom: 25px;
+}
+
+.slider{
+    margin-top: 25px;
+    justify-content: center;
+    margin-left: 250px;
+    
+}
+
+.hospital-name{
+    text-align: center;
+}

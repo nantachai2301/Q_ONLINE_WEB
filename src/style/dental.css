@@ -1,0 +1,139 @@
+
+.departmentname {
+  justify-content: center; 
+  display: flex;
+ 
+  /* font-weight: bolder;
+  font-size: 45px;
+  
+   */
+  justify-content: center;
+}
+
+
+
+.centerdoctor {
+  justify-content: center;
+  display: flex;
+  font-size: 20px;  
+}
+
+.doctor-in-depart-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.card-doctor {
+  width: 80%;
+  height: 800px;
+  margin-left: 150px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 20px;
+  color: rgb(31, 131, 144);
+  font-size: 24px;
+  background: aliceblue;
+  margin-top: 25px;
+}
+
+.doc-img {
+  width: 70%;
+  height: auto;
+  margin-left: 30px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.depart-detail-title {
+  color: rgb(6, 6, 119);
+  font-size: 20px;
+  font: bold;
+  
+}
+
+.depart-detail {
+  justify-content: flex-start;
+  white-space: normal;
+  margin-top: 5px;
+  text-align: center;
+  font-size: 20px;
+  font: bold;
+}
+
+.text-name-doctor{
+  color: black;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  
+}
+
+.card{
+  text-align: center;
+  justify-content: center;
+  
+}
+
+.sta-card{
+  margin-top: 10px;
+}
+
+.card-img{
+  margin-top: 10px;
+}
+
+
+.container45{
+  text-align: center;
+  justify-content: center;
+  padding: 290px;
+  margin-top: -300px;
+
+}
+
+.wrapper-page{
+  flex: 0,0,40%;
+}
+
+.card-text{
+  text-align: center;
+  justify-content: center;
+}
+
+.card-status{
+  text-align: center;
+  justify-content: center;
+  
+}
+
+.image-card{
+  margin-left: 100px;
+  margin-top: 25px;
+}
+
+
+.card-img{
+  width: 100%;
+  margin-top: 20px;
+}
+
+
+
+.circular-image-container {
+  width: 180px;
+  height: 190px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circular-image {
+  width: 180px;
+  height: 190px;
+  object-fit: cover; 
+}

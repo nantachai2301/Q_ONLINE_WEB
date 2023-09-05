@@ -1,0 +1,62 @@
+.col{
+  display:flex;
+  font-size: 15px;
+  gap:10px;
+  padding-top: 1px;
+  margin-bottom: 20px;
+  margin-left: 50px;
+  margin-right: 50px;
+  flex-direction:column;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  
+
+}
+
+.fas{
+  width: 110px;
+ text-align: center;
+  align-items: center;
+}
+
+.Nameicon{
+  font-size: larger;
+  white-space:nowrap;
+  margin-top: -19px;
+}
+
+.card-body{
+  border-radius: 15px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.row{
+  line-height: 20px;
+  justify-content: space-between;
+  padding: auto;
+}
+
+.text-link1{
+  color: white;
+  font-size: 12px;
+  justify-content: center;
+}
+
+.Title-card{
+  text-align: left;
+  margin-top: 25px;
+}
+
+
+
+.button-card{
+  margin-top: 20px;
+  margin-left: 165px;
+  
+}
+
+.Home-icon{
+  width: 100px;
+}

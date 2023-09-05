@@ -1,0 +1,65 @@
+.questionnaire{
+    color:red;
+}
+.containerq{
+    position: absolute;
+    top: 450px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background:#ffff;
+    padding: 30px;
+    border-radius: 30px;
+    width: 640px;
+    display: flex;
+   gap: 10px;
+    flex-direction:column;
+    justify-content:space-between;
+   
+}
+
+.rating {
+ right: 120px;
+   font-size: 0;
+   position: relative;
+   text-transform: capitalize;
+   padding: 0 50px 8%;
+   color: gray;
+   align-items: center;
+  
+  
+ }
+   
+ .star {
+   float: right;
+   padding: 0;
+   font-size: 65px;
+   cursor: pointer;
+   
+ }   
+ .star::before {
+   content: "\2606";
+   padding-bottom: 8px;
+   display: inline-block;
+   transition: 0.2s;
+ } 
+ 
+ .star:hover span {
+   opacity: 1;
+   transform: none;
+   letter-spacing: 0;
+ }
+ input:checked ~ .star::before {
+   content: "\2605";
+   color: orange;
+   filter: drop-shadow(0 0 4px);
+   transform: rotate(.2turn);
+   transition-delay: calc(0.1 * attr(data-idx integer));
+ }
+.Items
+ {
+   text-align: center;
+ }
+ .textarea2{
+   font-size: small;
+ }
+

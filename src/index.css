@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Kanit', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.form-input {
+  width: 100%;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  padding-left: 0.5rem; /* 8px */
+  padding-right: 0.5rem; /* 8px */
+  padding-top: 0.25rem; /* 4px */
+  padding-bottom: 0.25rem; /* 4px */
+  border-width: 1px;
+  border: 1px solid #dee2e6;
+  height: 2.5rem;
+  border-radius: 0.5rem; /* 8px */
+}
+
+.form-input:hover {
+  width: 100%;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  padding-left: 0.5rem; /* 8px */
+  padding-right: 0.5rem; /* 8px */
+  padding-top: 0.25rem; /* 4px */
+  padding-bottom: 0.25rem; /* 4px */
+  border-width: 1px;
+  border: 1px solid #000;
+  height: 2.5rem;
+  border-radius: 0.5rem; /* 8px */
+}
+
+.form-input:focus {
+  width: 100%;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  padding-left: 0.5rem; /* 8px */
+  padding-right: 0.5rem; /* 8px */
+  padding-top: 0.25rem; /* 4px */
+  padding-bottom: 0.25rem; /* 4px */
+  border-width: 1px;
+  border: 1px solid #4bb3cd;
+  height: 2.5rem;
+  border-radius: 0.5rem; /* 8px */
+}
+
+.invalid {
+  border: 1px solid red !important;
+}
+
+.valid {
+  border: 1px solid green !important;
+}
+
+.text-invalid {
+  color: red !important;
+  font-size: 14px;
+}
+
+.w-pagesize {
+  width: 100px;
+}
+
+.pagination {
+  width: 100%;
+}
+
+.pagination li {
+  border-radius: 5px;
+  height: 40px;
+  width: 40px;
+  margin-left: 1px;
+  margin-right: 1px;
+  text-align: center;
+  padding-top: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  border: 1px solid #e7e7e7;
+}
+
+.pagination li a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.pagination .disabled {
+  cursor: default;
+  background-color: #e7e7e7 !important;
+}
+
+.pagination .disabled a {
+  cursor: default;
+}
+
+.pagination .active {
+  cursor: default;
+  color: #ffff;
+  background-color:  #1b7bd0 !important;
+}
+
+.pagination .active a {
+  cursor: default;
+  color: #ffff;
+  background-color:  #1b7bd0 !important;
+}
+
+.content-dropzone {
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: -5px;
+}

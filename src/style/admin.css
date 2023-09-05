@@ -1,0 +1,194 @@
+
+.content .cards {
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+.content .cards .card {
+  border-radius: 5px;
+  border: 1px solid lightblue;
+  width: 250px;
+  height: 150px;
+  background-color: lightblue;
+  margin: 0px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20ps 0 rgb(0, 0, 0, 0.19);
+}
+.icons{
+  width:400px;
+  align-items: center;
+ 
+ font-size: 30px;
+  margin-top: 30px;
+}
+.count {
+  font-size: 30px;
+   margin-top: 10px;
+
+}
+.fa-cal {
+  width: 20px;
+  align-items: center;
+
+  margin-top: 30px;
+}
+.counts {
+  font-size: 30px;
+  margin-top: 10px;
+
+}
+.fa-per {
+  width: 20px;
+  align-items: center;
+
+  margin-top: 30px;
+}
+.countp {
+  font-size: 30px;
+  margin-top: 10px;
+  
+}
+
+.T1 {
+  margin-right: 4px;
+}
+.T2 {
+  margin-left: 5px;
+}
+
+.overflow2 {
+ margin-top: 30px;
+  width: 400px;
+  text-align: center;
+  
+  padding: 1px;
+
+ 
+}
+.overflow3 {
+  margin-top: 30px;
+   width: 200px;
+   text-align: center;
+   
+   padding: 1px;
+ 
+  
+ }
+.ta1 {
+ 
+
+  background-color: rgb(17, 111, 140);
+}
+.connd {
+  display: grid;
+  justify-self: center;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+  
+}
+.chart-container {
+  width: 300px;
+  height: 300px;
+  margin: auto;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* .card {
+  width: calc(25% - 20px);
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+ */
+
+ .container22 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 2200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.boxs {
+flex-basis: calc(20% - 20px);
+background-color:lightblue;
+margin-bottom: 30px;
+padding: 15px;
+border-radius: 10px;
+text-align: center;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+transition: transform 0.3s ease-in-out;
+}
+
+
+
+@media (max-width: 768px) {
+  .boxs {
+    flex-basis: calc(50% - 20px);
+  }
+}
+
+@media (max-width:  768px) {
+  .boxs {
+    flex-basis: 100%;
+  }
+}
+.d{
+font-size: 40px;
+width: 50px;
+
+
+}
+.C{
+font-size: 18px;
+margin-top: 10px;
+}
+.icon-box {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.tables{
+background-color: lightblue;
+border-radius: 10px;
+color: #000;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเอฟเฟกต์เงา */
+transition: box-shadow 0.3s ease;
+border-collapse: collapse;
+width: 100%;
+}
+.tables th{
+background-color: #20B2AA;
+border: 1px solid #20B2AA;
+color:#fff; /* เพิ่มเส้นกรอบ */
+text-align: left;
+padding: 8px;
+
+}
+.tables td {
+background-color: lightblue;
+}
+
+.tables tr {
+background-color: lightblue; /* แบ่งแถว */
+border-bottom: 1px solid lavender ;
+}
+
+
+.codd{
+background-color:  lightblue;
+margin-left: 20px;
+}

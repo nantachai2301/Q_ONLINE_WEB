@@ -1,0 +1,98 @@
+
+.departmentd{
+  align-items: center;
+  text-align: center;
+  padding: 30px;
+  align-items: center;
+
+  
+}
+
+.fa  {
+  width: 110px;
+  align-items: center;}
+.text-1{
+  margin-top: 80px;
+  text-align: center;
+ 
+}
+.text-2{
+
+ margin-top: 120px;
+ text-align: center;
+}
+.text-3{
+  margin-top: 50px;
+  text-align: center;
+}
+.text-4{
+  margin-top: 50px;
+  text-align: center;
+}
+.fafa-heartbeat{
+  width: 100px;
+  margin-top:10px;
+  align-items: center;
+  
+}
+.card{
+ 
+  border-radius:10px;
+  color: #000;
+  align-items: center;
+  padding: 5px;
+  margin-top: 15px;
+}
+
+.image-card{
+margin-top: 15p;
+width: 100px;
+margin-left: 230px;
+}
+
+.button-card{
+  margin-top: 10px;
+  margin-left: 90px;
+  width: 100px;
+  height: 60px;
+  
+}
+
+.row{
+  line-height: 25px;
+  justify-content: space-between;
+  margin: 25px;
+  margin-top: 30px;
+  padding: 15px;
+}
+
+.text-link1{
+  color: white;
+  font-size: 12px;
+  justify-content: center;
+}
+
+.Title-card{
+  text-align: left;
+  margin-top: 25px;
+}
+
+.card-body{
+  border-radius: 15px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+
+container5{
+  .container5{
+    justify-content: beet;
+    width: 100%;
+    margin-top: -30px;
+    margin-left: 150px;
+  }
+  
+  
+}
+
+

@@ -1,0 +1,663 @@
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
+import Pagination from "react-js-pagination";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import { Formik } from "formik";
+// import { useReactToPrint } from 'react-to-print';
+import Swal from "sweetalert2";
+
+import axios from "axios";
+import _ from "lodash";
+import Spinner from "react-bootstrap/Spinner";
+
+function ShowData() {
+  const navigate = useNavigate();
+  const [pageData, setPageData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageSize, setPageSize] = useState(10); // เปลี่ยนค่าเป็น 20 หรือค่าที่ต้องการ
+  const [userData, setUserData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [queueList, setQueueList] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [editModalShow, setEditModalShow] = useState(false);
+  const [selectedQueueData, setSelectedQueueData] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedStatusId, setSelectedStatusId] = useState('2');
+  const [departments, setDepartments] = useState([]);
+
+  const [queue, setQueue] = useState({});
+  console.log(queueList);
+
+  useEffect(() => {
+    // ตรวจสอบสถานะการล็อกอินเมื่อโหลดหน้า Profile
+    const storedUserData = localStorage.getItem("userData");
+    const storedIsLoggedIn = storedUserData ? true : false;
+    setIsLoggedIn(storedIsLoggedIn);
+
+    if (storedIsLoggedIn) {
+      // ถ้าล็อกอินแล้ว ดึงข้อมูลผู้ใช้จาก localStorage
+      const userDataFromLocalStorage = JSON.parse(storedUserData);
+      setUserData(userDataFromLocalStorage);
+      axios
+        .get(
+          `http://localhost:5000/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
+        )
+        .then((response) => {
+          console.log("Response data:", response.data);
+
+          const matchedUser = response.data.find(
+            (user) => user.id_card === userDataFromLocalStorage.data.id_card
+          );
+
+          if (matchedUser) {
+            const { users_id, prefix_name, first_name, last_name, id_card } =
+              matchedUser;
+            // อัปเดตข้อมูลใน state queue
+            setQueue((prevQueue) => ({
+              ...prevQueue,
+              users_id: users_id,
+            }));
+
+            // อัปเดตข้อมูลใน state userData
+            setUserData({
+              ...userData,
+              users_id: users_id,
+              prefix_name,
+              first_name,
+              last_name,
+              id_card,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchUserQueue = async () => {
+      try {
+        if (userData && userData.users_id) {
+          const response = await axios.get("http://localhost:5000/apis/queue", {
+            params: {
+              users_id: userData.users_id,
+            },
+          });
+          setQueueList(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user queue:", error);
+      }
+    };
+
+    fetchUserQueue();
+  }, [userData]);
+
+  // ในส่วนที่ใช้งาน useEffect สำหรับการคำนวณหน้าและข้อมูลที่แสดงใน Pagination
+  useEffect(() => {
+    const filteredData = queueList.filter((item) => {
+      const isMatchingStatusId =
+      selectedStatusId === "" ||
+      selectedStatusId === item.queue_status_id.toString();
+    
+      const isMatchingUserId = item.users_id === userData?.users_id;
+      const isMatchingDepartment =
+        selectedDepartment === "" ||
+        item.department_id.toString() === selectedDepartment;
+      const isMatchingDate =
+        selectedDate === "" ||
+        formatQueueDate(item.queue_date, "DD-MM-YYYY") === selectedDate;
+      console.log("selectedDate:", selectedDate);
+      
+      return (
+        isMatchingStatusId &&
+        isMatchingUserId &&
+        isMatchingDepartment &&
+        isMatchingDate
+      );
+    })
+    .sort((a, b) => {
+      const dateA = new Date(formatDateToAPI(a.queue_date));
+      const dateB = new Date(formatDateToAPI(b.queue_date));
+      return dateA - dateB;
+    });
+    if (selectedStatusId === "4") {
+      setFilteredData(
+        filteredData.filter((item) => item.queue_status_id === 4)
+      );
+    } else {
+      setFilteredData(filteredData);
+    }
+    const orderedData = _.orderBy(filteredData, ["queue_date"], ["desc"]); // เรียงข้อมูลตาม queue_date จากมากไปน้อย
+    if (page) {
+      const pagedatacount = Math.ceil(orderedData.length / pageSize);
+      setPageCount(pagedatacount);
+
+      const LIMIT = pageSize;
+      const skip = LIMIT * (page - 1);
+
+      setPageData(filteredData.slice(skip, skip + LIMIT));
+    }
+  }, [
+    queueList,
+    page,
+    pageSize,
+    selectedStatusId,
+    selectedDepartment,
+    userData,
+    selectedDate,
+  ]);
+  useEffect(() => {
+    // เรียก API เพื่อดึงข้อมูลแผนก
+    axios
+      .get("http://localhost:5000/apis/departments")
+      .then((response) => {
+        setDepartments(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching departments:", error);
+      });
+  }, []);
+
+  function formatQueueDate(dateString) {
+    const [day, month, year] = dateString.split("-");
+    return `${year}-${month}-${day}`;
+  }
+
+  const handleCancel = () => {
+    setSelectedDepartment(""); // เคลียร์ค่าค้นหาแผนก
+    setSelectedDate(""); // เคลียร์ค่าค้นหาวันที่
+    setPage(1); // กลับไปที่หน้าแรก
+    setPageData(filteredData); // อัพเดตข้อมูลใหม่ในหน้าแสดงผล
+  };
+
+  // สร้างฟังก์ชันเพื่อกำหนดคิวที่เลือกใน Modal แก้ไข
+  const handleEditClick = (queue) => {
+    setSelectedQueueData(queue); // กำหนดค่ารายการคิวที่ถูกเลือกแก้ไข
+    setEditModalShow(true); // เปิด Modal แก้ไข
+  };
+
+  const handleEditSubmit = async (values) => {
+    try {
+      // ... ตรวจสอบความถูกต้องของข้อมูล ...
+
+      // อัปเดตข้อมูลที่ต้องการแก้ไขใน API
+      const updatedData = {
+        symptom: values.symptom,
+        queue_date: formatDateToAPI(values.queue_date),
+      };
+
+      console.log("Values received in handleEditSubmit:", values);
+      console.log("Sending request with data:", updatedData);
+      // ส่งค่าไปยัง API สำหรับการแก้ไขคิว
+      const response = await axios.put(
+        `http://localhost:5000/apis/queue/${
+          selectedQueueData.users_id
+        }?queue_date=${formatDateToAPI(selectedQueueData.queue_date)}`,
+        updatedData
+      );
+      console.log("Response from server:", response.data);
+      // อัปเดตรายการคิวใน state หลังจากแก้ไขเรียบร้อย
+      setQueueList((prevQueueList) =>
+        prevQueueList.map((queue) =>
+          queue.queue_id === selectedQueueData.queue_id &&
+          queue.queue_date === selectedQueueData.queue_date
+            ? {
+                ...queue,
+                symptom: updatedData.symptom, // อัปเดตเฉพาะฟิลด์ symptom เท่านั้น
+              }
+            : queue
+        )
+      );
+
+      // ปิด Modal แก้ไข
+      setEditModalShow(false);
+
+      // แสดงตัวแจ้งเตือนการแก้ไขสำเร็จ
+      Swal.fire({
+        icon: "success",
+        title: "แก้ไขคิวสำเร็จ",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      console.error("Error editing queue:", error);
+      // แสดงตัวแจ้งเตือนเมื่อการแก้ไขไม่สำเร็จ
+      Swal.fire({
+        icon: "error",
+        title: "การแก้ไขคิวไม่สำเร็จ",
+        text: "เกิดข้อผิดพลาดในการแก้ไขคิว กรุณาลองใหม่อีกครั้ง",
+        showConfirmButton: true,
+      });
+    }
+  };
+  const formatDateToAPI = (dateString) => {
+    const [day, month, year] = dateString.split("-");
+    return `${year}-${month}-${day}`;
+  };
+  const removeQueue = async (users_id, queue_date) => {
+    Swal.fire({
+      title: "คุณแน่ใจที่จะยกเลิกการจองคิว ?",
+      text: "คุณต้องการยกเลิกการจองคิวนี้ใช่หรือไม่?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ใช่, ยกเลิกคิว",
+      cancelButtonText: "ไม่, ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const formattedDate = formatDateToAPI(queue_date);
+          const response = await axios.delete(
+            `http://localhost:5000/apis/queue/${users_id}/${formattedDate}`
+          );
+
+          if (response.data.affectedRows > 0) {
+            // หากลบสำเร็จ ทำการอัปเดตข้อมูลใหม่ด้วยการอัปเดต state หรือที่เก็บข้อมูลที่ใช้ในการแสดงผล
+            const updatedQueueList = queueList.filter(
+              (queue) =>
+                queue.users_id !== users_id || queue.queue_date !== queue_date
+            );
+            setQueueList(updatedQueueList); // อัปเดต state ด้วยข้อมูลใหม่
+
+            Swal.fire({
+              title: "ไม่พบคิวที่ต้องการยกเลิก",
+              text: "ไม่พบคิวที่ตรงกับข้อมูลที่ระบุ",
+              icon: "error",
+            });
+          } else {
+            Swal.fire({
+              title: "ยกเลิกการจองคิวสำเร็จ",
+              text: "คิวถูกยกเลิกแล้ว",
+              icon: "success",
+              timer: 1500,
+            }).then(() => {
+              window.location.reload(); // รีโหลดหน้าใหม่หลังจากที่ยืนยันการยกเลิกคิวสำเร็จ
+            });
+          }
+        } catch (error) {
+          console.error("Error removing queue:", error);
+          Swal.fire({
+            title: "เกิดข้อผิดพลาด",
+            text: "เกิดข้อผิดพลาดในการยกเลิกคิว",
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
+
+  function formatDate(dateString) {
+    const [day, month, year] = dateString.split("-");
+    return `${year}-${month}-${day}`;
+  }
+  return (
+    <div>
+      <div className="row justify-content-start mb-2">
+        <div className="col-5 col-md-2 col-lg-3">
+        <i className="fa-solid fa-calendar mx-1"></i>
+  <label>ค้นหาตามวันที่</label>
+          <input
+            type="date"
+            className="form-control"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+        </div>
+        <div className="col-5 col-md-2 col-lg-3 p-4">
+          <select
+            className="form-select"
+            value={selectedDepartment}
+            onChange={(e) => setSelectedDepartment(e.target.value)}
+          >
+            <option value="">แผนกทั้งหมด</option>
+            {departments.map((department) => (
+              <option
+                key={department.department_id}
+                value={department.department_id}
+              >
+                {department.department_name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-3 col-lg-3 pt-4">
+          <button
+            type="button"
+            className="btn btn-secondary ml-2"
+            onClick={handleCancel}
+          >
+            <i className="fa-solid fa-rotate-left mx-1"></i>
+            ล้างค่า
+          </button>
+        </div>
+      </div>
+
+      <div className="col-2" style={{ marginBottom: "10px" }}>
+        <select
+          className="form-select"
+          value={selectedStatusId}
+          onChange={(e) => setSelectedStatusId(e.target.value)}
+        >
+         <option value="2">คิวที่กำลังดำเนินการ</option>
+         <option value="1">คิวที่จอง</option>
+          <option value="4">ประวัติการจองคิว</option>
+        </select>
+      </div>
+      <div className="overflow-auto">
+        <table className="table">
+          <thead>
+          <tr
+  className="table"
+  style={{
+    backgroundColor:
+      selectedStatusId === "4"
+        ? "#778899"
+        : selectedStatusId === "1"
+        ? "#4682B4"
+        : "#FF5733", // กำหนดสีตามเงื่อนไข
+    color: "#fff"
+  }}
+>
+        {/* ... ส่วนอื่น ๆ ของการแสดงข้อมูลในตาราง */}
+              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
+                ลำดับ
+              </th>
+              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
+                อาการเบื้องต้น
+              </th>
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+                แผนก
+              </th>
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+                วันที่เข้ารับการรักษา
+              </th>
+              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
+                วันที่จอง
+              </th>
+
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+                สถานะ
+              </th>
+              
+           
+    <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+   
+    <span>จัดการ</span>
+
+    </th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            {pageData
+              .filter((queue) =>
+              queue.users_id === userData?.users_id &&
+              (selectedStatusId === "" ||
+                selectedStatusId.includes(queue.queue_status_id.toString()))
+            )
+              .slice(0, 10) // เลือกแสดงเฉพาะ 10 รายการแรก
+              .map((queue, index) => (
+                <tr key={queue.id}>
+                  <td style={{ textAlign: "center" }}>{(page - 1) * 10 + index + 1}</td>{" "}
+                  {/* แสดงลำดับเริ่มจาก 1 */}
+                  <td style={{ textAlign: "center" }}>{queue.symptom}</td>
+                  <td style={{ textAlign: "center" }}>
+                    {queue.department_name}
+                  </td>
+                  <td style={{ textAlign: "center" }}>{queue.queue_date}</td>
+                  <td style={{ textAlign: "center" }}>{queue.create_at}</td>
+                  <td style={{ textAlign: "center" }}>
+                 
+                    {queue.queue_status_name}
+                  </td>
+                  
+                  <td style={{ textAlign: "center" }}>
+  {(queue.queue_status_id === 1 || queue.queue_status_id === 2) && (
+    <div>
+      <button
+        type="button"
+        className="btn btn-warning text-white mx-1 mt-1"
+        onClick={() => handleEditClick(queue)}
+      >
+        <i className="fa-solid fa-pen-to-square"></i>
+      </button>
+      <button
+        type="button"
+        className="btn btn-danger text-white mx-1 mt-1"
+        onClick={() => {
+          removeQueue(queue.users_id, queue.queue_date);
+        }}
+      >
+        <i className="fa-solid fa-trash-can"></i>
+      </button>
+    </div>
+  )}
+</td>
+
+                </tr>
+              ))}
+            {filteredData.length === 0 && ( // เพิ่มเงื่อนไขตรวจสอบว่าไม่มีข้อมูล
+              <tr>
+                <td colSpan="7" style={{ textAlign: "center" }}>
+                  ไม่มีข้อมูล
+                </td>
+              </tr>
+            )}
+          </tbody>
+          
+          <Modal
+            show={editModalShow}
+            onHide={() => setEditModalShow(false)}
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title
+                style={{ width: "100%", textAlign: "center", fontSize: "25px" }}
+              >
+                แก้ไขจองคิว
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Formik
+                initialValues={{
+                  symptom: selectedQueueData ? selectedQueueData.symptom : "",
+                  department_id: selectedQueueData
+                    ? selectedQueueData.department_id
+                    : "",
+                  queue_date: selectedQueueData
+                    ? selectedQueueData.queue_date
+                    : "",
+                  //  queue_status_name: selectedQueueData
+                  //   ? selectedQueueData.queue_status_name
+                  //   : "",
+                  //   prefix_name: selectedQueueData ? selectedQueueData.prefix_name : "",
+                }}
+                onSubmit={(values) => handleEditSubmit(values)}
+              >
+                {({ handleSubmit, handleChange, values }) => (
+                  <Form onSubmit={handleSubmit}>
+                    {isLoggedIn && userData && (
+                      <div className="col-12">
+                        <div className="row">
+                          <div className="col-12 px-1 mt-1">
+                            <label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              เลขบัตรประชาชน :{" "}
+                            </label>
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              {" "}
+                              {userData.id_card}
+                            </label>
+                          </div>
+                          <div className="col-12 px-1 mt-3">
+                            <label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              ชื่อ :{" "}
+                            </label>
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              {" "}
+                              {userData.prefix_name} {userData.first_name}{" "}
+                              {userData.last_name}
+                            </label>
+                          </div>
+
+                          <Form.Group className="col-12 px-1 mt-3">
+                            <Form.Label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              อาการเบื้องต้น
+                            </Form.Label>
+                            <label className="red">*</label>
+                            <Form.Control
+                              name="symptom" // ตรงตามชื่อที่ใช้ใน initialValues
+                              type="text"
+                              placeholder="กรุณาระบุอาการเบื้องต้น"
+                              value={values.symptom} // ใช้ค่าจาก Formik values
+                              onChange={handleChange} // อัปเดตค่าใน Formik state
+                            />
+                          </Form.Group>
+                          <small className="red">
+                            *
+                            แก้ไขเฉพาะกรณีอาการเบื้องต้นที่ไม่ชัดเจนหรือพิมพ์ผิดเท่านั้น
+                          </small>
+                          <div className="col-6 px-1 mt-3">
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              แผนก
+                            </label>
+                            <label className="red">*</label>
+
+                            <select
+                              class="form-select"
+                              name="department_id"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                              value={values.department_id}
+                              disabled={true}
+                              aria-label="Default select example"
+                            >
+                              <option selected>เลือกแผนก</option>
+                              <option value="1">ทันตกรรม</option>
+                              <option value="2">กุมารเวช</option>
+                              <option value="3">ทั่วไป</option>
+                              <option value="4">สูติ-นรีเวช</option>
+                              <option value="6">ศัลยกรรม</option>
+                              <option value="7">หัวใจ</option>
+                              <option value="8">ผิวหนัง</option>
+                              <option value="23">จักษุ</option>
+                              
+                            </select>
+                            {/* <ErrorMessage
+                            component="div"
+                            name="department_id"
+                            className="text-invalid"
+                          /> */}
+                          </div>
+
+                          <div className="col-6 px-1 mt-3">
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              วันที่เข้ารับการรักษา
+                            </label>
+                            <label className="red">*</label>
+                            <input
+                              name="queue_date"
+                              type="date"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                              className="form-input"
+                           
+                              value={formatDate(values.queue_date)}
+                           
+                              disabled={true}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <Modal.Footer>
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        onClick={() => {
+                          handleEditSubmit({
+                            symptom: values.symptom,
+                            queue_date: values.queue_date,
+                          });
+                        }}
+                      >
+                        บันทึกการแก้ไข
+                      </button>
+                    </Modal.Footer>
+                  </Form>
+                )}
+              </Formik>
+              <small className="red">
+                * หากผู้ป่วยเลือกแผนกผิดหรือจองคิววันที่เข้ารับการรักษาผิด
+                จะต้องยกเลิกการจองคิวเดิมและจองคิวใหม่เท่านั้น
+              </small>
+            </Modal.Body>
+          </Modal>
+        </table>
+      </div>
+      <div className="d-flex justify-content-between">
+        <div>จำนวน {pageData.length} รายการ</div>
+        <div>
+          <Pagination
+            activePage={page}
+            itemsCountPerPage={pageSize}
+            totalItemsCount={
+              queueList.filter((queue) => queue.users_id === userData?.users_id)
+                .length
+            }
+            pageRangeDisplayed={5}
+            onChange={setPage}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ShowData;

@@ -1,0 +1,91 @@
+.title-content {
+    text-align: center;
+  }
+  
+  /* .card{
+      margin-left: 60px;
+  } */
+  .card-news {
+    margin-top: 5px;
+    margin-left: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 70vh;
+  }
+  
+  .card-image{
+      width: 350px;
+  }
+  
+  .ListContainer{
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .listWrapper{
+      width: 100%;
+      max-width:1024px;
+      display: flex;
+      gap:20px
+    
+    }
+  
+    .listResult{
+      flex : 3 ;
+    }
+  
+  .newsImg{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    
+    }
+    .siDesc{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 2;
+      margin-top: 10px;
+      margin-left: 85px;
+    }
+    .NewsTitle{
+      font-size: 20px;
+      color: #565d62;
+      
+    
+    }
+    .Title{
+      font-size: 15px;
+      color: cornflowerblue;
+      text-align: left;
+    }
+    .dental-news{
+      font-size: 15px;
+      text-align: left;
+    }
+  
+    .notice-news{
+      font-size: 15px;
+      color: #010802;
+    }
+    .notice{
+      font-size: 15px;
+      color: #eb0a0a;
+    }
+    .Tell-news{
+      font-size: 18px;
+      color:rgb(47, 126, 244);
+    }
+  
+  .NewsItem{
+      border: 1px solid lightgray;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+      background-color: white;
+  }
