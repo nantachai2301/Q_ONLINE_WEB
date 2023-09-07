@@ -28,7 +28,8 @@ const CustomAppBar = styled(AppBar)`
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 9999;
+  hight:auto;
+  z-index: 7999;
 `;
 
 const LogoImg = styled('img')`
@@ -37,13 +38,14 @@ const LogoImg = styled('img')`
     width: 80px;
   }
   cursor: pointer;
+  z-index: 10000; /* กำหนดค่า z-index ให้มากกว่าค่า z-index ของ Popup Login */
 `;
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const storedUserData = localStorage.getItem('userData');
   const userData = storedUserData ? JSON.parse(storedUserData) : null;
-  const isDesktop = useMediaQuery('(min-width:1024px)');
+  const isDesktop = useMediaQuery('(min-width:auto');
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   // เพิ่ม state สำหรับตรวจสอบสถานะการล็อกอิน
@@ -128,7 +130,7 @@ const Navbar = () => {
   const handleLoginPopup = () => {
     setShowLogin(true);
   };
-
+  const navbarHeight = showLogin ? '400px' : '80px';
 
   const renderMenuItems = () => {
     return (
@@ -164,12 +166,12 @@ const Navbar = () => {
   return (
     <>
       <header id="public">
-        <CustomAppBar>
+      <CustomAppBar style={{ navbarHeight}}>
           <Toolbar>
-            <LogoImg src={Logo} alt="โลโก้" onClick={handleLogoClick} style={{ marginRight: '16px' }} />
-            <Link to="/" className="logo-title" style={{ marginLeft: '3px' }}> {/* ลดระยะห่างด้านซ้ายจากค่าเดิม */}
-  โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
-</Link>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+  <LogoImg src={Logo} alt="โลโก้" onClick={handleLogoClick} style={{ marginRight: '16px' }} />
+  <Link to="/" className="logo-title"style={{ fontSize: '28px' }}>โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗</Link>
+</div>
             {isDesktop && userData && (
              <Typography variant="body1" component="div" sx={{ marginLeft: '350px' }}>
               ยินดีตอนรับคุณ :  {userData?.data.fullname}
@@ -183,12 +185,12 @@ const Navbar = () => {
                   color="inherit"
                   aria-label="สมัครสมาชิก"
                   onClick={handleRegister}
-                  sx={{ marginLeft: 'auto' }}
+                  sx={{ marginLeft: 'auto'  }}
                 >
                   <ExitToAppIcon />
                   <ListItemText primary="สมัครสมาชิก" />
                 </IconButton>
-                <IconButton
+                <IconButton 
         size="large"
         edge="start"
         color="inherit"

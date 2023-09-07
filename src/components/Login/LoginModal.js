@@ -19,6 +19,7 @@ const StyledContainer = styled(Container)`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  
 `;
 
 const StyledBox = styled(Box)`
