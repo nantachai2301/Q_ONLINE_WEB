@@ -159,7 +159,7 @@ const Navbar = () => {
             </Link>
             {isDesktop && userData && (
               <Typography variant="body1" component="div" sx={{ marginLeft: '750px' }}>
-                Welcome {userData?.data.fullname}
+                ยินดีต้อนรับคุณ. {userData?.data.fullname}
               </Typography>
             )}
             {!userData && (
@@ -198,7 +198,7 @@ const Navbar = () => {
                   size="large"
                   edge="start"
                   color="inherit"
-                  aria-label="menu"
+                  aria-label="ออกจากระบบ"
                   onClick={handleLogout}
                   sx={{ marginLeft: 'auto' }}
                 >
