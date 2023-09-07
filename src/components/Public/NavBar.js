@@ -167,7 +167,7 @@ const Navbar = () => {
         <CustomAppBar>
           <Toolbar>
             <LogoImg src={Logo} alt="โลโก้" onClick={handleLogoClick} style={{ marginRight: '16px' }} />
-            <Link to="/" className="logo-title" style={{ marginLeft: '6px' }}> {/* ลดระยะห่างด้านซ้ายจากค่าเดิม */}
+            <Link to="/" className="logo-title" style={{ marginLeft: '3px' }}> {/* ลดระยะห่างด้านซ้ายจากค่าเดิม */}
   โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
 </Link>
             {isDesktop && userData && (
