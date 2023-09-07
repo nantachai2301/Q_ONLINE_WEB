@@ -1,71 +1,83 @@
-import { InstanceFormBody, InstanceFormData } from '../helper/Axios';
+import axios from "axios";
 
-// ดึงข้อมูลแบบแบ่งหน้า
-export async function getDoctor(pageSize, currentPage, search, treatment, status) {
-  try {
-    const response = await InstanceFormBody.get(`doctor/getDoctor?pageSize=${pageSize}&currentPage=${currentPage}&search=${search}&treatment=${treatment}&status=${status}`);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+const API_URL = "http://localhost:5000/apis/";
 
-// ดึงข้อมูลตาม id
-export async function getDetailDoctor(id) {
-  try {
-    const response = await InstanceFormBody.get(`doctor/getDetailDoctor/${id}`);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+const getDoctor = async ( ) => {
+  return await axios.get(API_URL + "doctors",);
+};
+const getDoctorById = async (doctor_id) => {
+  return await axios.get(API_URL + "doctors/" + doctor_id);
+};
 
-// ดึงข้อมูลตาม id แผนก
-export async function getDoctorBy(id) {
-  try {
-    const response = await InstanceFormBody.get(`doctor/getDoctorBy/${id}`);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+const deleteDoctorById = async (doctor_id) => {
+  return await axios.delete(API_URL + "doctors/" + doctor_id);
+};
+const updateStatusDoctor = async (
+  doctor_id,
+  prefix_name,
+  doctor_first_name,
+  doctor_last_name,
+  doctor_image,
+  doctor_status,
+  department_id,
+  department_name
+) => {
+  return await axios.put(API_URL + "doctors/" + doctor_id, {
+    prefix_name,
+    doctor_first_name,
+    doctor_last_name,
+    doctor_image,
+    doctor_status,
+    department_id,
+    department_name,
+  });
+};
+const createDoctor = async ( doctor_id,prefix_name, doctor_first_name, doctor_last_name, doctor_image,doctor_status,department_id, department_name
+  ) => {
+    return await axios.post(API_URL + "doctors", {
+      doctor_id,
+      prefix_name,
+      doctor_first_name,
+      doctor_last_name,
+      doctor_image,
+      doctor_status,
+      department_id,
+      department_name,
+      
+    });
+  };
 
-// เพิ่มข้อมูลแพทย์
-export async function createDoctor(data) {
-  try {
-    const response = await InstanceFormData.post(`doctor/createDoctor`, data);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+  const updateDoctorById = async (
+    doctor_id,
+    prefix_name,
+    doctor_first_name,
+    doctor_last_name,
+    doctor_image,
+    doctor_status,
+    department_id,
+    department_name
+  ) => {
+    return await axios.put(API_URL + "doctors/" + doctor_id, {
+      prefix_name,
+      doctor_first_name,
+      doctor_last_name,
+      doctor_image, 
+      doctor_status,
+      department_id,
+      department_name,
+    });
+ 
+  
+};
+export { getDoctor, getDoctorById, deleteDoctorById, updateStatusDoctor , createDoctor,updateDoctorById}; // Export getDoctor as a named export
 
-// แก้ไขข้อมูลแพทย์
-export async function updateDoctor(id, data) {
-  try {
-    const response = await InstanceFormData.put(`doctor/updateDoctor/${id}`, data);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+const DoctorService = {
+  getDoctor,
+  getDoctorById,
+  deleteDoctorById, 
+  updateStatusDoctor
+  ,createDoctor,
+  updateDoctorById
+};
 
-// อัพเดทสถานะการใช้งาน
-export async function updateStatusDoctor(id, data) {
-  try {
-    const response = await InstanceFormBody.put(`doctor/updateStatusDoctor/${id}`, data);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
-
-// ลบข้อมูล
-export async function deleteDoctor(id) {
-  try {
-    const response = await InstanceFormBody.delete(`doctor/deleteDoctor/${id}`);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+export default DoctorService;

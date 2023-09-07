@@ -6,9 +6,15 @@ import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Table from "react-bootstrap/Table";
+import {
+  getDoctor,
+  updateStatusDoctor,
+  deleteDoctorById,
+} from "../../../../service/Doctor.Service";
 import "../../../../style/showdoctor.css";
-function ShowData({ pagin, changePage, changePageSize }) {
-  const navigate = useNavigate();
+
+function ShowData() {
+  let navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [pageData, setPageData] = useState([]);
   const [page, setPage] = useState(1);
@@ -19,17 +25,15 @@ function ShowData({ pagin, changePage, changePageSize }) {
   const [selectStatus, setSelectStatus] = useState(null);
   const [lockedDoctors, setLockedDoctors] = useState([]);
 
-  const getDoctors = async () => {
-    const response = await axios.get(
-      "http://localhost:5000/apis/doctors"
-    );
-    setDoctors(response.data);
-  };
-
   useEffect(() => {
-    getDoctors();
+    getDoctor()
+      .then((response) => {
+        setDoctors(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching doctors: ", error);
+      });
   }, []);
-
   useEffect(() => {
     const filteredDoctors = doctors.filter((doctor) => {
       const nameFilter =
@@ -49,8 +53,8 @@ function ShowData({ pagin, changePage, changePageSize }) {
       return nameFilter && departmentFilter && statusFilter;
     });
 
-      const pagedatacount = Math.ceil(filteredDoctors.length / pageSize);
-      setPageCount(pagedatacount);
+    const pagedatacount = Math.ceil(filteredDoctors.length / pageSize);
+    setPageCount(pagedatacount);
 
     if (page) {
       const LIMIT = pageSize;
@@ -103,36 +107,34 @@ function ShowData({ pagin, changePage, changePageSize }) {
       label: status,
     }));
   };
-
   const loadEdit = (id) => {
     navigate("/admin/doctor/form/" + id);
   };
-
-  const removeEmp = (doctor_id) => {
+  const handleDeleteDoctor = (doctorId) => {
+  
     Swal.fire({
-      title: "ยืนยืน ",
-      text: "คุณต้องการลบ รายชื่อแพทย์?",
+      title:  `ลบรายการแพทย์นี้หรือไม่ ? `,
+      text: "เมื่อรายการแพทย์ถูกลบ คุณจะไม่สามาถกู้คืนได้",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "ยืนยัน",
       cancelButtonText: "ยกเลิก",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .delete("http://localhost:5000/apis/doctors/" + doctor_id)
-          .then((res) => {
+        deleteDoctorById(doctorId)
+          .then((response) => {
             Swal.fire({
-              title: "ลบแพทย์สำเร็จ",
-              text: "ลบแล้ว.",
-              icon: "success",
-              timer: 1500,
+              icon: 'success',
+              title: 'ลบข้อมูลแพทย์สำเร็จ',
+              showConfirmButton: false,
+              timer: 1700,
             });
             window.location.reload();
           })
           .catch((error) => {
             Swal.fire({
-              title: "Error",
-              text: "เกิดข้อผิดพลาดขณะลบแพทย์.",
+              title: "เกิดข้อผิดพลาด",
+              text: "เกิดข้อผิดพลาดขณะลบข้อมูลแพทย์.",
               icon: "error",
               timer: 1500,
             });
@@ -151,42 +153,42 @@ function ShowData({ pagin, changePage, changePageSize }) {
     department_id,
     department_name
   ) => {
-    const newStatus =
-      currentStatus === "รับบริการ" ? "พักงาน" : "รับบริการ";
+    const newStatus = currentStatus === "ใช้งาน" ? "พักงาน" : "ใช้งาน";
 
     Swal.fire({
-      title: `คุณต้องการอัพเดทสถานะรายการนี้ใช่หรือไม่ ! `,
-      text: `คุณต้องการอัพเดทสถานะให้เป็น ! ${newStatus}?`,
-      icon: "warning",
+      title: `คุณต้องการอัพเดทสถานะรายการนี้ใช่หรือไม่  ?`,
+      text: `อัพเดทสถานะเป็น ${newStatus}`,
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: "เปลี่ยน",
-      cancelButtonText: "ยกเลิก",
+      confirmButtonText: 'ตกลง',
+      cancelButtonText: 'ยกเลิก',
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .put(`http://localhost:5000/apis/doctors/${doctors_id}`, {
-            prefix_name: prefix_name,
-            doctor_first_name: doctor_first_name,
-            doctor_last_name: doctor_last_name,
-            doctor_image: doctor_image,
-            doctor_status: newStatus,
-            department_id: department_id,
-            department_name: department_name,
-          })
-          .then((res) => {
+        // เรียกใช้งานฟังก์ชันเพื่ออัพเดทสถานะ
+        updateStatusDoctor(
+          doctors_id,
+          prefix_name,
+          doctor_first_name,
+          doctor_last_name,
+          doctor_image,
+          newStatus,
+          department_id,
+          department_name
+        )
+          .then((response) => {
             Swal.fire({
               title: "อัพเดทสถานะสำเร็จ",
-              text: `สถานะได้เปลี่ยนเป็น ${newStatus}.`,
+              text: `สถานะได้เปลี่ยนเป็น ${newStatus}`,
               icon: "success",
-              timer: 1500,
+              timer: 1700,
             });
             // รีเฟรชหน้าเพื่อแสดงสถานะใหม่
             window.location.reload();
           })
           .catch((error) => {
             Swal.fire({
-              title: "Error",
-              text: "An error occurred while changing the status.",
+              title: "เกิดข้อผิดพลาด",
+              text: "เกิดข้อผิดพลาดในขณะที่เปลี่ยนสถานะ",
               icon: "error",
             });
           });
@@ -239,7 +241,6 @@ function ShowData({ pagin, changePage, changePageSize }) {
           </button>
         </div>
       </div>
-
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
@@ -247,7 +248,6 @@ function ShowData({ pagin, changePage, changePageSize }) {
             value={pageSize}
             onChange={handlePageSizeChange}
           >
-           
             <option value={10}>10</option>
             <option value={15}>15</option>
             <option value={20}>20</option>
@@ -311,7 +311,7 @@ function ShowData({ pagin, changePage, changePageSize }) {
                     <td>
                       <span
                         className={
-                          item.doctor_status === "รับบริการ"
+                          item.doctor_status === "ใช้งาน"
                             ? "text-success"
                             : "text-danger"
                         }
@@ -333,7 +333,7 @@ function ShowData({ pagin, changePage, changePageSize }) {
                       <button
                         type="button"
                         className={`btn mx-1 mt-1 ${
-                          item.doctor_status === "รับบริการ"
+                          item.doctor_status === "ใช้งาน"
                             ? "btn-success"
                             : "btn-danger"
                         }`}
@@ -351,17 +351,18 @@ function ShowData({ pagin, changePage, changePageSize }) {
                           )
                         }
                       >
-                        {item.doctor_status === "รับบริการ" ? (
+                        {item.doctor_status === "ใช้งาน" ? (
                           <i className="fa-solid fa-lock-open btn-success"></i>
                         ) : (
                           <i className="fa-solid fa-lock btn-danger"></i>
                         )}{" "}
                       </button>
+
                       <button
                         type="button"
                         className="btn btn-danger text-white mx-1 mt-1"
                         onClick={() => {
-                          removeEmp(item.doctor_id);
+                          handleDeleteDoctor(item.doctor_id);
                         }}
                       >
                         <i className="fa-solid fa-trash-can"></i>
@@ -399,5 +400,4 @@ function ShowData({ pagin, changePage, changePageSize }) {
     </div>
   );
 }
-
 export default ShowData;

@@ -4,8 +4,10 @@ import Swal from "sweetalert2";
 import { useFormik, Formik, Form, ErrorMessage } from "formik";
 import Schema from "./Validation";
 import axios from "axios";
-
-
+import {
+  getPatientById,
+  updatePatientById,
+} from "../../../../../service/Patient.Service";
 
 function FormUpdateUser() {
   const location = useLocation();
@@ -13,43 +15,14 @@ function FormUpdateUser() {
   const [originalBirthday, setOriginalBirthday] = useState(""); // ตัวแปรเก็บค่าวันเกิดเดิม
   const [error, setError] = useState(false);
   const [age, setAge] = useState(null);
-  const [users, setUsers] = useState({
-    users_id: "",
-    id_card: "",
-    password: "", // เปลี่ยนชื่อฟิลด์นี้เป็น password
-    prefix_name: "",
-    first_name: "",
-    first_name: "",
-    last_name: "",
-    gender: "",
-    weight: "",
-    height: "",
-    phoneNumber: "",
-    congenital_disease: "",
-    drugallergy: "",
-    contact_first_name: "",
-    contact_last_name: "",
-    contact_relation_id: "",
-    contact_phoneNumber: "",
-    address: "",
-    subdistrict: "",
-    district: "",
-    province: "",
-    postcode: "",
-    subdistritsId: "",
-    img: "",
-    role_id: "",
-    department_id: "",
-  });
-  
+  const [users, setUsers] = useState({});
+
   const { users_id } = useParams();
 
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/apis/patients/" + users_id
-        );
+        const res = await getPatientById(users_id);
 
         setUsers(res.data);
 
@@ -89,11 +62,8 @@ function FormUpdateUser() {
     setUsers((prevUsers) => ({
       ...prevUsers,
       birthday: selectedDate,
-
-      
     }));
- 
-  
+
     if (selectedDate) {
       const birthDateObj = new Date(selectedDate);
       const today = new Date();
@@ -106,19 +76,18 @@ function FormUpdateUser() {
       setAge(null);
     }
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     const selectedDate = e.target.value;
     console.log("Input Value:", value); // ตรวจสอบค่าใน console
-    
+
     setUsers((prevUsers) => ({
       ...prevUsers,
       [name]: value,
     }));
   };
-  
+
   const handleClick = async () => {
     try {
       const isValid = await Schema.isValid(users);
@@ -133,28 +102,75 @@ function FormUpdateUser() {
       }
 
       const result = await Swal.fire({
-        title: "ยืนยัน อัปเดต",
-        text: "คุณแน่ใจหรือไม่ ว่าต้องการอัปเดตผู้ใช้ ??",
+        title: "คุณแน่ใจที่จะอัพเดทข้อมูลผู้ใช้ ?",
+        text: "",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "อัปเดต",
+        confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
-     
+
       if (result.isConfirmed) {
-        const { birthday, ...userData } = users; // ไม่รวม birthday ในการส่งข้อมูล
-        const response = await axios.put(
-          `http://localhost:5000/apis/patients/${users_id}`,
-          {
-            ...userData,
-            birthday: formatDate(users.birthday), // ส่งค่าวันเดือนใหม่ไปยัง API
-          }
+        const {
+          users_id,
+          id_card,
+          password,
+          prefix_name,
+          first_name,
+          last_name,
+          gender,
+          birthday,
+          weight,
+          height,
+          phoneNumber,
+          congenital_disease,
+          drugallergy,
+          contact_first_name,
+          contact_last_name,
+          contact_relation_id,
+          contact_phoneNumber,
+          address,
+          subdistrict,
+          district,
+          province,
+          postcode,
+          subdistrictsId,
+          img,
+          role_id,
+        } = users;
+        const response = await updatePatientById(
+          users_id,
+          id_card,
+          password,
+          prefix_name,
+          first_name,
+          last_name,
+          gender,
+          birthday,
+          weight,
+          height,
+          phoneNumber,
+          congenital_disease,
+          drugallergy,
+          contact_first_name,
+          contact_last_name,
+          contact_relation_id,
+          contact_phoneNumber,
+          address,
+          subdistrict,
+          district,
+          province,
+          postcode,
+          subdistrictsId,
+          img,
+          role_id,
+          {}
         );
 
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
-            title: "บันทึกข้อมูลสำเร็จ",
+            title: "อัพเดตข้อมูลผู้ใช้สำเร็จ",
             showConfirmButton: false,
             timer: 2000,
           });
@@ -162,7 +178,7 @@ function FormUpdateUser() {
         } else {
           Swal.fire({
             icon: "error",
-            title: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
+            title: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลผู้ใช้",
             text: "กรุณาลองอีกครั้ง",
             showConfirmButton: true,
           });
@@ -173,7 +189,7 @@ function FormUpdateUser() {
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการอัปเดตผู้ใช้",
+        text: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลผู้ใช้",
         showConfirmButton: true,
       });
     }
@@ -212,10 +228,11 @@ function FormUpdateUser() {
         >
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
-              <div className="container mt-2 ">
-                <div className="mb-4">
-                  <div className="card border-0 shadow p-4">
-                    <h6 className="font ">ข้อมูลทั่วไป</h6><br></br>
+              <div className="container mt-6 ">
+                <div className="mb-5">
+                  <div className="card border-1 shadow p-2">
+                    <h6 className="font ">ข้อมูลทั่วไป</h6>
+                    <br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
                         <div className="col-4">
@@ -345,15 +362,16 @@ function FormUpdateUser() {
                           />
                         </div>
                         <div className="col-2 px-1 mt-2">
-                        <label>อายุ</label>
-                        <input
-          type="text"
-          name="age"
-          value={age !== null ? age : ""}
-          readOnly
-          className="form-control"
-        />
-                      </div>
+                          <label>อายุ</label>
+                          <input
+                            type="text"
+                            name="age"
+                            value={age !== null ? age : ""}
+                            disabled
+                          style={{ backgroundColor: 'lightgray' }} 
+                            className="form-control"
+                          />
+                        </div>
                         <div className="col-sm-2">
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
@@ -437,10 +455,7 @@ function FormUpdateUser() {
                             onChange={handleChange}
                           />
                         </div>
-                   
                       </div>
-                     
-                    
                       <h6>รหัสผ่าน</h6>
                       <div className="rounded border p-4">
                         <div className="col-8 ">
@@ -718,13 +733,13 @@ function FormUpdateUser() {
                         >
                           บันทึก
                         </button>
-                       
+
                         <button
-                        className="btn btn-danger mx-1"
-                        onClick={() => navigate("/admin/user")}
-                      >
-                       ยกเลิก
-                      </button>
+                          className="btn btn-danger mx-1"
+                          onClick={() => navigate("/admin/user")}
+                        >
+                          ยกเลิก
+                        </button>
                       </div>
                     </div>
                   </div>

@@ -4,39 +4,27 @@ import Swal from "sweetalert2";
 import { useFormik, Formik, Form, ErrorMessage } from "formik";
 import Schema from "./Validation";
 import axios from "axios";
-
+import {
+  getPatientById,
+  updatePatientById,
+} from "../../../../../service/Patient.Service";
+import {
+  getAuthorities,
+  updateAuthorities,
+} from "../../../../../service/Authorities.Service";
 function EditAuthorities() {
   const navigate = useNavigate();
   const location = useLocation();
   const { users_id } = useParams();
   const [age, setAge] = useState(0);
-  const [users, setUsers] = useState({
-    users_id: null,
-    id_card: "",
-    password: "", // เปลี่ยนชื่อฟิลด์นี้เป็น password
-    prefix_name: "",
-    first_name: "",
-    last_name: "",
-    age: "",
-    gender: "",
-    phoneNumber: "",
-    role_id: 2,
-    department_id: null,
-    birthday: "",
-  });
+  const [users, setUsers] = useState({});
 
-
-  
-useEffect(() => {
+  useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/apis/patients/" + users_id
-        );
+        const res = await getPatientById(users_id);
 
         setUsers(res.data);
-
-        const password = res.data.password;
 
         if (res.data.birthday) {
           const birthDateObj = new Date(res.data.birthday);
@@ -72,11 +60,8 @@ useEffect(() => {
     setUsers((prevUsers) => ({
       ...prevUsers,
       birthday: selectedDate,
-
-      
     }));
- 
-  
+
     if (selectedDate) {
       const birthDateObj = new Date(selectedDate);
       const today = new Date();
@@ -89,19 +74,18 @@ useEffect(() => {
       setAge(null);
     }
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     const selectedDate = e.target.value;
     console.log("Input Value:", value); // ตรวจสอบค่าใน console
-    
+
     setUsers((prevUsers) => ({
       ...prevUsers,
       [name]: value,
     }));
   };
-  
+
   const handleClick = async () => {
     try {
       const isValid = await Schema.isValid(users);
@@ -116,36 +100,53 @@ useEffect(() => {
       }
 
       const result = await Swal.fire({
-        title: "ยืนยัน อัปเดต",
-        text: "คุณแน่ใจหรือไม่ ว่าต้องการอัปเดตเจ้าหน้าที่ ??",
+        title: "คุณแน่ใจที่จะอัพเดทข้อมูลเจ้าหน้าที่ ?",
+        text: "",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "อัปเดต",
+        confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
-     
+
       if (result.isConfirmed) {
-        const { birthday, ...userData } = users; // ไม่รวม birthday ในการส่งข้อมูล
-        const response = await axios.put(
-          `http://localhost:5000/apis/patients/${users_id}`,
-          {
-            ...userData,
-            birthday: formatDate(users.birthday), // ส่งค่าวันเดือนใหม่ไปยัง API
-          }
+        const {
+          users_id,
+          id_card,
+          password,
+          prefix_name,
+          first_name,
+          last_name,
+          gender,
+          birthday,
+          phoneNumber,
+          role_id,
+        } = users;
+        const response = await updateAuthorities(
+          users_id,
+          id_card,
+          password,
+          prefix_name,
+          first_name,
+          last_name,
+          gender,
+          birthday,
+          phoneNumber,
+          role_id,
+          {}
         );
 
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
-            title: "บันทึกข้อมูลสำเร็จ",
+            title: "อัพเดตข้อมูลสำเจ้าหน้าที่เร็จ",
             showConfirmButton: false,
             timer: 2000,
           });
-          navigate("/admin/authortities");
+          navigate("/admin/authorities");
         } else {
           Swal.fire({
             icon: "error",
-            title: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
+            title: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลเจ้าหน้า",
             text: "กรุณาลองอีกครั้ง",
             showConfirmButton: true,
           });
@@ -156,7 +157,7 @@ useEffect(() => {
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการอัปเดตหน้าที่",
+        text: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลเจ้าหน้า",
         showConfirmButton: true,
       });
     }
@@ -168,8 +169,8 @@ useEffect(() => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/admin/user" className="nav-breadcrumb">
-                ข้อมูลรายชื่อเจ้าหน้าที่
+                <Link to="/admin/authorities" className="nav-breadcrumb">
+                  ข้อมูลรายชื่อเจ้าหน้าที่
                 </Link>
               </li>
               <li
@@ -197,7 +198,7 @@ useEffect(() => {
               <div className="container mt-2 ">
                 <div className="mb-4">
                   <div className="card border-0 shadow p-4">
-                    <h6 className="font ">ข้อมูลทั่วไป</h6>
+                    <h6 className="font ">ข้อมูลเจ้าหน้าที่</h6>
                     <br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
@@ -340,6 +341,8 @@ useEffect(() => {
                             name="age"
                             value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
                             readOnly
+                            disabled
+                            style={{ backgroundColor: 'lightgray' }} 
                             className="form-control"
                           />
                         </div>
@@ -410,7 +413,7 @@ useEffect(() => {
 
                         <button
                           className="btn btn-danger mx-1"
-                          onClick={() => navigate("/admin/authortities")}
+                          onClick={() => navigate("/admin/authorities/")}
                         >
                           ยกเลิก
                         </button>

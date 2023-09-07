@@ -3,17 +3,16 @@ import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import Schema from "./Validation";
 import Swal from "sweetalert2";
+import {
+  getDoctorById,
+  updateDoctorById,
+} from "../../../../../service/Doctor.Service";
 
-const Schema = Yup.object().shape({
-  doctor_first_name: Yup.string().required("Please enter the first name"),
-  doctor_last_name: Yup.string().required("Please enter the last name"),
- 
-});
 function FormDoctor() {
   const location = useLocation();
-  const [doctor, setDoctors] = useState({
-    doctors_id: "",
+  const [doctor, setDoctor] = useState({
     prefix_name: "",
     doctor_first_name: "",
     doctor_last_name: "",
@@ -21,33 +20,24 @@ function FormDoctor() {
     doctor_status: "",
     department_id: "",
     department_name: "",
-  
   });
   const { doctors_id } = useParams();
-
   useEffect(() => {
-    const fetchAllDoctors = async () => {
-      try {
-        const res = await axios.get(
-          "http://localhost:5000/apis/doctors/" + doctors_id
-        );
-
-        setDoctors(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAllDoctors();
-  }, [doctors_id]);
-
+    getDoctorById(doctors_id)
+      .then((response) => {
+        setDoctor(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching doctors: ", error);
+      });
+  }, []);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDoctors((prev) => ({ ...prev, [name]: value }));
+    setDoctor((prev) => ({ ...prev, [name]: value }));
   };
- 
 
   const handleClick = async () => {
     try {
@@ -61,26 +51,30 @@ function FormDoctor() {
         });
         return;
       }
-  
-      const result = await Swal.fire({
-        title: "Confirm Update",
-        text: "Are you sure you want to update this doctor?",
+     const result = await Swal.fire({
+        title: "คุณแน่ใจที่จะอัพเดทข้อมูลแพทย์ ?",
+        text: "",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "Update",
-        cancelButtonText: "Cancel",
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
       });
-  
+
       if (result.isConfirmed) {
-        const response = await axios.put(
-          `http://localhost:5000/apis/doctors/${doctors_id}`,
-          doctor
+        const response = await updateDoctorById(
+          doctors_id,
+          doctor.prefix_name,
+          doctor.doctor_first_name,
+          doctor.doctor_last_name,
+          doctor.doctor_image,
+          doctor.doctor_status,
+          doctor.department_id,
+          doctor.department_name
         );
-  
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
-            title: "บันทึกข้อมูลสำเร็จ",
+            title: "อัพเดตข้อมูลแพทย์สำเร็จ",
             showConfirmButton: false,
             timer: 1500,
           });
@@ -88,7 +82,7 @@ function FormDoctor() {
         } else {
           Swal.fire({
             icon: "error",
-            title: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
+            title: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลแพทย์",
             text: "กรุณาลองอีกครั้ง",
             showConfirmButton: true,
           });
@@ -99,17 +93,61 @@ function FormDoctor() {
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการอัปเดตแพทย์",
+        text: "เกิดข้อผิดพลาดในการอัปเดตข้อมูลแพทย์",
         showConfirmButton: true,
       });
     }
   };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+  
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result;
+        img.onload = () => {
+          const maxWidth = 200;
+          const scaleFactor = maxWidth / img.width;
+          const newWidth = img.width * scaleFactor;
+          const newHeight = img.height * scaleFactor;
+  
+          const canvas = document.createElement('canvas');
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+  
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+  
+          canvas.toBlob(async (blob) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              const resizedImageURL = reader.result;
+              console.log('Resized Image URL:', resizedImageURL);
+
+              setDoctor((prevDoctor) => ({
+                ...prevDoctor,
+                doctor_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
+              }));
+            };
+            reader.readAsDataURL(blob);
+          }, 'image/jpeg', 0.8);
+        };
+      };
+      reader.readAsDataURL(file);
+      console.log('file :',file); // ตรวจสอบค่าของ doctor_image
+    }
+  };
+  console.log('doctor_image:',doctor.doctor_image); // ตรวจสอบค่าของ doctor_image
+ 
+  
+  
   
   
   
   return (
     <Fragment>
-      <div className="w-full">
+      <div className="container-fluid">
         <div className="d-flex justify-content-end">
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
@@ -138,43 +176,45 @@ function FormDoctor() {
           initialValues={doctor}
           onSubmit={handleClick}
         >
-          {({ values, errors, touched, setFieldValue }) => (
-            <Form>
+          {({ errors, touched }) => (
+              <Form encType='multipart/form-data'>
               <div className="row d-flex justify-content-center">
-                <div className="col-12 col-md-8 col-lg-6">
-                  <div className="row d-flex justify-content-center">
-                    <div className="col-12 col-sm-8 col-lg-7 col-xl-5 px-1 mt-2">
-                    <label>เลือกรูปภาพหมอ</label>
-                    <label className="red">*</label>
-                    <img className="img-hpt" src={doctor.doctor_image} />
+                <div className="UpdateDoc col-12 col-md-4 col-lg-8 border-1 shadow p-3">
+                  <div className="col-12 text-center align-items-center">
+                    <label>เลือกรูปภาพหมอ</label> <br />
+                    <br />
+                    <div className=" d-flex flex-column justify-content-center align-items-center">
+                      <img
+                        className="img-hpts mx-auto"
+                        src={doctor.doctor_image}
+                      />
                       <br />
-                      {/* <DropzoneImage
-                        image={doctor.doctor_image}
-                        onChange={(image) =>
-                          setFieldValue("doctor_image", image)
-                        }
-                      /> */}
                       <br />
-                      
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-column justify-content-center align-items-center">
+                    <div class="col-10 col-md-6 ">
                       <input
-                        type="text"
+                        type="file"
                         name="doctor_image"
+                        accept="image/*"
                         className="form-control"
-                        onChange={handleChange}
+                        onChange={handleImageChange}
                       />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                  </div>
+                  <form class="row g-3 d-flex justify-content-center ">
+                    <div className="col-10 col-md-6">
                       <label>คำนำหน้า</label>
                       <label className="red">*</label>
                       <select
                         name="prefix_name"
-                      
                         className={`form-select ${
                           touched.prefix_name && errors.prefix_name
                             ? "is-invalid"
                             : ""
                         }`}
-                        
                         onChange={handleChange}
                       >
                         <option selected>{doctor.prefix_name}</option>
@@ -195,7 +235,7 @@ function FormDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                    <div class="col-10 col-md-6">
                       <label>ชื่อ</label>
                       <label className="red">*</label>
                       <input
@@ -215,7 +255,7 @@ function FormDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                    <div class="col-10 col-md-6">
                       <label>นามสกุล</label>
                       <label className="red">*</label>
                       <input
@@ -235,7 +275,7 @@ function FormDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                    <div class="col-10 col-md-6">
                       <label>สถานะการใช้งาน</label>
                       <label className="red">*</label>
                       <select
@@ -246,7 +286,7 @@ function FormDoctor() {
                       >
                         <option selected>{doctor.doctor_status}</option>
                         <option value="พักงาน">พักงาน</option>
-                        <option value="รับบริการ">รับบริการ</option>
+                        <option value="ใช้งาน">ใช้งาน</option>
                       </select>
                       <ErrorMessage
                         name="doctor_status"
@@ -254,7 +294,7 @@ function FormDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                    <div class="col-10 col-md-6">
                       <label>แผนก</label>
                       <label className="red">*</label>
                       <select
@@ -265,6 +305,7 @@ function FormDoctor() {
                             : ""
                         }`}
                         aria-label="Default select example"
+                        value={doctor.department_id} // Set the value to doctor.department_id
                         onChange={handleChange}
                       >
                         <option selected>{doctor.department_name}</option>
@@ -282,18 +323,19 @@ function FormDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="d-flex justify-content-center mt-3">
-                      <button
-                        type="submit"
-                        className="btn btn-success mx-1"
-                        onClick={handleClick}
-                      >
-                        บันทึก
-                      </button>
-                      <button type="reset" className="btn btn-secondary mx-1">
-                        ล้างค่า
-                      </button>
-                    </div>
+                    <div class="col-10 col-md-6"></div>
+                  </form>
+                  <div className="d-flex justify-content-center mt-3">
+                    <button
+                      type="submit"
+                      className="btn btn-success mx-1"
+                      onClick={handleClick}
+                    >
+                      บันทึก
+                    </button>
+                    <button  className="btn btn-danger mx-1">
+                    <Link to="/admin/doctor/" style={{ textDecoration: "none" , color:"#fff" }}>ยกเลิก</Link>
+                    </button>
                   </div>
                 </div>
               </div>

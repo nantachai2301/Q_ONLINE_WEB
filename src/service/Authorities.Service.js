@@ -1,71 +1,65 @@
-import { InstanceFormBody, InstanceFormData } from '../helper/Axios';
+import axios from "axios";
 
-// ดึงข้อมูลแบบแบ่งหน้า
-export async function getAuthorities(pageSize, currentPage, search, treatment, status) {
-  try {
-    const response = await InstanceFormBody.get(`authorities/getAuthorities?pageSize=${pageSize}&currentPage=${currentPage}&search=${search}&status=${status}`);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+const API_URL = "http://localhost:5000/apis/";
 
-// ดึงข้อมูลตาม id
-export async function getDetailAuthorities(id) {
-  try {
-    const response = await InstanceFormBody.get(`authorities/getDetailAuthorities/${id}`);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+const getAuthorities = async () => {
+  return await axios.get(API_URL + "authorities ",);
+};
+const updateAuthorities = async (
+  users_id,
+  id_card,
+  password,
+  prefix_name,
+  first_name,
+  last_name,
+  gender,
+  birthday,
+  phoneNumber,
+  role_id
+) => {
+  return await axios.put(API_URL + "patients/" + users_id, {
+    id_card,
+    password,
+    prefix_name,
+    first_name,
+    last_name,
+    gender,
+    birthday,
+    phoneNumber,
+    role_id,
+  });
+};
+const createAuthorities = async (
+  users_id,
+  id_card,
+  password,
+  prefix_name,
+  first_name,
+  last_name,
+  gender,
+  birthday,
+  phoneNumber,
+  role_id
+) => {
+  return await axios.post(API_URL +"patient", {
+    users_id,
+    id_card,
+    password,
+    prefix_name,
+    first_name,
+    last_name,
+    gender,
+    birthday,
+    phoneNumber,
+    role_id,
+  });
+};
+export { getAuthorities, updateAuthorities, createAuthorities };
 
-// ดึงข้อมูลตาม id แผนก
-export async function getAuthoritiesBy(id) {
-  try {
-    const response = await InstanceFormBody.get(`authorities/getAuthoritiesBy/${id}`);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+const AuthoritiesService = {
+  getAuthorities,
+  updateAuthorities,
+  createAuthorities,
+};
 
-// เพิ่มข้อมูลเจ้าหน้าที่
-export async function createAuthorities(data) {
-  try {
-    const response = await InstanceFormData.post(`authorities/createAuthorities`, data);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
-
-// แก้ไขข้อมูลเจ้าหน้าที่
-export async function updateAuthorities(id, data) {
-  try {
-    const response = await InstanceFormData.put(`authorities/updateAuthorities/${id}`, data);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
-
-// อัพเดทสถานะการใช้งาน
-export async function updateStatusAuthorities(id, data) {
-  try {
-    const response = await InstanceFormBody.put(`authorities/updateStatusAuthorities/${id}`, data);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
-
-// ลบข้อมูล
-export async function deleteAuthorities(id) {
-  try {
-    const response = await InstanceFormBody.delete(`authorities/deleteAuthorities/${id}`);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+export default AuthoritiesService;

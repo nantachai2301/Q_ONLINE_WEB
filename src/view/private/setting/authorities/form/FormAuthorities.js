@@ -4,7 +4,7 @@ import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import Schema from "./Validation";
 import { Formik, Form, ErrorMessage } from "formik";
 import axios from "axios";
-
+import { createAuthorities } from "../../../../../service/Authorities.Service";
 function FormAuthorities() {
   const navigate = useNavigate();
   const [age, setAge] = useState(0);
@@ -17,9 +17,7 @@ function FormAuthorities() {
     last_name: "",
     age: "",
     gender: "",
-
     phoneNumber: "",
-
     role_id: 2,
     department_id: null,
     birthday: "",
@@ -51,41 +49,55 @@ function FormAuthorities() {
     const usersWithAge = { ...users, age: age };
     try {
       const result = await Swal.fire({
-        title: "ยืนยัน",
-        text: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างหน้าที่ ?",
+        title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างหน้าที่ ?",
+        text: "",
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
+      
       if (users.birthday) {
-        const birthDateObj = new Date(users.birthday); // แปลงวันที่ปีเกิดใน state ของคุณให้กลายเป็นออบเจ็กต์ของ Date
-        const today = new Date(); // วันที่ปัจจุบัน
+        const birthDateObj = new Date(users.birthday);
+        const today = new Date();
         const diffInMilliseconds = Math.abs(today - birthDateObj);
         const ageDate = new Date(diffInMilliseconds);
         const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
-        setAge(calculatedAge); // อัปเดต state ของอายุด้วยค่าที่คำนวณได้
+        setAge(calculatedAge);
       }
-      const dataToSend = { ...users, age: age, users_id: users.users_id };
-
+  
       if (result.isConfirmed) {
+      const dataToSend = { ...users, age: age, users_id: users.users_id };
+  
         try {
-          await axios.post("http://localhost:5000/apis/patient/", dataToSend);
-
+          await createAuthorities(
+            dataToSend.users_id,
+            dataToSend.id_card,
+            dataToSend.password,
+            dataToSend.prefix_name,
+            dataToSend.first_name,
+            dataToSend.last_name,
+            dataToSend.gender,
+            dataToSend.birthday,
+            dataToSend.phoneNumber,
+            dataToSend.role_id
+          );
+  
           Swal.fire({
             icon: "success",
-            title: "บันทึกข้อมูลสำเร็จ",
+            title: "เพิ่มข้อมูลเจ้าหน้าที่สำเร็จ",
             showConfirmButton: false,
             timer: 1500,
           });
-
-          navigate("/admin/authortities");
+  
+         
+          navigate("/admin/authorities");
         } catch (error) {
-          console.log(error);
+          console.error(error);
           Swal.fire({
             icon: "error",
             title: "เกิดข้อผิดพลาด",
-            text: "เกิดข้อผิดพลาดในการสร้างหน้าที่",
+            text: `เกิดข้อผิดพลาดในการเพิ่มข้อมูลหน้าที่: ${error.message}`, // แสดงข้อความข้อผิดพลาดจาก API หรือการร้องขอ POST
             showConfirmButton: true,
           });
         }
@@ -100,6 +112,7 @@ function FormAuthorities() {
       });
     }
   };
+  
   const ageToShow = age !== null ? age : "";
   return (
     <Fragment>
@@ -108,8 +121,8 @@ function FormAuthorities() {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/admin/user" className="nav-breadcrumb">
-                ข้อมูลรายชื่อเจ้าหน้าที่
+                <Link to="/admin/authorities" className="nav-breadcrumb">
+                  ข้อมูลรายชื่อเจ้าหน้าที่
                 </Link>
               </li>
               <li
@@ -137,7 +150,7 @@ function FormAuthorities() {
               <div className="container mt-2 ">
                 <div className="mb-4">
                   <div className="card border-0 shadow p-4">
-                    <h6 className="font ">ข้อมูลทั่วไป</h6>
+                    <h6 className="font ">ข้อมูลเจ้าหน้าที่</h6>
                     <br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
@@ -279,6 +292,8 @@ function FormAuthorities() {
                             name="age"
                             value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
                             readOnly
+                            disabled
+                            style={{ backgroundColor: 'lightgray' }} 
                             className="form-control"
                           />
                         </div>
@@ -349,7 +364,7 @@ function FormAuthorities() {
 
                         <button
                           className="btn btn-danger mx-1"
-                          onClick={() => navigate("/admin/authortities")}
+                          onClick={() => navigate("/admin/authorities/")}
                         >
                           ยกเลิก
                         </button>

@@ -75,7 +75,7 @@ function Dental() {
       <div className="container45">
         <div className="row" >
           {doctors.map((doctor) =>
-            doctor.doctor_status === "รับบริการ" ? (
+            doctor.doctor_status === "ใช้งาน" ? (
               <div className="card" key={doctor.id} style={{ width: "18rem", height: "300px" }}>
                 <div className="card_d ">
                 <div className="circular-image-container">

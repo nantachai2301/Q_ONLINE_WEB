@@ -1,26 +1,20 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
-import axios from "axios";
 import * as Yup from "yup";
-import { DropzoneImage } from "../../../../../components/DropzoneImage";
-
-import { baseURL } from "../../../../../helper/Axios";
+import Doctor from "../../../../../image/doctor.jpg";
+import axios from "axios";
+import Schema from "./Validation";
 import Swal from "sweetalert2";
-const Schema = Yup.object().shape({
-  prefix_name: Yup.string().required("Please enter the frefix name"),
-  doctor_first_name: Yup.string().required("Please enter the first name"),
-  doctor_last_name: Yup.string().required("Please enter the last name"),
-  department_name: Yup.string().required("Please enter the   department_name"),
-});
+import { createDoctor } from "../../../../../service/Doctor.Service";
 function FormCreateDoctor() {
   const location = useLocation();
   const [doctor, setDoctors] = useState({
-    doctors_id:  null,
+    doctors_id:null,
     prefix_name: "",
     doctor_first_name: "",
     doctor_last_name: "",
-    doctor_image: null,
+    doctor_image: "",
     doctor_status: "",
     department_id: "",
     department_name: "",
@@ -32,28 +26,72 @@ function FormCreateDoctor() {
   const handleChange = (e) => {
     setDoctors((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+  
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result;
+        img.onload = () => {
+          const maxWidth = 200;
+          const maxHeight = 200;
+          const newWidth = img.width > maxWidth ? maxWidth : img.width;
+          const newHeight = (newWidth / img.width) * img.height;
+  
+          const canvas = document.createElement('canvas');
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+  
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+  
+          canvas.toBlob(async (blob) => {
+            const resizedImageURL = window.URL.createObjectURL(blob);
+            console.log('Resized Image URL:', resizedImageURL);
+  
+            setDoctors((prevDoctor) => ({
+              ...prevDoctor,
+              doctor_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
+            }));
+          }, 'image/jpeg', 0.8);
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  
+  console.log('doctor_image:',doctor.doctor_image); // ตรวจสอบค่าของ doctor_image
+ 
   const handleClick = async (e) => {
     e.preventDefault();
-
+  
     try {
       const result = await Swal.fire({
-        title: "คุณแน่ใจที่จะเพิ่มรายชื่อแพทย์",
-        text: "Are you sure you want to create this doctor?",
+        title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างข้อมูลรายชื่อแพทย์ ?",
+        text: "",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "ยืนยัน",
+        confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
-
+  
       if (result.isConfirmed) {
-        // ทำการอัปเดตแพทย์
-        await axios.post(
-          "http://localhost:5000/apis/doctors/",
-          doctor
+        await createDoctor(
+          doctor.doctors_id,
+          doctor.prefix_name,
+          doctor.doctor_first_name,
+          doctor.doctor_last_name,
+          doctor.doctor_image,
+          doctor.doctor_status,
+          doctor.department_id,
+          doctor.department_name
         );
         Swal.fire({
           icon: "success",
-          title: "บันทึกข้อมูลสำเร็จ",
+          title: "เพิ่มข้อมูลแพทย์สำเร็จ",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -64,14 +102,15 @@ function FormCreateDoctor() {
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการอัปเดตแพทย์",
+        text: "เกิดข้อผิดพลาดในการเพิ่มข้อมูลแพทย์",
         showConfirmButton: true,
       });
     }
   };
+  
   return (
     <Fragment>
-      <div className="w-full">
+      <div className="container-fluid">
         <div className="d-flex justify-content-end">
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
@@ -84,41 +123,63 @@ function FormCreateDoctor() {
                 className="breadcrumb-item text-black fw-semibold"
                 aria-current="page"
               >
-                {location.state ? "แก้ไข" : "เพิ่ม"}ข้อมูลรายชื่อแพทย์
+                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแพทย์
               </li>
             </ol>
           </nav>
         </div>
         <div className="w-full mb-5">
           <h2 className="title-content">
-            {location.state ? "แก้ไข" : "เพิ่ม"}ข้อมูลรายชื่อแพทย์
+            {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแพทย์
           </h2>
         </div>
         <Formik
           enableReinitialize={true}
           validationSchema={Schema}
+          initialValues={doctor}
           onSubmit={handleClick}
         >
-          {({ values, errors, touched, setFieldValue }) => (
-            <Form>
+          {({ errors, touched }) => (
+            <form encType='multipart/form-data'>
               <div className="row d-flex justify-content-center">
-                <div className="col-12 col-md-8 col-lg-6">
-                  <div className="row d-flex justify-content-center">
-                    <div className="col-12 col-sm-8 col-lg-7 col-xl-5 px-1 mt-2">
-                      <label>เลือกรูปภาพหมอ</label>
-                      <label className="red">*</label>
+                <div className="UpdateDoc col-12 col-md-4 col-lg-8 border-1 shadow p-3">
+                  <div className="col-12 text-center align-items-center">
+                    <label>เลือกรูปภาพหมอ</label> <br />
+                    <br />
+                    <div className="d-flex flex-column justify-content-center align-items-center">
+                      {doctor.doctor_image ? (
+                        <img
+                          className="img-hpts mx-auto"
+                          src={doctor.doctor_image}
+                          alt="Doctor"
+                        />
+                      ) : (
+                        <img
+                          className="img-hpts mx-auto"
+                          src={Doctor}
+                          alt="Default Doctor"
+                        />
+                      )}
                       <br />
-                      <img className="img-hpt" src={doctor.doctor_image} />
                       <br />
-
-                      <input
-                        type="text"
-                        name="doctor_image"
-                        className="form-control"
-                        onChange={handleChange}
-                      />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                  </div>
+
+                  <div className="d-flex flex-column justify-content-center align-items-center">
+                    <div class="col-10 col-md-6 ">
+                    <input
+  type="file"
+  name="doctor_image"
+  accept="image/*"
+  className="form-control"
+  onChange={handleImageChange}
+/>
+
+
+                    </div>
+                  </div>
+                  <form class="row g-3 d-flex justify-content-center ">
+                    <div className="col-10 col-md-6">
                       <label>คำนำหน้า</label>
                       <label className="red">*</label>
                       <select
@@ -128,10 +189,9 @@ function FormCreateDoctor() {
                             ? "is-invalid"
                             : ""
                         }`}
-                        aria-label="Default select example"
                         onChange={handleChange}
                       >
-                        <option selected>{doctor.prefix_name}</option>
+                        <option selected>เลือกคำนำหน้าชื่อ</option>
                         <option value="ศาสตราจารย์นายแพทย์">
                           ศาสตราจารย์นายแพทย์
                         </option>
@@ -149,17 +209,18 @@ function FormCreateDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                    <div class="col-10 col-md-6">
                       <label>ชื่อ</label>
                       <label className="red">*</label>
                       <input
                         name="doctor_first_name"
+                        placeholder="กรอกชื่อ"
                         type="text"
                         value={doctor.doctor_first_name}
-                        className={`form-select ${
-                          touched.doctor_first_name && errors.doctor_first_name
-                            ? "is-invalid"
-                            : ""
+                        className={`form-control ${
+                          touched.doctor_first_name &&
+                          errors.doctor_first_name &&
+                          "is-invalid"
                         }`}
                         onChange={handleChange}
                       />
@@ -169,43 +230,39 @@ function FormCreateDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                    <div class="col-10 col-md-6">
                       <label>นามสกุล</label>
                       <label className="red">*</label>
                       <input
                         name="doctor_last_name"
+                        placeholder="นามสกุล"
                         type="text"
                         value={doctor.doctor_last_name}
-                        className={`form-select ${
-                          touched.doctor_last_name && errors.doctor_last_name
-                            ? "is-invalid"
-                            : ""
+                        className={`form-control ${
+                          touched.doctor_last_name &&
+                          errors.doctor_last_name &&
+                          "is-invalid"
                         }`}
                         onChange={handleChange}
                       />
                       <ErrorMessage
                         name="doctor_last_name"
                         component="div"
-                        className="error-message invalid-feedback"
+                        className="error-message"
                       />
                     </div>
-
-                    <div className="col-12 px-1 mt-2">
+                    <div class="col-10 col-md-6">
                       <label>สถานะการใช้งาน</label>
                       <label className="red">*</label>
                       <select
                         name="doctor_status"
-                        className={`form-select ${
-                          touched.doctor_status && errors.doctor_status
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        class="form-select"
                         aria-label="Default select example"
                         onChange={handleChange}
                       >
-                        <option selected>{doctor.doctor_status}</option>
+                        <option selected>เลือกสถานะการใช้งาน</option>
                         <option value="พักงาน">พักงาน</option>
-                        <option value="รับบริการ">รับบริการ</option>
+                        <option value="ใช้งาน">ใช้งาน</option>
                       </select>
                       <ErrorMessage
                         name="doctor_status"
@@ -213,7 +270,7 @@ function FormCreateDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="col-12 px-1 mt-2">
+                    <div class="col-10 col-md-6">
                       <label>แผนก</label>
                       <label className="red">*</label>
                       <select
@@ -224,9 +281,10 @@ function FormCreateDoctor() {
                             : ""
                         }`}
                         aria-label="Default select example"
+                        value={doctor.department_id} // Set the value to doctor.department_id
                         onChange={handleChange}
                       >
-                        <option selected>{doctor.department_name}</option>
+                        <option selected>เลือกแผนก</option>
                         <option value="1">ทันตกรรม</option>
                         <option value="2">กุมารเวชกรรม</option>
                         <option value="3">ทั่วไป</option>
@@ -241,22 +299,28 @@ function FormCreateDoctor() {
                         className="error-message"
                       />
                     </div>
-                    <div className="d-flex justify-content-center mt-3">
-                      <button
-                        type="submit"
-                        className="btn btn-success mx-1"
-                        onClick={handleClick}
+                    <div class="col-10 col-md-6"></div>
+                  </form>
+                  <div className="d-flex justify-content-center mt-3">
+                    <button
+                      type="submit"
+                      className="btn btn-success mx-1"
+                      onClick={handleClick}
+                    >
+                      บันทึก
+                    </button>
+                    <button className="btn btn-danger mx-1">
+                      <Link
+                        to="/admin/doctor/"
+                        style={{ textDecoration: "none", color: "#fff" }}
                       >
-                        บันทึก
-                      </button>
-                      <button type="reset" className="btn btn-secondary mx-1">
-                        ล้างค่า
-                      </button>
-                    </div>
+                        ยกเลิก
+                      </Link>
+                    </button>
                   </div>
                 </div>
               </div>
-            </Form>
+            </form>
           )}
         </Formik>
       </div>

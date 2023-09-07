@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Table from "react-bootstrap/Table";
+import {
+  getPatient,
+  deletePatientById,
+} from "../../../../service/Patient.Service";
+import { getAuthorities } from "../../../../service/Authorities.Service";
 function ShowData() {
   const [user, setUser] = useState([]);
   const navigate = useNavigate();
@@ -13,13 +18,15 @@ function ShowData() {
   const [pageCount, setPageCount] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
-  const getUser = async () => {
-    const response = await axios.get("http://localhost:5000/apis/authorities");
-    setUser(response.data);
-  };
 
   useEffect(() => {
-    getUser();
+    getAuthorities()
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching  Authorities: ", error);
+      });
   }, []);
 
   const handlePageSizeChange = (event) => {
@@ -67,37 +74,37 @@ function ShowData() {
     navigate("/admin/edit-authorities/" + id);
   };
 
-  const removeEmp = (users_id) => {
+  const handleDeletePatient = (users_id) => {
     Swal.fire({
-      title: "Confirm Delete",
-      text: "Do you want to delete this doctor?",
+      title:  `ลบรายการเจ้าหน้าที่นี้หรือไม่ ? `,
+      text: "เมื่อรายการเจ้าหน้าที่ถูกลบ คุณจะไม่สามาถกู้คืนได้",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Delete",
-      cancelButtonText: "Cancel",
+      confirmButtonText: "ตกลง",
+      cancelButtonText: "ยกเลิก",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .delete("http://localhost:5000/apis/patients/" + users_id)
+        deletePatientById(users_id)
           .then((res) => {
             Swal.fire({
-              title: "Deleted",
-              text: "The users has been deleted.",
-              icon: "success",
-              timer: "1500",
+              icon: 'success',
+              title: 'ลบข้อมูลเจ้าหน้าที่สำเร็จ',
+              showConfirmButton: false,
+              timer: 1700,
             });
             window.location.reload();
           })
           .catch((error) => {
             Swal.fire({
-              title: "Error",
-              text: "An error occurred while deleting the users.",
+              title: "เกิดข้อผิดพลาด",
+              text: "เกิดข้อผิดพลาดขณะลบข้อมูลเจ้าหน้าที่.",
               icon: "error",
             });
           });
       }
     });
   };
+
   return (
     <div className="w-full">
       <div className="row">
@@ -218,7 +225,7 @@ function ShowData() {
                         type="button"
                         className="btn btn-danger text-white mx-1 mt-1"
                         onClick={() => {
-                          removeEmp(item.users_id);
+                          handleDeletePatient(item.users_id);
                         }}
                       >
                         <i className="fa-solid fa-trash-can"></i>
@@ -236,7 +243,7 @@ function ShowData() {
         </Table>
       </div>
       <div className="d-flex justify-content-between">
-        <div>จำนวน {pageData.length} รายการ</div>
+      จำนวน {pageData.length} รายการ จากทั้งหมด {user.length} รายการ
         <div>
           <Pagination
             activePage={page}
