@@ -171,7 +171,7 @@ const Navbar = () => {
   โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
 </Link>
             {isDesktop && userData && (
-             <Typography variant="body1" component="div" sx={{ marginLeft: '500px' }}>
+             <Typography variant="body1" component="div" sx={{ marginLeft: '450px' }}>
               ยินดีตอนรับคุณ :  {userData?.data.fullname}
               </Typography>
             )}
