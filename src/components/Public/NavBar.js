@@ -128,13 +128,13 @@ const Navbar = () => {
   const renderMenuItems = () => {
     return (
       <List sx={{ paddingTop: '150px' }}>
-        <ListItem button onClick={handleNavigateToIndex}>
+        <ListItem aria-label= "หน้าแรก" button onClick={handleNavigateToIndex}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="หน้าแรก" />
         </ListItem>
-        <ListItem button onClick={handleNavigateToProfile}>
+        <ListItem aria-label= "โปรไฟล์" button  onClick={handleNavigateToProfile}>
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
