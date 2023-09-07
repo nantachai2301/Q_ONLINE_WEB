@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -43,12 +43,12 @@ const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const storedUserData = localStorage.getItem('userData');
   const userData = storedUserData ? JSON.parse(storedUserData) : null;
-  const isDesktop = useMediaQuery('(min-width:600px)');
+  const isDesktop = useMediaQuery('(min-width:1024px)');
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   // เพิ่ม state สำหรับตรวจสอบสถานะการล็อกอิน
   const [isLoggedIn, setIsLoggedIn] = useState(true,false);
-
+  const [showLogoutButton, setShowLogoutButton] = useState(false);
   // ฟังก์ชันสำหรับตรวจสอบล็อกอิน
   const checkLogin = () => {
     // เช่นในกรณีที่คุณมีตัวแปรใน localStorage หากมีค่าแสดงว่าผู้ใช้ล็อกอินแล้ว
@@ -57,8 +57,13 @@ const Navbar = () => {
     const isLoggedIn = storedUserData ? true : false;
     setIsLoggedIn(isLoggedIn);
   };
- 
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
   const handleLogout = () => {
+    setIsDrawerOpen(false); // ปิดเมนูแฮมเบอร์เกอร์ก่อน
+    setShowLogoutButton(false); // ปิดปุ่มออกจากระบบ
     Swal.fire({
       title: 'ออกจากระบบ',
       text: 'คุณแน่ใจที่ต้องการออกจากระบบหรือไม่',
@@ -128,18 +133,26 @@ const Navbar = () => {
   const renderMenuItems = () => {
     return (
       <List sx={{ paddingTop: '150px' }}>
-        <ListItem aria-label= "หน้าแรก" button onClick={handleNavigateToIndex}>
+        <ListItem    aria-label="หน้าหลัก" button onClick={handleNavigateToIndex}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="หน้าแรก" />
         </ListItem>
-        <ListItem aria-label= "โปรไฟล์" button  onClick={handleNavigateToProfile}>
+        <ListItem    aria-label="โปรไฟล์" button onClick={handleNavigateToProfile}>
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
           <ListItemText primary="โปรไฟล์" />
         </ListItem>
+        {isLoggedIn && (
+          <ListItem    aria-label="ออกจากระบบแฮ่ม" button onClick={handleLogout}>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary={`ออกจากระบบ (${userData?.data.fullname})`} />
+          </ListItem>
+        )}
       </List>
     );
   };
@@ -154,12 +167,12 @@ const Navbar = () => {
         <CustomAppBar>
           <Toolbar>
             <LogoImg src={Logo} alt="โลโก้" onClick={handleLogoClick} style={{ marginRight: '16px' }} />
-            <Link to="/" className="logo-title">
-              โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
-            </Link>
+            <Link to="/" className="logo-title" style={{ marginLeft: '6px' }}> {/* ลดระยะห่างด้านซ้ายจากค่าเดิม */}
+  โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
+</Link>
             {isDesktop && userData && (
-              <Typography variant="body1" component="div" sx={{ marginLeft: '750px' }}>
-                ยินดีต้อนรับคุณ. {userData?.data.fullname}
+             <Typography variant="body1" component="div" sx={{ marginLeft: '560px' }}>
+              ยินดีตอนรับคุณ :  {userData?.data.fullname}
               </Typography>
             )}
             {!userData && (
@@ -168,7 +181,7 @@ const Navbar = () => {
                   size="large"
                   edge="start"
                   color="inherit"
-                  aria-label="menu"
+                  aria-label="สมัครสมาชิก"
                   onClick={handleRegister}
                   sx={{ marginLeft: 'auto' }}
                 >
@@ -179,7 +192,7 @@ const Navbar = () => {
         size="large"
         edge="start"
         color="inherit"
-        aria-label="menu"
+        aria-label="เข้าสู่ระบบ"
         onClick={handleLoginPopup}
       >
         <AccountCircleIcon />
@@ -193,22 +206,26 @@ const Navbar = () => {
               </>
             )}
             {userData && (
-              <>
+  <>
+    {isDesktop && (
+      <IconButton
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="ออกจากระบบ"
+        onClick={handleLogout}
+        sx={{ marginLeft: 'auto' }}
+        // ทำการเพิ่มเงื่อนไขในการแสดงปุ่มตรงนี้
+        style={{ display: isDrawerOpen ? 'none' : 'block' }}
+      >
+        <ExitToAppIcon />
+      </IconButton>
+    )}
                 <IconButton
                   size="large"
                   edge="start"
                   color="inherit"
-                  aria-label="ออกจากระบบ"
-                  onClick={handleLogout}
-                  sx={{ marginLeft: 'auto' }}
-                >
-                  <ExitToAppIcon />
-                </IconButton>
-                <IconButton
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
+                  aria-label="แฮ่มเบอเกอร์"
                   onClick={handleDrawerToggle}
                   sx={{ marginLeft: '16px' }}
                 >

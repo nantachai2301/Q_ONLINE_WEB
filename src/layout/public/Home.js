@@ -61,7 +61,7 @@ function Home() {
   const handleAllQueueDesktop = () => {
     navigate("/DesktopQueue");
   };
-  
+
 
   const handleMainBookPopup = () => {
     // ตรวจสอบสถานะการล็อกอินก่อนเปิดโมดัล
@@ -83,22 +83,19 @@ function Home() {
   return (
     <Fragment>
       <div className="w-full">
-        <div class="container5">
+      <div class="container5">
           <div
             className="card justify-content-center"
-            style={{ height: "200px" }}
+            style={{ height: "auto" }}
           >
             <div className="row justify-content-xl-center">
-             
-             
-
-              <div className="col">
+             <div className="col">
                 <div className="Home-icon">
                 <FontAwesomeIcon
                   onClick={handleDepartment}
                   icon={faBook}
                   class="fas fa-book-medical"
-                  style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
+                  style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
                 /></div>
                 <div className="Nameicon">
                 <a
@@ -112,14 +109,14 @@ function Home() {
                 </a>
                 </div>
               </div>
-              
+                  
                <div className="col">
                 <div className="Home-icon">
                 <FontAwesomeIcon
                   onClick={handleMainBookPopup}
                   icon={faStethoscope}
                   class="fas fa-calendarDays"
-                  style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
+                  style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
                 /></div>
                  
                 <div className="Nameicon">
@@ -137,28 +134,26 @@ function Home() {
         <MainBook show={showMainBook} setShow={setShowMainBook} />
       )}
               </div>
-              {isLoggedIn && (
-        <div className="col">
-        <div className="Home-icon">
-        <FontAwesomeIcon
-          onClick={handleAllQueueDesktop}
-          icon={faDesktop}
-          class="fa-solid fa-Desktop"
-          style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
-        /></div>
-        <div className="Nameicon">
-        <a
-          onClick={handleAllQueueDesktop}
-          style={{ color: "#4b86d2", cursor: "pointer" }}
-        >
-          <h4 className="title-name-home mt-3 mx-5">
-           หน้าจอเรียกคิว
-          </h4>
-          
-        </a>
-        </div>
-      </div>
-      )}
+              <div className="col">
+                <div className="Home-icon">
+                <FontAwesomeIcon
+                onClick={handleAllQueueDesktop}
+                icon={faDesktop}
+                class="fa-solid fa-Desktop"
+                  style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
+                /></div>
+                <div className="Nameicon">
+                <a
+                   onClick={handleAllQueueDesktop}
+                  style={{ color: "#4b86d2", cursor: "pointer" }}
+                >
+                  <h4 className="title-name-home mt-3 mx-5">
+                  หน้าจอเรียกคิว
+                  </h4>
+                  
+                </a>
+                </div>
+              </div>
               {isLoggedIn && (
         <div className="col">
         <div className="Home-icon">
@@ -166,7 +161,7 @@ function Home() {
           onClick={handleListQueue}
           icon={faList}
           class="fa-solid fa-list"
-          style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
+          style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
         /></div>
         <div className="Nameicon">
         <a
@@ -181,15 +176,14 @@ function Home() {
         </div>
       </div>
       )}
-
-      {isLoggedIn && (
+      {/* {isLoggedIn && (
         <div className="col">
         <div className="Home-icon">
         <FontAwesomeIcon
           onClick={handleAllQueueList}
           icon={faRectangleList}
           class="fa-solid fa-rectangle-list"
-          style={{ color: "#4b86d2", marginTop: "60px", width : "80px" }}
+          style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
         /></div>
         <div className="Nameicon">
         <a
@@ -203,13 +197,13 @@ function Home() {
         </a>
         </div>
       </div>
-      )}
+      )} */}
            
               
             </div>
           </div>
         </div>
-      </div>
+
      
       <div class="container5 p-5 my-5 border">
         <div className="d-flex justify-content-center ">
@@ -299,6 +293,7 @@ function Home() {
             </div>
           </Card>
         </div>
+      </div>
       </div>
     </Fragment>
   );
