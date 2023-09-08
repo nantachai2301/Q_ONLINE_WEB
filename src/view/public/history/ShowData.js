@@ -6,7 +6,16 @@ import Form from "react-bootstrap/Form";
 import { Formik } from "formik";
 // import { useReactToPrint } from 'react-to-print';
 import Swal from "sweetalert2";
-
+import {
+  getQueue,
+  updateStatusQueue,
+  updateQueueById,
+  deleteQueueById
+  } from "../../../service/Queue.Service";
+  import {
+   getDepartment
+   
+    } from "../../../service/DepartmentType.Service";
 import axios from "axios";
 import _ from "lodash";
 import Spinner from "react-bootstrap/Spinner";
@@ -82,7 +91,7 @@ function ShowData() {
     const fetchUserQueue = async () => {
       try {
         if (userData && userData.users_id) {
-          const response = await axios.get("http://localhost:5000/apis/queue", {
+          const response = await getQueue({
             params: {
               users_id: userData.users_id,
             },

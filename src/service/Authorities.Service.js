@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/apis/";
+const API_URL = "https://elated-lime-salmon.cyclic.app/apis/";
 
 const getAuthorities = async () => {
   return await axios.get(API_URL + "authorities ",);

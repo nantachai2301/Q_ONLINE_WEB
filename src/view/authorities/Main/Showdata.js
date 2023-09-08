@@ -9,13 +9,14 @@ import Spinner from "react-bootstrap/Spinner";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
+import {
+  getQueue,
+  updateStatusQueue,
+  updateQueueById,
+  deleteQueueById
+  } from "../../../service/Queue.Service";
 function ShowData({
-  data,
-  pagin,
-  changePage,
-  changePageSize,
-  updateStatusBook,
-  deleteData,
+  
 }) {
   const [dataQ, setDataQ] = useState([]);
   console.log(dataQ);
@@ -31,7 +32,7 @@ function ShowData({
 
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const getdataQ = async () => {
-    const response = await axios.get("http://localhost:5000/apis/queue/");
+    const response = await getQueue();
     setDataQ(response.data);
   };
 
@@ -150,7 +151,7 @@ const handleCancel = () => {
       if (result.isConfirmed) {
         try {
           const formattedDate = formatDateToAPI(queue_date);
-          await axios.delete(`http://localhost:5000/apis/queue/${users_id}/${formattedDate}`);
+          await deleteQueueById(users_id, formattedDate);
   
           Swal.fire({
             title: "ลบคิวสำเร็จ",
@@ -209,19 +210,17 @@ const handleCancel = () => {
         const formattedQueueDate = formatDateToAPI(queue_date);
          const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss"); // แปลงเวลาปัจจุบันเป็นข้อความ
        
-       axios
-          .put(`http://localhost:5000/apis/queue/${users_id}`, {
-            queue_id: queue_id,
-            queue_date: formattedQueueDate,
-            create_at: formattedDate,
-            symptom: symptom,
-            queue_status_id: newQueueStatusId, // ใช้ newQueueStatusId ที่เราได้คำนวณไว้
-            department_id: department_id,
-            questionaire_id: questionaire_id,
-            users_id: users_id,
-
-            formatted_birthday: formatted_birthday,
-          })
+         updateQueueById(users_id,
+            queue_id,
+        formattedQueueDate,
+            formattedDate,
+            symptom,
+           newQueueStatusId, // ใช้ newQueueStatusId ที่เราได้คำนวณไว้
+             department_id,
+         questionaire_id,
+           users_id,
+           formatted_birthday,
+          )
           .then((res) => {
             Swal.fire({
               title: "อัพเดทสถานะสำเร็จ",

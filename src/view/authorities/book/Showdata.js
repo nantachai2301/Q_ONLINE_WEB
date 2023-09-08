@@ -8,7 +8,10 @@ import Spinner from "react-bootstrap/Spinner";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import { format } from 'date-fns';
-
+import {
+getQueue,
+updateStatusQueue
+} from "../../../service/Queue.Service";
 function Showdata({ data, pagin, changePage, changePageSize, updateStatusBook, deleteData }) {
   const [dataQ, setDataQ] = useState([]);
   console.log(dataQ)
@@ -23,7 +26,7 @@ function Showdata({ data, pagin, changePage, changePageSize, updateStatusBook, d
 
 
   const getdataQ = async () => {
-    const response = await axios.get("http://localhost:5000/apis/queue/");
+    const response = await getQueue();
     setDataQ(response.data);
 
   };

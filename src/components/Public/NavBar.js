@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -9,30 +9,30 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from '@mui/material';
-import { styled } from '@mui/system';
-import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import Swal from 'sweetalert2';
-import Logo from '../../image/logo.png';
-import { useMediaQuery } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import LoginModal from '../../components/Login/LoginModal';
+} from "@mui/material";
+import { styled } from "@mui/system";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import Swal from "sweetalert2";
+import Logo from "../../image/logo.png";
+import { useMediaQuery } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import LoginModal from "../../components/Login/LoginModal";
 
 const CustomAppBar = styled(AppBar)`
-  background-color: #133C55;
+  background-color: #133c55;
   backdrop-filter: blur(100px);
   transition: background-color 0.5s ease;
   position: fixed;
   top: 0;
   width: 100%;
-  hight:auto;
+  hight: auto;
   z-index: 7999;
 `;
 
-const LogoImg = styled('img')`
+const LogoImg = styled("img")`
   width: 130px;
   @media (max-width: 600px) {
     width: 80px;
@@ -43,13 +43,13 @@ const LogoImg = styled('img')`
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const storedUserData = localStorage.getItem('userData');
+  const storedUserData = localStorage.getItem("userData");
   const userData = storedUserData ? JSON.parse(storedUserData) : null;
-  const isDesktop = useMediaQuery('(min-width:1024px');
+  const isDesktop = useMediaQuery("(min-width:1024px");
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   // เพิ่ม state สำหรับตรวจสอบสถานะการล็อกอิน
-  const [isLoggedIn, setIsLoggedIn] = useState(true,false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true, false);
   const [showLogoutButton, setShowLogoutButton] = useState(false);
   // ฟังก์ชันสำหรับตรวจสอบล็อกอิน
   const checkLogin = () => {
@@ -67,34 +67,34 @@ const Navbar = () => {
     setIsDrawerOpen(false); // ปิดเมนูแฮมเบอร์เกอร์ก่อน
     setShowLogoutButton(false); // ปิดปุ่มออกจากระบบ
     Swal.fire({
-      title: 'ออกจากระบบ',
-      text: 'คุณแน่ใจที่ต้องการออกจากระบบหรือไม่',
-      icon: 'warning',
+      title: "ออกจากระบบ",
+      text: "คุณแน่ใจที่ต้องการออกจากระบบหรือไม่",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'ใช่, ฉันต้องการออกจากระบบ',
-      cancelButtonText: 'ยกเลิก',
+      confirmButtonText: "ใช่, ฉันต้องการออกจากระบบ",
+      cancelButtonText: "ยกเลิก",
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: 'กำลังออกจากระบบ...',
+          title: "กำลังออกจากระบบ...",
           showConfirmButton: false,
           allowOutsideClick: false,
-          icon: 'info',
+          icon: "info",
         });
-  
+
         // หน่วงเวลา 3 วินาที (3000 มิลลิวินาที) ก่อนที่จะทำการออกจากระบบ
         setTimeout(() => {
           // ลบข้อมูลที่เก็บใน localStorage
-          localStorage.removeItem('userData');
-  
+          localStorage.removeItem("userData");
+
           // เปลี่ยนสถานะการเข้าสู่ระบบให้เป็น false
           setIsLoggedIn(false);
-  
+
           // แสดง Pop-up แจ้งเมื่อออกจากระบบสำเร็จ
           Swal.fire({
-            title: 'ออกจากระบบสำเร็จ',
-            icon: 'success',
+            title: "ออกจากระบบสำเร็จ",
+            icon: "success",
             timer: 1000,
           }).then(() => {
             // ทำการนำผู้ใช้ไปยังหน้าเข้าสู่ระบบหลังจากออกจากระบบ
@@ -106,49 +106,46 @@ const Navbar = () => {
       }
     });
   };
-  
 
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
   const handleNavigateToIndex = () => {
-    navigate('/');
+    navigate("/");
     setIsDrawerOpen(false);
   };
 
-
-
   const handleRegister = () => {
-    navigate('/register');
+    navigate("/register");
   };
   const handleNavigateToProfile = () => {
-    window.location.href = '/Profile'; // นำทางไปยังหน้า Profile
+    window.location.href = "/Profile"; // นำทางไปยังหน้า Profile
     setIsDrawerOpen(false); // ปิดเมนูแฮมเบอร์เกอร์
   };
-  
+
   const handleLoginPopup = () => {
     setShowLogin(true);
   };
-  const navbarHeight = showLogin ? '400px' : '80px';
+  const navbarHeight = showLogin ? "400px" : "80px";
 
   const renderMenuItems = () => {
     return (
-      <List sx={{ paddingTop: '150px' }}>
-        <ListItem    aria-label="หน้าหลัก" button onClick={handleNavigateToIndex}>
+      <List sx={{ paddingTop: "150px" }}>
+        <ListItem aria-label="หน้าหลัก" button onClick={handleNavigateToIndex}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="หน้าแรก" />
         </ListItem>
-        <ListItem    aria-label="โปรไฟล์" button onClick={handleNavigateToProfile}>
+        <ListItem aria-label="โปรไฟล์" button onClick={handleNavigateToProfile}>
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
           <ListItemText primary="โปรไฟล์" />
         </ListItem>
         {isLoggedIn && (
-          <ListItem    aria-label="ออกจากระบบแฮ่ม" button onClick={handleLogout}>
+          <ListItem aria-label="ออกจากระบบแฮ่ม" button onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>
@@ -160,21 +157,32 @@ const Navbar = () => {
   };
 
   const handleLogoClick = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <>
       <header id="public">
-      <CustomAppBar style={{ navbarHeight}}>
+        <CustomAppBar style={{ navbarHeight }}>
           <Toolbar>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-  <LogoImg src={Logo} alt="โลโก้" onClick={handleLogoClick} style={{ marginRight: '16px' }} />
-  <Link to="/" className="logo-title"style={{ fontSize: '28px' }}>โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗</Link>
-</div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <LogoImg
+                src={Logo}
+                alt="โลโก้"
+                onClick={handleLogoClick}
+                style={{ marginRight: "16px" }}
+              />
+              <Link to="/" className="logo-title" style={{ fontSize: "28px" }}>
+                โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
+              </Link>
+            </div>
             {isDesktop && userData && (
-             <Typography variant="body1" component="div" sx={{ marginLeft: '480px' }}>
-              ยินดีตอนรับคุณ :  {userData?.data.fullname}
+              <Typography
+                variant="body1"
+                component="div"
+                sx={{ marginLeft: "480px" }}
+              >
+                ยินดีตอนรับคุณ : {userData?.data.fullname}
               </Typography>
             )}
             {!userData && (
@@ -185,51 +193,50 @@ const Navbar = () => {
                   color="inherit"
                   aria-label="สมัครสมาชิก"
                   onClick={handleRegister}
-                  sx={{ marginLeft: 'auto'  }}
+                  sx={{ marginLeft: "auto" }}
                 >
                   <ExitToAppIcon />
                   <ListItemText primary="สมัครสมาชิก" />
                 </IconButton>
-                <IconButton 
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="เข้าสู่ระบบ"
-        onClick={handleLoginPopup}
-      >
-        <AccountCircleIcon />
-        <ListItemText primary="เข้าสู่ระบบ" />
-      </IconButton>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="เข้าสู่ระบบ"
+                  onClick={handleLoginPopup}
+                >
+                  <AccountCircleIcon />
+                  <ListItemText primary="เข้าสู่ระบบ" />
+                </IconButton>
 
-      {showLogin && (
-        <LoginModal show={showLogin} setShow={setShowLogin} />
-      )}
-                
+                {showLogin && (
+                  <LoginModal show={showLogin} setShow={setShowLogin} />
+                )}
               </>
             )}
             {userData && (
-  <>
-    {isDesktop && (
-      <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="ออกจากระบบ"
-        onClick={handleLogout}
-        sx={{ marginLeft: 'auto' }}
-        // ทำการเพิ่มเงื่อนไขในการแสดงปุ่มตรงนี้
-        style={{ display: isDrawerOpen ? 'none' : 'block' }}
-      >
-        <ExitToAppIcon />
-      </IconButton>
-    )}
+              <>
+                {isDesktop && (
+                  <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="ออกจากระบบ"
+                    onClick={handleLogout}
+                    sx={{ marginLeft: "auto" }}
+                    // ทำการเพิ่มเงื่อนไขในการแสดงปุ่มตรงนี้
+                    style={{ display: isDrawerOpen ? "none" : "block" }}
+                  >
+                    <ExitToAppIcon />
+                  </IconButton>
+                )}
                 <IconButton
                   size="large"
                   edge="start"
                   color="inherit"
                   aria-label="แฮ่มเบอเกอร์"
                   onClick={handleDrawerToggle}
-                  sx={{ marginLeft: '16px' }}
+                  sx={{ marginLeft: "16px" }}
                 >
                   <MenuIcon />
                 </IconButton>
@@ -238,7 +245,11 @@ const Navbar = () => {
           </Toolbar>
         </CustomAppBar>
         {userData && (
-          <Drawer anchor="right" open={isDrawerOpen} onClose={handleDrawerToggle}>
+          <Drawer
+            anchor="right"
+            open={isDrawerOpen}
+            onClose={handleDrawerToggle}
+          >
             {renderMenuItems()}
           </Drawer>
         )}

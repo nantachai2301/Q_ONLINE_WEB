@@ -8,7 +8,7 @@ import { styled } from "@mui/system";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AUTHEN, USERINFO } from "../../actions/Authen";
-
+import { Sendlogin } from "../../service/Authen.Service";
 const StyledContainer = styled(Container)`
   display: flex;
   flex-direction: column;
@@ -19,7 +19,6 @@ const StyledContainer = styled(Container)`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  
 `;
 
 const StyledBox = styled(Box)`
@@ -41,15 +40,10 @@ const LoginModal = (props) => {
   const [show, setShow] = useState(false); // เพิ่มตัวแปรเพื่อควบคุมสถานะการแสดง Modal
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const navigate = useNavigate();
+
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "https://elated-lime-salmon.cyclic.app/apis/login",
-        {
-          id_card,
-          password,
-        }
-      );
+      const response = await Sendlogin(id_card, password);
 
       if (response.data && response.data.success) {
         localStorage.setItem("isLoggedIn", "true");

@@ -1,10 +1,19 @@
-import { InstanceFormBody /*, InstanceFormData*/ } from '../helper/Axios';
+import axios from "axios";
 
-export async function authen(data) {
-  try {
-    const response = await InstanceFormBody.post(`apis/login`, data);
-    return await response.data;
-  } catch (error) {
-    console.log('error', error);
-  }
-}
+const API_URL = "https://elated-lime-salmon.cyclic.app/apis/";
+const Sendlogin = async (
+  id_card,
+  password,
+) => {
+  return await axios.post(API_URL +"login", {
+    id_card,
+    password,
+  });
+};
+export { Sendlogin};
+
+const Authen = {Sendlogin
+ 
+};
+
+export default Authen;
