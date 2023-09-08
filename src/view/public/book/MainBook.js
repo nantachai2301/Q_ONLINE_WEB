@@ -67,7 +67,7 @@ const MainBook = (props) => {
       setUserData(userDataFromLocalStorage);
       axios
       .get(
-        `http://localhost:5000/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
+        `https://elated-lime-salmon.cyclic.app/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
       )
       .then((response) => {
         console.log("Response data:", response.data);

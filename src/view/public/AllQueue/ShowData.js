@@ -32,7 +32,7 @@ function ShowData() {
     const fetchAllQueues = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/apis/queue/"
+          "https://elated-lime-salmon.cyclic.app/apis/queue/"
         );
         setQueueList(response.data);
       } catch (error) {

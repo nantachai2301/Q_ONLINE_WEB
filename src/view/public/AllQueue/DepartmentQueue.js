@@ -17,7 +17,7 @@ function DepartmentQueue({ departmentData, selectedDate }) {
           const formattedDate = format(new Date(selectedDate), "yyyy-MM-dd");
   
           const response = await axios.get(
-            `http://localhost:5000/apis/queue/?queue_date=${formattedDate}&department_id=${departmentData.department_id}`
+            `https://elated-lime-salmon.cyclic.app/apis/queue/?queue_date=${formattedDate}&department_id=${departmentData.department_id}`
           );
   
           const queues = response.data;

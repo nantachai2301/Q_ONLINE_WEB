@@ -22,7 +22,7 @@ const Profile = () => {
       // ส่งค่า id_card ไปที่ API เพื่อรับข้อมูลผู้ใช้ที่ตรงกับ id_card
       axios
         .get(
-          `http://localhost:5000/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
+          `https://elated-lime-salmon.cyclic.app/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
         )
         .then((response) => {
           // หากสำเร็จ กำหนดข้อมูลผู้ใช้ใหม่

@@ -46,7 +46,7 @@ function EditProfile() {
     const fetchAllUsers = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/apis/patients/" + users_id
+          "https://elated-lime-salmon.cyclic.app/apis/patients/" + users_id
         );
 
         setUsers(res.data);

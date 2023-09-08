@@ -30,7 +30,7 @@ function Dental() {
     const fetchData = async () => {
       try {
         const res1 = await axios.get(
-          "http://localhost:5000/apis/doctors/depart/" +
+          "https://elated-lime-salmon.cyclic.app/apis/doctors/depart/" +
           DId
         );
 

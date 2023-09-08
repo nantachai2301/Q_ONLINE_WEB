@@ -86,7 +86,7 @@ function Register() {
       if (result.isConfirmed) {
         try {
           await axios.post(
-            "http://localhost:5000/apis/patient/",
+            "https://elated-lime-salmon.cyclic.app/apis/patient/",
             dataToSend
           );
 

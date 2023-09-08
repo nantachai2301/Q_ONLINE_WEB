@@ -44,7 +44,7 @@ const LoginModal = (props) => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/apis/login",
+        "https://elated-lime-salmon.cyclic.app/apis/login",
         {
           id_card,
           password,
