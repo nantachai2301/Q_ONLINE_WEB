@@ -210,17 +210,19 @@ const handleCancel = () => {
         const formattedQueueDate = formatDateToAPI(queue_date);
          const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss"); // แปลงเวลาปัจจุบันเป็นข้อความ
        
-         updateQueueById(users_id,
-            queue_id,
-        formattedQueueDate,
-            formattedDate,
-            symptom,
-           newQueueStatusId, // ใช้ newQueueStatusId ที่เราได้คำนวณไว้
-             department_id,
-         questionaire_id,
-           users_id,
-           formatted_birthday,
-          )
+       axios
+          .put(`http://localhost:5000/apis/queue/${users_id}`, {
+            queue_id: queue_id,
+            queue_date: formattedQueueDate,
+            create_at: formattedDate,
+            symptom: symptom,
+            queue_status_id: newQueueStatusId, // ใช้ newQueueStatusId ที่เราได้คำนวณไว้
+            department_id: department_id,
+            questionaire_id: questionaire_id,
+            users_id: users_id,
+
+            formatted_birthday: formatted_birthday,
+          })
           .then((res) => {
             Swal.fire({
               title: "อัพเดทสถานะสำเร็จ",
