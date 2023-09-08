@@ -45,7 +45,7 @@ const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const storedUserData = localStorage.getItem('userData');
   const userData = storedUserData ? JSON.parse(storedUserData) : null;
-  const isDesktop = useMediaQuery('(min-width:auto');
+  const isDesktop = useMediaQuery('(min-width:1024px');
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   // เพิ่ม state สำหรับตรวจสอบสถานะการล็อกอิน
@@ -173,7 +173,7 @@ const Navbar = () => {
   <Link to="/" className="logo-title"style={{ fontSize: '28px' }}>โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗</Link>
 </div>
             {isDesktop && userData && (
-             <Typography variant="body1" component="div" sx={{ marginLeft: '350px' }}>
+             <Typography variant="body1" component="div" sx={{ marginLeft: '480px' }}>
               ยินดีตอนรับคุณ :  {userData?.data.fullname}
               </Typography>
             )}
