@@ -48,7 +48,6 @@ const updateQueueById = async (
   queue_status_id,
   department_id,
   questionaire_id,
-
   department_name,
   queue_status_name,
   first_name,
@@ -63,7 +62,6 @@ const updateQueueById = async (
     queue_status_id,
     department_id,
     questionaire_id,
-
     department_name,
     queue_status_name,
     first_name,

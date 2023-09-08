@@ -180,11 +180,13 @@ const handleCancel = () => {
     create_at,
     symptom,
     queue_status_id,
+   
     department_id,
     questionaire_id,
     users_id,
     department_name,
-
+    queue_status_name,
+    prefix_name,
     first_name,
     last_name,
     formatted_birthday
@@ -193,10 +195,10 @@ const handleCancel = () => {
       const [day, month, year] = queue_date.split("-");
       return `${year}-${month}-${day}`;
     })();
-
+  
     console.log(formattedQueueDate);
     const newStatus = currentStatus === "ยืนยัน" ? "รับการรักษาแล้ว" : "ยืนยัน";
-
+  
     const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : 2; // ค่า newQueueStatusId ควรเป็น 3
     Swal.fire({
       title: `คุณต้องการอัพเดทสถานะรายการนี้ใช่หรือไม่ ! `,
@@ -208,21 +210,25 @@ const handleCancel = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const formattedQueueDate = formatDateToAPI(queue_date);
-         const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss"); // แปลงเวลาปัจจุบันเป็นข้อความ
-       
-       axios
-          .put(`http://localhost:5000/apis/queue/${users_id}`, {
-            queue_id: queue_id,
-            queue_date: formattedQueueDate,
-            create_at: formattedDate,
-            symptom: symptom,
-            queue_status_id: newQueueStatusId, // ใช้ newQueueStatusId ที่เราได้คำนวณไว้
-            department_id: department_id,
-            questionaire_id: questionaire_id,
-            users_id: users_id,
-
-            formatted_birthday: formatted_birthday,
-          })
+        const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss"); // แปลงเวลาปัจจุบันเป็นข้อความ
+  
+        // เรียกใช้ฟังก์ชัน updateQueueById แทน axios.put
+        updateQueueById(
+          users_id,
+          queue_id,
+          formattedQueueDate,
+          formattedDate,
+          symptom,
+          newQueueStatusId,
+          department_id,
+          questionaire_id,
+          dataQ.department_name,
+          dataQ.newStatus,
+          prefix_name,
+          first_name,
+          last_name,
+          formatted_birthday
+        )
           .then((res) => {
             Swal.fire({
               title: "อัพเดทสถานะสำเร็จ",
@@ -232,7 +238,7 @@ const handleCancel = () => {
             });
             // รีเฟรชหน้าเพื่อแสดงสถานะใหม่
             getdataQ();
-
+  
             // อัพเดทการค้นหาและสถานะที่ถูกเลือก เพื่อให้หน้าพอรียังคงแสดงข้อมูลตามที่เลือกไว้
             const searchData = searchUsers; // เก็บค่าการค้นหา
             const selectedDep = selectedDepartment; // เก็บค่าแผนกที่เลือก
@@ -241,7 +247,6 @@ const handleCancel = () => {
             setSearchUsers(searchData); // กำหนดค่าค้นหากลับให้กับ state
             setSelectedDepartment(selectedDep); // กำหนดค่าแผนกที่เลือกกลับให้กับ state
           })
-         
           .catch((error) => {
             Swal.fire({
               title: "Error",
@@ -252,6 +257,7 @@ const handleCancel = () => {
       }
     });
   };
+  
 
   const getDepartmentOptions = () => {
     const departmentsWithData = Array.from(
