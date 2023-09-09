@@ -3,29 +3,13 @@ import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import axios from "axios";
 import Swal from "sweetalert2";
-import * as Yup from "yup";
+import Schema from "./Validation";
+import * as Yup from 'yup';
+
 import {
-  getDepartmentbyID,
+  getDepartmentById,
   updateDepartmentById,
 } from "../../../../../service/DepartmentType.Service";
-const Schema = Yup.object().shape({
-  department_name: Yup.string().required("กรุณากรอก ชื่อแผนก"),
-  department_image: Yup.string().required("กรุณากรอก เลือกรูปภาพ"),
-  open_time: Yup.string().required("กรุณากรอก เวลาเปิด"),
-  // .matches(
-  //   /^(?:[01]\d|2[0-3]):[0-5]\d$/,
-  //   'กรุณากรอกเวลาในรูปแบบ HH:mm (เช่น 08:30)'
-  // ),
-  close_time: Yup.string().required("กรุณากรอก เวลาปิด"),
-  // .matches(
-  //   /^(?:[01]\d|2[0-3]):[0-5]\d$/,
-  //   'กรุณากรอกเวลาในรูปแบบ HH:mm (เช่น 17:00)'
-  // ),
-  department_phone: Yup.string().required("กรุณากรอก เบอร์โทรแผนก"),
-  max_queue_number: Yup.string().required("กรุณากรอก จำนวนคิวที่เปิดรับ"),
-  floor: Yup.string().required("กรุณากรอก ชั้น"),
-  building: Yup.string().required("กรุณากรอก อาคาร"),
-});
 
 function EditDepartment() {
   const location = useLocation();
@@ -43,17 +27,14 @@ function EditDepartment() {
   const { department_id } = useParams();
 
   useEffect(() => {
-    const fetchAllDepartments = async () => {
-      try {
-        const res = await getDepartmentbyID(department_id);
-
-        setDepartments(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAllDepartments();
-  }, [department_id]);
+    getDepartmentById(department_id)
+      .then((response) => {
+        setDepartments(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching departments: ", error);
+      });
+  }, []);
 
   const navigate = useNavigate();
   const [error, setError] = useState(false);
@@ -66,7 +47,7 @@ function EditDepartment() {
   const handleClick = async () => {
     try {
       const isValid = await Schema.isValid(departments);
-      console.log(departments);
+      console.log(departments)
       if (!isValid) {
         Swal.fire({
           icon: "error",
@@ -78,12 +59,12 @@ function EditDepartment() {
       }
 
       const result = await Swal.fire({
-        title: "Confirm Update",
-        text: "Are you sure you want to update this department?",
+        title: "คุณแน่ใจหรือไม่ ว่าต้องการจะอัพเดทข้อมูลรายชื่อแผนก ?",
+        text: "",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "Update",
-        cancelButtonText: "Cancel",
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
       });
 
       if (result.isConfirmed) {
@@ -102,7 +83,7 @@ function EditDepartment() {
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
-            title: "บันทึกข้อมูลสำเร็จ",
+            title: "อัพเดตข้อมูลแผนกสำเร็จ",
             showConfirmButton: false,
             timer: 1500,
           });
@@ -110,7 +91,7 @@ function EditDepartment() {
         } else {
           Swal.fire({
             icon: "error",
-            title: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
+            title: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลแผนก",
             text: "กรุณาลองอีกครั้ง",
             showConfirmButton: true,
           });
@@ -121,13 +102,60 @@ function EditDepartment() {
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการอัปเดตแผนก",
+        text: "เกิดข้อผิดพลาดในการอัปเดตข้อมูลแผนก",
         showConfirmButton: true,
       });
     }
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result;
+        img.onload = () => {
+          const maxWidth = 200;
+          const scaleFactor = maxWidth / img.width;
+          const newWidth = img.width * scaleFactor;
+          const newHeight = img.height * scaleFactor;
+
+          const canvas = document.createElement('canvas');
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+          canvas.toBlob(async (blob) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              const resizedImageURL = reader.result;
+              console.log('Resized Image URL:', resizedImageURL);
+
+              setDepartments((prevDepartments) => ({
+                ...prevDepartments,
+                department_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
+              }));
+            };
+            reader.readAsDataURL(blob);
+          }, 'image/jpeg', 0.8);
+        };
+      };
+      reader.readAsDataURL(file);
+      console.log('file :', file); // ตรวจสอบค่าของ department_image
+    }
+  };
+  console.log('department_image:', departments.department_image); // ตรวจสอบค่าของ department_image
+
+
+
+
+
   return (
+  <Fragment>
     <div className="w-full">
       <div className="d-flex justify-content-end">
         <nav aria-label="breadcrumb">
@@ -136,16 +164,19 @@ function EditDepartment() {
               <Link to="/admin/department-type" className="nav-breadcrumb">
                 ข้อมูลแผนกและการตรวจรักษา
               </Link>
+
             </li>
             <li
               className="breadcrumb-item text-black fw-semibold"
               aria-current="page"
             >
-              {location.state ? "แก้ไข" : "แก้ไข"}
-              ข้อมูลรายชื่อแผนกและการตรวจรักษา
+              {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
             </li>
+
           </ol>
+
         </nav>
+
       </div>
       <div className="w-full mb-5">
         <h2 className="title-content">
@@ -159,212 +190,232 @@ function EditDepartment() {
         initialValues={departments}
         onSubmit={handleClick}
       >
-        {({ values, errors, touched, setFieldValue }) => (
-          <Form>
-            <div className="row1">
-              <div className="card2">
-                <div className="De1">
-                  <div className="row2">
-                    <div className="De2">
-                      <label>เลือกรูปภาพแผนก</label>
-                      <br />
+        {({ errors, touched }) => (
+          <form encType='multipart/form-data'>
+            <div className="row d-flex justify-content-center">
+              <div className='UpdateDepart col-12 col-md-4 col-lg-8 border-1 shadow p-3' >
+                <div className="col-12 text-center align-items-center">
+                  <label>เลือกรูปภาพแผนก</label> <br />
+                  <br />
+                  <div className="d-flex flex-column justify-content-center align-items-center">
+                    {departments.department_image ? (
                       <img
-                        className="img-hpt"
+                        className="img-hpts mx-auto"
                         src={departments.department_image}
+                        alt="Departments"
                       />
-                      <br />
-
-                      <input
-                        type="text"
-                        name="department_image"
-                        className="form-control"
-                        onChange={handleChange}
+                    ) : (
+                      <img
+                        className="img-hpts mx-auto"
+                        src={departments}
+                        alt="Default Departments"
                       />
-                    </div>
-
-                    <div className="De3">
-                      <label>ชื่อแผนก</label>
-                      <label className="red">*</label>
-                      <select
-                        name="department_id"
-                        type="text"
-                        value={departments.department_id}
-                        placeholder="ชื่อแผนก"
-                        className={`form-control ${
-                          touched.department_id && errors.department_id
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        aria-label="Default select example"
-                        onChange={handleChange}
-                      >
-                        <option selected>เลือกแผนก</option>
-                        <option value="ทันตกรรม">ทันตกรรม</option>
-                        <option value="กุมารเวชกรรม">กุมารเวชกรรม</option>
-                        <option value="ทั่วไป">ทั่วไป</option>
-                        <option value="สูติ-นรีเวช">สูติ-นรีเวช</option>
-                        <option value="ศัลยกรรม">ศัลยกรรม</option>
-                        <option value="หัวใจ">หัวใจ</option>
-                        <option value="ผิวหนัง">ผิวหนัง</option>
-                      </select>
-                      <ErrorMessage
-                        name="department_id"
-                        component="div"
-                        className="error-message"
-                      />
-                    </div>
-
-                    <div className="De4">
-                      <label>เวลาเปิด</label>
-                      <label className="red">*</label>
-                      <input
-                        name="open_time"
-                        type="time"
-                        placeholder="เวลาเปิด"
-                        value={departments.open_time}
-                        className={`form-control ${
-                          touched.open_time && errors.open_time
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage
-                        name="open_time"
-                        component="div"
-                        className="error-message"
-                      />
-                    </div>
-
-                    <div className="De5">
-                      <label>เวลาปิด</label>
-                      <label className="red">*</label>
-                      <input
-                        name="close_time"
-                        type="time"
-                        placeholder="เวลาปิด"
-                        value={departments.close_time}
-                        className={`form-select ${
-                          touched.close_time && errors.close_time
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage
-                        name="close_time"
-                        component="div"
-                        className="error-message"
-                      />
-                    </div>
-
-                    <div className="De6">
-                      <label>อาคาร</label>
-                      <label className="red">*</label>
-                      <input
-                        name="building"
-                        type="text"
-                        placeholder="อาคาร"
-                        value={departments.building}
-                        className={`form-control ${
-                          touched.building && errors.building
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage
-                        name="building"
-                        component="div"
-                        className="error-message"
-                      />
-                    </div>
-
-                    <div className="De7">
-                      <label>ชั้น</label>
-                      <label className="red">*</label>
-                      <input
-                        name="floor"
-                        type="text"
-                        placeholder="ชั้น"
-                        value={departments.floor}
-                        className={`form-control ${
-                          touched.floor && errors.floor ? "is-invalid" : ""
-                        }`}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage
-                        name="floor"
-                        component="div"
-                        className="error-message"
-                      />
-                    </div>
-
-                    <div className="de7">
-                      <label>เบอร์โทรแผนก</label>
-                      <label className="red">*</label>
-                      <input
-                        name="department_phone"
-                        type="text"
-                        placeholder="เบอร์โทรแผนก"
-                        value={departments.department_phone}
-                        className={`form-control ${
-                          touched.department_phone && errors.department_phone
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage
-                        name="department_phone"
-                        component="div"
-                        className="error-message"
-                      />
-                    </div>
-
-                    <div className="De8">
-                      <label>จำนวนคิวสูงสุด</label>
-                      <label className="red">*</label>
-                      <input
-                        name="max_queue_number"
-                        type="text"
-                        placeholder="จำนวนคิวสูงสุด"
-                        value={departments.max_queue_number}
-                        className={`form-control ${
-                          touched.max_queue_number && errors.max_queue_number
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage
-                        name="max_queue_number"
-                        component="div"
-                        className="error-message"
-                      />
-                    </div>
-
-                    <div className="d-flex justify-content-center mt-3">
-                      <button
-                        type="submit"
-                        className="btn btn-success mx-1"
-                        onClick={handleClick}
-                      >
-                        บันทึก
-                      </button>
-                      <button type="reset" className="btn btn-secondary mx-1">
-                        ล้างค่า
-                      </button>
-                    </div>
+                    )}
+                    <br />
+                    <br />
                   </div>
+                </div>
+
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <div class="col-10 col-md-6 ">
+                    <input
+                      type="file"
+                      name="department_image"
+                      accept="image/*"
+                      className="form-control"
+                      onChange={handleImageChange}
+                    />
+
+
+                  </div>
+                </div>
+                <br />
+                <br />
+                <form class="row g-3 d-flex justify-content-center ">
+                  <div className="col-10 col-md-6 ">
+                    <label>ชื่อแผนก</label>
+                    <label className="red">*</label>
+                    <select
+                      name="department_id"
+                      type="text"
+                      className={`form-control ${touched.department_id &&
+                        errors.department_id
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      onChange={handleChange}
+                    >
+                      <option selected>กรุณาเลือกแผนก</option>
+                      <option value="ทันตกรรม">ทันตกรรม</option>
+                      <option value="จักษุ">จักษุ</option>
+                      <option value="หัวใจ">หัวใจ</option>
+                      <option value="ผิวหนัง">ผิวหนัง</option>
+                      <option value="ศัลยกรรม">ศัลยกรรม</option>
+                      <option value="ทั่วไป">ทั่วไป</option>
+                      <option value="กุมารเวช">กุมารเวช</option>
+                      <option value="สูติ-นรีเวช">สูติขนรีเวช</option>
+                    </select>
+                    <ErrorMessage
+                      name="department_id"
+                      component="div"
+                      className="error-message"
+                    />
+
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>เวลาเปิด</label>
+                    <label className="red">*</label>
+                    <input
+                      name="open_time"
+                      type="time"
+                      placeholder="กรอกเวลาเปิด"
+                      value={departments.open_time}
+                      className={`form-control ${touched.open_time &&
+                        errors.open_time &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="open_time"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>เวลาปิด</label>
+                    <label className="red">*</label>
+                    <input
+                      name="close_time"
+                      type="time"
+                      placeholder="เวลาปิด"
+                      value={departments.close_time}
+                      className={`form-select ${touched.close_time &&
+                        errors.close_time &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="close_time"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>อาคาร</label>
+                    <label className="red">*</label>
+                    <input
+                      name="building"
+                      type="text"
+                      placeholder="กรอกอาคาร"
+                      value={departments.building}
+                      className={`form-control ${touched.building &&
+                        errors.building &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="building"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>ชั้น</label>
+                    <label className="red">*</label>
+                    <input
+                      name="floor"
+                      type="text"
+                      placeholder="ชั้น"
+                      value={departments.floor}
+                      className={`form-control ${touched.floor &&
+                        errors.floor &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="floor"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>เบอร์โทรแผนก</label>
+                    <label className="red">*</label>
+                    <input
+                      name="department_phone"
+                      type="text"
+                      placeholder="เบอร์โทรแผนก"
+                      value={departments.department_phone}
+                      className={`form-control ${touched.department_phone &&
+                        errors.department_phone &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="department_phone"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>จำนวนคิวสูงสุด</label>
+                    <label className="red">*</label>
+                    <input
+                      name="max_queue_number"
+                      type="text"
+                      placeholder="จำนวนคิวสูงสุด"
+                      value={departments.max_queue_number}
+                      className={`form-control ${touched.max_queue_number &&
+                        errors.max_queue_number &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="max_queue_number"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+                  <div class="col-10 col-md-6 "></div>
+                </form>
+                
+                <div className="d-flex justify-content-center mt-3">
+                  <button
+                    type="submit"
+                    className="btn btn-success mx-1"
+                    onClick={handleClick}
+                  >
+                    บันทึก
+                  </button>
+                  <button className="btn btn-danger mx-1">
+                    <Link
+                      to="/admin/department-type"
+                      style={{ textDecoration: "none", color: "#fff" }}
+                    >
+                      ยกเลิก
+                    </Link>
+                  </button>
                 </div>
               </div>
             </div>
-          </Form>
+          </form>
         )}
       </Formik>
     </div>
-  );
+    </Fragment>
+  )
 }
 
-export default EditDepartment;
+export default EditDepartment

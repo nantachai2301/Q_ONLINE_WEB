@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import Pagination from 'react-js-pagination';
 import Select from "react-select";
@@ -5,12 +6,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Spinner from "react-bootstrap/Spinner";
-import {
- getDepartment,
- deleteDepartmentById 
-} from "../../../../service/DepartmentType.Service";
+import Table from "react-bootstrap/Table";
 import de from 'date-fns/esm/locale/de';
-function ShowData({ pagin, changePage, changePageSize }) {
+import {
+  getDepartment,
+  deleteDepartmentById,
+} from "../../../../service/DepartmentType.Service";
+import "../../../../style/showdepartments.css";
+
+
+function ShowData() {
   const navigate = useNavigate();
   const [departments, setDepartments] = useState([]);
   const [pageData, setPageData] = useState([]);
@@ -19,24 +24,20 @@ function ShowData({ pagin, changePage, changePageSize }) {
   const [pageSize, setPageSize] = useState(10);
   const [searchDepartment, setSearchDepartment] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState(null);
-  
-  const getDepartments = async () => {
-    const response = await getDepartment();
-    setDepartments(response.data);
-  };
+
 
   useEffect(() => {
-    getDepartments();
+    getDepartment()
+    .then((response) => {
+      setDepartments(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching Departments: ", error);
+    });
   }, []);
 
-  const handlePageSizeChange = (event) => {
-    const newPageSize = parseInt(event.target.value);
-    setPageSize(newPageSize);
-    setPage(1);
-  };
-
   useEffect(() => {
-    const pagedatacount = Math.ceil(departments.length / 10);
+    const pagedatacount = Math.ceil(departments.length / pageSize);
     setPageCount(pagedatacount);
 
     if (page) {
@@ -56,6 +57,13 @@ function ShowData({ pagin, changePage, changePageSize }) {
       setPageData(dataToDisplay);
     }
   }, [departments, page, pageSize, searchDepartment]);
+
+  const handlePageSizeChange = (event) => {
+    const newPageSize = parseInt(event.target.value);
+    setPageSize(newPageSize);
+    setPage(1);
+  };
+
   useEffect(() => {
     if (selectedDepartment) {
       const selectedDepartmentData = departments.filter(
@@ -70,8 +78,17 @@ function ShowData({ pagin, changePage, changePageSize }) {
     }
   }, [selectedDepartment, departments, pageSize]);
 
+ 
+  const handleCancelClick = () => {
+    setSearchDepartment("")
+    setSelectedDepartment(null);
+    setPage(1);
+    setPageData(departments.slice(0, pageSize));
+  };
+
   const getDepartmentOptions = () => {
-    const department = Array.from(new Set(departments.map((department) => department.department_name)));
+    const department = Array.from(
+      new Set(departments.map((department) => department.department_name)));
     return department.map((department) => ({
       value: department,
       label: department,
@@ -82,40 +99,35 @@ function ShowData({ pagin, changePage, changePageSize }) {
     setSelectedDepartment(selectedOption);
   };
 
-  const handleCancelClick = () => {
-    setSelectedDepartment(null);
-    setPage(1);
-    setPageData(departments);
-  };
 
   const loadEdit = (id) => {
     navigate("/admin/edit-department/form/" + id);
   };
+
   const handleDeleteDepartment = (department_id) => {
-  
     Swal.fire({
-      title: "ยืนยัน การลบ",
-      text: "คุนต้องการลบ แผนก?",
+      title: "ต้องการลบข้อมูลแแผนกนี้หรือไม่ ?",
+      text: "เมื่อรายการแผนกนี้ถูกลบ คุณจะไม่สามาถกู้คืนได้",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "ยืนยัน",
       cancelButtonText: "ยกเลิก",
     }).then((result) => {
       if (result.isConfirmed) {
-       deleteDepartmentById(department_id)
+        deleteDepartmentById(department_id)
           .then((res) => {
             Swal.fire({
-              title: "ลบ",
-              text: "แผนกถูกลบ.",
-              icon: "สำเร็จ",
-              timer: "1500"
+              icon: 'success',
+              title: 'ลบข้อมูลแผนกสำเร็จ',
+              showConfirmButton: false,
+              timer: 1700,
             });
             window.location.reload();
           })
           .catch((error) => {
             Swal.fire({
-              title: "Error",
-              text: "เกิดข้อผิดพลาดขณะลบแผนก.",
+              title: "เกิดข้อผิดพลาด",
+              text: "เกิดข้อผิดพลาดขณะลบข้อมูลแผนก.",
               icon: "error",
               timer: "1500"
             });
@@ -130,7 +142,7 @@ function ShowData({ pagin, changePage, changePageSize }) {
       <div className="row">
         <div className="col-12 col-md-6 col-lg-4">
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
-          <label>ค้นหา</label>
+          <label>ค้นหาแผนก</label>
           <Select
             value={selectedDepartment}
             options={getDepartmentOptions()}
@@ -160,7 +172,6 @@ function ShowData({ pagin, changePage, changePageSize }) {
             <option value={5}>5</option>
             <option value={10}>10</option>
             <option value={15}>15</option>
-            <option value={20}>20</option>
           </select>
         </div>
         <div>
@@ -176,6 +187,7 @@ function ShowData({ pagin, changePage, changePageSize }) {
           </button>
         </div>
       </div>
+
       <div className="overflow-auto">
         <table className="table">
           <thead>
@@ -249,11 +261,12 @@ function ShowData({ pagin, changePage, changePageSize }) {
                       >
                         <i className="fa-solid fa-pen-to-square"></i>
                       </button>
+
                       <button
                         type="button"
                         className="btn btn-danger text-white mx-1 mt-1"
                         onClick={() => {
-                          handleDeleteDepartment (item.department_id);
+                          handleDeleteDepartment(item.department_id);
                         }}
                       >
                         <i className="fa-solid fa-trash-can"></i>
@@ -263,22 +276,26 @@ function ShowData({ pagin, changePage, changePageSize }) {
                 );
               })
             ) : (
-                <div className="d-flex justify-content-center mt-4">
-                  Loading... <Spinner animation="border" variant="danger" />
-                </div>
+              <tr>
+              <td colSpan="8" className="text-center">
+                No doctors found.
+              </td>
+            </tr>
               )}
 
           </tbody>
         </table>
       </div>
       <div className="d-flex justify-content-between">
-        <div>จำนวน {departments.length} รายการ</div>
+        <div> 
+          จำนวน {pageData.length} รายการ จากทั้งหมด {departments.length} รายการ
+        </div>
         <div>
           <div className="Pagination">
             <Pagination
 
               activePage={page}
-              itemsCountPerPage={10}
+              itemsCountPerPage={pageSize}
               totalItemsCount={departments.length}
               pageRangeDisplayed={10}
               onChange={setPage}

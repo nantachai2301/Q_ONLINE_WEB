@@ -138,9 +138,8 @@ function Router(props) {
         ) : (
           <AuthoritiesLayout>
             <Routes>
-            <Route path="/author/book-an-appointment"element={<MainBookAuthor/>}/>
             <Route path="/" element={<HomeAuthorities/>} />
-            <Route path="/author/Home_authorities" element={<HomeAuthorities/>} />
+            <Route path="/author/book-an-appointment"element={<MainBookAuthor/>}/>
               <Route path="/author/history"element={<MainHistoryAuthor />}/>
               <Route path="/view/Question" element={<ViewQuestion />} />
               <Route path="/author/Manage" element={<ManageBook />} />

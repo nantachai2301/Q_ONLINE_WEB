@@ -1,123 +1,80 @@
-/* CSS สำหรับ card และช่อง input */
-.card1 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width:auto;
-    height:auto;
-    margin: 10px auto;
-    border-radius: 20px;
-    background-color: rgb(178, 221, 247);
-  }
+table, td, th {    
   
-  
-  
-  /* CSS สำหรับ label ข้อความบนหัว รูปภาพ img-hpt */
-  .de1 {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: larger;
-  }
-  
-  
-  
-  /* CSS สำหรับกล่องรูปภาพแผนก */
-  .img-hpt {
-    justify-content: center;
-    width: 100%;
-    max-width: 200px;
-    margin-bottom: 10px;
-  }
-  
-  /* CSS สำหรับช่อง input */
-  .form-control {
-    width: 100%;
-    max-width: 700px;
-    margin-bottom: 10px;
-  }
-  
-  .de2 .form-select {
-    width: 700px;
-  }
-  
-  /* CSS สำหรับ label ของช่อง input */
-  .de label {
-    display: inline-block;
-    text-align: left;
-    width: 150px; /* กำหนดความกว้างของ label */
-  }
-  
-  /* CSS สำหรับปุ่มบันทึกและล้างค่า */
-  .d-flex.justify-content-center.mt-3 button {
-    margin-top: 10px;
-    margin: 0 10px;
-  }
-  
-  /* ส่วนของ editdepartment */
-  
-  .card2 {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      max-width: 1500px;
-      height: 870px;
-      margin: 10px auto;
-      border-radius: 20px;
-      background-color: rgb(178, 221, 247);
-  }
-  
-  .row2 {
-    text-align: left;
-  }
-  
-  /* CSS สำหรับ label ข้อความบนหัว รูปภาพ img-hpt */
-  .De2 {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: larger;
-    }
-  
-    /* CSS สำหรับกล่องรูปภาพแผนก */
-  .img-hpt {
-      justify-content: center;
-      width: 100%;
-      max-width: 200px;
-      margin-bottom: 10px;
-    }
-  
-    /* CSS สำหรับช่อง input */
-  .form-control {
-      width: 100%;
-      max-width: 700px;
-      margin-bottom: 10px;
-    }
-  
-    .De3 .form-select {
-      width: 700px;
-    }
-  
-    /* CSS สำหรับ label ของช่อง input */
-  .De1 label {
-      display: inline-block;
-      text-align: left;
-      width: 150px; /* กำหนดความกว้างของ label */
-    }
-    
-    /* CSS สำหรับปุ่มบันทึกและล้างค่า */
-    .d-flex.justify-content-center.mt-3 button {
-      margin-top: 10px;
-      margin: 0 10px;
-    }
-    .card_d{
-      flex: 1;
-      object-fit: cover;
-      margin: auto;
+  text-align: left;
+}
 
-    }
+table {
+  border-collapse: collapse;
+
+  width: 100%;
+  background-color: aliceblue;
+}
+
+th, td {
+  padding: 15px;
+
+}
+.img-d {
+  border-radius: 60%;
+  width: 64px;
+height: 64px;
+overflow: hidden;
+text-align: center;
+  object-fit: cover;
+}
+/* pagination.css */
+
+.pagination {
+
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination li {
+  list-style: none;
+  margin: 0 5px;
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid #fff ;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  background-color: #fff;
+}
+
+.pagination li.active {
+  background-color: #f2f8ff;
+  color: #fff;
+  border: 1px solid #007bff;
+}
+
+.pagination li:hover {
+  background-color: #fff;
+}
+
+.pagination li.disabled {
+  pointer-events: none;
   
+  opacity: 0.6;
+}
+
+
+.img-hpts {
+  border-radius: 80%;
+ align-items: center;
+ margin-right: 550px;
+overflow: hidden;
+text-align: center;
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+}
+.UpdateDepart
+{
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+
+  
+}

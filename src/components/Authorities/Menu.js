@@ -1,5 +1,12 @@
 export const Menu = [
   {
+    id: 0,
+    title: 'หน้าหลัก',
+    icon: 'fa-solid fa-house',
+    pathname: '/',
+    type: 1,
+  },
+  {
     id: 1,
     title: 'ลงทะเบียนจองคิว',
     icon: 'fa-solid fa-q',

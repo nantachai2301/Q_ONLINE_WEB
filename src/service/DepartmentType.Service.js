@@ -6,9 +6,10 @@ const getDepartment = async () => {
   return await axios.get(API_URL + "departments ");
 };
 
-const getDepartmentbyID = async (department_id) => {
+const getDepartmentById = async (department_id) => {
   return await axios.get(API_URL + "departments/" + department_id);
 };
+
 const updateDepartmentById = async (department_id,
   department_name,
   department_image,
@@ -62,7 +63,7 @@ const createDepartment = async (  department_id,
   };
 export {
   getDepartment,
-  getDepartmentbyID,
+  getDepartmentById,
   deleteDepartmentById,
   updateDepartmentById,
   createDepartment,
@@ -71,7 +72,7 @@ export {
 
 const DepartmentService = {
   getDepartment,
-  getDepartmentbyID,
+  getDepartmentById,
   deleteDepartmentById,
   updateDepartmentById,
   createDepartment,
