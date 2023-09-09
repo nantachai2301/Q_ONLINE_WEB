@@ -4,7 +4,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 import axios from "axios";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
-import ShowData from "./Showdata";
+import { createPatient } from "../../../service/Patient.Service";
 /**หน้าจองคิวของเจ้าหน้าที่จองให้ผู้ป่วย */
 function MainBookAuthor() {
   const location = useLocation();
@@ -96,7 +96,33 @@ function MainBookAuthor() {
 
       if (result.isConfirmed) {
         try {
-          await axios.post("http://localhost:5000/apis/patients/", dataToSend);
+          await createPatient( 
+            dataToSend.users_id,
+            dataToSend.id_card,
+            dataToSend.password,
+            dataToSend.prefix_name,
+            dataToSend.first_name,
+            dataToSend.last_name,
+            dataToSend.gender,
+            dataToSend.birthday,
+            dataToSend.weight,
+            dataToSend.height,
+            dataToSend.phoneNumber,
+            dataToSend.congenital_disease,
+            dataToSend.drugallergy,
+            dataToSend.contact_first_name,
+            dataToSend.contact_last_name,
+            dataToSend.contact_relation_id,
+            dataToSend.contact_phoneNumber,
+            dataToSend.address,
+            dataToSend.subdistrict,
+            dataToSend.district,
+            dataToSend.province,
+            dataToSend.postcode,
+            dataToSend.subdistrictsId,
+            dataToSend.img,
+            dataToSend.role_id,
+          );
            
           
 
@@ -107,7 +133,7 @@ function MainBookAuthor() {
             timer: 1500,
           });
 
-          navigate("/auth/Bookingwalkin");
+          navigate("/author/Bookingwalkin");
         } catch (error) {
           console.log(error);
           Swal.fire({
@@ -319,6 +345,8 @@ function MainBookAuthor() {
                           name="age"
                           value={age !== null ? age : ''} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
                           readOnly
+                            disabled
+                            style={{ backgroundColor: "lightgray" }}
                           className="form-control"
                         />
                       </div>

@@ -5,7 +5,7 @@ import axios from "axios";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import LoginModal from "../../components/Login/LoginModal";
-
+import { createPatient } from "../../service/Patient.Service";
 function Register() {
   const location = useLocation();
  
@@ -85,9 +85,32 @@ function Register() {
 
       if (result.isConfirmed) {
         try {
-          await axios.post(
-            "https://elated-lime-salmon.cyclic.app/apis/patient/",
-            dataToSend
+          await createPatient( 
+            dataToSend.users_id,
+            dataToSend.id_card,
+            dataToSend.password,
+            dataToSend.prefix_name,
+            dataToSend.first_name,
+            dataToSend.last_name,
+            dataToSend.gender,
+            dataToSend.birthday,
+            dataToSend.weight,
+            dataToSend.height,
+            dataToSend.phoneNumber,
+            dataToSend.congenital_disease,
+            dataToSend.drugallergy,
+            dataToSend.contact_first_name,
+            dataToSend.contact_last_name,
+            dataToSend.contact_relation_id,
+            dataToSend.contact_phoneNumber,
+            dataToSend.address,
+            dataToSend.subdistrict,
+            dataToSend.district,
+            dataToSend.province,
+            dataToSend.postcode,
+            dataToSend.subdistrictsId,
+            dataToSend.img,
+            dataToSend.role_id,
           );
 
           Swal.fire({

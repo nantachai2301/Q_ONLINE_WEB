@@ -5,14 +5,14 @@ const API_URL = "https://elated-lime-salmon.cyclic.app/apis/";
 const getQueue = async () => {
   return await axios.get(API_URL + "queue");
 };
-const updateStatusQueue = async (
+const updateQueues = async ( users_id,
   queue_id,
   queue_date,
   create_at,
   symptom,
   queue_status_id,
   department_id,
-  users_id,
+ 
   department_name,
   queue_status_name,
   prefix_name,
@@ -69,14 +69,35 @@ const updateQueueById = async (
     formatted_birthday,
   });
 };
+const createQueue = async (
+  users_id,
+  first_name,
+  last_name,
+  department_id,
+  queue_date,
+  symptom,
+  queue_status_id
+) => {
+  return await axios.post(API_URL + "queue", {
+    users_id,
+    first_name,
+    last_name,
+    department_id,
+    queue_date,
+    symptom,
+    queue_status_id, // ตรวจสอบว่าค่า queue_status_id ถูกส่งไปยัง API ในฟังก์ชันนี้
+  });
+};
 
-export { getQueue, updateStatusQueue, deleteQueueById, updateQueueById }; // Export getDoctor as a named export
+
+export { getQueue,  updateQueues, deleteQueueById, updateQueueById,createQueue };
 
 const DoctorService = {
   getQueue,
-  updateStatusQueue,
+  updateQueues,
   deleteQueueById,
   updateQueueById,
+  createQueue
 };
 
 export default DoctorService;

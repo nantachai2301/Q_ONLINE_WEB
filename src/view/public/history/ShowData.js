@@ -8,14 +8,11 @@ import { Formik } from "formik";
 import Swal from "sweetalert2";
 import {
   getQueue,
-  updateStatusQueue,
-  updateQueueById,
-  deleteQueueById
-  } from "../../../service/Queue.Service";
-  import {
-   getDepartment
-   
-    } from "../../../service/DepartmentType.Service";
+  updateQueues,
+  deleteQueueById,
+} from "../../../service/Queue.Service";
+import { getPatient } from "../../../service/Patient.Service";
+import { getDepartment } from "../../../service/DepartmentType.Service";
 import axios from "axios";
 import _ from "lodash";
 import Spinner from "react-bootstrap/Spinner";
@@ -34,7 +31,7 @@ function ShowData() {
   const [editModalShow, setEditModalShow] = useState(false);
   const [selectedQueueData, setSelectedQueueData] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
-  const [selectedStatusId, setSelectedStatusId] = useState('2');
+  const [selectedStatusId, setSelectedStatusId] = useState("1");
   const [departments, setDepartments] = useState([]);
 
   const [queue, setQueue] = useState({});
@@ -50,10 +47,7 @@ function ShowData() {
       // ถ้าล็อกอินแล้ว ดึงข้อมูลผู้ใช้จาก localStorage
       const userDataFromLocalStorage = JSON.parse(storedUserData);
       setUserData(userDataFromLocalStorage);
-      axios
-        .get(
-          `http://localhost:5000/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
-        )
+      getPatient(userDataFromLocalStorage.data.id_card)
         .then((response) => {
           console.log("Response data:", response.data);
 
@@ -108,32 +102,33 @@ function ShowData() {
 
   // ในส่วนที่ใช้งาน useEffect สำหรับการคำนวณหน้าและข้อมูลที่แสดงใน Pagination
   useEffect(() => {
-    const filteredData = queueList.filter((item) => {
-      const isMatchingStatusId =
-      selectedStatusId === "" ||
-      selectedStatusId === item.queue_status_id.toString();
-    
-      const isMatchingUserId = item.users_id === userData?.users_id;
-      const isMatchingDepartment =
-        selectedDepartment === "" ||
-        item.department_id.toString() === selectedDepartment;
-      const isMatchingDate =
-        selectedDate === "" ||
-        formatQueueDate(item.queue_date, "DD-MM-YYYY") === selectedDate;
-      console.log("selectedDate:", selectedDate);
-      
-      return (
-        isMatchingStatusId &&
-        isMatchingUserId &&
-        isMatchingDepartment &&
-        isMatchingDate
-      );
-    })
-    .sort((a, b) => {
-      const dateA = new Date(formatDateToAPI(a.queue_date));
-      const dateB = new Date(formatDateToAPI(b.queue_date));
-      return dateA - dateB;
-    });
+    const filteredData = queueList
+      .filter((item) => {
+        const isMatchingStatusId =
+          selectedStatusId === "" ||
+          selectedStatusId === item.queue_status_id.toString();
+
+        const isMatchingUserId = item.users_id === userData?.users_id;
+        const isMatchingDepartment =
+          selectedDepartment === "" ||
+          item.department_id.toString() === selectedDepartment;
+        const isMatchingDate =
+          selectedDate === "" ||
+          formatQueueDate(item.queue_date, "DD-MM-YYYY") === selectedDate;
+        console.log("selectedDate:", selectedDate);
+
+        return (
+          isMatchingStatusId &&
+          isMatchingUserId &&
+          isMatchingDepartment &&
+          isMatchingDate
+        );
+      })
+      .sort((a, b) => {
+        const dateA = new Date(formatDateToAPI(a.queue_date));
+        const dateB = new Date(formatDateToAPI(b.queue_date));
+        return dateA - dateB;
+      });
     if (selectedStatusId === "4") {
       setFilteredData(
         filteredData.filter((item) => item.queue_status_id === 4)
@@ -161,9 +156,7 @@ function ShowData() {
     selectedDate,
   ]);
   useEffect(() => {
-    // เรียก API เพื่อดึงข้อมูลแผนก
-    axios
-      .get("http://localhost:5000/apis/departments")
+    getDepartment()
       .then((response) => {
         setDepartments(response.data);
       })
@@ -203,12 +196,13 @@ function ShowData() {
       console.log("Values received in handleEditSubmit:", values);
       console.log("Sending request with data:", updatedData);
       // ส่งค่าไปยัง API สำหรับการแก้ไขคิว
-      const response = await axios.put(
-        `http://localhost:5000/apis/queue/${
-          selectedQueueData.users_id
-        }?queue_date=${formatDateToAPI(selectedQueueData.queue_date)}`,
-        updatedData
+      const response = await updateQueues(
+        selectedQueueData.users_id,
+        formatDateToAPI(selectedQueueData.queue_date),
+        updatedData.queue_date,
+        updatedData.symptom
       );
+
       console.log("Response from server:", response.data);
       // อัปเดตรายการคิวใน state หลังจากแก้ไขเรียบร้อย
       setQueueList((prevQueueList) =>
@@ -260,9 +254,7 @@ function ShowData() {
       if (result.isConfirmed) {
         try {
           const formattedDate = formatDateToAPI(queue_date);
-          const response = await axios.delete(
-            `http://localhost:5000/apis/queue/${users_id}/${formattedDate}`
-          );
+          const response = await deleteQueueById(users_id, formattedDate);
 
           if (response.data.affectedRows > 0) {
             // หากลบสำเร็จ ทำการอัปเดตข้อมูลใหม่ด้วยการอัปเดต state หรือที่เก็บข้อมูลที่ใช้ในการแสดงผล
@@ -307,8 +299,8 @@ function ShowData() {
     <div>
       <div className="row justify-content-start mb-2">
         <div className="col-5 col-md-2 col-lg-3">
-        <i className="fa-solid fa-calendar mx-1"></i>
-  <label>ค้นหาตามวันที่</label>
+          <i className="fa-solid fa-calendar mx-1"></i>
+          <label>ค้นหาตามวันที่</label>
           <input
             type="date"
             className="form-control"
@@ -351,27 +343,27 @@ function ShowData() {
           value={selectedStatusId}
           onChange={(e) => setSelectedStatusId(e.target.value)}
         >
-         <option value="2">คิวที่กำลังดำเนินการ</option>
-         <option value="1">คิวที่จอง</option>
+          <option value="1">คิวที่จอง</option>
+          <option value="2">คิวที่กำลังดำเนินการ</option>
           <option value="4">ประวัติการจองคิว</option>
         </select>
       </div>
       <div className="overflow-auto">
         <table className="table">
           <thead>
-          <tr
-  className="table"
-  style={{
-    backgroundColor:
-      selectedStatusId === "4"
-        ? "#778899"
-        : selectedStatusId === "1"
-        ? "#4682B4"
-        : "#FF5733", // กำหนดสีตามเงื่อนไข
-    color: "#fff"
-  }}
->
-        {/* ... ส่วนอื่น ๆ ของการแสดงข้อมูลในตาราง */}
+            <tr
+              className="table"
+              style={{
+                backgroundColor:
+                  selectedStatusId === "4"
+                    ? "#4682B4"
+                    : selectedStatusId === "1"
+                    ? "#4682B4"
+                    : "#4682B4", // กำหนดสีตามเงื่อนไข
+                color: "#fff",
+              }}
+            >
+              {/* ... ส่วนอื่น ๆ ของการแสดงข้อมูลในตาราง */}
               <th scope="col" style={{ width: "5%", textAlign: "center" }}>
                 ลำดับ
               </th>
@@ -391,28 +383,27 @@ function ShowData() {
               <th scope="col" style={{ width: "10%", textAlign: "center" }}>
                 สถานะ
               </th>
-              
-           
-    <th scope="col" style={{ width: "10%", textAlign: "center" }}>
-   
-    <span>จัดการ</span>
 
-    </th>
-
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+                <span>จัดการ</span>
+              </th>
             </tr>
           </thead>
 
           <tbody>
             {pageData
-              .filter((queue) =>
-              queue.users_id === userData?.users_id &&
-              (selectedStatusId === "" ||
-                selectedStatusId.includes(queue.queue_status_id.toString()))
-            )
+              .filter(
+                (queue) =>
+                  queue.users_id === userData?.users_id &&
+                  (selectedStatusId === "" ||
+                    selectedStatusId.includes(queue.queue_status_id.toString()))
+              )
               .slice(0, 10) // เลือกแสดงเฉพาะ 10 รายการแรก
               .map((queue, index) => (
                 <tr key={queue.id}>
-                  <td style={{ textAlign: "center" }}>{(page - 1) * 10 + index + 1}</td>{" "}
+                  <td style={{ textAlign: "center" }}>
+                    {(page - 1) * 10 + index + 1}
+                  </td>{" "}
                   {/* แสดงลำดับเริ่มจาก 1 */}
                   <td style={{ textAlign: "center" }}>{queue.symptom}</td>
                   <td style={{ textAlign: "center" }}>
@@ -421,33 +412,31 @@ function ShowData() {
                   <td style={{ textAlign: "center" }}>{queue.queue_date}</td>
                   <td style={{ textAlign: "center" }}>{queue.create_at}</td>
                   <td style={{ textAlign: "center" }}>
-                 
                     {queue.queue_status_name}
                   </td>
-                  
                   <td style={{ textAlign: "center" }}>
-  {(queue.queue_status_id === 1 || queue.queue_status_id === 2) && (
-    <div>
-      <button
-        type="button"
-        className="btn btn-warning text-white mx-1 mt-1"
-        onClick={() => handleEditClick(queue)}
-      >
-        <i className="fa-solid fa-pen-to-square"></i>
-      </button>
-      <button
-        type="button"
-        className="btn btn-danger text-white mx-1 mt-1"
-        onClick={() => {
-          removeQueue(queue.users_id, queue.queue_date);
-        }}
-      >
-        <i className="fa-solid fa-trash-can"></i>
-      </button>
-    </div>
-  )}
-</td>
-
+                    {(queue.queue_status_id === 1 ||
+                      queue.queue_status_id === 2) && (
+                      <div>
+                        <button
+                          type="button"
+                          className="btn btn-warning text-white mx-1 mt-1"
+                          onClick={() => handleEditClick(queue)}
+                        >
+                          <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-danger text-white mx-1 mt-1"
+                          onClick={() => {
+                            removeQueue(queue.users_id, queue.queue_date);
+                          }}
+                        >
+                          <i className="fa-solid fa-trash-can"></i>
+                        </button>
+                      </div>
+                    )}
+                  </td>
                 </tr>
               ))}
             {filteredData.length === 0 && ( // เพิ่มเงื่อนไขตรวจสอบว่าไม่มีข้อมูล
@@ -458,7 +447,7 @@ function ShowData() {
               </tr>
             )}
           </tbody>
-          
+
           <Modal
             show={editModalShow}
             onHide={() => setEditModalShow(false)}
@@ -589,7 +578,6 @@ function ShowData() {
                               <option value="7">หัวใจ</option>
                               <option value="8">ผิวหนัง</option>
                               <option value="23">จักษุ</option>
-                              
                             </select>
                             {/* <ErrorMessage
                             component="div"
@@ -616,9 +604,7 @@ function ShowData() {
                                 fontSize: "18px",
                               }}
                               className="form-input"
-                           
                               value={formatDate(values.queue_date)}
-                           
                               disabled={true}
                             />
                           </div>

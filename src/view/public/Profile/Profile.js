@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import { getPatient } from "../../../service/Patient.Service";
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,10 +20,7 @@ const Profile = () => {
       setUserData(userDataFromLocalStorage);
 
       // ส่งค่า id_card ไปที่ API เพื่อรับข้อมูลผู้ใช้ที่ตรงกับ id_card
-      axios
-        .get(
-          `https://elated-lime-salmon.cyclic.app/apis/patients?id_card=${userDataFromLocalStorage.data.id_card}`
-        )
+      getPatient(userDataFromLocalStorage.data.id_card)
         .then((response) => {
           // หากสำเร็จ กำหนดข้อมูลผู้ใช้ใหม่
           const users = response.data;

@@ -6,7 +6,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Select from "react-select";
-
+import {
+  getQueue,
+ 
+  } from "../../../service/Queue.Service";
 function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, deleteData }) {
   const [dataQ, setDataQ] = useState([]);
   console.log(dataQ)
@@ -21,8 +24,10 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
 
 
   const getdataQ = async () => {
-    const response = await axios.get("http://localhost:5000/apis/queue/");
-   setDataQ(response.data);
+    const response = await getQueue();
+    const filteredData = response.data.filter(item => item.queue_status_id === 4);
+    setDataQ(filteredData);
+  
    
   };
 
@@ -83,21 +88,8 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
   };
   
 
-  const handleCancelClick = () => {
-  setSearchUsers("");
-    
-    setPageData(dataQ.slice(0, pageSize));
-  };
 
-const removeEmp =(queue_id)=>{
-  if(window.confirm("คุณต้องการลบคิวนี้หรือไม่?")){
-    axios.delete("http://localhost:5000/apis/queue/"+ queue_id)
-    .then((res)=>{
-      alert("Remove successfully.")
-      window.location.reload()
-    })
-  }
-}
+
   return (
     <div className="w-full">
     <div className="row">
@@ -130,22 +122,20 @@ const removeEmp =(queue_id)=>{
       <table className="table">
           <thead>
             <tr className="table-success">
-              <th scope="col" style={{ width: '20%' }}>
+              <th scope="col" style={{ width: '10%' }}>
               ชื่อ-สกุล
               </th>
-              <th scope="col" style={{ width: '20%' }}>
-              อาการเบื้องต้น
-              </th>
+             
               <th scope="col" style={{ width: '5%' }}>
               แผนก
               </th>
-              <th scope="col" style={{ width: '15%' }}>
+              <th scope="col" style={{ width: '10%' }}>
               วันที่จอง
               </th>
-              <th scope="col" style={{ width: '10%' }}>
+              <th scope="col" style={{ width: '5%' }}>
               วันที่เข้าการรับรักษา
               </th>             
-              <th scope="col" style={{ width: '5%' }}>
+              <th scope="col" style={{ width: '10%' }}>
               สถานะคิว
               </th>
             </tr>
@@ -156,7 +146,7 @@ const removeEmp =(queue_id)=>{
                 return (
                   <tr key={item.queue_id}>
                     <td>{item.first_name} {item.last_name}</td>
-                    <td>{item.symptom}</td>
+                
                       <td>{item.department_name}</td>
                       <td>{item.create_at}</td>
                       <td>{item.queue_date}</td>                     

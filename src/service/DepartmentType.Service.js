@@ -56,12 +56,17 @@ const createDepartment = async (  department_id,
       
     });
   };
+
+  const getDepartmentbydepart = async (department_id) => {
+    return await axios.get(API_URL + "departments/" + department_id);
+  };
 export {
   getDepartment,
   getDepartmentbyID,
   deleteDepartmentById,
   updateDepartmentById,
-  createDepartment
+  createDepartment,
+  getDepartmentbydepart
 };
 
 const DepartmentService = {
@@ -69,7 +74,8 @@ const DepartmentService = {
   getDepartmentbyID,
   deleteDepartmentById,
   updateDepartmentById,
-  createDepartment
+  createDepartment,
+  getDepartmentbydepart
 };
 
 export default DepartmentService;

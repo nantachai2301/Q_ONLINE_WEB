@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "../../../../src/style/departmentAll.css";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-
+import { getDepartment} from "../../../service/DepartmentType.Service";
 function ShowDepartmentAll({}) {
   const [departments, setDepartments] = useState([]);
 
@@ -13,9 +13,7 @@ function ShowDepartmentAll({}) {
 useEffect(() => {
   const fetchDepartments = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/apis/departments"
-      );
+      const response = await getDepartment();
 
       console.log(response.data); // Check the response data
 

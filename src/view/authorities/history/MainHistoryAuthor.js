@@ -9,7 +9,7 @@ function MainHistoryAuthor() {
             <nav aria-label="breadcrumb"></nav>
           </div>
           <div className="w-full mb-5">
-            <h2 className="title-content">ข้อมูลรายชื่อแพทย์</h2>
+            <h2 className="title-content">ประวัติการจองคิว</h2>
           </div>
           <Formik>
             <Form>

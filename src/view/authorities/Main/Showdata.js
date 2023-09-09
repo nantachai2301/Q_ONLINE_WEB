@@ -31,9 +31,12 @@ function ShowData({
   const [searchDate, setSearchDate] = useState(format(new Date(), "yyyy-MM-dd")); // เริ่มต้นด้วยวันที่ปัจจุบัน
 
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+  
   const getdataQ = async () => {
     const response = await getQueue();
-    setDataQ(response.data);
+    const filteredData = response.data.filter(item => item.queue_status_name === "ปกติ" || item.queue_status_name === "ยืนยัน");
+    setDataQ(filteredData);
+  
   };
 
   useEffect(() => {
@@ -54,12 +57,17 @@ function ShowData({
     return dataQ.filter((item) => {
       if (searchDate !== "") {
         const formattedSearchDate = formatDateToAPI(searchDate);
-        return item.queue_date === formattedSearchDate;
+  
+        // เพิ่มเงื่อนไขเช็คว่าวันที่ที่กรอกเข้ามาไม่น้อยกว่าวันที่ปัจจุบัน
+        if (formattedSearchDate >= formattedCurrentDate) {
+          return item.queue_date === formattedSearchDate;
+        }
       }
+      
       return item.queue_date === formattedCurrentDate;
     });
   };
-
+  
   useEffect(() => {
     const currentDate = new Date(); // วันที่ปัจจุบัน
     const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
@@ -125,14 +133,19 @@ function ShowData({
     setPage(1);
     getdataQ();
   };
-const handleCancel = () => {
-  setSearchUsers(""); // เคลียร์ค่าค้นหาชื่อผู้ใช้
-  setSearchDate(format(new Date(), "yyyy-MM-dd")); // เคลียร์ค่าวันที่
-
+  const handleCancel = () => {
+    setSearchUsers(""); // เคลียร์ค่าค้นหาชื่อผู้ใช้
+    setSearchDate(format(new Date(), "yyyy-MM-dd")); // กำหนดค่าวันที่เป็นวันที่ปัจจุบัน
   setPage(1); // กลับไปที่หน้าแรก
-  const filteredData = dataQ; // กรองข้อมูลใหม่ด้วยการค้นหาและวันที่
-  setPageData(filteredData); // อัพเดตข้อมูลใหม่ในหน้าแสดงผล
-};
+  
+    // อัพเดตข้อมูลใหม่ในหน้าแสดงผลโดยให้ pageData เก็บข้อมูลที่ถูกกรองด้วยค่าค้นหาและวันที่ใหม่
+    const currentDate = new Date(); // วันที่ปัจจุบัน
+    const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
+  
+    const filteredData = filterDataBySearchAndDate(dataQ, searchDate, formattedCurrentDate);
+  
+    setPageData(filteredData);
+  };
   const formatDateToAPI = (dateString) => {
     const [day, month, year] = dateString.split("-");
     return `${year}-${month}-${day}`;
@@ -199,7 +212,7 @@ const handleCancel = () => {
     console.log(formattedQueueDate);
     const newStatus = currentStatus === "ยืนยัน" ? "รับการรักษาแล้ว" : "ยืนยัน";
   
-    const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : 2; // ค่า newQueueStatusId ควรเป็น 3
+    const newQueueStatusId = currentStatus === "ยืนยัน" ? 4 : 2; // ค่า newQueueStatusId ควรเป็น 3
     Swal.fire({
       title: `คุณต้องการอัพเดทสถานะรายการนี้ใช่หรือไม่ ! `,
       text: `คุณต้องการอัพเดทสถานะให้เป็น ! ${newStatus}?`,

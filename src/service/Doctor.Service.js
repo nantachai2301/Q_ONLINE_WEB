@@ -5,6 +5,9 @@ const API_URL = "https://elated-lime-salmon.cyclic.app/apis/";
 const getDoctor = async ( ) => {
   return await axios.get(API_URL + "doctors",);
 };
+const getDoctorDepartment = async (id ) => {
+  return await axios.get(API_URL + "doctors/"+ id,);
+};
 const getDoctorById = async (doctor_id) => {
   return await axios.get(API_URL + "doctors/" + doctor_id);
 };
@@ -69,7 +72,10 @@ const createDoctor = async ( doctor_id,prefix_name, doctor_first_name, doctor_la
  
   
 };
-export { getDoctor, getDoctorById, deleteDoctorById, updateStatusDoctor , createDoctor,updateDoctorById}; // Export getDoctor as a named export
+const getDoctordepart = async (department_id) => {
+  return await axios.get(API_URL + "/doctors/depart/" + department_id);
+};
+export { getDoctor,getDoctorDepartment, getDoctorById, deleteDoctorById, updateStatusDoctor , createDoctor,updateDoctorById,getDoctordepart}; // Export getDoctor as a named export
 
 const DoctorService = {
   getDoctor,
@@ -77,7 +83,9 @@ const DoctorService = {
   deleteDoctorById, 
   updateStatusDoctor
   ,createDoctor,
-  updateDoctorById
+  updateDoctorById,
+  getDoctorDepartment,
+  getDoctordepart
 };
 
 export default DoctorService;

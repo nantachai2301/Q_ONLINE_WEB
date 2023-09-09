@@ -10,7 +10,9 @@ import axios from "axios";
 import "../../style/admin.css";
 import Chart from "chart.js/auto";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
-
+import { getDoctor,} from "../../service/Doctor.Service";
+import { getPatient,} from "../../service/Patient.Service";
+import { getDepartment } from "../../service/DepartmentType.Service";
 function HomePrivate() {
   const [counts, setCounts] = useState({});
   const [patients, setPatients] = useState({});
@@ -31,9 +33,10 @@ function HomePrivate() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res1 = await axios.get(`http://localhost:5000/apis/doctors`);
+        const res1 = await getDoctor();
 
-        const res2 = await axios.get(`http://localhost:5000/apis/departments`);
+
+        const res2 = await getDepartment();
 
         console.log(res1);
         console.log(res2);
@@ -48,9 +51,7 @@ function HomePrivate() {
         setDepartment_name(res2.data);
         setDepartment(res2.data);
 
-        const resDoctors = await axios.get(
-          `http://localhost:5000/apis/doctors`
-        );
+        const resDoctors = await getDoctor();
         const doctorsData = resDoctors.data;
 
         const doctorsCountByDepartment = doctorsData.reduce((acc, doctor) => {
@@ -71,9 +72,7 @@ function HomePrivate() {
 
   const countD = department.length;
   useEffect(() => {
-    axios
-      // เรียกใช้ API เพื่อดึงข้อมูลจากฐานข้อมูล
-      .get("http://localhost:5000/apis/patients")
+    getPatient()
       .then((res) => {
         console.log(res);
         const patientsData = res.data;

@@ -5,7 +5,7 @@ import axios from "axios";
 import Swal from 'sweetalert2';
 import "../../../../../style/showdepartments.css";
 import * as Yup from 'yup';
-
+import { createDepartment} from "../../../../../service/DepartmentType.Service";
 const Schema = Yup.object().shape({
   department_name: Yup.string().required('กรุณากรอก ชื่อแผนก'),
   department_image: Yup.string().required('กรุณากรอก เลือกรูปภาพ'),
@@ -65,7 +65,15 @@ function FormDepartment() {
 
       if (result.isConfirmed) {
         // ทำการอัปเดตข้อมูลแผนก
-        await axios.post("http://localhost:5000/apis/departments/", departments);
+        await createDepartment(departments.department_id,
+          departments.department_name,
+          departments.department_image,
+          departments.open_time,
+          departments.close_time,
+          departments.max_queue_number,
+          departments.floor,
+          departments.building,
+          departments.department_phone);
         Swal.fire({
           icon: 'success',
           title: 'บันทึกข้อมูลสำเร็จ',

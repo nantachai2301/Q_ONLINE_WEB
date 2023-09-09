@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import Pagination from 'react-js-pagination';
 import Select from "react-select";
@@ -6,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Spinner from "react-bootstrap/Spinner";
-
+import {
+ getDepartment,
+ deleteDepartmentById 
+} from "../../../../service/DepartmentType.Service";
+import de from 'date-fns/esm/locale/de';
 function ShowData({ pagin, changePage, changePageSize }) {
   const navigate = useNavigate();
   const [departments, setDepartments] = useState([]);
@@ -16,8 +19,9 @@ function ShowData({ pagin, changePage, changePageSize }) {
   const [pageSize, setPageSize] = useState(10);
   const [searchDepartment, setSearchDepartment] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+  
   const getDepartments = async () => {
-    const response = await axios.get("http://localhost:5000/apis/departments");
+    const response = await getDepartment();
     setDepartments(response.data);
   };
 
@@ -87,8 +91,8 @@ function ShowData({ pagin, changePage, changePageSize }) {
   const loadEdit = (id) => {
     navigate("/admin/edit-department/form/" + id);
   };
-
-  const removeEmp = (department_id) => {
+  const handleDeleteDepartment = (department_id) => {
+  
     Swal.fire({
       title: "ยืนยัน การลบ",
       text: "คุนต้องการลบ แผนก?",
@@ -98,8 +102,7 @@ function ShowData({ pagin, changePage, changePageSize }) {
       cancelButtonText: "ยกเลิก",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .delete("http://localhost:5000/apis/departments/" + department_id)
+       deleteDepartmentById(department_id)
           .then((res) => {
             Swal.fire({
               title: "ลบ",
@@ -250,7 +253,7 @@ function ShowData({ pagin, changePage, changePageSize }) {
                         type="button"
                         className="btn btn-danger text-white mx-1 mt-1"
                         onClick={() => {
-                          removeEmp(item.department_id);
+                          handleDeleteDepartment (item.department_id);
                         }}
                       >
                         <i className="fa-solid fa-trash-can"></i>

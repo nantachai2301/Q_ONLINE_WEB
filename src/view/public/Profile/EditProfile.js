@@ -5,14 +5,14 @@ import { useFormik, Formik, Form, ErrorMessage } from "formik";
 import Schema from "./Validation";
 import axios from "axios";
 import Select from "react-select";
-
+import { getPatientById ,updatePatientById} from "../../../service/Patient.Service";
 
 function EditProfile() {
   const location = useLocation();
   const navigate = useNavigate();
   const [originalBirthday, setOriginalBirthday] = useState(""); // ตัวแปรเก็บค่าวันเกิดเดิม
   const [error, setError] = useState(false);
-
+  const [age, setAge] = useState(null);
   const [users, setUsers] = useState({
     users_id: "",
     id_card: "",
@@ -45,15 +45,20 @@ function EditProfile() {
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const res = await axios.get(
-          "https://elated-lime-salmon.cyclic.app/apis/patients/" + users_id
-        );
+        const res = await getPatientById(users_id);
 
         setUsers(res.data);
 
         const password = res.data.password;
 
-        console.log("รหัสผ่านที่ได้:", password);
+        if (res.data.birthday) {
+          const birthDateObj = new Date(res.data.birthday);
+          const today = new Date();
+          const diffInMilliseconds = Math.abs(today - birthDateObj);
+          const ageDate = new Date(diffInMilliseconds);
+          const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
+          setAge(calculatedAge);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -81,16 +86,31 @@ function EditProfile() {
       ...prevUsers,
       birthday: selectedDate,
     }));
+
+    if (selectedDate) {
+      const birthDateObj = new Date(selectedDate);
+      const today = new Date();
+      const diffInMilliseconds = Math.abs(today - birthDateObj);
+      const ageDate = new Date(diffInMilliseconds);
+      const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
+      setAge(calculatedAge);
+    } else {
+      // ถ้าวันที่เกิดไม่ได้ถูกเลือก ให้เคลียร์ค่าอายุใน state
+      setAge(null);
+    }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const selectedDate = e.target.value;
     console.log("Input Value:", value); // ตรวจสอบค่าใน console
+
     setUsers((prevUsers) => ({
       ...prevUsers,
       [name]: value,
     }));
   };
+
   const handleClick = async () => {
     try {
       const isValid = await Schema.isValid(users);
@@ -105,37 +125,83 @@ function EditProfile() {
       }
 
       const result = await Swal.fire({
-        title: "ยืนยัน อัปเดต",
-        text: "คุณแน่ใจหรือไม่ ว่าต้องการอัปเดตผู้ใช้ ??",
+        title: "คุณแน่ใจที่จะอัพเดทข้อมูลผู้ใช้ ?",
+        text: "",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "อัปเดต",
+        confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
 
       if (result.isConfirmed) {
-        const { birthday, ...userData } = users; // ไม่รวม birthday ในการส่งข้อมูล
-
-        const response = await axios.put(
-          `http://localhost:5000/apis/patients/${users_id}`,
-          {
-            ...userData,
-            birthday: formatDate(users.birthday), // ส่งค่าวันเดือนใหม่ไปยัง API
-          }
+        const {
+          users_id,
+          id_card,
+          password,
+          prefix_name,
+          first_name,
+          last_name,
+          gender,
+          birthday,
+          weight,
+          height,
+          phoneNumber,
+          congenital_disease,
+          drugallergy,
+          contact_first_name,
+          contact_last_name,
+          contact_relation_id,
+          contact_phoneNumber,
+          address,
+          subdistrict,
+          district,
+          province,
+          postcode,
+          subdistrictsId,
+          img,
+          role_id,
+        } = users;
+        const response = await updatePatientById(
+          users_id,
+          id_card,
+          password,
+          prefix_name,
+          first_name,
+          last_name,
+          gender,
+          birthday,
+          weight,
+          height,
+          phoneNumber,
+          congenital_disease,
+          drugallergy,
+          contact_first_name,
+          contact_last_name,
+          contact_relation_id,
+          contact_phoneNumber,
+          address,
+          subdistrict,
+          district,
+          province,
+          postcode,
+          subdistrictsId,
+          img,
+          role_id,
+          {}
         );
 
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
-            title: "บันทึกข้อมูลสำเร็จ",
+            title: "อัพเดตข้อมูลผู้ใช้สำเร็จ",
             showConfirmButton: false,
             timer: 2000,
           });
-          navigate("/Profile");
+          navigate("/admin/user");
         } else {
           Swal.fire({
             icon: "error",
-            title: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
+            title: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลผู้ใช้",
             text: "กรุณาลองอีกครั้ง",
             showConfirmButton: true,
           });
@@ -146,7 +212,7 @@ function EditProfile() {
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการอัปเดตผู้ใช้",
+        text: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลผู้ใช้",
         showConfirmButton: true,
       });
     }
@@ -160,21 +226,21 @@ function EditProfile() {
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/admin/user" className="nav-breadcrumb">
-                  ข้อมูลรายชื่อผู้ป่วย
+                  ข้อมูลรายชื่อผู้ใช้
                 </Link>
               </li>
               <li
                 className="breadcrumb-item text-black fw-semibold"
                 aria-current="page"
               >
-                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อผู้ป่วย
+                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อผู้ใช้
               </li>
             </ol>
           </nav>
         </div>
         <div className="w-full mb-5">
           <h2 className="title-content">
-            {location.state ? "เพิ่ม" : "แก้ไข"}ข้อมูลรายชื่อผู้ป่วย
+            {location.state ? "เพิ่ม" : "แก้ไข"}ข้อมูลรายชื่อผู้ใช้
           </h2>
         </div>
         <Formik
@@ -185,9 +251,9 @@ function EditProfile() {
         >
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
-              <div className="container mt-2 ">
-                <div className="mb-4">
-                  <div className="card border-0 shadow p-4">
+              <div className="container mt-6 ">
+                <div className="mb-5">
+                  <div className="card border-1 shadow p-2">
                     <h6 className="font ">ข้อมูลทั่วไป</h6>
                     <br></br>
                     <div className="rounded border p-4">
@@ -318,6 +384,17 @@ function EditProfile() {
                             onChange={handleDateChange}
                           />
                         </div>
+                        <div className="col-2 px-1 mt-2">
+                          <label>อายุ</label>
+                          <input
+                            type="text"
+                            name="age"
+                            value={age !== null ? age : ""}
+                            disabled
+                          style={{ backgroundColor: 'lightgray' }} 
+                            className="form-control"
+                          />
+                        </div>
                         <div className="col-sm-2">
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
@@ -378,12 +455,11 @@ function EditProfile() {
                           />
                         </div>
 
-                        <div className="col-4 px-1 mt-2">
+                        <div className="col-sm-6">
                           <label>โรคประจำตัว</label>
-                          <label className="red">*</label>
+
                           <input
                             type="text"
-                            placeholder="โรคประจำตัว"
                             name="congenital_disease"
                             value={users.congenital_disease}
                             className="form-control"
@@ -403,34 +479,7 @@ function EditProfile() {
                           />
                         </div>
                       </div>
-                      <h6>รหัสผ่าน</h6>
-                      <div className="rounded border p-4">
-                        <div className="col-8 ">
-                          <div className="row">
-                            <div className="col-5 px-1 mt-8">
-                              <label>รหัสผ่าน</label>
-                              <label className="red">*</label>
-                              <input
-                                type="password"
-                                placeholder="รหัสผ่าน"
-                                name="password"
-                                value={users.password}
-                                className={`form-control ${
-                                  touched.password &&
-                                  errors.password &&
-                                  "is-invalid"
-                                }`}
-                                onChange={handleChange}
-                              />
-                              <ErrorMessage
-                                name="password"
-                                component="div"
-                                className="error-message"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                     
                       <br></br>
                       <h6>บุคคลที่ติดต่อได้</h6>
                       <div className="rounded border p-4">
@@ -498,7 +547,6 @@ function EditProfile() {
                               <option value="ภรรยา">ภรรยา</option>
                               <option value="พี่-น้อง">พี่-น้อง</option>
                               <option value="ญาติ">ญาติ</option>
-                           
                             </select>
                             <ErrorMessage
                               name="contact_relation_id"
@@ -681,10 +729,12 @@ function EditProfile() {
                         >
                           บันทึก
                         </button>
-                        <button className="btn btn-danger mx-1 nav-breadcrumb ">
-                          <Link to="/profile" className="text-white">
-                            กลับ
-                          </Link>
+
+                        <button
+                          className="btn btn-danger mx-1"
+                          onClick={() => navigate("/admin/user")}
+                        >
+                          ยกเลิก
                         </button>
                       </div>
                     </div>

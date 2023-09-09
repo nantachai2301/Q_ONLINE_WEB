@@ -27,11 +27,11 @@ export const Menu = [
     type: 1,  
   },
    
-   {
-    id: 5,
-    title: 'การประเมินการจองคิว',
-    icon: 'fa-solid fa-address-book',
-    pathname: '/view/Question',
-    type: 1,
-  },
+  //  {
+  //   id: 5,
+  //   title: 'การประเมินการจองคิว',
+  //   icon: 'fa-solid fa-address-book',
+  //   pathname: '/view/Question',
+  //   type: 1,
+  // },
 ];

@@ -7,6 +7,12 @@ import Swal from "sweetalert2";
 import Table from "react-bootstrap/Table";
 import { Modal, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import {
+  getPatient,getPatientById
+  } from "../../../service/Patient.Service";
+import {
+createQueue,deleteQueueById,
+} from "../../../service/Queue.Service";
 function Showdata() {
   const [user, setUser] = useState([]);
   const [selectedUser, setSelectedUser] = useState([]);
@@ -43,7 +49,7 @@ function Showdata() {
 
   const handlecloseLogin = () => {
     window.location.reload();  
-    window.location.href = "/auth/Bookingwalkin";
+    window.location.href = "/author/Bookingwalkin/";
   };
 
   const handleBookingChange = (event) => {
@@ -94,7 +100,13 @@ function Showdata() {
             symptom,
           };
           // ทำการจองคิวโดยส่งข้อมูลที่อยู่ในตัวแปร queue ไปยัง API สำหรับการจองคิว
-          await axios.post("http://localhost:5000/apis/queue", dataToSend);
+          await createQueue( dataToSend.users_id,
+            dataToSend.first_name,
+            dataToSend.last_name,
+            dataToSend.department_id,
+            dataToSend.queue_date,
+            dataToSend.symptom,
+            dataToSend.queue_status_id);
 
           // แสดงตัวแจ้งเตือนการจองคิวสำเร็จ
           Swal.fire({
@@ -135,14 +147,12 @@ function Showdata() {
   };
 
   const getUser = async () => {
-    const response = await axios.get("http://localhost:5000/apis/patients");
+    const response = await getPatient();
     setUser(response.data);
   };
   const getUserById = async (userId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/apis/patients/${userId}`
-      );
+      const response = await getPatientById(userId);
       setSelectedUser(response.data);
     } catch (error) {
       console.error("Error fetching user by ID:", error);
@@ -210,8 +220,7 @@ function Showdata() {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios
-          .delete("http://localhost:5000/apis/patients/" + users_id)
+      deleteQueueById( users_id)
           .then((res) => {
             Swal.fire({
               title: "Deleted",
