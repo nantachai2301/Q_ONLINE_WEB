@@ -15,7 +15,8 @@ import axios from "axios";
 import Chart from "chart.js/auto";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
 import "../../style/homeauthorities.css";
-
+import { getQueue} from "../../service/Queue.Service";
+import { getDepartment} from "../../service/DepartmentType.Service";
 /**หน้าจองคิวของเจ้าหน้าที่จองให้ผู้ป่วย */
 function HomeAuthorities() {
 
@@ -44,9 +45,9 @@ function HomeAuthorities() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res1 = await axios.get(`http://localhost:5000/apis/queue`);
+        const res1 = await getQueue();
 
-        const res2 = await axios.get(`http://localhost:5000/apis/departments`);
+        const res2 = await getDepartment();
 
 
         console.log(res1);
@@ -65,8 +66,7 @@ function HomeAuthorities() {
         setDepartment(res2.data);
         setQueue_status_id(res1.data);
 
-        const resQueue = await axios.get(
-          `http://localhost:5000/apis/queue`
+        const resQueue = await getQueue(
         );
         const queueData = resQueue.data;
 
@@ -89,9 +89,7 @@ function HomeAuthorities() {
   const countD = department.length;
 
   useEffect(() => {
-    axios
-      // เรียกใช้ API เพื่อดึงข้อมูลจากฐานข้อมูล
-      .get("http://localhost:5000/apis/queue")
+    getQueue()
       .then((res) => {
         console.log(res);
         const queueData = res.data;
@@ -168,11 +166,11 @@ function HomeAuthorities() {
   };
 
   return (
-    <div className="w-fulls">
+    <div className="w-full">
 
       <h2 className="title-content">เจ้าหน้าที่</h2>
       <br></br>
-      <div className="container3">
+      <div className="container22">
         <div className="box">
           <div className="icon-box1">
             <h3 className="D">
@@ -234,7 +232,7 @@ function HomeAuthorities() {
           </div>
         </div>
 
-        <div className="col-md-3">
+        <div className="col-md-3 p-3">
           <div className="ta11d">
             <table className="Tables">
               <thead className="thead">
@@ -260,7 +258,7 @@ function HomeAuthorities() {
           </div>
         </div>
 
-        <div className="col-md-5">
+        <div className="col-md-5 p-3">
           <div className="bar-chart">
             {usersAndDepartmentChartData && (
               <Bar data={usersAndDepartmentChartData} options={barChartOptions} />
@@ -268,7 +266,7 @@ function HomeAuthorities() {
           </div>
         </div>
 
-        <div className="col-md-2">
+        <div className="col-md-2 p-3">
           <div className="chart-container1">
             <Doughnut data={chartData} options={chartOptions} />
           </div>
