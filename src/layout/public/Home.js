@@ -174,6 +174,7 @@ function Home() {
           
         </a>
         </div>
+        
       </div>
       )}
       {/* {isLoggedIn && (

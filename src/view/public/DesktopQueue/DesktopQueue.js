@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faCheck, faClock } from "@fortawesome/free-solid-svg-icons";
 import { format, isSameDay } from "date-fns";
 import { parse } from "date-fns";
+import {getQueue } from "../../../service/Queue.Service";
+import {getDepartment } from "../../../service/DepartmentType.Service";
 import doctor from "../../../image/doctor.png";
 import WaitingQueueTable from "./WaitingQueueTable";
 import CallQueue from "./CallQueue";
@@ -18,9 +20,11 @@ function DesktopQueue({ departmentData, selectedDate }) {
                 if (departmentData && selectedDate) { // ตรวจสอบ departmentData และ selectedDate
                     const formattedDate = format(new Date(selectedDate), "yyyy-MM-dd");
 
-                    const response = await axios.get(
-                        `http://localhost:5000/apis/queue/?queue_date=${formattedDate}&department_id=${departmentData.department_id}`
-                    );
+                    const response = await getQueue({
+                        queue_date: formattedDate,
+                        department_id: departmentData.department_id,
+                      });
+                      
 
                     const queues = response.data;
                     console.log("API Response:", response.data);
@@ -191,9 +195,7 @@ function QueuePage() {
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const response = await axios.get(
-                    "http://localhost:5000/apis/departments"
-                );
+                const response = await getDepartment();
                 setDepartments(response.data);
             } catch (error) {
                 console.log(error);
