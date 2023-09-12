@@ -20,12 +20,26 @@
   align-items: center;
 }
 
-.Nameicon{
+.Name-icon{
   font-size: larger;
   white-space:nowrap;
   margin-top: -19px;
 }
-
+.Name-icons{
+  font-size: larger;
+  white-space:nowrap;
+  margin-top: -19px;
+}
+.Name-icon3{
+  font-size: larger;
+  white-space:nowrap;
+  margin-top: -19px;
+}
+.Name-icon4{
+  font-size: larger;
+  white-space:nowrap;
+  margin-top: -19px;
+}
 .card-body{
   border-radius: 15px;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -61,4 +75,20 @@
   width: 80px;
   cursor: pointer;
 }
+.Home-medical{
+  width: 80px;
+  cursor: pointer;
+}
 
+.Home-calendarDays{
+  width: 80px;
+  cursor: pointer;
+}
+.Home-Desktop{
+  width: 80px;
+  cursor: pointer;
+}
+.Home-Queue{
+  width: 80px;
+  cursor: pointer;
+}

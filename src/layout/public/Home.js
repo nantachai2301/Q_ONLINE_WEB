@@ -90,14 +90,14 @@ function Home() {
           >
             <div className="row justify-content-xl-center">
              <div className="col">
-                <div className="Home-icon">
+                <div className="Home-medical">
                 <FontAwesomeIcon
                   onClick={handleDepartment}
                   icon={faBook}
                   class="fas fa-book-medical"
                   style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
                 /></div>
-                <div className="Nameicon">
+                <div className="Name-icon">
                 <a
                   onClick={handleDepartment}
                   style={{ color: "#4b86d2", cursor: "pointer" }}
@@ -111,7 +111,7 @@ function Home() {
               </div>
                   
                <div className="col">
-                <div className="Home-icon">
+                <div className="Home-calendarDays">
                 <FontAwesomeIcon
                   onClick={handleMainBookPopup}
                   icon={faStethoscope}
@@ -119,7 +119,7 @@ function Home() {
                   style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
                 /></div>
                  
-                <div className="Nameicon">
+                <div className="Name-icons">
                   <a
                   onClick={handleMainBookPopup}
                   style={{ color: "#4b86d2", cursor: "pointer" }}
@@ -135,14 +135,14 @@ function Home() {
       )}
               </div>
               <div className="col">
-                <div className="Home-icon">
+                <div className="Home-Desktop">
                 <FontAwesomeIcon
                 onClick={handleAllQueueDesktop}
                 icon={faDesktop}
                 class="fa-solid fa-Desktop"
                   style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
                 /></div>
-                <div className="Nameicon">
+                <div className="Name-icon3">
                 <a
                    onClick={handleAllQueueDesktop}
                   style={{ color: "#4b86d2", cursor: "pointer" }}
@@ -156,14 +156,14 @@ function Home() {
               </div>
               {isLoggedIn && (
         <div className="col">
-        <div className="Home-icon">
+        <div className="Home-Queue">
         <FontAwesomeIcon
           onClick={handleListQueue}
           icon={faList}
           class="fa-solid fa-list"
           style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
         /></div>
-        <div className="Nameicon">
+        <div className="Name-icon4">
         <a
           onClick={handleListQueue}
           style={{ color: "#4b86d2", cursor: "pointer" }}
