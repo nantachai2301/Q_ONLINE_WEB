@@ -33,6 +33,7 @@
     "react-scripts": "^5.0.1",
     "react-select": "^5.7.0",
     "redux": "^4.2.1",
+    "shortid": "^2.2.16",
     "sweetalert2": "^11.7.3",
     "web-vitals": "^2.1.4",
     "yup": "^1.0.2"

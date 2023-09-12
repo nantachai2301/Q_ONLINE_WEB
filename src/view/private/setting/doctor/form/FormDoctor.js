@@ -3,6 +3,7 @@ import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import shortid from "shortid";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import {
@@ -100,7 +101,7 @@ function FormDoctor() {
   };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-  
+
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -108,34 +109,29 @@ function FormDoctor() {
         img.src = reader.result;
         img.onload = () => {
           const maxWidth = 200;
-          const scaleFactor = maxWidth / img.width;
-          const newWidth = img.width * scaleFactor;
-          const newHeight = img.height * scaleFactor;
-  
+          const maxHeight = 200;
+          const newWidth = img.width > maxWidth ? maxWidth : img.width;
+          const newHeight = (newWidth / img.width) * img.height;
+
           const canvas = document.createElement('canvas');
           canvas.width = newWidth;
           canvas.height = newHeight;
-  
+
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, newWidth, newHeight);
-  
-          canvas.toBlob(async (blob) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              const resizedImageURL = reader.result;
-              console.log('Resized Image URL:', resizedImageURL);
 
-              setDoctor((prevDoctor) => ({
-                ...prevDoctor,
-                doctor_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
-              }));
-            };
-            reader.readAsDataURL(blob);
+          canvas.toBlob(async (blob) => {
+            const resizedImageURL = window.URL.createObjectURL(blob);
+            console.log('Resized Image URL:', resizedImageURL);
+
+            setDoctor((prevDoctor) => ({
+              ...prevDoctor,
+              doctor_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
+            }));
           }, 'image/jpeg', 0.8);
         };
       };
       reader.readAsDataURL(file);
-      console.log('file :',file); // ตรวจสอบค่าของ doctor_image
     }
   };
   console.log('doctor_image:',doctor.doctor_image); // ตรวจสอบค่าของ doctor_image

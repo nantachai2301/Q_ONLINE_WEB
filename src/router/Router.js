@@ -11,12 +11,9 @@ import AuthoritiesLayout from "../layout/authorities/AuthoritiesLayout";
 
 import MainDoctor from "../view/private/setting/doctor/MainDoctor";
 import FormDoctor from "../view/private/setting/doctor/form/FormDoctor";
-import MainOpenSchedule from "../view/private/openSchedule/MainOpenSchedule";
-import FormOpenSchedule from "../view/private/openSchedule/form/FormOpenSchedule";
 import MainUser from "../../src/view/private/setting/user/MainUser";
 import FormCreateUser from "../view/private/setting/user/form/FormCreateUser";
-import MainHospital from "../view/private/openSchedule/form/DataHospital/MainHospital";
-import FormHospital from "../view/private/openSchedule/form/DataHospital/FormHospital";
+
 import MainAuthorities from "../view/private/setting/authorities/MainAuthorities";
 import FormAuthorities from "../view/private/setting/authorities/form/FormAuthorities";
 import EditAuthorities from "../view/private/setting/authorities/form/EditAuthorities"
@@ -108,11 +105,7 @@ function Router(props) {
           <PrivateLayout>
             <Routes>
               <Route path="/" element={<HomePrivate/>} />
-              <Route path="/admin/data-hospital" element={<MainHospital />}/>
-              <Route path="/admin/hospital/form" element={<FormHospital />}/>
-              <Route path="/admin/hospital/form/:FId" element={<FormHospital />}/>
-              <Route path="/admin/open-schedule"element={<MainOpenSchedule />}/>
-              <Route path="/admin/open-schedule/form" element={<FormOpenSchedule />}/>
+              
               
               <Route path="/admin/doctor" element={<MainDoctor />} />
               <Route path="/admin/doctor/form/:doctors_id" element={<FormDoctor />} />
