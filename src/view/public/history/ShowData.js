@@ -244,12 +244,12 @@ function ShowData() {
   };
   const removeQueue = async (users_id, queue_date) => {
     Swal.fire({
-      title: "คุณแน่ใจที่จะยกเลิกการจองคิว ?",
-      text: "คุณต้องการยกเลิกการจองคิวนี้ใช่หรือไม่?",
+      title: "คุณแน่ใจที่จะยกเลิกการจองคิว !",
+      text: "เมื่อรายการจองคิวถูกยกเลิก คุณจะไม่สามาถกู้คืนได้",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "ใช่, ยกเลิกคิว",
-      cancelButtonText: "ไม่, ยกเลิก",
+      confirmButtonText: "ตกลง",
+      cancelButtonText: "ยกเลิก",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -380,7 +380,7 @@ function ShowData() {
                 วันที่จอง
               </th>
 
-              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
                 สถานะ
               </th>
 
@@ -415,16 +415,17 @@ function ShowData() {
                     {queue.queue_status_name}
                   </td>
                   <td style={{ textAlign: "center" }}>
-                    {(queue.queue_status_id === 1 ||
-                      queue.queue_status_id === 2) && (
-                      <div>
-                        <button
-                          type="button"
-                          className="btn btn-warning text-white mx-1 mt-1"
-                          onClick={() => handleEditClick(queue)}
-                        >
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </button>
+        {(queue.queue_status_id === 1 ||
+          (queue.queue_status_id === 2 && selectedStatusId !== "2") ||
+          (queue.queue_status_id === 4 && selectedStatusId !== "4")) && (
+          <div>
+            <button
+              type="button"
+              className="btn btn-warning text-white mx-1 mt-1"
+              onClick={() => handleEditClick(queue)}
+            >
+              <i className="fa-solid fa-pen-to-square"></i>
+            </button>
                         <button
                           type="button"
                           className="btn btn-danger text-white mx-1 mt-1"
