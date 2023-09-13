@@ -10,13 +10,13 @@ import { getPatientById ,updatePatientById} from "../../../service/Patient.Servi
 function EditProfile() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [originalBirthday, setOriginalBirthday] = useState(""); // ตัวแปรเก็บค่าวันเกิดเดิม
+  const [originalBirthday, setOriginalBirthday] = useState(""); 
   const [error, setError] = useState(false);
   const [age, setAge] = useState(null);
   const [users, setUsers] = useState({
     users_id: "",
     id_card: "",
-    password: "", // เปลี่ยนชื่อฟิลด์นี้เป็น password
+    password: "", 
     prefix_name: "",
     first_name: "",
     first_name: "",
