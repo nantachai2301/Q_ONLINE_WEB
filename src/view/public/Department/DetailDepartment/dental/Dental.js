@@ -51,7 +51,7 @@ useEffect(() => {
       <div className=" departmentname">
         <h1 className="title-content">แผนก{departments.department_name}</h1>
       </div>
-      <div className="w-full mb-4" style={{ textAlign: "center" }}>
+      <div className="w-full p-6 mb-4" style={{ textAlign: "center" }}>
         <h4 className="centerdoctor">แพทย์ประจำแผนก</h4>
       </div>
       <div className="d-flex justify-content-end">
@@ -59,14 +59,14 @@ useEffect(() => {
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/showdepartmentAll" className="nav-breadcrumb">
-               แผนกทั้งหมด
+               แผนกในโรงพยาบาล
                 </Link>
               </li>
               <li
                 className="breadcrumb-item text-black fw-semibold"
                 aria-current="page"
               >
-              ข้อมูลแพทย์ในแผนก
+        แพทย์ในแผนก
               </li>
             </ol>
           </nav>
