@@ -89,7 +89,7 @@ function Home() {
             style={{ height: "auto" }}
           >
             <div className="row justify-content-xl-center">
-             <div className="col">
+            <div className="col" style={{ margin: "0 20px" }}>
                 <div className="Home-medical">
                 <FontAwesomeIcon
                   onClick={handleDepartment}
@@ -110,7 +110,7 @@ function Home() {
                 </div>
               </div>
                   
-               <div className="col">
+              <div className="col" style={{ margin: "0 20px" }}>
                 <div className="Home-calendarDays">
                 <FontAwesomeIcon
                   onClick={handleMainBookPopup}
@@ -134,7 +134,7 @@ function Home() {
         <MainBook show={showMainBook} setShow={setShowMainBook} />
       )}
               </div>
-              <div className="col">
+              <div className="col" style={{ margin: "0 20px" }}>
                 <div className="Home-Desktop">
                 <FontAwesomeIcon
                 onClick={handleAllQueueDesktop}
@@ -155,7 +155,7 @@ function Home() {
                 </div>
               </div>
               {isLoggedIn && (
-        <div className="col">
+     <div className="col" style={{ margin: "0 20px" }}>
         <div className="Home-Queue">
         <FontAwesomeIcon
           onClick={handleListQueue}
@@ -177,8 +177,8 @@ function Home() {
         
       </div>
       )}
-      {/* {isLoggedIn && (
-        <div className="col">
+      {isLoggedIn && (
+       <div className="col" style={{ margin: "0 5px" }}>
         <div className="Home-icon">
         <FontAwesomeIcon
           onClick={handleAllQueueList}
@@ -186,7 +186,7 @@ function Home() {
           class="fa-solid fa-rectangle-list"
           style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
         /></div>
-        <div className="Nameicon">
+        <div className="Name-icon8">
         <a
           onClick={handleAllQueueList}
           style={{ color: "#4b86d2", cursor: "pointer" }}
@@ -198,7 +198,7 @@ function Home() {
         </a>
         </div>
       </div>
-      )} */}
+      )}
            
               
             </div>
