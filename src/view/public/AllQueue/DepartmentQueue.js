@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faCheck, faClock } from "@fortawesome/free-solid-svg-icons";
 import { format, isSameDay } from "date-fns";
 import { parse } from "date-fns";
-
+import { getQueue} from "../../../service/Queue.Service";
+import { getDepartment} from "../../../service/DepartmentType.Service";
 function DepartmentQueue({ departmentData, selectedDate }) {
   const [bookedQueues, setBookedQueues] = useState(0);
   const [availableQueues, setAvailableQueues] = useState(0);
@@ -16,9 +17,10 @@ function DepartmentQueue({ departmentData, selectedDate }) {
         if (departmentData && selectedDate) { // ตรวจสอบ departmentData และ selectedDate
           const formattedDate = format(new Date(selectedDate), "yyyy-MM-dd");
   
-          const response = await axios.get(
-            `https://elated-lime-salmon.cyclic.app/apis/queue/?queue_date=${formattedDate}&department_id=${departmentData.department_id}`
-          );
+          const response = await getQueue({
+            queue_date: formattedDate,
+            department_id: departmentData.department_id,
+          });
   
           const queues = response.data;
           console.log("API Response:", response.data);
@@ -91,8 +93,8 @@ function QueuePage() {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/apis/departments"
+        const response = await getDepartment(
+         
         );
         setDepartments(response.data);
       } catch (error) {
@@ -108,9 +110,15 @@ function QueuePage() {
   };
 
   const handleDateChange = (date) => {
-    setSelectedDepartment("");
-    setSelectedDate(date);
-  };
+    const selectedDate = new Date(date); // แปลงค่าวันที่ที่ถูกเลือกเป็นวัตถุ Date
+    const currentDate = new Date(); // วันที่ปัจจุบัน
+    if (selectedDate >= currentDate) {
+    setSelectedDate(format(selectedDate, "yyyy-MM-dd"));
+  } else {
+    // วันที่ถูกเลือกเป็นวันที่ย้อนหลัง ไม่ต้องทำอะไร
+    console.log("ไม่สามารถเลือกวันที่ย้อนหลังได้");
+  }
+};
 
   const handleCancel = () => {
     setSelectedDepartment("");
