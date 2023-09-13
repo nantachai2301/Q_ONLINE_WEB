@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect, Fragment } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams,useLocation } from "react-router-dom";
 import axios from "axios";
 import "../../../../../style/dental.css";
 import { NavItem, Row, Card } from "react-bootstrap";
 import { getDepartmentbydepart } from "../../../../../service/DepartmentType.Service";
 import { getDoctordepart } from "../../../../../service/Doctor.Service";
 function Dental() {
+  const location = useLocation();
   const [doctors, setDoctors] = useState([]);
   const [departments, setDepartments] = useState({
     department_id: "",
@@ -53,11 +54,29 @@ useEffect(() => {
       <div className="w-full mb-4" style={{ textAlign: "center" }}>
         <h4 className="centerdoctor">แพทย์ประจำแผนก</h4>
       </div>
+      <div className="d-flex justify-content-end">
+          <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/showdepartmentAll" className="nav-breadcrumb">
+               แผนกทั้งหมด
+                </Link>
+              </li>
+              <li
+                className="breadcrumb-item text-black fw-semibold"
+                aria-current="page"
+              >
+              ข้อมูลแพทย์ในแผนก
+              </li>
+            </ol>
+          </nav>
+        </div>
       <div className="container45">
         <div className="row" >
+        <div className="departs" style={{ justifyContent: "flex-start" }}>
           {doctors.map((doctor) =>
             doctor.doctor_status === "ใช้งาน" ? (
-              <div className="card" key={doctor.id} style={{ width: "18rem", height: "300px"  , alignItems: 'center',}}>
+              <div className="card dental-card" key={doctor.id} style={{ width: "320px", height: "300px"  , alignItems: 'center',}}>
                 <div className="card_d ">
                 <div className="circular-image-container">
                   <img
@@ -70,10 +89,10 @@ useEffect(() => {
              
                 <div className="sta-card">
                   <Card.Title className="card-title">
-                    <h5>
+                    <h6 className="text-89">
                       {doctor.prefix_name} {doctor.doctor_first_name}{" "}
                       {doctor.doctor_last_name}
-                    </h5>
+                    </h6>
                   </Card.Title>
                 </div>
 
@@ -81,6 +100,7 @@ useEffect(() => {
 
             ) : null
           )}
+          </div>
         </div>
         <div className="depart-detail">
           <div className="card">

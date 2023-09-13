@@ -11,7 +11,9 @@
 }
 
 
-
+.dental-card:hover {
+  transform: scale(1.05);
+}
 .centerdoctor {
   justify-content: center;
   display: flex;
@@ -86,12 +88,11 @@
 }
 
 
-.container45{
-  text-align: center;
-  justify-content: center;
-  padding: 290px;
-  margin-top: -300px;
-
+.container25{
+  display: grid;
+  justify-self: center;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
 }
 
 .wrapper-page{
@@ -102,10 +103,13 @@
   text-align: center;
   justify-content: center;
 }
-
+.text-89{
+  white-space:nowrap;
+}
 .card-status{
   text-align: center;
   justify-content: center;
+  
   
 }
 
@@ -130,10 +134,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  
 }
 
 .circular-image {
-  width: 180px;
+  width: 250px;
   height: 190px;
   object-fit: cover; 
 }
+

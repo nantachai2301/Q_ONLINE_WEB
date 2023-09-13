@@ -28,40 +28,47 @@ useEffect(() => {
 
 
   return (
-    <div className="w-full">
-      <div className="w-full mb-4">
-        <h4 className="title-content">แผนกในโรงพยาบาล</h4>
-      </div>
-      <div class="container5 p-4 my-4 ">
-      <div className="row">
-      {departments.length > 0 ? (
-            departments.map((department) => (
-              <div className="card" key={department.id} style={{ width: "12rem", height : "300px" }} >
-                <Card.Img
-                  variant="top"
-                  src={department.department_image}
-                  style={{ width: "110%", height: "60%"}}
-                />
-                <h5 className="title-name-depart mt-4 mx-6">
-                  {department.department_name}
-                </h5>
-               
-                <div className="button-card1">
-                  <Link
-                    to={`/detaildental/${department.department_id}`}
-                    className="btn btn-success mx-1"
-                  >
-                    <div className="text-link1">ข้อมูลแผนก</div>
-                  </Link>
-                </div>
+   <div className="container5">
+     <h4 className="title-content">แผนกในโรงพยาบาล</h4>
+     <div className="row ">
+     <div className="departs" style={{ justifyContent: "flex-start" }}>
+     {departments.length > 0 ? (
+          departments.map((department) => (
+            <div 
+            className="card depart-card" 
+            key={department.id}
+             style={{ width: "12rem", height : "200px" }} >
+              <div style={{ overflow: "hidden", height: "60%" }}>
+              <Link to={`/detaildental/${department.department_id}`}>
+  <Card.Img
+    variant="top"
+    src={department.department_image}
+    style={{ width: "100px", height: "100px"}}
+  />
+</Link>
+                 </div>
+                 <Link to={`/detaildental/${department.department_id}`} className="link-no-underline">
+              <h5 className="title-name-depart mt-4 mx-6">
+                {department.department_name}
+              </h5>
+             </Link>
+              <div className="button-card1">
+                <Link
+                  to={`/detaildental/${department.department_id}`}
+                  className="btn btn-success mx-1"
+                >
+                  <div className="text-link1">ข้อมูลแผนก</div>
+                </Link>
               </div>
-            ))
-          ) : (
-            <div>Loading ...</div>
-          )}
-      </div>
-      </div>
+            </div>
+         
+          ))
+        ) : (
+          <div>Loading ...</div>
+        )}
     </div>
+    </div>
+  </div>
   );
 }
 

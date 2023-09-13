@@ -83,16 +83,26 @@ margin-left: 230px;
   transition: 0.3s;
 }
 
+.departs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
+  gap: 1px; /* ระยะห่างระหว่าง card แนะนำให้ใช้ gap */
+}
 
-container5{
-  .container5{
-    justify-content: beet;
-    width: 100%;
-    margin-top: -30px;
-    margin-left: 150px;
-  }
-  
-  
+.card {
+ 
+  margin:15px; 
+}
+
+.depart-card:hover {
+  transform: scale(1.10);
+  background-color: #e0edf5; /* เปลี่ยนสีพื้นหลังของการ์ดเมื่อโฮเวอร์ */
 }
 
 
+.link-no-underline {
+  color: #000; /* เปลี่ยนสีตามที่คุณต้องการ */
+  text-decoration: none; /* ลบขีดเส้นใต้งานว่างของลิงก์ */
+}
