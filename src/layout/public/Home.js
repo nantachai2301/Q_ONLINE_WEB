@@ -192,7 +192,7 @@ function Home() {
           style={{ color: "#4b86d2", cursor: "pointer" }}
         >
           <h4 className="title-name-home mt-3 mx-5">
-          รายการคิวผู้ป่วยทั้งหมด
+          จำนวนคิวทั้งหมด
           </h4>
           
         </a>
