@@ -52,7 +52,7 @@ function Home() {
   };
 
   const handleListQueue = () => {
-    navigate("/history/:users_id");
+    navigate("/history");
   };
 
   const handleAllQueueList = () => {

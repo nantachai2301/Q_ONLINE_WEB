@@ -72,7 +72,7 @@ function Router(props) {
               
               <Route path="/book-an-appointment/:users_id" element={<MainBook/>} />  
               <Route path="/DesktopQueue" element={<DesktopQueue/>} />  
-              <Route path="/history/:users_id" element={<TableBooking/>}/>
+              <Route path="/history" element={<TableBooking/>}/>
               <Route path="/register" element={<Register />} />
               <Route path="/calendar" element={<Calendars/>} />
               <Route path="/edit-profile/:users_id" element={<EditProfile />} />
