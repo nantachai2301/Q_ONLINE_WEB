@@ -225,22 +225,22 @@ function EditProfile() {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/admin/user" className="nav-breadcrumb">
-                  ข้อมูลรายชื่อผู้ใช้
+                <Link to="/Profile" className="nav-breadcrumb">
+                  ข้อมูลส่วนตัว
                 </Link>
               </li>
               <li
                 className="breadcrumb-item text-black fw-semibold"
                 aria-current="page"
               >
-                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อผู้ใช้
+                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลส่วนตัว
               </li>
             </ol>
           </nav>
         </div>
         <div className="w-full mb-5">
           <h2 className="title-content">
-            {location.state ? "เพิ่ม" : "แก้ไข"}ข้อมูลรายชื่อผู้ใช้
+            {location.state ? "เพิ่ม" : "แก้ไข"}ข้อมูลส่วนตัว
           </h2>
         </div>
         <Formik
