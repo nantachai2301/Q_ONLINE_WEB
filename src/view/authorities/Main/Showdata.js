@@ -22,7 +22,7 @@ function ShowData({}) {
   const [pageData, setPageData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
-  const [pageSize, setPageSize] = useState(10); // Default page size is 5
+  const [pageSize, setPageSize] = useState(10); 
   const [searchUsers, setSearchUsers] = useState("");
   const [searchDate, setSearchDate] = useState(
     format(new Date(), "yyyy-MM-dd")
@@ -46,7 +46,7 @@ function ShowData({}) {
     setPage(pageNumber);
   };
 
-  // ฟังก์ชันที่เรียกใช้เมื่อเปลี่ยนจำนวนรายการต่อหน้า
+
   const handlePageSizeChange = (event) => {
     const newPageSize = parseInt(event.target.value);
     setPageSize(newPageSize);
@@ -89,10 +89,10 @@ function ShowData({}) {
       const LIMIT = pageSize;
       const skip = LIMIT * (page - 1);
       const dataToDisplay = filteredData.filter((dataItem) => {
-        const firstName = dataItem.first_name || ""; // เมื่อค่าเป็น null หรือ undefined จะกำหนดให้เป็นค่าว่าง
-        const lastName = dataItem.last_name || ""; // เมื่อค่าเป็น null หรือ undefined จะกำหนดให้เป็นค่าว่าง
-        const departmentName = dataItem.department_name || ""; // เมื่อค่าเป็น null หรือ undefined จะกำหนดให้เป็นค่าว่าง
-        const symptom = dataItem.symptom || ""; // เมื่อค่าเป็น null หรือ undefined จะกำหนดให้เป็นค่าว่าง
+        const firstName = dataItem.first_name || "";
+        const lastName = dataItem.last_name || "";
+        const departmentName = dataItem.department_name || ""; 
+        const symptom = dataItem.symptom || ""; 
 
         const nameFilter =
           firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
@@ -106,15 +106,15 @@ function ShowData({}) {
         return nameFilter && departmentFilter;
       });
 
-      const sortedData = dataToDisplay.sort((a, b) => a.queue_id - b.queue_id); // เรียงลำดับตามเลขหมายคิว (queue_id)
+      const sortedData = dataToDisplay.sort((a, b) => a.queue_id - b.queue_id); 
 
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
-      const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length); // ให้คำนวณ pageEndIndex ใหม่เพื่อให้ไม่เกินจำนวนข้อมูลทั้งหมด
+      const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
       const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
 
-      // ปรับเลขหมายคิวให้ต่อเนื่องกัน โดยนำหมายเลขหมายคิวในหน้าแรกมาเพิ่มทีละ 1 ในหน้าถัดไป
+     
       const firstQueueNumber =
-        pageStartIndex > 0 ? sortedData[pageStartIndex - 1].queue_id + 1 : 1; // เริ่มต้นที่หมายเลขหมายคิวของหน้าแรก (หากหน้าแรกเริ่มต้นที่หมายเลขหมายคิวที่ไม่ใช่ 1)
+        pageStartIndex > 0 ? sortedData[pageStartIndex - 1].queue_id + 1 : 1; 
       const newData = slicedData.map((item, index) => ({
         ...item,
         queue_id: firstQueueNumber + index,
@@ -138,24 +138,23 @@ function ShowData({}) {
     setSearchUsers("");
     setPage(1);
     getdataQ();
-  };
-  const handleCancel = () => {
-    setSearchUsers(""); // เคลียร์ค่าค้นหาชื่อผู้ใช้
-    setSearchDate(format(new Date(), "yyyy-MM-dd")); // กำหนดค่าวันที่เป็นวันที่ปัจจุบัน
-    setPage(1); // กลับไปที่หน้าแรก
 
-    // อัพเดตข้อมูลใหม่ในหน้าแสดงผลโดยให้ pageData เก็บข้อมูลที่ถูกกรองด้วยค่าค้นหาและวันที่ใหม่
-    const currentDate = new Date(); // วันที่ปัจจุบัน
-    const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
+   
+};
+const handleCancel = () => {
+  setSearchUsers("");
+  setSearchDate(format(new Date(), "yyyy-MM-dd")); // กำหนดค่าวันที่เป็นวันที่ปัจจุบัน
+  setPage(1);
 
-    const filteredData = filterDataBySearchAndDate(
-      dataQ,
-      searchDate,
-      formattedCurrentDate
-    );
+  // อัพเดตข้อมูลใหม่ในหน้าแสดงผลโดยให้ pageData เก็บข้อมูลที่ถูกกรองด้วยค่าค้นหาและวันที่ใหม่
+  const currentDate = new Date(); // วันที่ปัจจุบัน
+  const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
 
-    setPageData(filteredData);
-  };
+  
+
+  
+};
+
   const formatDateToAPI = (dateString) => {
     const [day, month, year] = dateString.split("-");
     return `${year}-${month}-${day}`;
@@ -471,7 +470,7 @@ function ShowData({}) {
                     <td>
                       <button
                         type="button"
-                        className="btn btn-primary"b
+                        className="btn btn-primary"
                         onClick={() => {
                           setData(item);
                         }}
