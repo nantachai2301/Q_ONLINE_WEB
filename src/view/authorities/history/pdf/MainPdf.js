@@ -1,28 +1,27 @@
 import React from 'react';
-import DateTh from '../../../../components/DateTh';
 
 function MainPdf({ dataQ }) {
-  console.log('dataQ', dataQ);
+  
+    console.log("Data for PDF:", dataQ);
+
   return (
-    <div className="border content-pdf p-4">
+    <div className="border content-pdf p-4 " style={{ textAlign: 'center' }}>
       <div className="d-flex justify-content-end">
-        <div>รหัสคิว : {dataQ ? dataQ.code : '-'}</div>
+        <div>รหัสผู้ใช้ : {dataQ ? dataQ.users_id : '-'}</div>
       </div>
       <div className="text-center">
-        <p className="font-number-q">{dataQ ? dataQ.number : '-'}</p>
+        <p className="font-number-q">{dataQ ? dataQ.queue_id : '-'}</p>
+      </div>
+     
+      <div>
+        <b>ชื่อ-นามสกุล :</b> {dataQ ? dataQ.prefix_name : '-'}{" "}{dataQ ? dataQ.first_name : '-'}{" "}{dataQ ? dataQ.last_name : '-'}
       </div>
       <div>
-        <b>เลขบัตรประชาชน :</b> {dataQ ? dataQ.id_card : '-'}
-      </div>
-      <div>
-        <b>ชื่อ-นามสกุล :</b> {dataQ ? dataQ.fullname : '-'}
-      </div>
-      <div>
-        <b>ประเภทการรักษา :</b> {dataQ ? dataQ.treatment_type_name : '-'}
+        <b>แผนก :</b> {dataQ ? dataQ.department_name : '-'}
       </div>
       <div>
         <b className='me-1'>วันที่เข้ารับการรักษา :</b>
-        {dataQ ? <DateTh date={dataQ.open_date} /> : '-'}
+        {dataQ ? dataQ.queue_date : '-'}
       </div>
     </div>
   );

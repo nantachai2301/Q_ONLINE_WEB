@@ -1,7 +1,6 @@
-
 import React, { useRef, useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
-// import { useReactToPrint } from 'react-to-print';
+import { useReactToPrint } from "react-to-print";
 import MainPdf from "../history/pdf/MainPdf";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -13,30 +12,31 @@ import {
   getQueue,
   updateStatusQueue,
   updateQueueById,
-  deleteQueueById
-  } from "../../../service/Queue.Service";
-function ShowData({
-  
-}) {
+  deleteQueueById,
+} from "../../../service/Queue.Service";
+function ShowData({}) {
+  const [data, setData] = useState(null);
   const [dataQ, setDataQ] = useState([]);
   console.log(dataQ);
-  const [empData, setEmpData] = useState([]);
-  const componentRef = useRef();
   const navigate = useNavigate();
   const [pageData, setPageData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [pageSize, setPageSize] = useState(10); // Default page size is 5
   const [searchUsers, setSearchUsers] = useState("");
-  const [searchDate, setSearchDate] = useState(format(new Date(), "yyyy-MM-dd")); // เริ่มต้นด้วยวันที่ปัจจุบัน
+  const [searchDate, setSearchDate] = useState(
+    format(new Date(), "yyyy-MM-dd")
+  ); // เริ่มต้นด้วยวันที่ปัจจุบัน
 
   const [selectedDepartment, setSelectedDepartment] = useState(null);
-  
+
   const getdataQ = async () => {
     const response = await getQueue();
-    const filteredData = response.data.filter(item => item.queue_status_name === "ปกติ" || item.queue_status_name === "ยืนยัน");
+    const filteredData = response.data.filter(
+      (item) =>
+        item.queue_status_name === "ปกติ" || item.queue_status_name === "ยืนยัน"
+    );
     setDataQ(filteredData);
-  
   };
 
   useEffect(() => {
@@ -53,28 +53,34 @@ function ShowData({
     setPage(1);
   };
 
-  const filterDataBySearchAndDate = (dataQ, searchDate, formattedCurrentDate) => {
+  const filterDataBySearchAndDate = (
+    dataQ,
+    searchDate,
+    formattedCurrentDate
+  ) => {
     return dataQ.filter((item) => {
       if (searchDate !== "") {
         const formattedSearchDate = formatDateToAPI(searchDate);
-  
+
         // เพิ่มเงื่อนไขเช็คว่าวันที่ที่กรอกเข้ามาไม่น้อยกว่าวันที่ปัจจุบัน
         if (formattedSearchDate >= formattedCurrentDate) {
           return item.queue_date === formattedSearchDate;
         }
       }
-      
+
       return item.queue_date === formattedCurrentDate;
     });
   };
-  
+
   useEffect(() => {
     const currentDate = new Date(); // วันที่ปัจจุบัน
     const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
-  
-    const filteredData = filterDataBySearchAndDate(dataQ, searchDate, formattedCurrentDate);
- 
-    
+
+    const filteredData = filterDataBySearchAndDate(
+      dataQ,
+      searchDate,
+      formattedCurrentDate
+    );
 
     const pagedatacount = Math.ceil(dataQ.length / pageSize);
     setPageCount(pagedatacount);
@@ -87,19 +93,19 @@ function ShowData({
         const lastName = dataItem.last_name || ""; // เมื่อค่าเป็น null หรือ undefined จะกำหนดให้เป็นค่าว่าง
         const departmentName = dataItem.department_name || ""; // เมื่อค่าเป็น null หรือ undefined จะกำหนดให้เป็นค่าว่าง
         const symptom = dataItem.symptom || ""; // เมื่อค่าเป็น null หรือ undefined จะกำหนดให้เป็นค่าว่าง
-      
+
         const nameFilter =
           firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
           lastName.toLowerCase().includes(searchUsers.toLowerCase()) ||
           departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
           symptom.toLowerCase().includes(searchUsers.toLowerCase());
-      
+
         const departmentFilter =
           !selectedDepartment || departmentName === selectedDepartment.value;
-      
+
         return nameFilter && departmentFilter;
       });
-      
+
       const sortedData = dataToDisplay.sort((a, b) => a.queue_id - b.queue_id); // เรียงลำดับตามเลขหมายคิว (queue_id)
 
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
@@ -116,7 +122,7 @@ function ShowData({
 
       setPageData(newData);
     }
-  }, [dataQ, page, pageSize, searchUsers ,selectedDepartment, searchDate]);
+  }, [dataQ, page, pageSize, searchUsers, selectedDepartment, searchDate]);
 
   const handleSearchChange = (event) => {
     const query = event.target.value;
@@ -136,21 +142,24 @@ function ShowData({
   const handleCancel = () => {
     setSearchUsers(""); // เคลียร์ค่าค้นหาชื่อผู้ใช้
     setSearchDate(format(new Date(), "yyyy-MM-dd")); // กำหนดค่าวันที่เป็นวันที่ปัจจุบัน
-  setPage(1); // กลับไปที่หน้าแรก
-  
+    setPage(1); // กลับไปที่หน้าแรก
+
     // อัพเดตข้อมูลใหม่ในหน้าแสดงผลโดยให้ pageData เก็บข้อมูลที่ถูกกรองด้วยค่าค้นหาและวันที่ใหม่
     const currentDate = new Date(); // วันที่ปัจจุบัน
     const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
-  
-    const filteredData = filterDataBySearchAndDate(dataQ, searchDate, formattedCurrentDate);
-  
+
+    const filteredData = filterDataBySearchAndDate(
+      dataQ,
+      searchDate,
+      formattedCurrentDate
+    );
+
     setPageData(filteredData);
   };
   const formatDateToAPI = (dateString) => {
     const [day, month, year] = dateString.split("-");
     return `${year}-${month}-${day}`;
   };
-
 
   const handleCancelClick = (users_id, queue_date) => {
     Swal.fire({
@@ -165,13 +174,13 @@ function ShowData({
         try {
           const formattedDate = formatDateToAPI(queue_date);
           await deleteQueueById(users_id, formattedDate);
-  
+
           Swal.fire({
             title: "ลบคิวสำเร็จ",
             text: "การจองคิวถูกลบแล้ว",
             icon: "success",
           });
-  
+
           getdataQ(); // รีเฟรชข้อมูลใหม่หลังจากลบคิว
         } catch (error) {
           console.error("เกิดข้อผิดพลาดในการลบคิว:", error);
@@ -185,7 +194,6 @@ function ShowData({
     });
   };
 
-  
   const changeStatus = (
     queue_id,
     currentStatus,
@@ -193,7 +201,7 @@ function ShowData({
     create_at,
     symptom,
     queue_status_id,
-   
+
     department_id,
     questionaire_id,
     users_id,
@@ -208,10 +216,10 @@ function ShowData({
       const [day, month, year] = queue_date.split("-");
       return `${year}-${month}-${day}`;
     })();
-  
+
     console.log(formattedQueueDate);
     const newStatus = currentStatus === "ยืนยัน" ? "รับการรักษาแล้ว" : "ยืนยัน";
-  
+
     const newQueueStatusId = currentStatus === "ยืนยัน" ? 4 : 2; // ค่า newQueueStatusId ควรเป็น 3
     Swal.fire({
       title: `คุณต้องการอัพเดทสถานะรายการนี้ใช่หรือไม่ ! `,
@@ -224,7 +232,7 @@ function ShowData({
       if (result.isConfirmed) {
         const formattedQueueDate = formatDateToAPI(queue_date);
         const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss"); // แปลงเวลาปัจจุบันเป็นข้อความ
-  
+
         // เรียกใช้ฟังก์ชัน updateQueueById แทน axios.put
         updateQueueById(
           users_id,
@@ -251,7 +259,7 @@ function ShowData({
             });
             // รีเฟรชหน้าเพื่อแสดงสถานะใหม่
             getdataQ();
-  
+
             // อัพเดทการค้นหาและสถานะที่ถูกเลือก เพื่อให้หน้าพอรียังคงแสดงข้อมูลตามที่เลือกไว้
             const searchData = searchUsers; // เก็บค่าการค้นหา
             const selectedDep = selectedDepartment; // เก็บค่าแผนกที่เลือก
@@ -270,15 +278,12 @@ function ShowData({
       }
     });
   };
-  
 
   const getDepartmentOptions = () => {
     const departmentsWithData = Array.from(
-      new Set(
-        pageData.map((dataItem) => dataItem.department_name)
-      )
+      new Set(pageData.map((dataItem) => dataItem.department_name))
     );
-    
+
     return departmentsWithData.map((department) => ({
       value: department,
       label: department,
@@ -287,6 +292,26 @@ function ShowData({
   const handleSearchSelectChange = (selectedOption) => {
     setSelectedDepartment(selectedOption);
   };
+  const pageStyle = `
+  @page{
+    size :4in 4in;
+  }
+  
+  
+  `;
+
+  const componentsRef = useRef();
+  useEffect(() => {
+    if (data) {
+      print();
+    }
+  }, [data]);
+  const print = useReactToPrint({
+    content: () => componentsRef.current,
+    documentTitle: "Q_Online",
+    pageStyle: pageStyle,
+  });
+
   return (
     <div className="w-full">
       <div className="row justify-content-start mb-2">
@@ -300,17 +325,17 @@ function ShowData({
             onChange={handleSearchChange}
           />
         </div>
-      <div className="col-5 col-md-2 col-lg-3">
-  <i className="fa-solid fa-calendar mx-1"></i>
-  <label>ค้นหาตามวันที่</label>
-  <input
-    type="date"
-    className="form-control"
-    value={searchDate}
-    onChange={handleDateSearch}
-  />
-</div>
-<div className="col-3 col-lg-3 pt-4">
+        <div className="col-5 col-md-2 col-lg-3">
+          <i className="fa-solid fa-calendar mx-1"></i>
+          <label>ค้นหาตามวันที่</label>
+          <input
+            type="date"
+            className="form-control"
+            value={searchDate}
+            onChange={handleDateSearch}
+          />
+        </div>
+        <div className="col-3 col-lg-3 pt-4">
           <button
             type="button"
             className="btn btn-secondary ml-2"
@@ -321,32 +346,28 @@ function ShowData({
           </button>
         </div>
       </div>
-      
-   
-        <div className="d-flex justify-content-end mb-2">
-    
-        <Select
-    value={selectedDepartment}
-    options={getDepartmentOptions()}
-    onChange={handleSearchSelectChange}
-    placeholder="เลือกแผนก..."
-    isClearable={true}
-  />
-    
 
+      <div className="d-flex justify-content-end mb-2">
+        <Select
+          value={selectedDepartment}
+          options={getDepartmentOptions()}
+          onChange={handleSearchSelectChange}
+          placeholder="เลือกแผนก..."
+          isClearable={true}
+        />
       </div>
- 
+
       <div className="overflow-auto">
         <table className="table">
           <thead>
             <tr className="table-success">
-              <th scope="col" style={{ width: "5%" }}>
-                คิวที่
+              <th scope="col" style={{ width: "2%" }}>
+                ที่
               </th>
               <th scope="col" style={{ width: "20%" }}>
                 ชื่อ-สกุล
               </th>
-              <th scope="col" style={{ width: "15%" }}>
+              <th scope="col" style={{ width: "10%" }}>
                 อาการเบื้องต้น
               </th>
               <th scope="col" style={{ width: "10%" }}>
@@ -363,11 +384,13 @@ function ShowData({
                 สถานะคิว
               </th>
 
-              <th scope="col" style={{ width: "5%" }}>
+              <th scope="col" style={{ width: "10%" }}>
                 จัดการสถานะคิว
               </th>
-
-              <th scope="col" style={{ width: "5%" }}>
+              <th scope="col" style={{ width: "2%" }}>
+                ใบคิว
+              </th>
+              <th scope="col" style={{ width: "3%" }}>
                 ลบ
               </th>
               <th scope="col" style={{ width: "15%" }}>
@@ -387,8 +410,8 @@ function ShowData({
                     </td>
                     <td>{item.symptom}</td>
                     <td>{item.department_name}</td>
-                    <td>{item.queue_date}</td>  
-                      <td>{item.create_at}</td>     
+                    <td>{item.queue_date}</td>
+                    <td>{item.create_at}</td>
                     <td>
                       {item.queue_status_id === 3 ? (
                         <span className="text-warning">รับการรักษาแล้ว</span>
@@ -405,6 +428,7 @@ function ShowData({
 
                     <td>
                       <button
+                        id="buttonStatus"
                         type="button"
                         className={`btn ${
                           item.queue_status_name === "ยืนยัน"
@@ -427,27 +451,38 @@ function ShowData({
                             item.department_name,
                             item.formatted_birthday
                           );
-                    // Update pageData with the new queue status
-     
-      // Reload data and keep the same search and department filter
-      getdataQ();
-    }}
-  
->
-  {item.queue_status_name === "ปกติ" && (
-    <i class="fa-solid fa-user-check"></i>
-  )}
-  {item.queue_status_name === "ยืนยัน" && (
-    <i class="fa-solid fa-user-check"></i>
-  )}
-  {item.queue_status_name === "รับการรักษาแล้ว" && (
-    <i className="fa-solid fa-clinic-medical"></i>
-  )}
-</button>
-</td>
+                          // Update pageData with the new queue status
+
+                          // Reload data and keep the same search and department filter
+                          getdataQ();
+                        }}
+                      >
+                        {item.queue_status_name === "ปกติ" && (
+                          <i class="fa-solid fa-user-check"></i>
+                        )}
+                        {item.queue_status_name === "ยืนยัน" && (
+                          <i class="fa-solid fa-user-check"></i>
+                        )}
+                        {item.queue_status_name === "รับการรักษาแล้ว" && (
+                          <i className="fa-solid fa-clinic-medical"></i>
+                        )}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-info"
+                        onClick={() => {
+                          setData(item);
+                        }}
+                      >
+                        <i className="fa-solid fa-print text-white"></i>
+                      </button>
+                    </td>
 
                     <td>
                       <button
+                        id="buttoCancel"
                         type="button"
                         className="btn btn-danger"
                         onClick={() => {
@@ -493,13 +528,13 @@ function ShowData({
           </div>
         </div>
       </div>
-      {/* <div className='d-flex justify-content-center'>
-        <div className='hidden'>
-          <div ref={componentRef}>
-            <MainPdf dataQ={dataQ} />
+      <div className="d-flex justify-content-center">
+        <div className="hidden">
+          <div ref={componentsRef}>
+            <MainPdf dataQ={data} />
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
