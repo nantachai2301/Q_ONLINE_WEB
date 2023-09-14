@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://elated-lime-salmon.cyclic.app/apis/";
+const API_URL = "https://tan-hippopotamus-hem.cyclic.app/apis/";
 
 const getQueue = async () => {
   return await axios.get(API_URL + "queue");
