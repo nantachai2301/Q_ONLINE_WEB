@@ -122,6 +122,9 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
       <table className="table">
           <thead>
             <tr className="table-success">
+            <th scope="col" style={{ width: '3%' }}>
+           ที่
+              </th>
               <th scope="col" style={{ width: '10%' }}>
               ชื่อ-สกุล
               </th>
@@ -145,6 +148,7 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
               pageData.map((item, index) => {
                 return (
                   <tr key={item.queue_id}>
+                     <td>{(page - 1) * 10 + index + 1}</td>
                     <td>{item.first_name} {item.last_name}</td>
                 
                       <td>{item.department_name}</td>
