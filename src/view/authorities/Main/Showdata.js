@@ -471,7 +471,7 @@ function ShowData({}) {
                     <td>
                       <button
                         type="button"
-                        className="btn btn-info"
+                        className="btn btn-primary"b
                         onClick={() => {
                           setData(item);
                         }}
