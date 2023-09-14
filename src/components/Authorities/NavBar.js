@@ -53,7 +53,7 @@ function NavBar(props) {
    
 
   return (
-    <header id="authorities">
+    <header id="author">
     <Navbar collapseOnSelect expand="md" className="navbar px-4">
    
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />

@@ -44,7 +44,7 @@
 .sidebar-nav2{
   position: fixed;
   background-color: #10a254;
-  width: 8rem;
+  width: 9rem;
   height: 100%;
   border-top-right-radius: 1.5rem;
   z-index: 20;
@@ -55,7 +55,7 @@
     display: block !important;
   }
 
-  .main-private-layout {
+  .main-author-layout {
     padding-left: 0px;
   }
 
