@@ -194,7 +194,7 @@ const MainBook = (props) => {
             showConfirmButton: false,
             timer: 1500,
           });
-          navigate("/history/:users_id");
+          navigate("/history");
 
           // ทำการซ่อนป๊อปอัปการจองคิว
           props.setShow(false);
