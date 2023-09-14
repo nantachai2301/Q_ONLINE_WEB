@@ -182,7 +182,7 @@ const Navbar = () => {
                 component="div"
                 sx={{ marginLeft: "480px" }}
               >
-                ยินดีตอนรับคุณ : {userData?.data.fullname}
+                ยินดีต้อนรับคุณ : {userData?.data.fullname}
               </Typography>
             )}
             {!userData && (
