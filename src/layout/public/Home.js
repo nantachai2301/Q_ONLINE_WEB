@@ -92,6 +92,7 @@ function Home() {
             <div className="col" style={{ margin: "0 20px" }}>
                 <div className="Home-medical">
                 <FontAwesomeIcon
+                  id="Home-medical"
                   onClick={handleDepartment}
                   icon={faBook}
                   class="fas fa-book-medical"
@@ -113,6 +114,7 @@ function Home() {
               <div className="col" style={{ margin: "0 20px" }}>
                 <div className="Home-calendarDays">
                 <FontAwesomeIcon
+                  id="Home-calendarDays"
                   onClick={handleMainBookPopup}
                   icon={faStethoscope}
                   class="fas fa-calendarDays"
@@ -137,6 +139,7 @@ function Home() {
               <div className="col" style={{ margin: "0 20px" }}>
                 <div className="Home-Desktop">
                 <FontAwesomeIcon
+                 id="Home-Desktop"
                 onClick={handleAllQueueDesktop}
                 icon={faDesktop}
                 class="fa-solid fa-Desktop"
@@ -158,6 +161,7 @@ function Home() {
      <div className="col" style={{ margin: "0 20px" }}>
         <div className="Home-Queue">
         <FontAwesomeIcon
+         id="Home-Queue"
           onClick={handleListQueue}
           icon={faList}
           class="fa-solid fa-list"
@@ -179,8 +183,9 @@ function Home() {
       )}
       {isLoggedIn && (
        <div className="col" style={{ margin: "0 5px" }}>
-        <div className="Home-icon">
+        <div className="Home-iconQ">
         <FontAwesomeIcon
+         id="Home-iconQ"
           onClick={handleAllQueueList}
           icon={faRectangleList}
           class="fa-solid fa-rectangle-list"

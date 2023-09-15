@@ -22,10 +22,10 @@ const FetchFooterData = () => {
               <div className="Title-Footer">
                  <div>
                 <div className="Footer-name">
-                  <h4>{hospital.hospital_name}</h4>
+                  <h4 id="hospital_name">{hospital.hospital_name}</h4>
                 </div>
                 <div className="Footer-Detail">
-                   <p>
+                   <p id="hospital_All">
                   {hospital.hospital_No} {hospital.hospital_subdistrict},
                   {hospital.hospital_district}, {hospital.hospital_province},
                   {hospital.hospital_zipcode}
