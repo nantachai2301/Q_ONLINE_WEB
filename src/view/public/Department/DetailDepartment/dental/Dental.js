@@ -105,8 +105,8 @@ useEffect(() => {
         <div className="depart-detail">
           <div className="card">
           <div className="depart-detail-title">สถานที่ตั้ง </div>
-          <div className="depart-buildind">อาคาร:&nbsp; {departments.building} ชั้น:&nbsp; {departments.floor}</div>
-          <div className="depart-opentime">เวลาเปิดทำการ  {departments.open_time} : {departments.close_time} น.</div>
+          <div className="depart-buildind">อาคาร:&nbsp;<d id="building"> {departments.building} ชั้น:&nbsp; {departments.floor}</d></div>
+          <div className="depart-opentime">เวลาเปิดทำการ  <d id="open_time">{departments.open_time} : {departments.close_time} </d>น.</div>
           <div className="depart-max">จำนวนคิวที่รับ :&nbsp; <d id="max_queue_number">{departments.max_queue_number} คิว</d></div>
           <div className="depart-phone">ติดต่อแผนก :&nbsp; {departments.department_phone }</div>
         </div>
