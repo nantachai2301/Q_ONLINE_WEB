@@ -207,6 +207,7 @@ function EditAuthorities() {
                           <label className="red">*</label>
                           <br></br>
                           <input
+                           id="Author_id_card"
                             type="text"
                             name="id_card"
                             value={users.id_card}
@@ -229,6 +230,7 @@ function EditAuthorities() {
                             :{" "}
                           </label>{" "}
                           <select
+                             id="Author_prefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -252,6 +254,7 @@ function EditAuthorities() {
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
+                            id="Author_first_name"
                             type="name"
                             name="first_name"
                             placeholder="ชื่อ"
@@ -273,6 +276,7 @@ function EditAuthorities() {
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
+                            id="Author_last_name"
                             type="text"
                             name="last_name"
                             placeholder="นามสกุล"
@@ -295,6 +299,7 @@ function EditAuthorities() {
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
+                            id="Author_gender"
                             name="gender"
                             value={users.gender}
                             className={`form-select ${
@@ -318,6 +323,8 @@ function EditAuthorities() {
                           <label className="red">*</label>
 
                           <input
+                            id="Author_birthday"
+                          
                             name="birthday"
                             type="date"
                             value={users.birthday}
@@ -337,6 +344,7 @@ function EditAuthorities() {
                         <div className="col-2 px-1 mt-2">
                           <label>อายุ</label>
                           <input
+                            id="Author_age"
                             type="text"
                             name="age"
                             value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
@@ -378,6 +386,7 @@ function EditAuthorities() {
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
+                               id="Author_password"
                                 type="password"
                                 placeholder="รหัสผ่าน"
                                 name="password"
@@ -404,6 +413,7 @@ function EditAuthorities() {
 
                       <div className="d-flex justify-content-center mt-3">
                         <button
+                           id="Author_submit"
                           type="submit"
                           className="btn btn-success mx-1"
                           onClick={handleClick}
@@ -412,6 +422,7 @@ function EditAuthorities() {
                         </button>
 
                         <button
+                            id="Author_Backs"
                           className="btn btn-danger mx-1"
                           onClick={() => navigate("/admin/authorities/")}
                         >
