@@ -188,7 +188,7 @@ function ShowData() {
       if (!values.symptom) {
         Swal.fire({
           icon: "error",
-          title: "กรุณากรอกข้อมูลให้ครบถ้วน",
+          title: "กรุณากรอกอาการเบื้องต้น",
           showConfirmButton: true,
         });
         return;
