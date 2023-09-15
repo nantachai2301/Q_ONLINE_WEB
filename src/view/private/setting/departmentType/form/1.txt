@@ -1,0 +1,735 @@
+import React, { Fragment, useEffect, useState } from "react";
+import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
+import { Formik, Form, ErrorMessage } from "formik";
+import axios from "axios";
+import Swal from "sweetalert2";
+import Schema from "./Validation";
+import * as Yup from 'yup';
+
+import {
+  getDepartmentById,
+  updateDepartmentById,
+} from "../../../../../service/DepartmentType.Service";
+
+function EditDepartment() {
+  const location = useLocation();
+  const [departments, setDepartments] = useState({
+    department_id: "",
+    department_name: "",
+    department_image: "",
+    open_time: "",
+    close_time: "",
+    max_queue_number: "",
+    floor: "",
+    building: "",
+    department_phone: "",
+  });
+  const { department_id } = useParams();
+
+  useEffect(() => {
+    getDepartmentById(department_id)
+      .then((response) => {
+        setDepartments(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching departments: ", error);
+      });
+  }, []);
+
+  const navigate = useNavigate();
+  const [error, setError] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDepartments((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleClick = async () => {
+    try {
+      const isValid = await Schema.isValid(departments);
+      // console.log(departments)
+      if (!isValid) {
+        Swal.fire({
+          icon: "error",
+          title: "ข้อมูลไม่ถูกต้อง",
+          text: "กรุณากรอกข้อมูลให้ถูกต้องและครบถ้วน",
+          showConfirmButton: true,
+        });
+        return;
+      }
+
+      const result = await Swal.fire({
+        title: "คุณแน่ใจหรือไม่ ว่าต้องการจะอัพเดทข้อมูลรายชื่อแผนก ?",
+        text: "",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      });
+
+      if (result.isConfirmed) {
+        const response = await updateDepartmentById(
+          department_id,
+          departments.department_name,
+          departments.department_image,
+          departments.open_time,
+          departments.close_time,
+          departments.max_queue_number,
+          departments.floor,
+          departments.building,
+          departments.department_phone
+        );
+
+        if (response.status === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "อัพเดตข้อมูลแผนกสำเร็จ",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate("/admin/department-type");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลแผนก",
+            text: "กรุณาลองอีกครั้ง",
+            showConfirmButton: true,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: "เกิดข้อผิดพลาดในการอัปเดตข้อมูลแผนก",
+        showConfirmButton: true,
+      });
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result;
+        img.onload = () => {
+          const maxWidth = 200;
+          const maxHeight = 200;
+          const newWidth = img.width > maxWidth ? maxWidth : img.width;
+          const newHeight = (newWidth / img.width) * img.height;
+
+          const canvas = document.createElement('canvas');
+          canvas.width = newWidth;
+          canvas.height = newHeight;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+          canvas.toBlob(async (blob) => {
+            const resizedImageURL = window.URL.createObjectURL(blob);
+            console.log('Resized Image URL:', resizedImageURL);
+
+              setDepartments((prevDepartments) => ({
+                ...prevDepartments,
+                department_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
+              }));
+          }, 'image/jpeg', 0.8);
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  console.log('department_image:', departments.department_image); // ตรวจสอบค่าของ department_image
+
+
+
+
+
+  return (
+  <Fragment>
+    <div className="container-fluid">
+      <div className="d-flex justify-content-end">
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="/admin/department-type" className="nav-breadcrumb">
+                ข้อมูลแผนกและการตรวจรักษา
+              </Link>
+
+            </li>
+            <li
+              className="breadcrumb-item text-black fw-semibold"
+              aria-current="page"
+            >
+              {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
+            </li>
+
+          </ol>
+
+        </nav>
+
+      </div>
+      <div className="w-full mb-5">
+        <h2 className="title-content">
+          {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
+        </h2>
+      </div>
+
+      <Formik
+        enableReinitialize={true}
+        validationSchema={Schema}
+        initialValues={departments}
+        onSubmit={handleClick}
+      >
+        {({ errors, touched }) => (
+          <form encType='multipart/form-data'>
+            <div className="row d-flex justify-content-center">
+              <div className='UpdateDepart col-12 col-md-4 col-lg-8 border-1 shadow p-3' >
+                <div className="col-12 text-center align-items-center">
+                  <label>เลือกรูปภาพแผนก</label> <br />
+                  <br />
+                  <div className="d-flex flex-column justify-content-center align-items-center">
+                    {departments.department_image ? (
+                      <img
+                        className="img-hpts mx-auto"
+                        src={departments.department_image}
+                        alt="Departments"
+                      />
+                    ) : (
+                      <img
+                        className="img-hpts mx-auto"
+                        src={departments}
+                        alt="Default Departments"
+                      />
+                    )}
+                    <br />
+                    <br />
+                  </div>
+                </div>
+
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <div class="col-10 col-md-6 ">
+                    <input
+                      type="file"
+                      name="department_image"
+                      accept="image/*"
+                      className="form-control"
+                      onChange={handleImageChange}
+                    />
+
+
+                  </div>
+                </div>
+                <br />
+                <br />
+                <form class="row g-3 d-flex justify-content-center ">
+                  <div className="col-10 col-md-6 ">
+                    <label>ชื่อแผนก</label>
+                    <label className="red">*</label>
+                    <select
+                      name="department_id"
+                      type="text"
+                      className={`form-control ${touched.department_id &&
+                        errors.department_id
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      onChange={handleChange}
+                    >
+                      <option selected>กรุณาเลือกแผนก</option>
+                      <option value="ทันตกรรม">ทันตกรรม</option>
+                      <option value="จักษุ">จักษุ</option>
+                      <option value="หัวใจ">หัวใจ</option>
+                      <option value="ผิวหนัง">ผิวหนัง</option>
+                      <option value="ศัลยกรรม">ศัลยกรรม</option>
+                      <option value="ทั่วไป">ทั่วไป</option>
+                      <option value="กุมารเวช">กุมารเวช</option>
+                      <option value="สูติ-นรีเวช">สูติขนรีเวช</option>
+                    </select>
+                    <ErrorMessage
+                      name="department_id"
+                      component="div"
+                      className="error-message"
+                    />
+
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>เวลาเปิด</label>
+                    <label className="red">*</label>
+                    <input
+                      name="open_time"
+                      type="time"
+                      placeholder="กรอกเวลาเปิด"
+                      value={departments.open_time}
+                      className={`form-control ${touched.open_time &&
+                        errors.open_time &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="open_time"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>เวลาปิด</label>
+                    <label className="red">*</label>
+                    <input
+                      name="close_time"
+                      type="time"
+                      placeholder="เวลาปิด"
+                      value={departments.close_time}
+                      className={`form-select ${touched.close_time &&
+                        errors.close_time &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="close_time"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>อาคาร</label>
+                    <label className="red">*</label>
+                    <input
+                      name="building"
+                      type="text"
+                      placeholder="กรอกอาคาร"
+                      value={departments.building}
+                      className={`form-control ${touched.building &&
+                        errors.building &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="building"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>ชั้น</label>
+                    <label className="red">*</label>
+                    <input
+                      name="floor"
+                      type="text"
+                      placeholder="ชั้น"
+                      value={departments.floor}
+                      className={`form-control ${touched.floor &&
+                        errors.floor &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="floor"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>เบอร์โทรแผนก</label>
+                    <label className="red">*</label>
+                    <input
+                      name="department_phone"
+                      type="text"
+                      placeholder="เบอร์โทรแผนก"
+                      value={departments.department_phone}
+                      className={`form-control ${touched.department_phone &&
+                        errors.department_phone &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="department_phone"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+
+                  <div className="col-10 col-md-6 ">
+                    <label>จำนวนคิวสูงสุด</label>
+                    <label className="red">*</label>
+                    <input
+                      name="max_queue_number"
+                      type="text"
+                      placeholder="จำนวนคิวสูงสุด"
+                      value={departments.max_queue_number}
+                      className={`form-control ${touched.max_queue_number &&
+                        errors.max_queue_number &&
+                        "is-invalid"
+                        }`}
+                      onChange={handleChange}
+                    />
+                    <ErrorMessage
+                      name="max_queue_number"
+                      component="div"
+                      className="error-message"
+                    />
+                  </div>
+                  <div class="col-10 col-md-6 "></div>
+                </form>
+                
+                <div className="d-flex justify-content-center mt-3">
+                  <button
+                    type="submit"
+                    className="btn btn-success mx-1"
+                    onClick={handleClick}
+                  >
+                    บันทึก
+                  </button>
+                  <button className="btn btn-danger mx-1">
+                    <Link
+                      to="/admin/department-type"
+                      style={{ textDecoration: "none", color: "#fff" }}
+                    >
+                      ยกเลิก
+                    </Link>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        )}
+      </Formik>
+    </div>
+    </Fragment>
+  )
+}
+
+export default EditDepartment
+
+
+
+
+แก้งานเก่าอันที่สอง
+
+import React, { useRef, useState, useEffect } from 'react';
+import Pagination from 'react-js-pagination';
+import Select from "react-select";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Swal from "sweetalert2";
+import Spinner from "react-bootstrap/Spinner";
+import Table from "react-bootstrap/Table";
+import de from 'date-fns/esm/locale/de';
+import {
+  getDepartment,
+  deleteDepartmentById,
+} from "../../../../service/DepartmentType.Service";
+import "../../../../style/showdepartments.css";
+
+
+function ShowData() {
+  const navigate = useNavigate();
+  const [departments, setDepartments] = useState([]);
+  const [pageData, setPageData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchDepartment, setSearchDepartment] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+
+  useEffect(() => {
+    getDepartment()
+    .then((response) => {
+      setDepartments(response.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching Departments: ", error);
+    });
+  }, []);
+
+  useEffect(() => {
+    const pagedatacount = Math.ceil(departments.length / pageSize);
+    setPageCount(pagedatacount);
+
+    if (page) {
+      const LIMIT = pageSize;
+      const skip = LIMIT * (page - 1);
+      const dataToDisplay = searchDepartment
+        ? departments.filter(
+          (departments) =>
+            departments.department_name
+              .toLowerCase()
+              .includes(searchDepartment.toLowerCase())
+        )
+        : departments.slice(skip, skip + LIMIT);
+
+      setPageData(dataToDisplay);
+    }
+  }, [departments, page, pageSize, searchDepartment]);
+
+  const handlePageSizeChange = (event) => {
+    const newPageSize = parseInt(event.target.value);
+    setPageSize(newPageSize);
+    setPage(1);
+  };
+
+    const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearchDepartment(query);
+  };
+
+  useEffect(() => {
+    if (selectedDepartment) {
+      const selectedDepartmentData = departments.filter(
+        (departments) => departments.department_name === selectedDepartment.value
+      );
+      if (selectedDepartmentData.length > 0) {
+        setPage(1);
+        setPageData(selectedDepartmentData);
+      }
+    } else {
+      setPageData(departments.slice(0, pageSize));
+    }
+  }, [selectedDepartment, departments, pageSize]);
+
+ 
+  const handleCancelClick = () => {
+    setSearchDepartment("")
+    setSelectedDepartment(null);
+    setPage(1);
+    setPageData(departments.slice(0, pageSize));
+  };
+
+  const getDepartmentOptions = () => {
+    const department = Array.from(
+      new Set(departments.map((department) => department.department_name))
+      );
+    return department.map((department) => ({
+      value: department,
+      label: department,
+    }));
+  };
+
+  const handleSearchSelectChange = (selectedOption) => {
+    setSelectedDepartment(selectedOption);
+  };
+
+
+  const loadEdit = (id) => {
+    navigate("/admin/edit-department/form/" + id);
+  };
+
+  const handleDeleteDepartment = (department_id) => {
+    Swal.fire({
+      title: "ต้องการลบข้อมูลแแผนกนี้หรือไม่ ?",
+      text: "เมื่อรายการแผนกนี้ถูกลบ คุณจะไม่สามาถกู้คืนได้",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteDepartmentById(department_id)
+          .then((res) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'ลบข้อมูลแผนกสำเร็จ',
+              showConfirmButton: false,
+              timer: 1700,
+            });
+            window.location.reload();
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: "เกิดข้อผิดพลาด",
+              text: "เกิดข้อผิดพลาดขณะลบข้อมูลแผนก.",
+              icon: "error",
+              timer: "1500"
+            });
+          });
+      }
+    });
+  };
+
+
+  return (
+    <div className="w-full">
+      <div className="row">
+        <div className="col-12 col-md-6 col-lg-4">
+          <i className="fa-solid fa-magnifying-glass mx-1"></i>
+          <label>ค้นหาแผนก</label>
+          <Select
+            value={selectedDepartment}
+            options={getDepartmentOptions()}
+            onChange={handleSearchSelectChange}
+            placeholder="ค้นหาด้วยชื่อแผนก..."
+            isClearable={true}
+          />
+        </div>
+        <div className="col-12 col-lg-8 pt-4">
+          <button
+            type="button"
+            className="btn btn-secondary ml-2"
+            onClick={handleCancelClick}
+          >
+            <i className="fa-solid fa-rotate-left mx-1"></i>
+            ล้างค่า
+          </button>
+        </div>
+      </div>
+      <div className="d-flex justify-content-between mb-2">
+        <div className="w-pagesize">
+          <select
+            class="form-select"
+            value={pageSize}
+            onChange={handlePageSizeChange}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+          </select>
+        </div>
+        <div>
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => {
+              navigate("/admin/department/form/");
+            }}
+          >
+            <i className="fa-solid fa-plus mx-1"></i>
+            เพิ่ม
+          </button>
+        </div>
+      </div>
+
+      <div className="overflow-auto">
+        <table className="table">
+          <thead>
+            <tr className="table-primary">
+              <th scope="col" style={{ width: '5%' }}>
+                ลำดับที่
+              </th>
+
+              <th scope="col" style={{ width: '10%' }}>
+                รูปภาพแผนก
+              </th>
+
+              <th scope="col" style={{ width: '10%' }}>
+                ชื่อแผนก
+              </th>
+
+              <th scope="col" style={{ width: '10%' }}>
+                เวลาเปิด
+              </th>
+
+              <th scope="col" style={{ width: '10%' }}>
+                เวลาปิด
+              </th>
+
+              <th scope="col" style={{ width: '5%' }}>
+                อาคาร
+              </th>
+
+              <th scope="col" style={{ width: '5%' }}>
+                ชั้น
+              </th>
+
+              <th scope="col" style={{ width: '10%' }}>
+                เบอร์โทรแผนก
+              </th>
+
+              <th scope="col" style={{ width: '10%' }}>
+                จำนวนคิวสูงสุด
+              </th>
+
+
+              <th scope="col justify-content-center" style={{ width: '15%' }}>
+                จัดการ
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {pageData.length > 0 ? (
+              pageData.map((item, index) => {
+                return (
+                  <tr key={item.department_id}>
+                    <td>{(page - 1) * 10 + index + 1}</td>
+                    {/* <td> */}
+                    <td><img className="img-d" src={item.department_image} /></td>
+                    {/* </td> */}
+                    <td>{item.department_name}</td>
+
+                    <td>{item.open_time}</td>
+                    <td>{item.close_time}</td>
+                    <td>{item.building}</td>
+                    <td>{item.floor}</td>
+                    <td>{item.department_phone}</td>
+                    <td>{item.max_queue_number}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-warning text-white mx-1 mt-1"
+                        onClick={() => {
+                          loadEdit(item.department_id);
+                        }}
+                      >
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </button>
+
+                      <button
+                        type="button"
+                        className="btn btn-danger text-white mx-1 mt-1"
+                        onClick={() => {
+                          handleDeleteDepartment(item.department_id);
+                        }}
+                      >
+                        <i className="fa-solid fa-trash-can"></i>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+              <td colSpan="8" className="text-center">
+                No departments found.
+              </td>
+            </tr>
+              )}
+
+          </tbody>
+        </table>
+      </div>
+      <div className="d-flex justify-content-between">
+        <div> 
+          จำนวน {pageData.length} รายการ จากทั้งหมด {departments.length} รายการ
+        </div>
+        <div>
+          <div className="Pagination">
+            <Pagination
+
+              activePage={page}
+              itemsCountPerPage={pageSize}
+              totalItemsCount={departments.length}
+              pageRangeDisplayed={10}
+              onChange={setPage}
+
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ShowData;

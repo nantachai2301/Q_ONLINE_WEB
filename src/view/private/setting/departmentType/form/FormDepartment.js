@@ -71,6 +71,19 @@ function FormDepartment() {
   const handleClick = async (e) => {
     e.preventDefault();
 
+     const formValid = validateForm(); // เช็คว่าฟอร์มถูกต้องหรือไม่
+
+     if (!formValid) {
+      // ถ้าฟอร์มไม่ถูกต้อง แสดง SweetAlert
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง !',
+        showConfirmButton: true,
+      });
+      return;
+    }
+    
+
     try {
       const result = await Swal.fire({
         title: 'คุณแน่ใจหรือไม่ ว่าต้องการสร้างข้อมูลรายชื่อแผนก ?',
@@ -112,6 +125,54 @@ function FormDepartment() {
       });
     }
   };
+
+  // เขียนฟังก์ชันสำหรับตรวจสอบความถูกต้องของฟอร์ม
+  // เพิ่มเงื่อนไขใน validateForm ในส่วนของเบอร์โทรแผนก
+const validateForm = () => {
+  const {
+    department_name,
+    open_time,
+    close_time,
+    max_queue_number,
+    floor,
+    building,
+    department_phone,
+  } = departments;
+
+  // ตรวจสอบว่ามีข้อมูลทุกช่องหรือไม่
+  if (
+    !department_name ||
+    !open_time ||
+    !close_time ||
+    !max_queue_number ||
+    !floor ||
+    !building ||
+    !department_phone
+  ) {
+    // แสดง SweetAlert แจ้งให้กรอกข้อมูลเบอร์โทรแผนกให้ครบถ้วน
+    Swal.fire({
+      icon: 'warning',
+      title: 'กรุณากรอกข้อมูลเบอร์โทรแผนกให้ครบถ้วน',
+      showConfirmButton: true,
+    });
+    return false;
+  }
+  // เพิ่มเงื่อนไขตรวจสอบความถูกต้องของข้อมูลอื่น ๆ ตามความต้องการ
+  // ตรวจสอบเวลาเปิด-ปิดว่าเป็นรูปแบบเวลาที่ถูกต้องหรือไม่
+  // ตรวจสอบรูปภาพแผนกว่ามีหรือไม่
+   // เพิ่มเงื่อนไขตรวจสอบความถูกต้องของเบอร์โทร
+   if (!/^\d{10}$/.test(department_phone)) {
+    // แสดง SweetAlert แจ้งให้กรอกเบอร์โทรแผนกให้ถูกต้อง
+    Swal.fire({
+      icon: 'warning',
+      title: 'กรุณากรอกเบอร์โทรแผนกให้ถูกต้อง (10 หลักและเป็นตัวเลขเท่านั้น)',
+      showConfirmButton: true,
+    });
+    return false;
+  }
+  // ถ้าผ่านทุกเงื่อนไขให้ส่งค่า true
+  return true;
+};
 
   return (
     <Fragment>
@@ -191,35 +252,26 @@ function FormDepartment() {
                   <br />
                   <br />
                   <form class="row g-3 d-flex justify-content-center ">
-                  <div className="col-10 col-md-6 ">
-                  <label>ชื่อแผนก</label>
-                  <label className="red">*</label>
-                  <select
-                    name="department_name" 
-                    className={`form-select ${touched.department_name &&
-                      errors.department_name
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    onChange={handleChange}
-                  >
-                    <option selected>{departments.department_name}</option>
-                    <option value="ทันตกรรม">ทันตกรรม</option>
-                    <option value="จักษุ">จักษุ</option>
-                    <option value="หัวใจ">หัวใจ</option>
-                    <option value="ผิวหนัง">ผิวหนัง</option>
-                    <option value="ศัลยกรรม">ศัลยกรรม</option>
-                    <option value="ทั่วไป">ทั่วไป</option>
-                    <option value="กุมารเวช">กุมารเวช</option>
-                    <option value="สูติ-นรีเวช">สูติขนรีเวช</option>
-                  </select>
-                  <ErrorMessage
-                    name="department_name"
-                    component="div"
-                    className="error-message"
-                  />
-
-                </div>
+                    <div className="col-10 col-md-6">
+                      <label>ชื่อแผนก</label>
+                      <label className="red">*</label>
+                      <input
+                        name="department_name"
+                        type="text"
+                        placeholder="กรอกชื่อแผนก"
+                        value={departments.department_name}
+                        className={`form-control ${touched.department_name &&
+                          errors.department_name &&
+                          "is-invalid"
+                          }`}
+                        onChange={handleChange}
+                      />
+                      <ErrorMessage
+                        name="department_name"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
 
                     <div className="col-10 col-md-6">
                       <label>เวลาเปิด</label>
@@ -382,4 +434,4 @@ function FormDepartment() {
   );
 }
 
-export default FormDepartment
+export default FormDepartment;
