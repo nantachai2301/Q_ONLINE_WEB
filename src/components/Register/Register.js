@@ -308,6 +308,8 @@ function Register() {
                             name="age"
                             value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
                             readOnly
+                            disabled
+                            style={{ backgroundColor: "lightgray" }}
                             className="form-control"
                           />
                         </div>
