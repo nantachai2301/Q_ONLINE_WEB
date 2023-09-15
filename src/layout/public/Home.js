@@ -285,13 +285,13 @@ function Home() {
                 </Link>
               </div>
           </Card>
-          <Card style={{ width: "20rem" }}>
+          <Card id="NewsfoodN" style={{ width: "20rem" }}>
             <Card.Img
               variant="top"
               src={c4}
               style={{ width: "95%", height: "70%" }}
             />
-            <div className="Title-card"id="NewsfoodN">
+            <div className="Title-card">
              เด็กไทยวันนี้ สูงดีสมส่วน ด้วย 4 ข้อแนะนำ
             </div>
           
