@@ -13,7 +13,9 @@ const Schema = Yup.object().shape({
     "กรุณากรอกเลขบัตรประชาชน 13 หลัก",
     (value) => value.length === 13
   ),
-
+  password: Yup.string()
+  .min(6, "กรุณากรอกให้ครบ 6 หลัก")
+  .required("กรุณากรอก รหัสผ่าน"),
 
   phoneNumber: Yup.string()
     .required("กรุณากรอก เบอร์โทรศัพท์")
