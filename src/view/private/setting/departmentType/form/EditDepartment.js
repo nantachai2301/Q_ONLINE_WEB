@@ -47,7 +47,6 @@ function EditDepartment() {
   const handleClick = async () => {
     try {
       const isValid = await Schema.isValid(departments);
-      console.log(departments)
       if (!isValid) {
         Swal.fire({
           icon: "error",
@@ -68,17 +67,8 @@ function EditDepartment() {
       });
 
       if (result.isConfirmed) {
-        const response = await updateDepartmentById(
-          department_id,
-          departments.department_name,
-          departments.department_image,
-          departments.open_time,
-          departments.close_time,
-          departments.max_queue_number,
-          departments.floor,
-          departments.building,
-          departments.department_phone
-        );
+        const response = await updateDepartmentById(department_id, departments);
+
 
         if (response.status === 200) {
           Swal.fire({
@@ -118,9 +108,9 @@ function EditDepartment() {
         img.src = reader.result;
         img.onload = () => {
           const maxWidth = 200;
-          const scaleFactor = maxWidth / img.width;
-          const newWidth = img.width * scaleFactor;
-          const newHeight = img.height * scaleFactor;
+          const maxHeight = 200;
+          const newWidth = img.width > maxWidth ? maxWidth : img.width;
+          const newHeight = (newWidth / img.width) * img.height;
 
           const canvas = document.createElement('canvas');
           canvas.width = newWidth;
@@ -130,87 +120,72 @@ function EditDepartment() {
           ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
           canvas.toBlob(async (blob) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              const resizedImageURL = reader.result;
-              console.log('Resized Image URL:', resizedImageURL);
+            const resizedImageURL = window.URL.createObjectURL(blob);
+            console.log('Resized Image URL:', resizedImageURL);
 
-              setDepartments((prevDepartments) => ({
-                ...prevDepartments,
-                department_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
-              }));
-            };
-            reader.readAsDataURL(blob);
+            setDepartments((prevDepartments) => ({
+              ...prevDepartments,
+              department_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
+            }));
           }, 'image/jpeg', 0.8);
         };
       };
       reader.readAsDataURL(file);
-      console.log('file :', file); // ตรวจสอบค่าของ department_image
     }
   };
   console.log('department_image:', departments.department_image); // ตรวจสอบค่าของ department_image
 
 
 
-
-
   return (
-  <Fragment>
-    <div className="w-full">
-      <div className="d-flex justify-content-end">
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <Link to="/admin/department-type" className="nav-breadcrumb">
-                ข้อมูลแผนกและการตรวจรักษา
+    <Fragment>
+      <div className="w-full">
+        <div className="d-flex justify-content-end">
+          <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/admin/department-type" className="nav-breadcrumb">
+                  ข้อมูลแผนกและการตรวจรักษา
               </Link>
 
+              </li>
+              <li
+                className="breadcrumb-item text-black fw-semibold"
+                aria-current="page"
+              >
+                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
             </li>
-            <li
-              className="breadcrumb-item text-black fw-semibold"
-              aria-current="page"
-            >
-              {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
-            </li>
 
-          </ol>
+            </ol>
 
-        </nav>
+          </nav>
 
-      </div>
-      <div className="w-full mb-5">
-        <h2 className="title-content">
-          {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
+        </div>
+        <div className="w-full mb-5">
+          <h2 className="title-content">
+            {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
         </h2>
-      </div>
+        </div>
 
-      <Formik
-        enableReinitialize={true}
-        validationSchema={Schema}
-        initialValues={departments}
-        onSubmit={handleClick}
-      >
-        {({ errors, touched }) => (
-          <form encType='multipart/form-data'>
+        <Formik
+          enableReinitialize={true}
+          validationSchema={Schema}
+          initialValues={departments}
+          onSubmit={handleClick}
+        >
+          {({ errors, touched }) => (
             <div className="row d-flex justify-content-center">
               <div className='UpdateDepart col-12 col-md-4 col-lg-8 border-1 shadow p-3' >
                 <div className="col-12 text-center align-items-center">
-                  <label>เลือกรูปภาพแผนก</label> <br />
+                  <label>เลือกรูปภาพหมอ</label> <br />
                   <br />
-                  <div className="d-flex flex-column justify-content-center align-items-center">
-                    {departments.department_image ? (
-                      <img
-                        className="img-hpts mx-auto"
-                        src={departments.department_image}
-                        alt="Departments"
-                      />
-                    ) : (
-                      <img
-                        className="img-hpts mx-auto"
-                        src={departments}
-                        alt="Default Departments"
-                      />
-                    )}
+                  <div className=" d-flex flex-column justify-content-center align-items-center">
+                    <img
+                      className="img-hpts mx-auto"
+                      src={departments.department_image}
+                      alt="รูปภาพแผนก"
+                    />
+
                     <br />
                     <br />
                   </div>
@@ -219,6 +194,7 @@ function EditDepartment() {
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <div class="col-10 col-md-6 ">
                     <input
+                      id="Depart_department_image"
                       type="file"
                       name="department_image"
                       accept="image/*"
@@ -236,9 +212,10 @@ function EditDepartment() {
                     <label>ชื่อแผนก</label>
                     <label className="red">*</label>
                     <select
+                      id="Depart_department_id"
                       name="department_id"
                       type="text"
-                      className={`form-control ${touched.department_id &&
+                      className={`form-select ${touched.department_id &&
                         errors.department_id
                         ? "is-invalid"
                         : ""
@@ -267,6 +244,7 @@ function EditDepartment() {
                     <label>เวลาเปิด</label>
                     <label className="red">*</label>
                     <input
+                      id="Depart_open_time"
                       name="open_time"
                       type="time"
                       placeholder="กรอกเวลาเปิด"
@@ -288,6 +266,7 @@ function EditDepartment() {
                     <label>เวลาปิด</label>
                     <label className="red">*</label>
                     <input
+                      id="Depart_close_time"
                       name="close_time"
                       type="time"
                       placeholder="เวลาปิด"
@@ -309,6 +288,7 @@ function EditDepartment() {
                     <label>อาคาร</label>
                     <label className="red">*</label>
                     <input
+                      id="Depart_building"
                       name="building"
                       type="text"
                       placeholder="กรอกอาคาร"
@@ -330,6 +310,7 @@ function EditDepartment() {
                     <label>ชั้น</label>
                     <label className="red">*</label>
                     <input
+                      id="Depart_floor"
                       name="floor"
                       type="text"
                       placeholder="ชั้น"
@@ -351,6 +332,7 @@ function EditDepartment() {
                     <label>เบอร์โทรแผนก</label>
                     <label className="red">*</label>
                     <input
+                      id="Depart_department_phone"
                       name="department_phone"
                       type="text"
                       placeholder="เบอร์โทรแผนก"
@@ -372,6 +354,7 @@ function EditDepartment() {
                     <label>จำนวนคิวสูงสุด</label>
                     <label className="red">*</label>
                     <input
+                      id="Depart_max_queue_number"
                       name="max_queue_number"
                       type="text"
                       placeholder="จำนวนคิวสูงสุด"
@@ -390,9 +373,10 @@ function EditDepartment() {
                   </div>
                   <div class="col-10 col-md-6 "></div>
                 </form>
-                
+
                 <div className="d-flex justify-content-center mt-3">
                   <button
+                    id="Depart_Creatsebmit"
                     type="submit"
                     className="btn btn-success mx-1"
                     onClick={handleClick}
@@ -401,6 +385,7 @@ function EditDepartment() {
                   </button>
                   <button className="btn btn-danger mx-1">
                     <Link
+                      id="Depart_Canclesebmit"
                       to="/admin/department-type"
                       style={{ textDecoration: "none", color: "#fff" }}
                     >
@@ -410,10 +395,9 @@ function EditDepartment() {
                 </div>
               </div>
             </div>
-          </form>
-        )}
-      </Formik>
-    </div>
+          )}
+        </Formik>
+      </div>
     </Fragment>
   )
 }

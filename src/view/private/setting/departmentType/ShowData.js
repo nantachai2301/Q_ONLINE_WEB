@@ -1,5 +1,5 @@
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pagination from 'react-js-pagination';
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
@@ -37,26 +37,28 @@ function ShowData() {
   }, []);
 
   useEffect(() => {
-    const pagedatacount = Math.ceil(departments.length / pageSize);
+    const filteredDepartments = departments.filter((department) => {
+      const nameFilter =
+      department.department_name
+          .toLowerCase()
+          .includes(searchDepartment.toLowerCase());
+
+          const departmentFilter =
+          !selectedDepartment ||
+          department.department_name === selectedDepartment.value;
+    
+        return nameFilter && departmentFilter ;
+    });
+
+    const pagedatacount = Math.ceil(filteredDepartments.length / pageSize);
     setPageCount(pagedatacount);
 
     if (page) {
       const LIMIT = pageSize;
       const skip = LIMIT * (page - 1);
-      const dataToDisplay = searchDepartment
-        ? departments.filter(
-          (departments) =>
-            departments.department_name
-              .toLowerCase()
-              .includes(searchDepartment.toLowerCase())
-
-        )
-
-        : departments.slice(skip, skip + LIMIT);
-
-      setPageData(dataToDisplay);
+      setPageData(filteredDepartments.slice(skip, skip + LIMIT));
     }
-  }, [departments, page, pageSize, searchDepartment]);
+  }, [departments, page, pageSize, searchDepartment, selectedDepartment]);
 
   const handlePageSizeChange = (event) => {
     const newPageSize = parseInt(event.target.value);
@@ -64,21 +66,12 @@ function ShowData() {
     setPage(1);
   };
 
-  useEffect(() => {
-    if (selectedDepartment) {
-      const selectedDepartmentData = departments.filter(
-        (departments) => departments.department_name === selectedDepartment.value
-      );
-      if (selectedDepartmentData.length > 0) {
-        setPage(1);
-        setPageData(selectedDepartmentData);
-      }
-    } else {
-      setPageData(departments.slice(0, pageSize));
-    }
-  }, [selectedDepartment, departments, pageSize]);
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    setSearchDepartment(query);
+  };
 
- 
+  
   const handleCancelClick = () => {
     setSearchDepartment("")
     setSelectedDepartment(null);
@@ -88,18 +81,18 @@ function ShowData() {
 
   const getDepartmentOptions = () => {
     const department = Array.from(
-      new Set(departments.map((department) => department.department_name)));
-    return department.map((department) => ({
-      value: department,
-      label: department,
-    }));
-  };
+      new Set(departments.map((departments) => departments.department_name))
+      );
+      return departments.map((department) => ({
+        value: department,
+        label: department,
+      }));
+    };
 
-  const handleSearchSelectChange = (selectedOption) => {
-    setSelectedDepartment(selectedOption);
-  };
-
-
+    const handleSearchSelectChange = (selectedOption) => {
+      setSelectedDepartment(selectedOption);
+    };
+  
   const loadEdit = (id) => {
     navigate("/admin/edit-department/form/" + id);
   };
@@ -172,10 +165,12 @@ function ShowData() {
             <option value={5}>5</option>
             <option value={10}>10</option>
             <option value={15}>15</option>
+            <option value={20}>20</option>
           </select>
         </div>
         <div>
           <button
+           id="department_create"
             type="button"
             className="btn btn-success"
             onClick={() => {
@@ -253,6 +248,7 @@ function ShowData() {
                     <td>{item.max_queue_number}</td>
                     <td>
                       <button
+                       id="department_edit"
                         type="button"
                         className="btn btn-warning text-white mx-1 mt-1"
                         onClick={() => {
@@ -263,6 +259,7 @@ function ShowData() {
                       </button>
 
                       <button
+                        id="department_delete"
                         type="button"
                         className="btn btn-danger text-white mx-1 mt-1"
                         onClick={() => {
@@ -282,7 +279,6 @@ function ShowData() {
               </td>
             </tr>
               )}
-
           </tbody>
         </table>
       </div>

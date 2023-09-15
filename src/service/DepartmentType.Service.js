@@ -3,14 +3,15 @@ import axios from "axios";
 const API_URL = "https://tan-hippopotamus-hem.cyclic.app/apis/";
 
 const getDepartment = async () => {
-  return await axios.get(API_URL + "departments ");
+  return await axios.get(API_URL + "departments",);
 };
 
 const getDepartmentById = async (department_id) => {
   return await axios.get(API_URL + "departments/" + department_id);
 };
 
-const updateDepartmentById = async (department_id,
+const updateDepartmentById = async (
+  department_id,
   department_name,
   department_image,
   open_time,
@@ -18,7 +19,7 @@ const updateDepartmentById = async (department_id,
   max_queue_number,
   floor,
   building,
-  department_phone,
+  department_phone
 ) => {
   return await axios.put(API_URL + "departments/" + department_id, {
     department_name,

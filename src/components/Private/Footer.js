@@ -21,7 +21,7 @@ function Footer() {
 
   useEffect(() => {
     axios
-      .get("https://combative-buckle-moth.cyclic.app/apis/hospitals/1")
+      .get("https://tan-hippopotamus-hem.cyclic.app/apis/hospitals/1")
       .then((res) => {
         console.log(res.data);
         setHospital_Name(res.data.hospital_name);

@@ -239,6 +239,7 @@ const validateForm = () => {
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <div class="col-10 col-md-6 ">
                       <input
+                       id="department_createdepartment_image"
                         type="file"
                         name="department_image"
                         accept="image/*"
@@ -256,6 +257,7 @@ const validateForm = () => {
                       <label>ชื่อแผนก</label>
                       <label className="red">*</label>
                       <input
+                      id="department_partment_name"
                         name="department_name"
                         type="text"
                         placeholder="กรอกชื่อแผนก"
@@ -277,6 +279,7 @@ const validateForm = () => {
                       <label>เวลาเปิด</label>
                       <label className="red">*</label>
                       <input
+                         id="department_open_time"
                         name="open_time"
                         type="time"
                         placeholder="กรอกเวลาเปิด"
@@ -298,6 +301,7 @@ const validateForm = () => {
                       <label>เวลาปิด</label>
                       <label className="red">*</label>
                       <input
+                       id="department_close_time"
                         name="close_time"
                         type="time"
                         placeholder="เวลาปิด"
@@ -319,6 +323,7 @@ const validateForm = () => {
                       <label>อาคาร</label>
                       <label className="red">*</label>
                       <input
+                       id="department_building"
                         name="building"
                         type="text"
                         placeholder="กรอกอาคาร"
@@ -340,6 +345,7 @@ const validateForm = () => {
                       <label>ชั้น</label>
                       <label className="red">*</label>
                       <input
+                      id="department_floor"
                         name="floor"
                         type="text"
                         placeholder="ชั้น"
@@ -361,6 +367,7 @@ const validateForm = () => {
                       <label>เบอร์โทรแผนก</label>
                       <label className="red">*</label>
                       <input
+                        id="department_department_phone"
                         name="department_phone"
                         type="text"
                         placeholder="เบอร์โทรแผนก"
@@ -382,6 +389,7 @@ const validateForm = () => {
                       <label>จำนวนคิวสูงสุด</label>
                       <label className="red">*</label>
                       <input
+                        id="department_max_queue_number"
                         name="max_queue_number"
                         type="text"
                         placeholder="จำนวนคิวสูงสุด"
@@ -402,6 +410,7 @@ const validateForm = () => {
                   </form>
                   <div className="d-flex justify-content-center mt-3">
                     <button
+                     id="department_creatSubmit"
                       type="submit"
                       className="btn btn-success mx-1"
                       onClick={handleClick}
@@ -410,6 +419,7 @@ const validateForm = () => {
                     </button>
                     <button className="btn btn-danger mx-1">
                       <Link
+                       id="department_CancleSubmit"
                         to="/admin/department-type"
                         style={{ textDecoration: "none", color: "#fff" }}
                       >

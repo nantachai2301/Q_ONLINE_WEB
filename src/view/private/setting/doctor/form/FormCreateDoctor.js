@@ -10,7 +10,7 @@ import { createDoctor } from "../../../../../service/Doctor.Service";
 function FormCreateDoctor() {
   const location = useLocation();
   const [doctor, setDoctors] = useState({
-    doctors_id:null,
+    doctors_id: null,
     prefix_name: "",
     doctor_first_name: "",
     doctor_last_name: "",
@@ -28,7 +28,7 @@ function FormCreateDoctor() {
   };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-  
+
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -39,18 +39,18 @@ function FormCreateDoctor() {
           const maxHeight = 200;
           const newWidth = img.width > maxWidth ? maxWidth : img.width;
           const newHeight = (newWidth / img.width) * img.height;
-  
+
           const canvas = document.createElement('canvas');
           canvas.width = newWidth;
           canvas.height = newHeight;
-  
+
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, newWidth, newHeight);
-  
+
           canvas.toBlob(async (blob) => {
             const resizedImageURL = window.URL.createObjectURL(blob);
             console.log('Resized Image URL:', resizedImageURL);
-  
+
             setDoctors((prevDoctor) => ({
               ...prevDoctor,
               doctor_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
@@ -61,13 +61,13 @@ function FormCreateDoctor() {
       reader.readAsDataURL(file);
     }
   };
-  
-  
-  console.log('doctor_image:',doctor.doctor_image); // ตรวจสอบค่าของ doctor_image
- 
+
+
+  console.log('doctor_image:', doctor.doctor_image); // ตรวจสอบค่าของ doctor_image
+
   const handleClick = async (e) => {
     e.preventDefault();
-  
+
     try {
       const result = await Swal.fire({
         title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างข้อมูลรายชื่อแพทย์ ?",
@@ -77,7 +77,7 @@ function FormCreateDoctor() {
         confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
-  
+
       if (result.isConfirmed) {
         await createDoctor(
           doctor.doctors_id,
@@ -107,7 +107,7 @@ function FormCreateDoctor() {
       });
     }
   };
-  
+
   return (
     <Fragment>
       <div className="container-fluid">
@@ -154,12 +154,12 @@ function FormCreateDoctor() {
                           alt="Doctor"
                         />
                       ) : (
-                        <img
-                          className="img-hpts mx-auto"
-                          src={Doctor}
-                          alt="Default Doctor"
-                        />
-                      )}
+                          <img
+                            className="img-hpts mx-auto"
+                            src={Doctor}
+                            alt="Default Doctor"
+                          />
+                        )}
                       <br />
                       <br />
                     </div>
@@ -167,14 +167,14 @@ function FormCreateDoctor() {
 
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <div class="col-10 col-md-6 ">
-                    <input
-                    id="doctor_createdoctor_image"
-  type="file"
-  name="doctor_image"
-  accept="image/*"
-  className="form-control"
-  onChange={handleImageChange}
-/>
+                      <input
+                        id="doctor_createdoctor_image"
+                        type="file"
+                        name="doctor_image"
+                        accept="image/*"
+                        className="form-control"
+                        onChange={handleImageChange}
+                      />
 
 
                     </div>
@@ -184,13 +184,12 @@ function FormCreateDoctor() {
                       <label>คำนำหน้า</label>
                       <label className="red">*</label>
                       <select
-                       id="doctor_createprefix_name"
+                        id="doctor_createprefix_name"
                         name="prefix_name"
-                        className={`form-select ${
-                          touched.prefix_name && errors.prefix_name
+                        className={`form-select ${touched.prefix_name && errors.prefix_name
                             ? "is-invalid"
                             : ""
-                        }`}
+                          }`}
                         onChange={handleChange}
                       >
                         <option selected>เลือกคำนำหน้าชื่อ</option>
@@ -215,16 +214,15 @@ function FormCreateDoctor() {
                       <label>ชื่อ</label>
                       <label className="red">*</label>
                       <input
-                      id="doctor_doctor_first_name"
+                        id="doctor_doctor_first_name"
                         name="doctor_first_name"
                         placeholder="กรอกชื่อ"
                         type="text"
                         value={doctor.doctor_first_name}
-                        className={`form-control ${
-                          touched.doctor_first_name &&
+                        className={`form-control ${touched.doctor_first_name &&
                           errors.doctor_first_name &&
                           "is-invalid"
-                        }`}
+                          }`}
                         onChange={handleChange}
                       />
                       <ErrorMessage
@@ -237,16 +235,15 @@ function FormCreateDoctor() {
                       <label>นามสกุล</label>
                       <label className="red">*</label>
                       <input
-                       id="doctor_doctor_last_name"
+                        id="doctor_doctor_last_name"
                         name="doctor_last_name"
                         placeholder="นามสกุล"
                         type="text"
                         value={doctor.doctor_last_name}
-                        className={`form-control ${
-                          touched.doctor_last_name &&
+                        className={`form-control ${touched.doctor_last_name &&
                           errors.doctor_last_name &&
                           "is-invalid"
-                        }`}
+                          }`}
                         onChange={handleChange}
                       />
                       <ErrorMessage
@@ -259,7 +256,7 @@ function FormCreateDoctor() {
                       <label>สถานะการใช้งาน</label>
                       <label className="red">*</label>
                       <select
-                      id="doctor_doctor_doctor_status"
+                        id="doctor_doctor_doctor_status"
                         name="doctor_status"
                         class="form-select"
                         aria-label="Default select example"
@@ -279,13 +276,12 @@ function FormCreateDoctor() {
                       <label>แผนก</label>
                       <label className="red">*</label>
                       <select
-                       id="doctor_doctor_doctor_department_id"
+                        id="doctor_doctor_doctor_department_id"
                         name="department_id"
-                        className={`form-select ${
-                          touched.department_id && errors.department_id
+                        className={`form-select ${touched.department_id && errors.department_id
                             ? "is-invalid"
                             : ""
-                        }`}
+                          }`}
                         aria-label="Default select example"
                         value={doctor.department_id} // Set the value to doctor.department_id
                         onChange={handleChange}
@@ -318,7 +314,7 @@ function FormCreateDoctor() {
                     </button>
                     <button className="btn btn-danger mx-1">
                       <Link
-                       id="Doctor_CreateBack"
+                        id="Doctor_CreateBack"
                         to="/admin/doctor/"
                         style={{ textDecoration: "none", color: "#fff" }}
                       >
