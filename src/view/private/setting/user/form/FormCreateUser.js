@@ -8,6 +8,7 @@ import { createPatient } from "../../../../../service/Patient.Service";
 function FormCreateUser() {
   const location = useLocation();
   const [age, setAge] = useState(0);
+  const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [users, setUsers] = useState({
     users_id:null,
     id_card: "",
@@ -59,6 +60,57 @@ function FormCreateUser() {
       ...prevUsers,
       [name]: value,
     }));
+    if (isDataValid()) {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
+    }
+  };
+  const handleSubmit = () => {
+    
+    if (isDataValid()) {
+    
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณากรอกข้อมูลให้ครบ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง",
+        showConfirmButton: true,
+      });
+    }
+  };
+  const isDataValid = () => {
+    const {
+      id_card,
+      prefix_name,
+      first_name,
+      last_name,
+      gender,
+      birthday,
+      weight,
+      height,
+      phoneNumber,
+    } = users;
+
+    if (
+      !id_card ||
+      !prefix_name ||
+      !first_name ||
+      !last_name ||
+      !gender ||
+      !birthday ||
+      !weight ||
+      !height ||
+      !phoneNumber ||
+      id_card.length !== 13 ||
+      phoneNumber.length !== 10 
+    ) {
+      return false;
+    }
+
+   
+
+    return true;
   };
   const handleClick = async () => {
     const usersWithAge = { ...users, age: age };
@@ -72,17 +124,40 @@ function FormCreateUser() {
         cancelButtonText: "ยกเลิก",
       });
       if (users.birthday) {
-        const birthDateObj = new Date(users.birthday); // แปลงวันที่ปีเกิดใน state ของคุณให้กลายเป็นออบเจ็กต์ของ Date
-        const today = new Date(); // วันที่ปัจจุบัน
+        const birthDateObj = new Date(users.birthday); 
+        const today = new Date(); 
         const diffInMilliseconds = Math.abs(today - birthDateObj);
         const ageDate = new Date(diffInMilliseconds);
         const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
-        setAge(calculatedAge); // อัปเดต state ของอายุด้วยค่าที่คำนวณได้
+        setAge(calculatedAge); 
       }
       const dataToSend = { ...users, age: age, users_id: users.users_id };
-
       if (result.isConfirmed) {
-        try {
+        const requiredFields = [
+          "id_card",
+          "prefix_name",
+          "first_name",
+          "last_name",
+          "gender",
+          "birthday",
+          "weight",
+          "height",
+          "phoneNumber",
+       
+        ];
+  
+        const missingFields = requiredFields.filter(fieldName => !dataToSend[fieldName]);
+  
+        if (missingFields.length > 0) {
+          Swal.fire({
+            icon: "warning",
+            title: "กรุณากรอกข้อมูลให้ครบ",
+            text: `กรุณากรอกข้อมูลให้ครบ`,
+            showConfirmButton: true,
+          });
+          return; 
+        }
+  try {
           await createPatient( 
             dataToSend.users_id,
             dataToSend.id_card,
@@ -121,9 +196,9 @@ function FormCreateUser() {
         } catch (error) {
           console.log(error);
           Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "เกิดข้อผิดพลาดในการเพิ่มข้อมูลผู้ใช้",
+            icon: "warning",
+            title: "มีบัญชีผู้ใช้อยู่แล้ว",
+            text: "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว",
             showConfirmButton: true,
           });
         }
@@ -146,7 +221,7 @@ function FormCreateUser() {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/admin/user" className="nav-breadcrumb">
+                <Link id="admin-user"to="/admin/user" className="nav-breadcrumb">
                   ข้อมูลรายชื่อผู้ใช้
                 </Link>
               </li>
@@ -184,6 +259,7 @@ function FormCreateUser() {
                           <label className="red">*</label>
                           <br></br>
                           <input
+                           id="Addid_card"
                             type="text"
                             name="id_card"
                             value={users.id_card}
@@ -206,6 +282,7 @@ function FormCreateUser() {
                             :{" "}
                           </label>{" "}
                           <select
+                            id="Addprefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -230,6 +307,7 @@ function FormCreateUser() {
                           <label className="red">*</label>
                           <input
                             type="name"
+                            id="Addfirst_name"
                             name="first_name"
                             placeholder="ชื่อ"
                             value={users.first_name}
@@ -250,6 +328,7 @@ function FormCreateUser() {
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
+                           id="Addlast_name"
                             type="text"
                             name="last_name"
                             placeholder="นามสกุล"
@@ -272,6 +351,7 @@ function FormCreateUser() {
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
+                          id="Addgender"
                             name="gender"
                             className={`form-select ${
                               touched.gender && errors.gender && "is-invalid"
@@ -294,6 +374,7 @@ function FormCreateUser() {
                           <label className="red">*</label>
 
                           <input
+                           id="Addbirthday"
                             name="birthday"
                             type="date"
                             value={users.birthday}
@@ -313,6 +394,7 @@ function FormCreateUser() {
                         <div className="col-2 px-1 mt-2">
                           <label>อายุ</label>
                           <input
+                           id="Addage"
                             type="text"
                             name="age"
                             value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
@@ -326,6 +408,7 @@ function FormCreateUser() {
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
+                           id="Addweight"
                             type="weight"
                             name="weight"
                             placeholder="น้ำหนัก"
@@ -345,6 +428,7 @@ function FormCreateUser() {
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
+                          id="Addheight"
                             type="height"
                             name="height"
                             placeholder="ส่วนสูง"
@@ -364,6 +448,7 @@ function FormCreateUser() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
+                            id="AddphoneNumber"
                             type="phone"
                             name="phoneNumber"
                             placeholder="เบอร์โทร"
@@ -385,6 +470,7 @@ function FormCreateUser() {
                           <label>โรคประจำตัว</label>
                           <label className="red">*</label>
                           <input
+                            id="Addcongenital_disease"
                             type="text"
                             placeholder="โรคประจำตัว"
                             name="congenital_disease"
@@ -397,6 +483,7 @@ function FormCreateUser() {
                           <label>ประวัติแพ้ยา</label>
                           <label className="red">*</label>
                           <input
+                           id="Adddrugallergy"
                             type="text"
                             placeholder="ประวัติแพ้ยา"
                             name="drugallergy"
@@ -415,6 +502,7 @@ function FormCreateUser() {
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
+                                id="Addpassword"
                                 type="password"
                                 placeholder="รหัสผ่าน"
                                 name="password"
@@ -444,6 +532,7 @@ function FormCreateUser() {
                             <label className="red">*</label>
                             <input
                               placeholder="ชื่อ"
+                              id="Addcontact_first_name"
                               type="contact_first_name"
                               name="contact_first_name"
                               value={users.contact_first_name}
@@ -465,6 +554,7 @@ function FormCreateUser() {
                             <label className="red">*</label>
                             <input
                               placeholder="นามสกุล"
+                              id="Addcontact_last_name"
                               type="contact_last_name"
                               name="contact_last_name"
                               value={users.contact_last_name}
@@ -487,6 +577,7 @@ function FormCreateUser() {
                               <label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                             id="Addcontact_relation_id"
                               name="contact_relation_id"
                               className={`form-select ${
                                 touched.contact_relation_id &&
@@ -513,6 +604,7 @@ function FormCreateUser() {
                             <label>เบอร์โทร</label>
                             <label className="red">*</label>
                             <input
+                            id="Addcontact_phoneNumber"
                               type="text"
                               placeholder="เบอร์โทร"
                               name="contact_phoneNumber"
@@ -540,6 +632,7 @@ function FormCreateUser() {
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
+                            id="Addaddress"
                               type="address"
                               name="address"
                               placeholder="บ้านเลขที่"
@@ -563,6 +656,7 @@ function FormCreateUser() {
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                            id="Addprovince"
                               name="province"
                               className={`form-control ${
                                 touched.province &&
@@ -674,6 +768,7 @@ function FormCreateUser() {
                             <label className="red">*</label>
                             <input
                               placeholder="อำเภอ"
+                              id="Addsubdistrict"
                               type="district"
                               name="district"
                               value={users.district}
@@ -694,6 +789,7 @@ function FormCreateUser() {
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
+                             id="Addsubdistrict"
                               name="subdistrict"
                               placeholder="ตำบล"
                               value={users.subdistrict}
@@ -714,6 +810,7 @@ function FormCreateUser() {
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
+                             id="addpostcode"
                               placeholder="รหัสไปรษณีย์"
                               name="postcode"
                               value={users.postcode}
@@ -733,15 +830,17 @@ function FormCreateUser() {
                         </div>
                       </div>
                       <div className="d-flex justify-content-center mt-3">
-                        <button
+                      <button
+                        id="buttonAdminUser"
                           type="submit"
                           className="btn btn-success mx-1"
-                          onClick={handleClick}
-                        >
+                          onClick={handleSubmit} 
+                         >
                           บันทึก
                         </button>
 
                         <button
+                         id="BackbuttonAdminUser"
                           className="btn btn-danger mx-1"
                           onClick={() => navigate("/admin/user")}
                         >

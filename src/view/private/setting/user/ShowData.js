@@ -113,6 +113,7 @@ function ShowData() {
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
           <label>ค้นหา</label>
           <input
+          id="SearchUser"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -123,6 +124,7 @@ function ShowData() {
         <div className="col-3 col-lg-3 pt-4">
           {/* ส่วนของการเลือกค่า role_id */}
           <select
+           id="selectedUser"
             className="form-select"
             value={selectedRoleId}
             onChange={(e) => setSelectedRoleId(e.target.value)}
@@ -134,6 +136,7 @@ function ShowData() {
         </div>
         <div className="col-3 col-lg-3 pt-4">
           <button
+           id="CencelUser"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
@@ -147,6 +150,7 @@ function ShowData() {
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
+           id="pageSizeUser"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
@@ -157,6 +161,7 @@ function ShowData() {
         </div>
         <div>
           <button
+           id="createformUser"
             type="button"
             className="btn btn-success"
             onClick={() => {
@@ -228,6 +233,7 @@ function ShowData() {
 
                       <td>
                         <button
+                        id=" loadEditUser"
                           type="button"
                           className="btn btn-warning text-white mx-1 mt-1"
                           onClick={() => {
@@ -237,6 +243,7 @@ function ShowData() {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
+                        id="DeleteUser"
                           type="button"
                           className="btn btn-danger text-white mx-1 mt-1"
                           onClick={() => {
