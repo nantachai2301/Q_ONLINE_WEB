@@ -271,7 +271,7 @@ function Home() {
               src={c3}
               style={{ width: "95%", height: "70%" }}
             />
-            <div className="Title-card">
+            <div className="Title-card"id="ModernaBivalentN">
               ฉีดวัคซีนโควิด-19 Moderna Bivalent ตั้งแต่วันอังคารที่ 16 พฤษภาคม
               2566
             </div>
@@ -291,7 +291,7 @@ function Home() {
               src={c4}
               style={{ width: "95%", height: "70%" }}
             />
-            <div className="Title-card">
+            <div className="Title-card"id="NewsfoodN">
              เด็กไทยวันนี้ สูงดีสมส่วน ด้วย 4 ข้อแนะนำ
             </div>
           
