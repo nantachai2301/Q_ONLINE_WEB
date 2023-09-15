@@ -52,7 +52,7 @@ function Home() {
   };
 
   const handleListQueue = () => {
-    navigate("/history/:users_id");
+    navigate("/history");
   };
 
   const handleAllQueueList = () => {
@@ -192,7 +192,7 @@ function Home() {
           style={{ color: "#4b86d2", cursor: "pointer" }}
         >
           <h4 className="title-name-home mt-3 mx-5">
-         จำนวนคิวทั้งหมด
+          จำนวนคิวทั้งหมด
           </h4>
           
         </a>
@@ -253,7 +253,7 @@ function Home() {
             <div className="button-card">
               <Button variant="primary">
               <Link to="/Newsfluvaccine">
-                  <div className="text-link2">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </Button>
             </div>
@@ -271,7 +271,7 @@ function Home() {
             <div className="button-card">
               <Button variant="primary">
               <Link to="/NewsModernaBivalent">
-                  <div className="text-link3">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </Button>
             </div>
@@ -288,7 +288,7 @@ function Home() {
             <div className="button-card">
               <Button variant="primary">
               <Link to="/Newsfood">
-                  <div className="text-link2">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </Button>
             </div>
