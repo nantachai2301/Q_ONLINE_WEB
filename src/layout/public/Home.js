@@ -234,7 +234,7 @@ function Home() {
             </div>
             <div className="button-New-primary">
                 <Link
-                  to={`/Newsdentalservice/`}
+                  to={`/Newsdentalservice`}
                   className="btn btn-primary mx-1"
                 >
                   <div className="text-link1">ข้อมูลเพิ่มเติม</div>
