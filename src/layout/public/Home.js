@@ -223,7 +223,7 @@ function Home() {
           </Carousel>
         </div>
         <div className="title-message">
-          <h3>ข่าวสารประชาสัมพันธ์</h3>
+          <h3 id="NewsS">ข่าวสารประชาสัมพันธ์</h3>
         </div>
         <hr></hr>
         <div className="row">
@@ -233,7 +233,7 @@ function Home() {
               src={c1}
               style={{ width: "95%", height: "70%" }}
             />
-            <div className="Title-card">
+            <div className="Title-card" id="HhNewsS">
               ขั้นตอนการรับบริการทันตกรรม รพ.สมเด็จพระสังฆราชองค์ที่ 17
             </div>
             <div className="button-New-primary" >
