@@ -114,6 +114,7 @@ const LoginModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>รหัสประจำตัวประชาชน</Form.Label>
               <Form.Control
+              id="LoginID_Card"
                 type="text"
                 placeholder="Enter ID number"
                 value={id_card}
@@ -123,6 +124,7 @@ const LoginModal = (props) => {
             <Form.Group className="mb-3">
               <Form.Label>รหัสผ่าน</Form.Label>
               <Form.Control
+              id="LoginPassword"
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -145,6 +147,7 @@ const LoginModal = (props) => {
         </Modal.Body>
         <Modal.Footer>
           <button
+          id="Login"
             type="button"
             className="btn btn-primary"
             onClick={handleLogin}
@@ -171,6 +174,7 @@ const LoginModal = (props) => {
               <Form.Control type="email" placeholder="Enter email" />
             </Form.Group>
             <button
+            
               type="button"
               className="btn btn-primary"
               onClick={handleResetPassword}
