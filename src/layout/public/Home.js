@@ -90,9 +90,9 @@ function Home() {
           >
             <div className="row justify-content-xl-center">
             <div className="col" style={{ margin: "0 20px" }}>
-                <div className="Home-medical">
+                <div className="Home-medical"  id="Home-medical">
                 <FontAwesomeIcon
-                  id="Home-medical"
+                  
                   onClick={handleDepartment}
                   icon={faBook}
                   class="fas fa-book-medical"
@@ -112,9 +112,9 @@ function Home() {
               </div>
                   
               <div className="col" style={{ margin: "0 20px" }}>
-                <div className="Home-calendarDays">
+                <div className="Home-calendarDays" id="Home-calendarDays">
                 <FontAwesomeIcon
-                  id="Home-calendarDays"
+                 
                   onClick={handleMainBookPopup}
                   icon={faStethoscope}
                   class="fas fa-calendarDays"
@@ -137,9 +137,9 @@ function Home() {
       )}
               </div>
               <div className="col" style={{ margin: "0 20px" }}>
-                <div className="Home-Desktop">
+                <div className="Home-Desktop"  id="Home-Desktop">
                 <FontAwesomeIcon
-                 id="Home-Desktop"
+               
                 onClick={handleAllQueueDesktop}
                 icon={faDesktop}
                 class="fa-solid fa-Desktop"
@@ -159,9 +159,9 @@ function Home() {
               </div>
               {isLoggedIn && (
      <div className="col" style={{ margin: "0 20px" }}>
-        <div className="Home-Queue">
+        <div className="Home-Queue"  id="Home-Queue">
         <FontAwesomeIcon
-         id="Home-Queue"
+        
           onClick={handleListQueue}
           icon={faList}
           class="fa-solid fa-list"
@@ -183,9 +183,9 @@ function Home() {
       )}
       {isLoggedIn && (
        <div className="col" style={{ margin: "0 5px" }}>
-        <div className="Home-iconQ">
+        <div className="Home-iconQ" id="Home-iconQ">
         <FontAwesomeIcon
-         id="Home-iconQ"
+        
           onClick={handleAllQueueList}
           icon={faRectangleList}
           class="fa-solid fa-rectangle-list"
