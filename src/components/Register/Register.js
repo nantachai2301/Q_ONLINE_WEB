@@ -7,9 +7,7 @@ import Swal from "sweetalert2";
 import LoginModal from "../../components/Login/LoginModal";
 import { createPatient } from "../../service/Patient.Service";
 function Register() {
-  const location = useLocation();
- 
-  const [age, setAge] = useState(0);
+const [age, setAge] = useState(0);
   const [users, setUsers] = useState({
     users_id: null,
     id_card: "",
@@ -254,6 +252,7 @@ function Register() {
                           <br></br>
                           <input
                             type="text"
+                            id="user_id_card"
                             name="id_card"
                             value={users.id_card}
                             placeholder="เลขบัตรประชาชน 13 หลัก"
@@ -275,6 +274,7 @@ function Register() {
                             :{" "}
                           </label>{" "}
                           <select
+                           id="user_prefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -298,7 +298,8 @@ function Register() {
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
-                            type="name"
+                            id="user_first_name"
+                            type="text"
                             name="first_name"
                             placeholder="ชื่อ"
                             value={users.first_name}
@@ -319,6 +320,7 @@ function Register() {
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
+                            id="user_last_name"
                             type="text"
                             name="last_name"
                             placeholder="นามสกุล"
@@ -341,6 +343,7 @@ function Register() {
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
+                          id="user_gender"
                             name="gender"
                             className={`form-select ${
                               touched.gender && errors.gender && "is-invalid"
@@ -363,6 +366,7 @@ function Register() {
                           <label className="red">*</label>
 
                           <input
+                           id="user_birthday"
                             name="birthday"
                             type="date"
                             value={users.birthday}
@@ -382,6 +386,7 @@ function Register() {
                         <div className="col-2 px-1 mt-2">
                           <label>อายุ</label>
                           <input
+                            id="user_age"
                             type="text"
                             name="age"
                             value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
@@ -396,7 +401,8 @@ function Register() {
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
-                            type="weight"
+                           id="user_weight"
+                            type="text"
                             name="weight"
                             placeholder="น้ำหนัก"
                             value={users.weight}
@@ -415,7 +421,8 @@ function Register() {
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
-                            type="height"
+                            id="user_height"
+                            type="text"
                             name="height"
                             placeholder="ส่วนสูง"
                             value={users.height}
@@ -434,6 +441,7 @@ function Register() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
+                          id="user_phoneNumbe"
                             type="phone"
                             name="phoneNumber"
                             placeholder="เบอร์โทร"
@@ -455,6 +463,7 @@ function Register() {
                           <label>โรคประจำตัว</label>
                           <label className="red">*</label>
                           <input
+                           id="user_congenital_disease"
                             type="text"
                             placeholder="โรคประจำตัว"
                             name="congenital_disease"
@@ -467,6 +476,7 @@ function Register() {
                           <label>ประวัติแพ้ยา</label>
                           <label className="red">*</label>
                           <input
+                           id="user_drugallergy"
                             type="text"
                             placeholder="ประวัติแพ้ยา"
                             name="drugallergy"
@@ -485,6 +495,7 @@ function Register() {
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
+                               id="user_password"
                                 type="password"
                                 placeholder="รหัสผ่าน"
                                 name="password"
@@ -514,7 +525,8 @@ function Register() {
                             <label className="red">*</label>
                             <input
                               placeholder="ชื่อ"
-                              type="contact_first_name"
+                              id="user_contact_first_name"
+                              type="text"
                               name="contact_first_name"
                               value={users.contact_first_name}
                               className={`form-control ${
@@ -534,8 +546,9 @@ function Register() {
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
+                              id="user_contact_last_name"
                               placeholder="นามสกุล"
-                              type="contact_last_name"
+                              type="text"
                               name="contact_last_name"
                               value={users.contact_last_name}
                               className={`form-control ${
@@ -557,6 +570,8 @@ function Register() {
                               <label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                              id="user_contact_relation_id"
+                              type="text"
                               name="contact_relation_id"
                               className={`form-select ${
                                 touched.contact_relation_id &&
@@ -583,6 +598,7 @@ function Register() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
+                           id="user_contact_phoneNumber"
                             type="phone"
                             name="contact_phoneNumber"
                             placeholder="เบอร์โทร"
@@ -611,7 +627,8 @@ function Register() {
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
-                              type="address"
+                            id="user_address"
+                              type="text"
                               name="address"
                               placeholder="บ้านเลขที่"
                               value={users.address}
@@ -634,6 +651,7 @@ function Register() {
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                             id="user_province"
                               name="province"
                               className={`form-control ${
                                 touched.province &&
@@ -744,8 +762,9 @@ function Register() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
+                             id="user_district"
                               placeholder="อำเภอ"
-                              type="district"
+                              type="text"
                               name="district"
                               value={users.district}
                               className={`form-control ${
@@ -765,6 +784,8 @@ function Register() {
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
+                             id="user_subdistrict"
+                             type="text"
                               name="subdistrict"
                               placeholder="ตำบล"
                               value={users.subdistrict}
@@ -785,6 +806,7 @@ function Register() {
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
+                            id="user_postcode"
                               placeholder="รหัสไปรษณีย์"
                               name="postcode"
                               value={users.postcode}
@@ -805,6 +827,7 @@ function Register() {
                       </div>
                       <div className="d-flex justify-content-center mt-3">
                         <button
+                        id="buttonRegisterUser"
                           type="submit"
                           className="btn btn-success mx-1"
                           onClick={handleSubmit} 
@@ -812,6 +835,7 @@ function Register() {
                           บันทึก
                         </button>
                         <button
+                        id="buttonCancelUser"
                           className="btn btn-danger mx-1"
                           onClick={() => navigate("/")}
                         >
