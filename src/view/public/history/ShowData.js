@@ -185,9 +185,14 @@ function ShowData() {
 
   const handleEditSubmit = async (values) => {
     try {
-      // ... ตรวจสอบความถูกต้องของข้อมูล ...
-
-      // อัปเดตข้อมูลที่ต้องการแก้ไขใน API
+      if (!values.symptom) {
+        Swal.fire({
+          icon: "error",
+          title: "กรุณากรอกข้อมูลให้ครบถ้วน",
+          showConfirmButton: true,
+        });
+        return;
+      }
       const updatedData = {
         symptom: values.symptom,
         queue_date: formatDateToAPI(values.queue_date),
