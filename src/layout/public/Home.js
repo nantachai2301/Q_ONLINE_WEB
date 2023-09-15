@@ -232,13 +232,14 @@ function Home() {
             <div className="Title-card">
               ขั้นตอนการรับบริการทันตกรรม รพ.สมเด็จพระสังฆราชองค์ที่ 17
             </div>
-            <div className="button-card">
-              <Button variant="primary">
-                <Link to="/Newsdentalservice">
+            <div className="button-New-primary">
+                <Link
+                  to={`/Newsdentalservice/`}
+                  className="btn btn-primary mx-1"
+                >
                   <div className="text-link1">ข้อมูลเพิ่มเติม</div>
                 </Link>
-              </Button>
-            </div>
+              </div>
           </Card>
           <Card style={{ width: "20rem" }}>
             <Card.Img
@@ -250,13 +251,15 @@ function Home() {
               ฉีดวัคซีนไข้หวัดใหญ่” ฟรี สปสช.ชวนประชาชน 7
               กลุ่มเสี่ยงสิทธิบัตรทอง
             </div>
-            <div className="button-card">
-              <Button variant="primary">
-              <Link to="/Newsfluvaccine">
-                  <div className="text-link2">ข้อมูลเพิ่มเติม</div>
+          
+            <div className="button-New-primary">
+                <Link
+                  to={`/Newsfluvaccine`}
+                  className="btn btn-primary mx-1"
+                >
+                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
                 </Link>
-              </Button>
-            </div>
+              </div>
           </Card>
           <Card style={{ width: "20rem" }}>
             <Card.Img
@@ -268,13 +271,15 @@ function Home() {
               ฉีดวัคซีนโควิด-19 Moderna Bivalent ตั้งแต่วันอังคารที่ 16 พฤษภาคม
               2566
             </div>
-            <div className="button-card">
-              <Button variant="primary">
-              <Link to="/NewsModernaBivalent">
-                  <div className="text-link3">ข้อมูลเพิ่มเติม</div>
+           
+            <div className="button-New-primary">
+                <Link
+                  to={`/NewsModernaBivalent`}
+                  className="btn btn-primary mx-1"
+                >
+                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
                 </Link>
-              </Button>
-            </div>
+              </div>
           </Card>
           <Card style={{ width: "20rem" }}>
             <Card.Img
@@ -285,13 +290,15 @@ function Home() {
             <div className="Title-card">
              เด็กไทยวันนี้ สูงดีสมส่วน ด้วย 4 ข้อแนะนำ
             </div>
-            <div className="button-card">
-              <Button variant="primary">
-              <Link to="/Newsfood">
-                  <div className="text-link4">ข้อมูลเพิ่มเติม</div>
+          
+            <div className="button-New-primary">
+                <Link
+                  to={`/Newsfood`}
+                  className="btn btn-primary mx-1"
+                >
+                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
                 </Link>
-              </Button>
-            </div>
+              </div>
           </Card>
         </div>
       </div>
