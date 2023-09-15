@@ -257,7 +257,7 @@ function Home() {
                   to={`/Newsfluvaccine`}
                   className="btn btn-primary mx-1"
                 >
-                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link2">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </div>
           </Card>
@@ -277,7 +277,7 @@ function Home() {
                   to={`/NewsModernaBivalent`}
                   className="btn btn-primary mx-1"
                 >
-                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link3">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </div>
           </Card>
@@ -296,7 +296,7 @@ function Home() {
                   to={`/Newsfood`}
                   className="btn btn-primary mx-1"
                 >
-                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link4">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </div>
           </Card>
