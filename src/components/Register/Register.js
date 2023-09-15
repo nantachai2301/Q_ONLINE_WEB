@@ -39,7 +39,7 @@ function Register() {
     department_id: null,
     birthday: "",
   });
-
+  const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -61,7 +61,60 @@ function Register() {
       ...prevUsers,
       [name]: value,
     }));
+    if (isDataValid()) {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
+    }
   };
+  const handleSubmit = () => {
+    
+    if (isDataValid()) {
+    
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณากรอกข้อมูลให้ครบ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง",
+        showConfirmButton: true,
+      });
+    }
+  };
+
+  const isDataValid = () => {
+    const {
+      id_card,
+      prefix_name,
+      first_name,
+      last_name,
+      gender,
+      birthday,
+      weight,
+      height,
+      phoneNumber,
+    } = users;
+
+    if (
+      !id_card ||
+      !prefix_name ||
+      !first_name ||
+      !last_name ||
+      !gender ||
+      !birthday ||
+      !weight ||
+      !height ||
+      !phoneNumber ||
+      id_card.length !== 13 ||
+      phoneNumber.length !== 10 
+    ) {
+      return false;
+    }
+
+   
+
+    return true;
+  };
+
   const handleClick = async () => {
     const usersWithAge = { ...users, age: age };
     try {
@@ -94,7 +147,7 @@ function Register() {
           "weight",
           "height",
           "phoneNumber",
-          // Add other required fields here
+       
         ];
   
         const missingFields = requiredFields.filter(fieldName => !dataToSend[fieldName]);
@@ -337,6 +390,7 @@ function Register() {
                             style={{ backgroundColor: "lightgray" }}
                             className="form-control"
                           />
+                        
                         </div>
                         <div className="col-3">
                           <label>น้ำหนัก</label>
@@ -753,8 +807,8 @@ function Register() {
                         <button
                           type="submit"
                           className="btn btn-success mx-1"
-                          onClick={handleClick}
-                        >
+                          onClick={handleSubmit} 
+                         >
                           บันทึก
                         </button>
                         <button
@@ -763,7 +817,6 @@ function Register() {
                         >
                           ยกเลิก
                         </button>
-                       
                       </div>
                     </div>
                   </div>
