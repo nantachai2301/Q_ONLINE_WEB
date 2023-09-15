@@ -185,9 +185,14 @@ function ShowData() {
 
   const handleEditSubmit = async (values) => {
     try {
-      // ... ตรวจสอบความถูกต้องของข้อมูล ...
-
-      // อัปเดตข้อมูลที่ต้องการแก้ไขใน API
+      if (!values.symptom) {
+        Swal.fire({
+          icon: "error",
+          title: "กรุณากรอกอาการเบื้องต้น",
+          showConfirmButton: true,
+        });
+        return;
+      }
       const updatedData = {
         symptom: values.symptom,
         queue_date: formatDateToAPI(values.queue_date),
@@ -420,6 +425,7 @@ function ShowData() {
           (queue.queue_status_id === 4 && selectedStatusId !== "4")) && (
           <div>
             <button
+              id="EditQueue"
               type="button"
               className="btn btn-warning text-white mx-1 mt-1"
               onClick={() => handleEditClick(queue)}
@@ -427,6 +433,7 @@ function ShowData() {
               <i className="fa-solid fa-pen-to-square"></i>
             </button>
                         <button
+                          id="RemoveQueue"
                           type="button"
                           className="btn btn-danger text-white mx-1 mt-1"
                           onClick={() => {
@@ -537,6 +544,7 @@ function ShowData() {
                             </Form.Label>
                             <label className="red">*</label>
                             <Form.Control
+                              id="Editsymptom"
                               name="symptom" // ตรงตามชื่อที่ใช้ใน initialValues
                               type="text"
                               placeholder="กรุณาระบุอาการเบื้องต้น"
@@ -614,6 +622,7 @@ function ShowData() {
                     )}
                     <Modal.Footer>
                       <button
+                       id="QSubmit"
                         type="submit"
                         className="btn btn-primary"
                         onClick={() => {

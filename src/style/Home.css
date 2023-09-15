@@ -58,6 +58,23 @@
   justify-content: center;
 }
 
+.text-link2{
+  color: white;
+  font-size: 12px;
+  justify-content: center;
+}
+
+.text-link3{
+  color: white;
+  font-size: 12px;
+  justify-content: center;
+}
+
+.text-link4{
+  color: white;
+  font-size: 12px;
+  justify-content: center;
+}
 .Title-card{
   text-align: left;
   margin-top: 25px;
@@ -94,4 +111,8 @@
 }
 .Name-icon8{
   white-space:nowrap;
+}
+.Home-iconQ{
+  width: 80px;
+  cursor: pointer;
 }

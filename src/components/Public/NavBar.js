@@ -132,20 +132,20 @@ const Navbar = () => {
   const renderMenuItems = () => {
     return (
       <List sx={{ paddingTop: "150px" }}>
-        <ListItem aria-label="หน้าหลัก" button onClick={handleNavigateToIndex}>
+        <ListItem id="HomeHam"aria-label="หน้าหลัก" button onClick={handleNavigateToIndex}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="หน้าแรก" />
         </ListItem>
-        <ListItem aria-label="โปรไฟล์" button onClick={handleNavigateToProfile}>
+        <ListItem id="ProfileHam"aria-label="โปรไฟล์" button onClick={handleNavigateToProfile}>
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
           <ListItemText primary="โปรไฟล์" />
         </ListItem>
         {isLoggedIn && (
-          <ListItem aria-label="ออกจากระบบแฮ่ม" button onClick={handleLogout}>
+          <ListItem id="LogoutHam"aria-label="ออกจากระบบแฮ่ม" button onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>
@@ -167,12 +167,13 @@ const Navbar = () => {
           <Toolbar>
             <div style={{ display: "flex", alignItems: "center" }}>
               <LogoImg
+              id="HospitalLogo.17"
                 src={Logo}
                 alt="โลโก้"
                 onClick={handleLogoClick}
                 style={{ marginRight: "16px" }}
               />
-              <Link to="/" className="logo-title" style={{ fontSize: "28px" }}>
+              <Link to="/" className="logo-title" id="Hospital.17"style={{ fontSize: "28px" }}>
                 โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
               </Link>
             </div>
@@ -188,6 +189,7 @@ const Navbar = () => {
             {!userData && (
               <>
                 <IconButton
+                id="registerNavbar"
                   size="large"
                   edge="start"
                   color="inherit"
@@ -199,6 +201,7 @@ const Navbar = () => {
                   <ListItemText primary="สมัครสมาชิก" />
                 </IconButton>
                 <IconButton
+                id="loginNavbar"
                   size="large"
                   edge="start"
                   color="inherit"
@@ -218,6 +221,7 @@ const Navbar = () => {
               <>
                 {isDesktop && (
                   <IconButton
+                  id="logoutNavbar"
                     size="large"
                     edge="start"
                     color="inherit"
@@ -231,6 +235,7 @@ const Navbar = () => {
                   </IconButton>
                 )}
                 <IconButton
+                  id="hamNavbar"
                   size="large"
                   edge="start"
                   color="inherit"
@@ -246,6 +251,7 @@ const Navbar = () => {
         </CustomAppBar>
         {userData && (
           <Drawer
+           id="isDrawerOpen"
             anchor="right"
             open={isDrawerOpen}
             onClose={handleDrawerToggle}

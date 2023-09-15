@@ -255,6 +255,7 @@ function ShowData() {
         </div>
         <div>
           <button
+            id="doctor_create"
             type="button"
             className="btn btn-success"
             onClick={() => {
@@ -322,6 +323,7 @@ function ShowData() {
 
                     <td>
                       <button
+                      id="doctor_edit"
                         type="button"
                         className="btn btn-warning text-white mx-1 mt-1"
                         onClick={() => {
@@ -331,6 +333,7 @@ function ShowData() {
                         <i className="fa-solid fa-pen-to-square"></i>
                       </button>
                       <button
+                       id="doctor_status"
                         type="button"
                         className={`btn mx-1 mt-1 ${
                           item.doctor_status === "ใช้งาน"
@@ -359,6 +362,7 @@ function ShowData() {
                       </button>
 
                       <button
+                         id="doctor_Delete"
                         type="button"
                         className="btn btn-danger text-white mx-1 mt-1"
                         onClick={() => {

@@ -90,8 +90,9 @@ function Home() {
           >
             <div className="row justify-content-xl-center">
             <div className="col" style={{ margin: "0 20px" }}>
-                <div className="Home-medical">
+                <div className="Home-medical"  id="Home-medical">
                 <FontAwesomeIcon
+                  
                   onClick={handleDepartment}
                   icon={faBook}
                   class="fas fa-book-medical"
@@ -111,8 +112,9 @@ function Home() {
               </div>
                   
               <div className="col" style={{ margin: "0 20px" }}>
-                <div className="Home-calendarDays">
+                <div className="Home-calendarDays" id="Home-calendarDays">
                 <FontAwesomeIcon
+                 
                   onClick={handleMainBookPopup}
                   icon={faStethoscope}
                   class="fas fa-calendarDays"
@@ -135,8 +137,9 @@ function Home() {
       )}
               </div>
               <div className="col" style={{ margin: "0 20px" }}>
-                <div className="Home-Desktop">
+                <div className="Home-Desktop"  id="Home-Desktop">
                 <FontAwesomeIcon
+               
                 onClick={handleAllQueueDesktop}
                 icon={faDesktop}
                 class="fa-solid fa-Desktop"
@@ -156,8 +159,9 @@ function Home() {
               </div>
               {isLoggedIn && (
      <div className="col" style={{ margin: "0 20px" }}>
-        <div className="Home-Queue">
+        <div className="Home-Queue"  id="Home-Queue">
         <FontAwesomeIcon
+        
           onClick={handleListQueue}
           icon={faList}
           class="fa-solid fa-list"
@@ -179,9 +183,9 @@ function Home() {
       )}
       {isLoggedIn && (
        <div className="col" style={{ margin: "0 5px" }}>
-        <div className="Home-icon">
+        <div className="Home-iconQ" id="Home-iconQ">
         <FontAwesomeIcon
-          onClick={handleAllQueueList}
+        onClick={handleAllQueueList}
           icon={faRectangleList}
           class="fa-solid fa-rectangle-list"
           style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
@@ -192,7 +196,7 @@ function Home() {
           style={{ color: "#4b86d2", cursor: "pointer" }}
         >
           <h4 className="title-name-home mt-3 mx-5">
-          จำนวนคิวทั้งหมด
+         จำนวนคิวทั้งหมด
           </h4>
           
         </a>
@@ -219,7 +223,7 @@ function Home() {
           </Carousel>
         </div>
         <div className="title-message">
-          <h3>ข่าวสารประชาสัมพันธ์</h3>
+          <h3 id="NewsS">ข่าวสารประชาสัมพันธ์</h3>
         </div>
         <hr></hr>
         <div className="row">
@@ -229,16 +233,17 @@ function Home() {
               src={c1}
               style={{ width: "95%", height: "70%" }}
             />
-            <div className="Title-card">
+            <div className="Title-card" id="HhNewsS">
               ขั้นตอนการรับบริการทันตกรรม รพ.สมเด็จพระสังฆราชองค์ที่ 17
             </div>
-            <div className="button-card">
-              <Button variant="primary">
-                <Link to="/Newsdentalservice">
-                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
+            <div className="button-New-primary" >
+                <Link
+                  to={`/Newsdentalservice`}
+                  className="btn btn-primary mx-1 "id="Newsdentalservice"
+                >
+                  <div className="text-link1"id="Newsdentalservice1">ข้อมูลเพิ่มเติม</div>
                 </Link>
-              </Button>
-            </div>
+              </div>
           </Card>
           <Card style={{ width: "20rem" }}>
             <Card.Img
@@ -250,13 +255,15 @@ function Home() {
               ฉีดวัคซีนไข้หวัดใหญ่” ฟรี สปสช.ชวนประชาชน 7
               กลุ่มเสี่ยงสิทธิบัตรทอง
             </div>
-            <div className="button-card">
-              <Button variant="primary">
-              <Link to="/Newsfluvaccine">
-                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
+          
+            <div className="button-New-primary">
+                <Link
+                  to={`/Newsfluvaccine`}
+                  className="btn btn-primary mx-1"id="Newsfluvaccine"
+                >
+                  <div className="text-link2"id="Newsfluvaccine1">ข้อมูลเพิ่มเติม</div>
                 </Link>
-              </Button>
-            </div>
+              </div>
           </Card>
           <Card style={{ width: "20rem" }}>
             <Card.Img
@@ -264,19 +271,21 @@ function Home() {
               src={c3}
               style={{ width: "95%", height: "70%" }}
             />
-            <div className="Title-card">
+            <div className="Title-card"id="ModernaBivalentN">
               ฉีดวัคซีนโควิด-19 Moderna Bivalent ตั้งแต่วันอังคารที่ 16 พฤษภาคม
               2566
             </div>
-            <div className="button-card">
-              <Button variant="primary">
-              <Link to="/NewsModernaBivalent">
-                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
+           
+            <div className="button-New-primary">
+                <Link
+                  to={`/NewsModernaBivalent`}
+                  className="btn btn-primary mx-1"id="NewsModernaBivalent"
+                >
+                  <div className="text-link3"id="NewsModernaBivalent1">ข้อมูลเพิ่มเติม</div>
                 </Link>
-              </Button>
-            </div>
+              </div>
           </Card>
-          <Card style={{ width: "20rem" }}>
+          <Card id="NewsfoodN" style={{ width: "20rem" }}>
             <Card.Img
               variant="top"
               src={c4}
@@ -285,13 +294,15 @@ function Home() {
             <div className="Title-card">
              เด็กไทยวันนี้ สูงดีสมส่วน ด้วย 4 ข้อแนะนำ
             </div>
-            <div className="button-card">
-              <Button variant="primary">
-              <Link to="/Newsfood">
-                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
+          
+            <div className="button-New-primary">
+                <Link
+                  to={`/Newsfood`}
+                  className="btn btn-primary mx-1"id="Newsfood"
+                >
+                  <div className="text-link4"id="Newsfood1">ข้อมูลเพิ่มเติม</div>
                 </Link>
-              </Button>
-            </div>
+              </div>
           </Card>
         </div>
       </div>

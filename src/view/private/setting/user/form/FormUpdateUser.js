@@ -202,7 +202,7 @@ function FormUpdateUser() {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/admin/user" className="nav-breadcrumb">
+                <Link id="adminUser"to="/admin/user" className="nav-breadcrumb">
                   ข้อมูลรายชื่อผู้ใช้
                 </Link>
               </li>
@@ -240,6 +240,7 @@ function FormUpdateUser() {
                           <label className="red">*</label>
                           <br></br>
                           <input
+                          id="UpdateUserid_card"
                             type="text"
                             name="id_card"
                             value={users.id_card}
@@ -261,6 +262,7 @@ function FormUpdateUser() {
                             :{" "}
                           </label>{" "}
                           <select
+                            id="UpdateUserprefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -284,6 +286,7 @@ function FormUpdateUser() {
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
+                           id="UpdateUserfirst_name"
                             type="name"
                             name="first_name"
                             value={users.first_name}
@@ -304,6 +307,7 @@ function FormUpdateUser() {
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
+                            id="UpdateUserlast_name"
                             type="text"
                             name="last_name"
                             value={users.last_name}
@@ -326,6 +330,7 @@ function FormUpdateUser() {
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
+                            id="UpdateUsergender"
                             name="gender"
                             className={`form-select ${
                               touched.gender && errors.gender && "is-invalid"
@@ -348,6 +353,7 @@ function FormUpdateUser() {
                           <label className="red">*</label>
 
                           <input
+                           id="UpdateUserbirthday"
                             name="birthday"
                             type="date"
                             value={
@@ -364,6 +370,7 @@ function FormUpdateUser() {
                         <div className="col-2 px-1 mt-2">
                           <label>อายุ</label>
                           <input
+                           id="UpdateUserage"
                             type="text"
                             name="age"
                             value={age !== null ? age : ""}
@@ -376,6 +383,7 @@ function FormUpdateUser() {
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
+                            id="Updateweight"
                             type="weight"
                             name="weight"
                             value={users.weight}
@@ -395,6 +403,7 @@ function FormUpdateUser() {
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
+                           id="Updateheight"
                             type="height"
                             name="height"
                             value={users.height}
@@ -414,6 +423,7 @@ function FormUpdateUser() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
+                          id="UpdatephoneNumber"
                             type="phone"
                             name="phoneNumber"
                             value={users.phoneNumber}
@@ -436,6 +446,7 @@ function FormUpdateUser() {
                           <label>โรคประจำตัว</label>
 
                           <input
+                           id="Updatecongenital_disease"
                             type="text"
                             name="congenital_disease"
                             value={users.congenital_disease}
@@ -464,6 +475,7 @@ function FormUpdateUser() {
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
+                                id="Updatepassword"
                                 type="password"
                                 placeholder="รหัสผ่าน"
                                 name="password"
@@ -492,6 +504,7 @@ function FormUpdateUser() {
                             <label>ชื่อ</label>
                             <label className="red">*</label>
                             <input
+                              id="Updatecontact_first_name"
                               type="contact_first_name"
                               name="contact_first_name"
                               value={users.contact_first_name}
@@ -512,6 +525,7 @@ function FormUpdateUser() {
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
+                               id="Updatecontact_last_name"
                               type="contact_last_name"
                               name="contact_last_name"
                               value={users.contact_last_name}
@@ -534,6 +548,7 @@ function FormUpdateUser() {
                               <label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                               id="Updatecontact_relation_id"
                               name="contact_relation_id"
                               className={`form-select ${
                                 touched.contact_relation_id &&
@@ -562,6 +577,7 @@ function FormUpdateUser() {
                             <label>เบอร์โทร</label>
                             <label className="red">*</label>
                             <input
+                              id="UpdatephoneNumber"
                               type="phoneNumber"
                               className="form-control"
                               name="contact_phoneNumber"
@@ -579,6 +595,7 @@ function FormUpdateUser() {
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
+                             id="Updateaddress"
                               type="address"
                               className="form-control"
                               name="address"
@@ -592,6 +609,7 @@ function FormUpdateUser() {
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                             id="Updateprovince"
                               name="province"
                               className="form-select"
                               onChange={handleChange}
@@ -695,6 +713,7 @@ function FormUpdateUser() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
+                             id="Updatedistrict"
                               type="district"
                               className="form-control"
                               name="district"
@@ -706,6 +725,7 @@ function FormUpdateUser() {
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
+                             id="Updatesubdistrict"
                               name="subdistrict"
                               className="form-control"
                               value={users.subdistrict}
@@ -717,6 +737,7 @@ function FormUpdateUser() {
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
+                             id="Updatepostcode"
                               name="postcode"
                               className="form-control"
                               value={users.postcode}
@@ -727,6 +748,7 @@ function FormUpdateUser() {
                       </div>
                       <div className="d-flex justify-content-center mt-3">
                         <button
+                         id="Updatessubmit"
                           type="submit"
                           className="btn btn-success mx-1"
                           onClick={handleClick}
@@ -735,6 +757,7 @@ function FormUpdateUser() {
                         </button>
 
                         <button
+                         id="UpdatesCencel"
                           className="btn btn-danger mx-1"
                           onClick={() => navigate("/admin/user")}
                         >

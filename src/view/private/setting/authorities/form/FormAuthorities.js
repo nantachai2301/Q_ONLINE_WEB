@@ -159,6 +159,7 @@ function FormAuthorities() {
                           <label className="red">*</label>
                           <br></br>
                           <input
+                           id="Authors_id_card"
                             type="text"
                             name="id_card"
                             value={users.id_card}
@@ -181,6 +182,7 @@ function FormAuthorities() {
                             :{" "}
                           </label>{" "}
                           <select
+                           id="Authors_prefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -204,6 +206,8 @@ function FormAuthorities() {
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
+                           id="Authors_first_name"
+                          
                             type="name"
                             name="first_name"
                             placeholder="ชื่อ"
@@ -225,6 +229,7 @@ function FormAuthorities() {
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
+                              id="Authors_last_name"
                             type="text"
                             name="last_name"
                             placeholder="นามสกุล"
@@ -247,6 +252,7 @@ function FormAuthorities() {
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
+                            id="Authors_gender"
                             name="gender"
                             className={`form-select ${
                               touched.gender && errors.gender && "is-invalid"
@@ -269,6 +275,7 @@ function FormAuthorities() {
                           <label className="red">*</label>
 
                           <input
+                           id="Authors_birthday"
                             name="birthday"
                             type="date"
                             value={users.birthday}
@@ -288,6 +295,7 @@ function FormAuthorities() {
                         <div className="col-2 px-1 mt-2">
                           <label>อายุ</label>
                           <input
+                            id="Authors_age"
                             type="text"
                             name="age"
                             value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
@@ -302,6 +310,7 @@ function FormAuthorities() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
+                             id="Authors_phoneNumber"
                             type="phone"
                             name="phoneNumber"
                             placeholder="เบอร์โทร"
@@ -329,6 +338,7 @@ function FormAuthorities() {
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
+                                 id="Authors_password"
                                 type="password"
                                 placeholder="รหัสผ่าน"
                                 name="password"
@@ -355,6 +365,7 @@ function FormAuthorities() {
 
                       <div className="d-flex justify-content-center mt-3">
                         <button
+                            id="Authors_submit"
                           type="submit"
                           className="btn btn-success mx-1"
                           onClick={handleClick}
@@ -363,6 +374,7 @@ function FormAuthorities() {
                         </button>
 
                         <button
+                          id="Authors_Cancel"
                           className="btn btn-danger mx-1"
                           onClick={() => navigate("/admin/authorities/")}
                         >

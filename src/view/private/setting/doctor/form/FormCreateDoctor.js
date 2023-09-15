@@ -168,6 +168,7 @@ function FormCreateDoctor() {
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <div class="col-10 col-md-6 ">
                     <input
+                    id="doctor_createdoctor_image"
   type="file"
   name="doctor_image"
   accept="image/*"
@@ -183,6 +184,7 @@ function FormCreateDoctor() {
                       <label>คำนำหน้า</label>
                       <label className="red">*</label>
                       <select
+                       id="doctor_createprefix_name"
                         name="prefix_name"
                         className={`form-select ${
                           touched.prefix_name && errors.prefix_name
@@ -213,6 +215,7 @@ function FormCreateDoctor() {
                       <label>ชื่อ</label>
                       <label className="red">*</label>
                       <input
+                      id="doctor_doctor_first_name"
                         name="doctor_first_name"
                         placeholder="กรอกชื่อ"
                         type="text"
@@ -234,6 +237,7 @@ function FormCreateDoctor() {
                       <label>นามสกุล</label>
                       <label className="red">*</label>
                       <input
+                       id="doctor_doctor_last_name"
                         name="doctor_last_name"
                         placeholder="นามสกุล"
                         type="text"
@@ -255,6 +259,7 @@ function FormCreateDoctor() {
                       <label>สถานะการใช้งาน</label>
                       <label className="red">*</label>
                       <select
+                      id="doctor_doctor_doctor_status"
                         name="doctor_status"
                         class="form-select"
                         aria-label="Default select example"
@@ -274,6 +279,7 @@ function FormCreateDoctor() {
                       <label>แผนก</label>
                       <label className="red">*</label>
                       <select
+                       id="doctor_doctor_doctor_department_id"
                         name="department_id"
                         className={`form-select ${
                           touched.department_id && errors.department_id
@@ -303,6 +309,7 @@ function FormCreateDoctor() {
                   </form>
                   <div className="d-flex justify-content-center mt-3">
                     <button
+                      id="Doctor_Createsubmit"
                       type="submit"
                       className="btn btn-success mx-1"
                       onClick={handleClick}
@@ -311,6 +318,7 @@ function FormCreateDoctor() {
                     </button>
                     <button className="btn btn-danger mx-1">
                       <Link
+                       id="Doctor_CreateBack"
                         to="/admin/doctor/"
                         style={{ textDecoration: "none", color: "#fff" }}
                       >
