@@ -47,7 +47,7 @@ const Schema = Yup.object().shape({
   contact_phoneNumber: Yup.string()
   .required("กรุณากรอก เบอร์โทรผู้ติดต่อ")
   .matches(/^[0-9]{10}$/, "Invalid phone number"),
-  password: Yup.string().min(6, "กรุณากรอกให้ครบ 6 หลัก").required("กรุณากรอก รหัสผ่าน"),
+
 
 });
 

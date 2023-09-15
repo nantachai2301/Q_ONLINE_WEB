@@ -730,10 +730,13 @@ function Register() {
                         >
                           บันทึก
                         </button>
-                       
-                        <button className="btn btn-danger mx-1">
-                          <Link to="admin/user">ยกเลิก</Link>
+                        <button
+                          className="btn btn-danger mx-1"
+                          onClick={() => navigate("/")}
+                        >
+                          ยกเลิก
                         </button>
+                       
                       </div>
                     </div>
                   </div>
