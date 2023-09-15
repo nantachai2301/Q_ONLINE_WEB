@@ -242,7 +242,7 @@ function Home() {
                   to={`/Newsdentalservice`}
                   className="btn btn-primary mx-1 "id="Newsdentalservice"
                 >
-                  <div className="text-link1">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link1"id="Newsdentalservice1">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </div>
           </Card>
@@ -262,7 +262,7 @@ function Home() {
                   to={`/Newsfluvaccine`}
                   className="btn btn-primary mx-1"id="Newsfluvaccine"
                 >
-                  <div className="text-link2">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link2"id="Newsfluvaccine1">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </div>
           </Card>
@@ -282,7 +282,7 @@ function Home() {
                   to={`/NewsModernaBivalent`}
                   className="btn btn-primary mx-1"id="NewsModernaBivalent"
                 >
-                  <div className="text-link3">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link3"id="NewsModernaBivalent1">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </div>
           </Card>
@@ -301,7 +301,7 @@ function Home() {
                   to={`/Newsfood`}
                   className="btn btn-primary mx-1"id="Newsfood"
                 >
-                  <div className="text-link4">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link4"id="Newsfood1">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </div>
           </Card>
