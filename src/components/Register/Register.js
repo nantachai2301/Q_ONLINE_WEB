@@ -74,16 +74,41 @@ function Register() {
         cancelButtonText: "ยกเลิก",
       });
       if (users.birthday) {
-        const birthDateObj = new Date(users.birthday); // แปลงวันที่ปีเกิดใน state ของคุณให้กลายเป็นออบเจ็กต์ของ Date
-        const today = new Date(); // วันที่ปัจจุบัน
+        const birthDateObj = new Date(users.birthday);
+        const today = new Date();
         const diffInMilliseconds = Math.abs(today - birthDateObj);
         const ageDate = new Date(diffInMilliseconds);
         const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
-        setAge(calculatedAge); // อัปเดต state ของอายุด้วยค่าที่คำนวณได้
+        setAge(calculatedAge);
       }
       const dataToSend = { ...users, age: age, users_id: users.users_id };
-
+  
       if (result.isConfirmed) {
+        const requiredFields = [
+          "id_card",
+          "prefix_name",
+          "first_name",
+          "last_name",
+          "gender",
+          "birthday",
+          "weight",
+          "height",
+          "phoneNumber",
+          // Add other required fields here
+        ];
+  
+        const missingFields = requiredFields.filter(fieldName => !dataToSend[fieldName]);
+  
+        if (missingFields.length > 0) {
+          Swal.fire({
+            icon: "warning",
+            title: "กรุณากรอกข้อมูลให้ครบ",
+            text: `กรุณากรอกข้อมูลให้ครบ`,
+            showConfirmButton: true,
+          });
+          return; // Exit the function, don't proceed with registration
+        }
+  
         try {
           await createPatient( 
             dataToSend.users_id,
@@ -112,7 +137,7 @@ function Register() {
             dataToSend.img,
             dataToSend.role_id,
           );
-
+  
           Swal.fire({
             icon: "success",
             title: "สมัครสมาชิกสำเร็จ",
@@ -120,10 +145,9 @@ function Register() {
             showConfirmButton: false,
             timer: 1500,
           });
-
+  
           setTimeout(() => {
-            navigate("/"); // เปลี่ยนเส้นทางไปยังหน้าหลัก
-            
+            navigate("/"); // Redirect to the homepage after registration
           }, 1500);
         } catch (error) {
           console.log(error);
@@ -145,6 +169,7 @@ function Register() {
       });
     }
   };
+  
   const ageToShow = age !== null ? age : "";
   return (
     <Fragment>
