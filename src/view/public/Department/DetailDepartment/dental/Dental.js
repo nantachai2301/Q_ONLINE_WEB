@@ -58,7 +58,7 @@ useEffect(() => {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/showdepartmentAll" className="nav-breadcrumb">
+                <Link  id="BackshowdepartmentAll" to="/showdepartmentAll" className="nav-breadcrumb">
                แผนกในโรงพยาบาล
                 </Link>
               </li>

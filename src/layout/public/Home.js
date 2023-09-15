@@ -185,8 +185,7 @@ function Home() {
        <div className="col" style={{ margin: "0 5px" }}>
         <div className="Home-iconQ" id="Home-iconQ">
         <FontAwesomeIcon
-        
-          onClick={handleAllQueueList}
+        onClick={handleAllQueueList}
           icon={faRectangleList}
           class="fa-solid fa-rectangle-list"
           style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}

@@ -47,7 +47,7 @@ useEffect(() => {
   />
 </Link>
                  </div>
-                 <Link to={`/detaildental/${department.department_id}`} className="link-no-underline">
+                 <Link  id="detaildental" to={`/detaildental/${department.department_id}`} className="link-no-underline">
               <h5 className="title-name-depart mt-4 mx-6">
                 {department.department_name}
               </h5>
@@ -57,7 +57,7 @@ useEffect(() => {
                   to={`/detaildental/${department.department_id}`}
                   className="btn btn-success mx-1"
                 >
-                  <div className="text-link1">ข้อมูลแผนก</div>
+                  <div className="text-link1" id="detaildentalLink">ข้อมูลแผนก</div>
                 </Link>
               </div>
             </div>

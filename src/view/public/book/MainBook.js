@@ -299,6 +299,7 @@ const MainBook = (props) => {
                         </Form.Label>
                         <label className="red">*</label>
                         <Form.Control
+                        id="QueueUsersymptom"
                           name="symptom" // ต้องตรงกับชื่อใน state queue
                           type="text"
                           placeholder="กรุณาระบุอาการเบื้องต้น"
@@ -318,6 +319,7 @@ const MainBook = (props) => {
                         <label className="red">*</label>
 
                         <select
+                         id="QueueUserdepartment_id"
                           class="form-select"
                           name="department_id"
                           style={{
@@ -351,6 +353,7 @@ const MainBook = (props) => {
                         </label>
                         <label className="red">*</label>
                         <input
+                          id="QueueUserqueue_date"
                           name="queue_date"
                           type="date"
                           style={{
@@ -370,6 +373,7 @@ const MainBook = (props) => {
           </Modal.Body>
           <Modal.Footer>
             <button
+              id="BookingQ"
               type="button"
               className="btn btn-primary"
               onClick={handleBooking}

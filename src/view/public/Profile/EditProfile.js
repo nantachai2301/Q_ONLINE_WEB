@@ -263,6 +263,7 @@ function EditProfile() {
                           <label className="red">*</label>
                           <br></br>
                           <input
+                          id="ProfileId_card"
                             type="text"
                             name="id_card"
                             value={users.id_card}
@@ -284,6 +285,7 @@ function EditProfile() {
                             :{" "}
                           </label>{" "}
                           <select
+                             id="Profileprefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -307,6 +309,7 @@ function EditProfile() {
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
+                            id="Profilefirst_name"
                             type="name"
                             name="first_name"
                             value={users.first_name}
@@ -327,6 +330,7 @@ function EditProfile() {
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
+                            id="Profilelast_name"
                             type="text"
                             name="last_name"
                             value={users.last_name}
@@ -349,6 +353,7 @@ function EditProfile() {
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
+                           id="Profilegender"
                             name="gender"
                             className={`form-select ${
                               touched.gender && errors.gender && "is-invalid"
@@ -371,6 +376,7 @@ function EditProfile() {
                           <label className="red">*</label>
 
                           <input
+                            id="Profilebirthday"
                             name="birthday"
                             type="date"
                             value={
@@ -387,6 +393,7 @@ function EditProfile() {
                         <div className="col-2 px-1 mt-2">
                           <label>อายุ</label>
                           <input
+                            id="Profileage"
                             type="text"
                             name="age"
                             value={age !== null ? age : ""}
@@ -399,6 +406,7 @@ function EditProfile() {
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
+                           id="Profileweight"
                             type="weight"
                             name="weight"
                             value={users.weight}
@@ -418,6 +426,7 @@ function EditProfile() {
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
+                           id="Profileheight"
                             type="height"
                             name="height"
                             value={users.height}
@@ -437,6 +446,7 @@ function EditProfile() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
+                             id="Profilephone"
                             type="phone"
                             name="phoneNumber"
                             value={users.phoneNumber}
@@ -459,6 +469,7 @@ function EditProfile() {
                           <label>โรคประจำตัว</label>
 
                           <input
+                            id="Profilecongenital_disease"
                             type="text"
                             name="congenital_disease"
                             value={users.congenital_disease}
@@ -471,6 +482,7 @@ function EditProfile() {
                           <label>ประวัติแพ้ยา</label>
 
                           <input
+                             id="Profiledrugallergy"
                             type="text"
                             name="drugallergy"
                             value={users.drugallergy}
@@ -488,6 +500,7 @@ function EditProfile() {
                             <label>ชื่อ</label>
                             <label className="red">*</label>
                             <input
+                                id="Profilecontact_first_name"
                               type="contact_first_name"
                               name="contact_first_name"
                               value={users.contact_first_name}
@@ -508,6 +521,7 @@ function EditProfile() {
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
+                              id="Profilecontact_last_name"
                               type="contact_last_name"
                               name="contact_last_name"
                               value={users.contact_last_name}
@@ -530,6 +544,7 @@ function EditProfile() {
                               <label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                             id="Profilecontact_relation_id"
                               name="contact_relation_id"
                               className={`form-select ${
                                 touched.contact_relation_id &&
@@ -558,6 +573,7 @@ function EditProfile() {
                             <label>เบอร์โทร</label>
                             <label className="red">*</label>
                             <input
+                             id="ProfilephoneNumber"
                               type="phoneNumber"
                               className="form-control"
                               name="contact_phoneNumber"
@@ -575,6 +591,7 @@ function EditProfile() {
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
+                              id="Profileaddress"
                               type="address"
                               className="form-control"
                               name="address"
@@ -588,6 +605,7 @@ function EditProfile() {
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                              id="Profileprovince"
                               name="province"
                               className="form-select"
                               onChange={handleChange}
@@ -691,6 +709,7 @@ function EditProfile() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
+                              id="Profiledistrict"
                               type="district"
                               className="form-control"
                               name="district"
@@ -702,6 +721,7 @@ function EditProfile() {
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
+                              id="Profilesubdistrict"
                               name="subdistrict"
                               className="form-control"
                               value={users.subdistrict}
@@ -713,6 +733,7 @@ function EditProfile() {
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
+                              id="Profilepostcode"
                               name="postcode"
                               className="form-control"
                               value={users.postcode}
@@ -723,6 +744,7 @@ function EditProfile() {
                       </div>
                       <div className="d-flex justify-content-center mt-3">
                         <button
+                          id="Profilesubmit"
                           type="submit"
                           className="btn btn-success mx-1"
                           onClick={handleClick}
@@ -731,6 +753,7 @@ function EditProfile() {
                         </button>
 
                         <button
+                        id="Profilecencel"
                           className="btn btn-danger mx-1"
                           onClick={() => navigate("/admin/user")}
                         >

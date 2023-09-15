@@ -171,10 +171,10 @@ const LoginModal = (props) => {
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Control  id="Resetemail" type="email" placeholder="Enter email" />
             </Form.Group>
             <button
-            
+            id="ResetPassword"
               type="button"
               className="btn btn-primary"
               onClick={handleResetPassword}
