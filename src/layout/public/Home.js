@@ -288,7 +288,7 @@ function Home() {
             <div className="button-card">
               <Button variant="primary">
               <Link to="/Newsfood">
-                  <div className="text-link2">ข้อมูลเพิ่มเติม</div>
+                  <div className="text-link4">ข้อมูลเพิ่มเติม</div>
                 </Link>
               </Button>
             </div>
