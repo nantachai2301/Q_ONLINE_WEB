@@ -167,6 +167,7 @@ const Navbar = () => {
           <Toolbar>
             <div style={{ display: "flex", alignItems: "center" }}>
               <LogoImg
+              id="HospitalLogo.17"
                 src={Logo}
                 alt="โลโก้"
                 onClick={handleLogoClick}
