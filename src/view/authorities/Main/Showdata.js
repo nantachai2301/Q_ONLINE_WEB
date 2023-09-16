@@ -106,7 +106,12 @@ function ShowData({}) {
         return nameFilter && departmentFilter;
       });
 
-      const sortedData = dataToDisplay.sort((a, b) => a.queue_id - b.queue_id); 
+      
+      const sortedData = dataToDisplay.sort((a, b) => {
+        const dateA = new Date(a.queue_id);
+        const dateB = new Date(b.queue_id);
+        return dateA - dateB; // เรียงจากวันที่เก่าสุดไปวันที่ใหม่สุด
+      });
 
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
       const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
@@ -293,7 +298,7 @@ const handleCancel = () => {
   };
   const pageStyle = `
   @page{
-    size :4in 4in;
+    size :6in 5in;
   }
   
   
