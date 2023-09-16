@@ -370,7 +370,7 @@ function ShowData() {
             >
               {/* ... ส่วนอื่น ๆ ของการแสดงข้อมูลในตาราง */}
               <th scope="col" style={{ width: "5%", textAlign: "center" }}>
-                ลำดับ
+               รายการ
               </th>
               <th scope="col" style={{ width: "15%", textAlign: "center" }}>
                 อาการเบื้องต้น
@@ -388,7 +388,9 @@ function ShowData() {
               <th scope="col" style={{ width: "15%", textAlign: "center" }}>
                 สถานะ
               </th>
-
+              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
+                ลำดับคิว
+              </th>
               <th scope="col" style={{ width: "10%", textAlign: "center" }}>
                 <span>จัดการ</span>
               </th>
@@ -416,9 +418,8 @@ function ShowData() {
                   </td>
                   <td style={{ textAlign: "center" }}>{queue.queue_date}</td>
                   <td style={{ textAlign: "center" }}>{queue.create_at}</td>
-                  <td style={{ textAlign: "center" }}>
-                    {queue.queue_status_name}
-                  </td>
+                  <td style={{ textAlign: "center" }}>{queue.queue_status_name}</td>
+                  <td style={{ textAlign: "center" }}>{queue.queue_id}</td>
                   <td style={{ textAlign: "center" }}>
         {(queue.queue_status_id === 1 ||
           (queue.queue_status_id === 2 && selectedStatusId !== "2") ||
