@@ -109,7 +109,7 @@ function FormDepartment() {
         );
         Swal.fire({
           icon: 'success',
-          title: 'เพิ่มข้อมูลแผนกสำเร็จ',
+          title: 'เพิ่มข้อมูลแผนกสำเร็จ !',
           showConfirmButton: false,
           timer: 1500,
         });
