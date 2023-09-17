@@ -499,11 +499,11 @@ function Showdata() {
         <div>
           <Pagination
           id="BookingWalkinpageSize"
-            activePage={page}
-            itemsCountPerPage={pageSize}
-            totalItemsCount={pageData.length}
-            pageRangeDisplayed={5}
-            onChange={setPage}
+          activePage={page}
+          itemsCountPerPage={pageSize}
+          totalItemsCount={pageData.length}
+          pageRangeDisplayed={5}
+          onChange={setPage}s
           />
         </div>
       </div>
