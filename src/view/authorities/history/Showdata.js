@@ -1,18 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
-// import { useReactToPrint } from 'react-to-print';
-import MainPdf from "../history/pdf/MainPdf";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import Select from "react-select";
-import {
-  getQueue,
- 
-  } from "../../../service/Queue.Service";
-function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, deleteData }) {
+
+import { getQueue } from "../../../service/Queue.Service";
+function ShowData({}) {
   const [dataQ, setDataQ] = useState([]);
-  console.log(dataQ)
+  console.log(dataQ);
   const [empData, setEmpData] = useState([]);
   const componentRef = useRef();
   const navigate = useNavigate();
@@ -22,13 +17,12 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
   const [pageSize, setPageSize] = useState(10); // Default page size is 5
   const [searchUsers, setSearchUsers] = useState("");
 
-
   const getdataQ = async () => {
     const response = await getQueue();
-    const filteredData = response.data.filter(item => item.queue_status_id === 4);
+    const filteredData = response.data.filter(
+      (item) => item.queue_status_id === 4
+    );
     setDataQ(filteredData);
-  
-   
   };
 
   useEffect(() => {
@@ -48,55 +42,59 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
   useEffect(() => {
     const pagedatacount = Math.ceil(dataQ.length / pageSize);
     setPageCount(pagedatacount);
-  
+
     if (page) {
       const LIMIT = pageSize;
       const skip = LIMIT * (page - 1);
-  
+
       const dataToDisplay = dataQ.filter((dataItem) => {
         const nameFilter =
-          dataItem.first_name.toLowerCase().includes(searchUsers.toLowerCase()) ||
-          dataItem.last_name.toLowerCase().includes(searchUsers.toLowerCase()) ||
-          dataItem.department_name.toLowerCase().includes(searchUsers.toLowerCase()) ||
+          dataItem.first_name
+            .toLowerCase()
+            .includes(searchUsers.toLowerCase()) ||
+          dataItem.last_name
+            .toLowerCase()
+            .includes(searchUsers.toLowerCase()) ||
+          dataItem.department_name
+            .toLowerCase()
+            .includes(searchUsers.toLowerCase()) ||
           dataItem.symptom.toLowerCase().includes(searchUsers.toLowerCase());
-  
+
         return nameFilter;
       });
-  
+
       const sortedData = dataToDisplay.sort((a, b) => a.queue_id - b.queue_id); // เรียงลำดับตามเลขหมายคิว (queue_id)
-  
+
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
       const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length); // ให้คำนวณ pageEndIndex ใหม่เพื่อให้ไม่เกินจำนวนข้อมูลทั้งหมด
       const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
-  
+
       // ปรับเลขหมายคิวให้ต่อเนื่องกัน โดยนำหมายเลขหมายคิวในหน้าแรกมาเพิ่มทีละ 1 ในหน้าถัดไป
-      const firstQueueNumber = pageStartIndex > 0 ? sortedData[pageStartIndex - 1].queue_id + 1 : 1; // เริ่มต้นที่หมายเลขหมายคิวของหน้าแรก (หากหน้าแรกเริ่มต้นที่หมายเลขหมายคิวที่ไม่ใช่ 1)
+      const firstQueueNumber =
+        pageStartIndex > 0 ? sortedData[pageStartIndex - 1].queue_id + 1 : 1; // เริ่มต้นที่หมายเลขหมายคิวของหน้าแรก (หากหน้าแรกเริ่มต้นที่หมายเลขหมายคิวที่ไม่ใช่ 1)
       const newData = slicedData.map((item, index) => ({
         ...item,
         queue_id: firstQueueNumber + index,
       }));
-  
+
       setPageData(newData);
     }
   }, [dataQ, page, pageSize, searchUsers]);
-  
+
   const handleSearchChange = (event) => {
     const query = event.target.value;
     setSearchUsers(query);
     setPage(1);
     getdataQ();
   };
-  
-
-
 
   return (
     <div className="w-full">
-    <div className="row">
+      <div className="row">
         <div className="col-5 col-md-2 col-lg-3">
           <label>ค้นหา</label>
           <input
-          id="MainHistoryAuthorSearch"
+            id="MainHistoryAuthorSearch"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -104,59 +102,60 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
             onChange={handleSearchChange}
           />
         </div>
-        </div>
+      </div>
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
-          id="MainHistoryAuthorSelect"
+            id="MainHistoryAuthorSelect"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
           >
-          
             <option value={10}>10</option>
-       
+
             <option value={20}>20</option>
           </select>
         </div>
       </div>
       <div className="overflow-auto">
-      <table className="table">
+        <table className="table">
           <thead>
             <tr className="table-success">
-            <th scope="col" style={{ width: '3%' }}>
-           ที่
+              <th scope="col" style={{ width: "3%" }}>
+                ที่
               </th>
-              <th scope="col" style={{ width: '10%' }}>
-              ชื่อ-สกุล
+              <th scope="col" style={{ width: "10%" }}>
+                ชื่อ-สกุล
               </th>
-             
-              <th scope="col" style={{ width: '5%' }}>
-              แผนก
+
+              <th scope="col" style={{ width: "5%" }}>
+                แผนก
               </th>
-              <th scope="col" style={{ width: '10%' }}>
-              วันที่จอง
+              <th scope="col" style={{ width: "10%" }}>
+                วันที่จอง
               </th>
-              <th scope="col" style={{ width: '5%' }}>
-              วันที่เข้าการรับรักษา
-              </th>             
-              <th scope="col" style={{ width: '10%' }}>
-              สถานะคิว
+              <th scope="col" style={{ width: "5%" }}>
+                วันที่เข้าการรับรักษา
+              </th>
+              <th scope="col" style={{ width: "10%" }}>
+                สถานะคิว
               </th>
             </tr>
           </thead>
           <tbody>
-          {pageData.length > 0 ? (
+            {pageData.length > 0 ? (
               pageData.map((item, index) => {
                 return (
                   <tr key={item.queue_id}>
-                     <td>{(page - 1) * 10 + index + 1}</td>
-                    <td>{item.first_name} {item.last_name}</td>
-                
-                      <td>{item.department_name}</td>
-                      <td>{item.create_at}</td>
-                      <td>{item.queue_date}</td>                     
-                      <td>{item.queue_status_name}</td>
+                    <td>{(page - 1) * 10 + index + 1}</td>
+                    <td>
+                      {item.first_name} {item.last_name}
+                    </td>
+
+                    <td>{item.department_name}</td>
+                    <td>{item.create_at}</td>
+                    <td>{item.queue_date}</td>
+                    <td>{item.queue_status_name}</td>
                   </tr>
                 );
               })
@@ -165,7 +164,6 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
                 Loading... <Spinner animation="border" variant="danger" />
               </div>
             )}
-         
           </tbody>
         </table>
       </div>
@@ -173,7 +171,7 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
         <div>จำนวน {dataQ.length} รายการ</div>
         <div>
           <div className="Pagination">
-          <Pagination
+            <Pagination
               id="paginMainHistoryAuthor"
               activePage={page}
               itemsCountPerPage={pageSize}
@@ -184,13 +182,6 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
           </div>
         </div>
       </div>
-      {/* <div className='d-flex justify-content-center'>
-        <div className='hidden'>
-          <div ref={componentRef}>
-            <MainPdf dataQ={dataQ} />
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

@@ -16,7 +16,7 @@ function MainBookAuthor() {
     prefix_name: "",
     first_name: "",
     last_name: "",
-    age:"",
+    age: "",
     gender: "",
     weight: "",
     height: "",
@@ -96,7 +96,7 @@ function MainBookAuthor() {
 
       if (result.isConfirmed) {
         try {
-          await createPatient( 
+          await createPatient(
             dataToSend.users_id,
             dataToSend.id_card,
             dataToSend.password,
@@ -121,10 +121,8 @@ function MainBookAuthor() {
             dataToSend.postcode,
             dataToSend.subdistrictsId,
             dataToSend.img,
-            dataToSend.role_id,
+            dataToSend.role_id
           );
-           
-          
 
           Swal.fire({
             icon: "success",
@@ -144,9 +142,6 @@ function MainBookAuthor() {
           });
         }
       }
-
-
-
     } catch (error) {
       console.log(error);
       Swal.fire({
@@ -157,7 +152,7 @@ function MainBookAuthor() {
       });
     }
   };
-  const ageToShow = age !== null ? age : '';
+  const ageToShow = age !== null ? age : "";
 
   return (
     <Fragment>
@@ -165,11 +160,6 @@ function MainBookAuthor() {
         <div className="d-flex justify-content-end">
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/author/book-an-appointment/" className="nav-breadcrumb">
-                  จองคิวผู้ป่วย Walkin
-                </Link>
-              </li>
               <li
                 className="breadcrumb-item text-black fw-semibold"
                 aria-current="page"
@@ -195,25 +185,23 @@ function MainBookAuthor() {
               <div className="container mt-2">
                 <div className="mb-4">
                   <div className="card border-0 shadow p-4">
-                    <h6 className="font ">ข้อมูลทั่วไป</h6><br></br>
+                    <h6 className="font ">ข้อมูลทั่วไป</h6>
+                    <br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
                         <div className="col-3">
-
                           <label>เลขบัตรประชาชน</label>
                           <label className="red">*</label>
                           <br></br>
                           <input
-                          id="MainBookAuthor_id_card"
+                            id="MainBookAuthor_id_card"
                             type="text"
                             name="id_card"
                             value={users.id_card}
                             placeholder="เลขบัตรประชาชน 13 หลัก"
                             className={`form-control ${
-                              touched.id_card &&
-                              errors.id_card &&
-                              "is-invalid"
-                              }`}
+                              touched.id_card && errors.id_card && "is-invalid"
+                            }`}
                             onChange={handleChange}
                           />
                           <ErrorMessage
@@ -225,17 +213,17 @@ function MainBookAuthor() {
 
                         <div className="col-3">
                           <label>
-                            คำนำหน้าชื่อ{" "}
-                            <label className="red">* &nbsp;</label>:{" "}
+                            คำนำหน้าชื่อ <label className="red">* &nbsp;</label>
+                            :{" "}
                           </label>{" "}
                           <select
-                             id="MainBookAuthor_prefix_name"
+                            id="MainBookAuthor_prefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
                               errors.prefix_name &&
                               "is-invalid"
-                              }`}
+                            }`}
                             onChange={handleChange}
                           >
                             <option selected>เลือกคำนำหน้าชื่อ</option>
@@ -254,7 +242,7 @@ function MainBookAuthor() {
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
-                          id="MainBookAuthor_first_name"
+                            id="MainBookAuthor_first_name"
                             type="name"
                             name="first_name"
                             placeholder="ชื่อ"
@@ -263,7 +251,7 @@ function MainBookAuthor() {
                               touched.first_name &&
                               errors.first_name &&
                               "is-invalid"
-                              }`}
+                            }`}
                             onChange={handleChange}
                           />
                           <ErrorMessage
@@ -286,7 +274,7 @@ function MainBookAuthor() {
                               touched.last_name &&
                               errors.last_name &&
                               "is-invalid"
-                              }`}
+                            }`}
                             onChange={handleChange}
                           />
                           <ErrorMessage
@@ -301,13 +289,11 @@ function MainBookAuthor() {
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
-                          id="MainBookAuthor_gender"
+                            id="MainBookAuthor_gender"
                             name="gender"
                             className={`form-select ${
-                              touched.gender &&
-                              errors.gender &&
-                              "is-invalid"
-                              }`}
+                              touched.gender && errors.gender && "is-invalid"
+                            }`}
                             onChange={handleChange}
                           >
                             <option selected>เลือกเพศ</option>
@@ -320,45 +306,42 @@ function MainBookAuthor() {
                             className="error-message"
                           />
                         </div>
-                       
 
-                            <div className="col-3">
-                              <label>วันเดือนปีเกิด</label>
-                              <label className="red">*</label>
+                        <div className="col-3">
+                          <label>วันเดือนปีเกิด</label>
+                          <label className="red">*</label>
 
-                              <input
-                                  id="MainBookAuthor_birthday"
-                                name="birthday"
-                                type="date"
-                                value={users.birthday}
-                                className={`form-control ${
-                                  touched.birthday &&
-                                  errors.birthday &&
-                                  "is-invalid"
-                                }`}
-                                onChange={handleChange}
-                              />
-                              {touched.birthday && errors.birthday && (
-                                <div className="error-message">
-                                  {errors.birthday}
-                                </div>
-                              )}
+                          <input
+                            id="MainBookAuthor_birthday"
+                            name="birthday"
+                            type="date"
+                            value={users.birthday}
+                            className={`form-control ${
+                              touched.birthday &&
+                              errors.birthday &&
+                              "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          />
+                          {touched.birthday && errors.birthday && (
+                            <div className="error-message">
+                              {errors.birthday}
                             </div>
-                            <div className="col-2">
-                        <label>อายุ</label>
-                        <input
+                          )}
+                        </div>
+                        <div className="col-2">
+                          <label>อายุ</label>
+                          <input
                             id="MainBookAuthor_age"
-                          type="text"
-                          name="age"
-                          value={age !== null ? age : ''} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
-                          readOnly
+                            type="text"
+                            name="age"
+                            value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
+                            readOnly
                             disabled
                             style={{ backgroundColor: "lightgray" }}
-                          className="form-control"
-                        />
-                      </div>
-
-                      
+                            className="form-control"
+                          />
+                        </div>
 
                         <div className="col-3">
                           <label>น้ำหนัก</label>
@@ -370,10 +353,8 @@ function MainBookAuthor() {
                             placeholder="น้ำหนัก"
                             value={users.weight}
                             className={`form-control ${
-                              touched.weight &&
-                              errors.weight &&
-                              "is-invalid"
-                              }`}
+                              touched.weight && errors.weight && "is-invalid"
+                            }`}
                             onChange={handleChange}
                           />
                           <ErrorMessage
@@ -387,16 +368,14 @@ function MainBookAuthor() {
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
-                          id="MainBookAuthor_height"
+                            id="MainBookAuthor_height"
                             type="height"
                             name="height"
                             placeholder="ส่วนสูง"
                             value={users.height}
                             className={`form-control ${
-                              touched.height &&
-                              errors.height &&
-                              "is-invalid"
-                              }`}
+                              touched.height && errors.height && "is-invalid"
+                            }`}
                             onChange={handleChange}
                           />
                           <ErrorMessage
@@ -410,7 +389,7 @@ function MainBookAuthor() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
-                           id="MainBookAuthor_phone"
+                            id="MainBookAuthor_phone"
                             type="phone"
                             name="phoneNumber"
                             placeholder="เบอร์โทร"
@@ -419,7 +398,7 @@ function MainBookAuthor() {
                               touched.phoneNumber &&
                               errors.phoneNumber &&
                               "is-invalid"
-                              }`}
+                            }`}
                             onChange={handleChange}
                           />
                           <ErrorMessage
@@ -433,19 +412,19 @@ function MainBookAuthor() {
                           <label>โรคประจำตัว</label>
                           <label className="red">*</label>
                           <input
-                           id="MainBookAuthor_congenital_disease"
+                            id="MainBookAuthor_congenital_disease"
                             type="text"
                             placeholder="โรคประจำตัว"
                             name="congenital_disease"
                             value={users.congenital_disease}
                             className={`form-control ${
-                            touched.congenital_disease &&
-                            errors.congenital_disease &&
-                            "is-invalid"
-                          }`}
+                              touched.congenital_disease &&
+                              errors.congenital_disease &&
+                              "is-invalid"
+                            }`}
                             onChange={handleChange}
                           />
-                             <ErrorMessage
+                          <ErrorMessage
                             name="congenital_disease"
                             component="div"
                             className="error-message"
@@ -466,38 +445,27 @@ function MainBookAuthor() {
                               errors.drugallergy &&
                               "is-invalid"
                             }`}
-                              onChange={handleChange}
-                            />
-                               <ErrorMessage
-                              name="drugallergy"
-                              component="div"
-                              className="error-message"
-                            />
-
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="drugallergy"
+                            component="div"
+                            className="error-message"
+                          />
                         </div>
-
-
-
                       </div>
-
-
-                      
-
-                     
 
                       <br></br>
 
                       <h6>บุคคลที่ติดต่อได้</h6>
-                       <br></br>
+                      <br></br>
                       <div className="rounded border p-4">
                         <div className="row gx-3 gy-2 align-items-center">
                           <div className="col-3">
-
-
                             <label>ชื่อ</label>
                             <label className="red">*</label>
                             <input
-                            id="MainBookAuthor_contact_first_name"
+                              id="MainBookAuthor_contact_first_name"
                               placeholder="ชื่อ"
                               type="contact_first_name"
                               name="contact_first_name"
@@ -506,7 +474,7 @@ function MainBookAuthor() {
                                 touched.contact_first_name &&
                                 errors.contact_first_name &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             />
                             <ErrorMessage
@@ -520,7 +488,7 @@ function MainBookAuthor() {
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
-                             id="MainBookAuthor_contact_last_name"
+                              id="MainBookAuthor_contact_last_name"
                               placeholder="นามสกุล"
                               type="contact_last_name"
                               name="contact_last_name"
@@ -529,7 +497,7 @@ function MainBookAuthor() {
                                 touched.contact_last_name &&
                                 errors.contact_last_name &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             />
                             <ErrorMessage
@@ -545,13 +513,13 @@ function MainBookAuthor() {
                               <label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
-                               id="MainBookAuthor_contact_relation_id"
+                              id="MainBookAuthor_contact_relation_id"
                               name="contact_relation_id"
                               className={`form-select ${
                                 touched.contact_relation_id &&
                                 errors.contact_relation_id &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             >
                               <option selected>เลือกความสัมพันธ์</option>
@@ -582,7 +550,7 @@ function MainBookAuthor() {
                                 touched.contact_phoneNumber &&
                                 errors.contact_phoneNumber &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             />
                             <ErrorMessage
@@ -590,7 +558,6 @@ function MainBookAuthor() {
                               component="div"
                               className="error-message"
                             />
-
                           </div>
                         </div>
                       </div>
@@ -602,11 +569,10 @@ function MainBookAuthor() {
                       <div className="rounded border p-4">
                         <div className="row gx-3 gy-2 align-items-center">
                           <div className="col-3">
-
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
-                               id="MainBookAuthor_address"
+                              id="MainBookAuthor_address"
                               type="address"
                               name="address"
                               placeholder="บ้านเลขที่"
@@ -615,7 +581,7 @@ function MainBookAuthor() {
                                 touched.address &&
                                 errors.address &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             />
                             <ErrorMessage
@@ -630,13 +596,13 @@ function MainBookAuthor() {
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
-                             id="MainBookAuthor_province"
+                              id="MainBookAuthor_province"
                               name="province"
                               className={`form-control ${
                                 touched.province &&
                                 errors.province &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             >
                               <option value="" selected>
@@ -709,12 +675,8 @@ function MainBookAuthor() {
                               <option value="สกลนคร">สกลนคร</option>
                               <option value="สงขลา">สงขลา </option>
                               <option value="สมุทรสาคร">สมุทรสาคร </option>
-                              <option value="สมุทรปราการ">
-                                สมุทรปราการ{" "}
-                              </option>
-                              <option value="สมุทรสงคราม">
-                                สมุทรสงคราม{" "}
-                              </option>
+                              <option value="สมุทรปราการ">สมุทรปราการ </option>
+                              <option value="สมุทรสงคราม">สมุทรสงคราม </option>
                               <option value="สระแก้ว">สระแก้ว </option>
                               <option value="สระบุรี">สระบุรี </option>
                               <option value="สิงห์บุรี">สิงห์บุรี </option>
@@ -726,9 +688,7 @@ function MainBookAuthor() {
                               <option value="สุรินทร์">สุรินทร์ </option>
                               <option value="สตูล">สตูล </option>
                               <option value="หนองคาย">หนองคาย </option>
-                              <option value="หนองบัวลำภู">
-                                หนองบัวลำภู{" "}
-                              </option>
+                              <option value="หนองบัวลำภู">หนองบัวลำภู </option>
                               <option value="อำนาจเจริญ">อำนาจเจริญ </option>
                               <option value="อุดรธานี">อุดรธานี </option>
                               <option value="อุตรดิตถ์">อุตรดิตถ์ </option>
@@ -756,7 +716,7 @@ function MainBookAuthor() {
                                 touched.district &&
                                 errors.district &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             />
                             <ErrorMessage
@@ -770,7 +730,7 @@ function MainBookAuthor() {
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
-                             id="MainBookAuthor_subdistrict"
+                              id="MainBookAuthor_subdistrict"
                               name="subdistrict"
                               placeholder="ตำบล"
                               value={users.subdistrict}
@@ -778,7 +738,7 @@ function MainBookAuthor() {
                                 touched.subdistrict &&
                                 errors.subdistrict &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             />
                             <ErrorMessage
@@ -791,7 +751,7 @@ function MainBookAuthor() {
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
-                               id="MainBookAuthor_postcode"
+                              id="MainBookAuthor_postcode"
                               placeholder="รหัสไปรษณีย์"
                               name="postcode"
                               value={users.postcode}
@@ -799,7 +759,7 @@ function MainBookAuthor() {
                                 touched.postcode &&
                                 errors.postcode &&
                                 "is-invalid"
-                                }`}
+                              }`}
                               onChange={handleChange}
                             />
                             <ErrorMessage
@@ -807,12 +767,9 @@ function MainBookAuthor() {
                               component="div"
                               className="error-message"
                             />
-
                           </div>
-
                         </div>
                       </div>
-
 
                       <div className="d-flex justify-content-center mt-3">
                         <button
@@ -825,7 +782,7 @@ function MainBookAuthor() {
                         </button>
 
                         <button
-                         id="MainBookAuthor_Cencel"
+                          id="MainBookAuthor_Cencel"
                           className="btn btn-danger mx-1"
                           onClick={() => navigate("/")}
                         >
@@ -837,12 +794,11 @@ function MainBookAuthor() {
                 </div>
               </div>
             </Form>
-          )
-          }
-        </Formik >
-      </div >
-    </Fragment >
+          )}
+        </Formik>
+      </div>
+    </Fragment>
   );
 }
 
-export default MainBookAuthor
+export default MainBookAuthor;
