@@ -5,27 +5,9 @@ const Schema = Yup.object().shape({
   first_name: Yup.string().required("กรุณากรอก ชื่อ"),
   last_name: Yup.string().required("กรุณากรอก นามสกุล"),
   id_card: Yup.string().min(13, "กรุณากรอกให้ครบ 13 หลัก").required("กรุณากรอก เลขบัตรประชาชน"),
-  // idCard: Yup.string()
-  // .test("is-citizenID", "กรุณาตรวจสอบเลขบัตรประชาชนอีกครั้ง", function checkCitizen(value) {
-  //   if (value === undefined) {
-  //     return false;
-  //   }
-  //   if (value.length !== 13) {
-  //     return false;
-  //   }
-  //   let sum = 0;
-  //   for (let i = 0; i < 12; i++) {
-  //     sum += parseInt(value.charAt(i)) * (13 - i);
-  //   }
-  //   let mod = sum % 11;
-  //   let check = (11 - mod) % 10;
-  //   if (check === parseInt(value.charAt(12))) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // })
-  // .required("กรุณากรอก เลขบัตรประชาชน"),
+  password: Yup.string()
+  .min(6, "กรุณากรอกให้ครบ 6 หลัก")
+  .required("กรุณากรอก รหัสผ่าน"),
 
   phoneNumber: Yup.string()
   .required("กรุณากรอก เบอร์โทรผู้ติดต่อ")
@@ -47,7 +29,7 @@ const Schema = Yup.object().shape({
   contact_phoneNumber: Yup.string()
   .required("กรุณากรอก เบอร์โทรผู้ติดต่อ")
   .matches(/^[0-9]{10}$/, "Invalid phone number"),
-  password: Yup.string().min(6, "กรุณากรอกให้ครบ 6 หลัก").required("กรุณากรอก รหัสผ่าน"),
+
 
 });
 

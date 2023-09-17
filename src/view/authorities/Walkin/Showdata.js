@@ -204,40 +204,7 @@ function Showdata() {
     setPage(1);
     setPageData(user);
   };
-  const loadEdit = (id) => {
-    navigate("/admin/user/form/" + id);
-  };
 
-  const removeEmp = (users_id) => {
-    Swal.fire({
-      title: "Confirm Delete",
-      text: "Do you want to delete this doctor?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Delete",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteQueueById(users_id)
-          .then((res) => {
-            Swal.fire({
-              title: "Deleted",
-              text: "The users has been deleted.",
-              icon: "success",
-              timer: "1500",
-            });
-            window.location.reload();
-          })
-          .catch((error) => {
-            Swal.fire({
-              title: "Error",
-              text: "An error occurred while deleting the users.",
-              icon: "error",
-            });
-          });
-      }
-    });
-  };
   return (
     <div className="w-full">
       <div className="row">
@@ -378,6 +345,7 @@ function Showdata() {
         </Table>
       </div>
       <Modal
+        id="BookingWalkinisModalOpen"
         className="custom-modal"
         show={isModalOpen}
         onHide={() => closeModal(false)}

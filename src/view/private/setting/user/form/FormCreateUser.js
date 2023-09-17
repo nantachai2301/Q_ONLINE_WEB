@@ -12,7 +12,7 @@ function FormCreateUser() {
   const [users, setUsers] = useState({
     users_id:null,
     id_card: "",
-    password: "", // เปลี่ยนชื่อฟิลด์นี้เป็น password
+   
     prefix_name: "",
     first_name: "",
     last_name: "",

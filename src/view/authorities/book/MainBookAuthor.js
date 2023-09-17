@@ -5,12 +5,12 @@ import axios from "axios";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import { createPatient } from "../../../service/Patient.Service";
-/**หน้าจองคิวของเจ้าหน้าที่จองให้ผู้ป่วย */
 function MainBookAuthor() {
   const location = useLocation();
   const [age, setAge] = useState(0);
+  const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [users, setUsers] = useState({
-    users_id: null,
+    users_id:null,
     id_card: "",
     password: "", // เปลี่ยนชื่อฟิลด์นี้เป็น password
     prefix_name: "",
@@ -34,21 +34,9 @@ function MainBookAuthor() {
     postcode: "",
     subdistritsId: "",
     img: "",
-    role_id: 0,
-    // department_id: null,
+    role_id:0,
+    department_id:null,
     birthday: "",
-  });
-
-  const [queue, setQueue] = useState({
-    queue_date: "",
-    create_at: "",
-    users_id: "",
-    symptom: "",
-    department_id: "",
-    department_name: "",
-    queue_status_id: "",
-    questionaire_id: "",
-    queue_id: null,
   });
 
   const navigate = useNavigate();
@@ -72,31 +60,105 @@ function MainBookAuthor() {
       ...prevUsers,
       [name]: value,
     }));
+    if (isDataValid()) {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
+    }
+  };
+  const handleSubmit = () => {
+    
+    if (isDataValid()) {
+    
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณากรอกข้อมูลให้ครบ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง",
+        showConfirmButton: true,
+      });
+    }
+  };
+  const isDataValid = () => {
+    const {
+      id_card,
+      prefix_name,
+      first_name,
+      last_name,
+      gender,
+      birthday,
+      weight,
+      height,
+      phoneNumber,
+    } = users;
+
+    if (
+      !id_card ||
+      !prefix_name ||
+      !first_name ||
+      !last_name ||
+      !gender ||
+      !birthday ||
+      !weight ||
+      !height ||
+      !phoneNumber ||
+      id_card.length !== 13 ||
+      phoneNumber.length !== 10 
+    ) {
+      return false;
+    }
+
+   
+
+    return true;
   };
   const handleClick = async () => {
     const usersWithAge = { ...users, age: age };
     try {
       const result = await Swal.fire({
-        title: "ยืนยัน",
-        text: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างผู้ใช้ ?",
+        title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างผู้ใช้ ?",
+        text: "",
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
       if (users.birthday) {
-        const birthDateObj = new Date(users.birthday); // แปลงวันที่ปีเกิดใน state ของคุณให้กลายเป็นออบเจ็กต์ของ Date
-        const today = new Date(); // วันที่ปัจจุบัน
+        const birthDateObj = new Date(users.birthday); 
+        const today = new Date(); 
         const diffInMilliseconds = Math.abs(today - birthDateObj);
         const ageDate = new Date(diffInMilliseconds);
         const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
-        setAge(calculatedAge); // อัปเดต state ของอายุด้วยค่าที่คำนวณได้
+        setAge(calculatedAge); 
       }
       const dataToSend = { ...users, age: age, users_id: users.users_id };
-
       if (result.isConfirmed) {
-        try {
-          await createPatient(
+        const requiredFields = [
+          "id_card",
+          "prefix_name",
+          "first_name",
+          "last_name",
+          "gender",
+          "birthday",
+          "weight",
+          "height",
+          "phoneNumber",
+       
+        ];
+  
+        const missingFields = requiredFields.filter(fieldName => !dataToSend[fieldName]);
+  
+        if (missingFields.length > 0) {
+          Swal.fire({
+            icon: "warning",
+            title: "กรุณากรอกข้อมูลให้ครบ",
+            text: `กรุณากรอกข้อมูลให้ครบ`,
+            showConfirmButton: true,
+          });
+          return; 
+        }
+  try {
+          await createPatient( 
             dataToSend.users_id,
             dataToSend.id_card,
             dataToSend.password,
@@ -121,12 +183,11 @@ function MainBookAuthor() {
             dataToSend.postcode,
             dataToSend.subdistrictsId,
             dataToSend.img,
-            dataToSend.role_id
+            dataToSend.role_id,
           );
-
           Swal.fire({
             icon: "success",
-            title: "บันทึกข้อมูลสำเร็จ",
+            title: "เพิ่มข้อมูลผู้ใช้สำเร็จ",
             showConfirmButton: false,
             timer: 1500,
           });
@@ -135,9 +196,9 @@ function MainBookAuthor() {
         } catch (error) {
           console.log(error);
           Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: "เกิดข้อผิดพลาดในการจองคิว",
+            icon: "warning",
+            title: "มีบัญชีผู้ใช้อยู่แล้ว",
+            text: "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว",
             showConfirmButton: true,
           });
         }
@@ -410,7 +471,7 @@ function MainBookAuthor() {
 
                         <div className="col-3">
                           <label>โรคประจำตัว</label>
-                          <label className="red">*</label>
+                        
                           <input
                             id="MainBookAuthor_congenital_disease"
                             type="text"
@@ -433,7 +494,7 @@ function MainBookAuthor() {
 
                         <div className="col-3">
                           <label>ประวัติแพ้ยา</label>
-                          <label className="red">*</label>
+                         
                           <input
                             id="MainBookAuthor_drugallerg"
                             type="text"
@@ -454,7 +515,35 @@ function MainBookAuthor() {
                           />
                         </div>
                       </div>
-
+                      <h6>รหัสผ่าน</h6>
+                      <div className="rounded border p-4">
+                        <div className="col-8 ">
+                          <div className="row">
+                            <div className="col-5 px-1 mt-8">
+                              <label>รหัสผ่าน</label>
+                              <label className="red">*</label>
+                              <input
+                                id="MainAddpassword"
+                                type="password"
+                                placeholder="รหัสผ่าน"
+                                name="password"
+                                value={users.password}
+                                className={`form-control ${
+                                  touched.password &&
+                                  errors.password &&
+                                  "is-invalid"
+                                }`}
+                                onChange={handleChange}
+                              />
+                              <ErrorMessage
+                                name="password"
+                                component="div"
+                                className="error-message"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       <br></br>
 
                       <h6>บุคคลที่ติดต่อได้</h6>
@@ -776,7 +865,7 @@ function MainBookAuthor() {
                           id="MainBookAuthor_submit"
                           type="submit"
                           className="btn btn-success mx-1"
-                          onClick={handleClick}
+                          onClick={handleSubmit} 
                         >
                           บันทึก
                         </button>
