@@ -204,6 +204,7 @@ function MainBookAuthor() {
                           <label className="red">*</label>
                           <br></br>
                           <input
+                          id="MainBookAuthor_id_card"
                             type="text"
                             name="id_card"
                             value={users.id_card}
@@ -228,6 +229,7 @@ function MainBookAuthor() {
                             <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
+                             id="MainBookAuthor_prefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -252,6 +254,7 @@ function MainBookAuthor() {
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
+                          id="MainBookAuthor_first_name"
                             type="name"
                             name="first_name"
                             placeholder="ชื่อ"
@@ -274,6 +277,7 @@ function MainBookAuthor() {
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
+                            id="MainBookAuthor_last_name"
                             type="text"
                             name="last_name"
                             placeholder="นามสกุล"
@@ -297,6 +301,7 @@ function MainBookAuthor() {
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
+                          id="MainBookAuthor_gender"
                             name="gender"
                             className={`form-select ${
                               touched.gender &&
@@ -322,6 +327,7 @@ function MainBookAuthor() {
                               <label className="red">*</label>
 
                               <input
+                                  id="MainBookAuthor_birthday"
                                 name="birthday"
                                 type="date"
                                 value={users.birthday}
@@ -341,6 +347,7 @@ function MainBookAuthor() {
                             <div className="col-2">
                         <label>อายุ</label>
                         <input
+                            id="MainBookAuthor_age"
                           type="text"
                           name="age"
                           value={age !== null ? age : ''} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
@@ -351,21 +358,13 @@ function MainBookAuthor() {
                         />
                       </div>
 
-                        {/* <div className="col-2 px-1 mt-2">
-                          <label>อายุ</label>
-                          <input
-                            type="text"
-                            name="age"
-                            value={age !== null ? age : ''} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
-                            readOnly
-                            className="form-control"
-                          />
-                        </div> */}
+                      
 
                         <div className="col-3">
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
+                            id="MainBookAuthor_weight"
                             type="weight"
                             name="weight"
                             placeholder="น้ำหนัก"
@@ -388,6 +387,7 @@ function MainBookAuthor() {
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
+                          id="MainBookAuthor_height"
                             type="height"
                             name="height"
                             placeholder="ส่วนสูง"
@@ -410,6 +410,7 @@ function MainBookAuthor() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
+                           id="MainBookAuthor_phone"
                             type="phone"
                             name="phoneNumber"
                             placeholder="เบอร์โทร"
@@ -432,6 +433,7 @@ function MainBookAuthor() {
                           <label>โรคประจำตัว</label>
                           <label className="red">*</label>
                           <input
+                           id="MainBookAuthor_congenital_disease"
                             type="text"
                             placeholder="โรคประจำตัว"
                             name="congenital_disease"
@@ -454,6 +456,7 @@ function MainBookAuthor() {
                           <label>ประวัติแพ้ยา</label>
                           <label className="red">*</label>
                           <input
+                            id="MainBookAuthor_drugallerg"
                             type="text"
                             placeholder="ประวัติแพ้ยา"
                             name="drugallergy"
@@ -494,6 +497,7 @@ function MainBookAuthor() {
                             <label>ชื่อ</label>
                             <label className="red">*</label>
                             <input
+                            id="MainBookAuthor_contact_first_name"
                               placeholder="ชื่อ"
                               type="contact_first_name"
                               name="contact_first_name"
@@ -516,6 +520,7 @@ function MainBookAuthor() {
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
+                             id="MainBookAuthor_contact_last_name"
                               placeholder="นามสกุล"
                               type="contact_last_name"
                               name="contact_last_name"
@@ -540,6 +545,7 @@ function MainBookAuthor() {
                               <label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                               id="MainBookAuthor_contact_relation_id"
                               name="contact_relation_id"
                               className={`form-select ${
                                 touched.contact_relation_id &&
@@ -567,6 +573,7 @@ function MainBookAuthor() {
                             <label>เบอร์โทร</label>
                             <label className="red">*</label>
                             <input
+                              id="MainBookAuthor_contact_phoneNumber"
                               type="text"
                               placeholder="เบอร์โทร"
                               name="contact_phoneNumber"
@@ -599,6 +606,7 @@ function MainBookAuthor() {
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
+                               id="MainBookAuthor_address"
                               type="address"
                               name="address"
                               placeholder="บ้านเลขที่"
@@ -622,6 +630,7 @@ function MainBookAuthor() {
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
+                             id="MainBookAuthor_province"
                               name="province"
                               className={`form-control ${
                                 touched.province &&
@@ -738,6 +747,7 @@ function MainBookAuthor() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
+                              id="MainBookAuthor_district"
                               placeholder="อำเภอ"
                               type="district"
                               name="district"
@@ -760,6 +770,7 @@ function MainBookAuthor() {
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
+                             id="MainBookAuthor_subdistrict"
                               name="subdistrict"
                               placeholder="ตำบล"
                               value={users.subdistrict}
@@ -780,6 +791,7 @@ function MainBookAuthor() {
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
+                               id="MainBookAuthor_postcode"
                               placeholder="รหัสไปรษณีย์"
                               name="postcode"
                               value={users.postcode}
@@ -804,18 +816,20 @@ function MainBookAuthor() {
 
                       <div className="d-flex justify-content-center mt-3">
                         <button
+                          id="MainBookAuthor_submit"
                           type="submit"
                           className="btn btn-success mx-1"
                           onClick={handleClick}
                         >
-                          จองคิว
+                          บันทึก
                         </button>
 
                         <button
+                         id="MainBookAuthor_Cencel"
                           className="btn btn-danger mx-1"
-                        // onClick={() => navigate("/admin/user")}
+                          onClick={() => navigate("/")}
                         >
-                          ล้างค่า
+                          ยกเลิก
                         </button>
                       </div>
                     </div>

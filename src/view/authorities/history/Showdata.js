@@ -96,6 +96,7 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
         <div className="col-5 col-md-2 col-lg-3">
           <label>ค้นหา</label>
           <input
+          id="MainHistoryAuthorSearch"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -107,6 +108,7 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
+          id="MainHistoryAuthorSelect"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
@@ -172,6 +174,7 @@ function ShowData({ data, pagin, changePage, changePageSize, updateStatusBook, d
         <div>
           <div className="Pagination">
           <Pagination
+              id="paginMainHistoryAuthor"
               activePage={page}
               itemsCountPerPage={pageSize}
               totalItemsCount={dataQ.length}

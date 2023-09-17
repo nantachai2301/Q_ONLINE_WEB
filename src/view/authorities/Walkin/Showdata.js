@@ -247,6 +247,7 @@ function Showdata() {
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
           <label>ค้นหา</label>
           <input
+          id="BookingWalkinSearch"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -256,6 +257,7 @@ function Showdata() {
         </div>
         <div className="col-12 col-lg-8 pt-4">
           <button
+           id="BookingWalkinSearchCancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
@@ -268,6 +270,7 @@ function Showdata() {
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
+           id="BookingWalkinpageSize"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
@@ -278,6 +281,7 @@ function Showdata() {
         </div>
         <div>
           <button
+           id="BookingWalkinAddbook-an-appointment"
             type="button"
             className="btn btn-success"
             onClick={() => {
@@ -350,6 +354,7 @@ function Showdata() {
                       <td>
                         <div>
                           <Button
+                           id="BookingWalkinopenModal"
                             variant="success"
                             className="text-white mx-1 mt-1"
                             onClick={() => {
@@ -421,6 +426,7 @@ function Showdata() {
                       </Form.Label>
                       <label className="red">*</label>
                       <Form.Control
+                        id="BookingWalkinsymptom"
                          name="symptom" // ต้องตรงกับชื่อใน state queue
                          type="text"
                          placeholder="กรุณาระบุอาการเบื้องต้น"
@@ -435,6 +441,7 @@ function Showdata() {
                       <label className="red">*</label>
 
                       <select
+                       id="BookingWalkindepartment_id"
                         class="form-select"
                         name="department_id"
                         style={{ textTransform: "uppercase", fontSize: "18px" }}
@@ -465,6 +472,7 @@ function Showdata() {
                       </label>
                       <label className="red">*</label>
                       <input
+                       id="BookingWalkinqueue_date"
                         name="queue_date"
                         type="date"
                         style={{ textTransform: "uppercase", fontSize: "18px" }}
@@ -480,7 +488,8 @@ function Showdata() {
                   )}
         </Modal.Body>
         <Modal.Footer>
-          <button type="button" className="btn btn-primary" onClick={handleBooking}>
+          <button  id="BookingWalkinBooking"
+                       type="button" className="btn btn-primary" onClick={handleBooking}>
             จองคิว
           </button>
         </Modal.Footer>
@@ -489,9 +498,10 @@ function Showdata() {
         <div>จำนวน {pageData.length} รายการ</div>
         <div>
           <Pagination
+          id="BookingWalkinpageSize"
             activePage={page}
             itemsCountPerPage={pageSize}
-            totalItemsCount={pageData.length}
+            totalItemsCount={user.length}
             pageRangeDisplayed={5}
             onChange={setPage}
           />
