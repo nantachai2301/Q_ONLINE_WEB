@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Select from "react-select";
 import Swal from "sweetalert2";
+
 import { format } from "date-fns";
 import {
   getQueue,
@@ -22,7 +23,7 @@ function ShowData({}) {
   const [pageData, setPageData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
-  const [pageSize, setPageSize] = useState(10); 
+  const [pageSize, setPageSize] = useState(10);
   const [searchUsers, setSearchUsers] = useState("");
   const [searchDate, setSearchDate] = useState(
     format(new Date(), "yyyy-MM-dd")
@@ -46,7 +47,6 @@ function ShowData({}) {
     setPage(pageNumber);
   };
 
-
   const handlePageSizeChange = (event) => {
     const newPageSize = parseInt(event.target.value);
     setPageSize(newPageSize);
@@ -62,7 +62,6 @@ function ShowData({}) {
       if (searchDate !== "") {
         const formattedSearchDate = formatDateToAPI(searchDate);
 
-        // เพิ่มเงื่อนไขเช็คว่าวันที่ที่กรอกเข้ามาไม่น้อยกว่าวันที่ปัจจุบัน
         if (formattedSearchDate >= formattedCurrentDate) {
           return item.queue_date === formattedSearchDate;
         }
@@ -91,8 +90,8 @@ function ShowData({}) {
       const dataToDisplay = filteredData.filter((dataItem) => {
         const firstName = dataItem.first_name || "";
         const lastName = dataItem.last_name || "";
-        const departmentName = dataItem.department_name || ""; 
-        const symptom = dataItem.symptom || ""; 
+        const departmentName = dataItem.department_name || "";
+        const symptom = dataItem.symptom || "";
 
         const nameFilter =
           firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
@@ -106,23 +105,18 @@ function ShowData({}) {
         return nameFilter && departmentFilter;
       });
 
-      
       const sortedData = dataToDisplay.sort((a, b) => {
         const dateA = new Date(a.queue_id);
         const dateB = new Date(b.queue_id);
-        return dateA - dateB; // เรียงจากวันที่เก่าสุดไปวันที่ใหม่สุด
+        return dateA - dateB;
       });
-
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
       const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
       const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
 
-     
-      const firstQueueNumber =
-        pageStartIndex > 0 ? sortedData[pageStartIndex - 1].queue_id + 1 : 1; 
-      const newData = slicedData.map((item, index) => ({
+      const newData = slicedData.map((item) => ({
         ...item,
-        queue_id: firstQueueNumber + index,
+        queue_id: item.queue_id,
       }));
 
       setPageData(newData);
@@ -143,22 +137,16 @@ function ShowData({}) {
     setSearchUsers("");
     setPage(1);
     getdataQ();
+  };
+  const handleCancel = () => {
+    setSearchUsers("");
+    setSearchDate(format(new Date(), "yyyy-MM-dd")); // กำหนดค่าวันที่เป็นวันที่ปัจจุบัน
+    setPage(1);
 
-   
-};
-const handleCancel = () => {
-  setSearchUsers("");
-  setSearchDate(format(new Date(), "yyyy-MM-dd")); // กำหนดค่าวันที่เป็นวันที่ปัจจุบัน
-  setPage(1);
-
-  // อัพเดตข้อมูลใหม่ในหน้าแสดงผลโดยให้ pageData เก็บข้อมูลที่ถูกกรองด้วยค่าค้นหาและวันที่ใหม่
-  const currentDate = new Date(); // วันที่ปัจจุบัน
-  const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
-
-  
-
-  
-};
+    // อัพเดตข้อมูลใหม่ในหน้าแสดงผลโดยให้ pageData เก็บข้อมูลที่ถูกกรองด้วยค่าค้นหาและวันที่ใหม่
+    const currentDate = new Date(); // วันที่ปัจจุบัน
+    const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
+  };
 
   const formatDateToAPI = (dateString) => {
     const [day, month, year] = dateString.split("-");
@@ -314,7 +302,34 @@ const handleCancel = () => {
     content: () => componentsRef.current,
     documentTitle: "Q_Online",
     pageStyle: pageStyle,
+    pageStyle: `
+      @page {
+        size: 6in 5in;
+      }
+    `,
+    pageStyle: "@page { size: 6in 5in; }",
   });
+
+  const [calledQueueData, setCalledQueueData] = useState([]);
+  const [pendingQueueData, setPendingQueueData] = useState([]);
+  const [dataToSend, setDataToSend] = useState(null);
+  const handleCallQueue = (queue) => {
+    // สร้างรายการคิวที่ถูกเรียกในตัวแปรใหม่
+    const newCalledQueueData = [...calledQueueData, queue];
+    // ลบคิวที่ถูกเรียกออกจากรายการคิวที่รอในตัวแปรใหม่
+    const newPendingQueueData = pendingQueueData.filter(
+      (item) => item.queue_id !== queue.queue_id
+    );
+
+    // อัพเดตสถานะของข้อมูลใน state
+    setCalledQueueData(newCalledQueueData);
+    setPendingQueueData(newPendingQueueData);
+
+    setDataToSend(queue);
+
+    // ส่งไปยังหน้า CallQueue โดยไม่เปลี่ยนหน้า
+    navigate("/CallQueue");
+  };
 
   return (
     <div className="w-full">
@@ -444,7 +459,7 @@ const handleCancel = () => {
                         onClick={() => {
                           changeStatus(
                             item.queue_id,
-                            item.queue_status_name, // นี่คือค่า currentStatus
+                            item.queue_status_name,
                             item.queue_date,
                             item.create_at,
                             item.symptom,
@@ -455,9 +470,7 @@ const handleCancel = () => {
                             item.department_name,
                             item.formatted_birthday
                           );
-                          // Update pageData with the new queue status
 
-                          // Reload data and keep the same search and department filter
                           getdataQ();
                         }}
                       >
@@ -497,15 +510,14 @@ const handleCancel = () => {
                       </button>
                     </td>
                     <td>
-                      <a
-                        className="btn btn-success"
-                        style={{ float: "center" }}
-                        onClick={() => {
-                          // removeEmp(item.queue_id);
-                        }}
-                      >
-                        <i class="fa-solid fa-arrow-right"></i>
-                      </a>
+                      {item.queue_status_name === "ยืนยัน" && (
+                        <button
+                          className="btn btn-success"
+                          onClick={() => handleCallQueue(item)} // เรียกใช้ฟังก์ชันพร้อมส่งค่า item
+                        >
+                          <i className="fa-solid fa-arrow-right"></i>
+                        </button>
+                      )}
                     </td>
                   </tr>
                 );
@@ -544,3 +556,4 @@ const handleCancel = () => {
 }
 
 export default ShowData;
+S
