@@ -503,7 +503,7 @@ function Showdata() {
           itemsCountPerPage={pageSize}
           totalItemsCount={pageData.length}
           pageRangeDisplayed={5}
-          onChange={setPage}s
+          onChange={setPage}
           />
         </div>
       </div>
