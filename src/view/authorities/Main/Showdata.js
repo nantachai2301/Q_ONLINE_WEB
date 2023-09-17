@@ -499,7 +499,7 @@ function ShowData({}) {
 
                     <td>
                       <button
-                        id="buttoCancel"
+                        id="buttoCancels"
                         type="button"
                         className="btn btn-danger"
                         onClick={() => {
