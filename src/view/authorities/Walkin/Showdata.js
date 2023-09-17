@@ -507,7 +507,7 @@ function Showdata() {
             id="BookingWalkinpageSize"
             activePage={page}
             itemsCountPerPage={pageSize}
-            totalItemsCount={user.length}
+            totalItemsCount={pageData.length}
             pageRangeDisplayed={5}
             onChange={setPage}
           />
