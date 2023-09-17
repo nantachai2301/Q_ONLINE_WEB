@@ -337,6 +337,7 @@ function ShowData({}) {
         <div className="col-5 col-md-2 col-lg-3">
           <label>ค้นหา</label>
           <input
+            id="Manager_MainSearch" 
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -348,6 +349,7 @@ function ShowData({}) {
           <i className="fa-solid fa-calendar mx-1"></i>
           <label>ค้นหาตามวันที่</label>
           <input
+            id="Manager_MainSearch_date" 
             type="date"
             className="form-control"
             value={searchDate}
@@ -356,6 +358,7 @@ function ShowData({}) {
         </div>
         <div className="col-3 col-lg-3 pt-4">
           <button
+            id="Manager_MainSearch_button" 
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancel}
@@ -368,6 +371,7 @@ function ShowData({}) {
 
       <div className="d-flex justify-content-end mb-2">
         <Select
+          id="Manager_Search_Department" 
           value={selectedDepartment}
           options={getDepartmentOptions()}
           onChange={handleSearchSelectChange}
@@ -487,6 +491,7 @@ function ShowData({}) {
                     </td>
                     <td>
                       <button
+                        id="Manager_button_status" 
                         type="button"
                         className="btn btn-primary"
                         onClick={() => {
@@ -512,6 +517,7 @@ function ShowData({}) {
                     <td>
                       {item.queue_status_name === "ยืนยัน" && (
                         <button
+                          id="buttonCallQueues"
                           className="btn btn-success"
                           onClick={() => handleCallQueue(item)} // เรียกใช้ฟังก์ชันพร้อมส่งค่า item
                         >
@@ -535,6 +541,7 @@ function ShowData({}) {
         <div>
           <div className="Pagination">
             <Pagination
+              id="Manager_mainBooking_pageSize"
               activePage={page}
               itemsCountPerPage={10}
               totalItemsCount={pageData.length}

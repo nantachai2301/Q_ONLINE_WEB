@@ -359,6 +359,7 @@ function EditAuthorities() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
+                           id="Author_phone"
                             type="phone"
                             name="phoneNumber"
                             placeholder="เบอร์โทร"

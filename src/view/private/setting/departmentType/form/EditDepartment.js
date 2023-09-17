@@ -67,15 +67,36 @@ function EditDepartment() {
       });
 
       if (result.isConfirmed) {
-        const response = await updateDepartmentById(department_id, departments);
-
+        const {
+          department_id,
+          department_name,
+          department_image,
+          open_time,
+          close_time,
+          max_queue_number,
+          floor,
+          building,
+          department_phone
+        } = departments;
+        const response = await updateDepartmentById(
+          department_id,
+          department_name,
+          department_image,
+          open_time,
+          close_time,
+          max_queue_number,
+          floor,
+          building,
+          department_phone,
+          {}
+        );
 
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
             title: "อัพเดตข้อมูลแผนกสำเร็จ",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 2000,
           });
           navigate("/admin/department-type");
         } else {
