@@ -7,12 +7,8 @@ import Swal from "sweetalert2";
 import Table from "react-bootstrap/Table";
 import { Modal, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import {
-  getPatient,getPatientById
-  } from "../../../service/Patient.Service";
-import {
-createQueue,deleteQueueById,
-} from "../../../service/Queue.Service";
+import { getPatient, getPatientById } from "../../../service/Patient.Service";
+import { createQueue, deleteQueueById } from "../../../service/Queue.Service";
 function Showdata() {
   const [user, setUser] = useState([]);
   const [selectedUser, setSelectedUser] = useState([]);
@@ -48,7 +44,7 @@ function Showdata() {
   };
 
   const handlecloseLogin = () => {
-    window.location.reload();  
+    window.location.reload();
     window.location.href = "/author/Bookingwalkin/";
   };
 
@@ -100,13 +96,15 @@ function Showdata() {
             symptom,
           };
           // ทำการจองคิวโดยส่งข้อมูลที่อยู่ในตัวแปร queue ไปยัง API สำหรับการจองคิว
-          await createQueue( dataToSend.users_id,
+          await createQueue(
+            dataToSend.users_id,
             dataToSend.first_name,
             dataToSend.last_name,
             dataToSend.department_id,
             dataToSend.queue_date,
             dataToSend.symptom,
-            dataToSend.queue_status_id);
+            dataToSend.queue_status_id
+          );
 
           // แสดงตัวแจ้งเตือนการจองคิวสำเร็จ
           Swal.fire({
@@ -220,7 +218,7 @@ function Showdata() {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-      deleteQueueById( users_id)
+        deleteQueueById(users_id)
           .then((res) => {
             Swal.fire({
               title: "Deleted",
@@ -247,7 +245,7 @@ function Showdata() {
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
           <label>ค้นหา</label>
           <input
-          id="BookingWalkinSearch"
+            id="BookingWalkinSearch"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -257,7 +255,7 @@ function Showdata() {
         </div>
         <div className="col-12 col-lg-8 pt-4">
           <button
-           id="BookingWalkinSearchCancel"
+            id="BookingWalkinSearchCancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
@@ -270,7 +268,7 @@ function Showdata() {
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
-           id="BookingWalkinpageSize"
+            id="BookingWalkinpageSize"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
@@ -281,7 +279,7 @@ function Showdata() {
         </div>
         <div>
           <button
-           id="BookingWalkinAddbook-an-appointment"
+            id="BookingWalkinAddbook-an-appointment"
             type="button"
             className="btn btn-success"
             onClick={() => {
@@ -354,7 +352,7 @@ function Showdata() {
                       <td>
                         <div>
                           <Button
-                           id="BookingWalkinopenModal"
+                            id="BookingWalkinopenModal"
                             variant="success"
                             className="text-white mx-1 mt-1"
                             onClick={() => {
@@ -379,117 +377,125 @@ function Showdata() {
           </tbody>
         </Table>
       </div>
-      <Modal className="custom-modal" show={isModalOpen} onHide={() => closeModal(false)} centered>
-  <Modal.Header onClick={handlecloseLogin} closeButton>
+      <Modal
+        className="custom-modal"
+        show={isModalOpen}
+        onHide={() => closeModal(false)}
+        centered
+      >
+        <Modal.Header onClick={handlecloseLogin} closeButton>
           <Modal.Title>กรอกข้อมูลการจองคิว</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {selectedUser ? (
-        <div className="col-12">
-                  <div className="row">
-                    <div className="col-12 px-1 mt-1">
-                      <label
-                        className="label-content"
-                        style={{ textTransform: "uppercase", fontSize: "18px" }}
-                      >
-                        เลขบัตรประชาชน :{" "}
-                      </label>
-                      <label
-                        style={{ textTransform: "uppercase", fontSize: "18px" }}
-                        
-                      >
-                        {" "}
-                        {selectedUser.id_card}
-                      </label>
-                    </div>
-                    <div className="col-12 px-1 mt-3">
-                      <label
-                        className="label-content"
-                        style={{ textTransform: "uppercase", fontSize: "18px" }}
-                      >
-                        ชื่อ :{" "}
-                      </label>
-                      <label
-                        style={{ textTransform: "uppercase", fontSize: "18px" }}
-                       
-                      >
-                        {" "}
-                        {selectedUser.prefix_name} {selectedUser.first_name} {selectedUser.last_name}
-                      </label>
-                    </div>
-                    <Form.Group className="col-12 px-1 mt-3">
-                      <Form.Label
-                        className="label-content"
-                        style={{ textTransform: "uppercase", fontSize: "18px" }}
-                      >
-                        อาการเบื้องต้น
-                      </Form.Label>
-                      <label className="red">*</label>
-                      <Form.Control
-                        id="BookingWalkinsymptom"
-                         name="symptom" // ต้องตรงกับชื่อใน state queue
-                         type="text"
-                         placeholder="กรุณาระบุอาการเบื้องต้น"
-                         value={booking.symptom}
-                         onChange={handleBookingChange}
-                      />
-                    </Form.Group>
-                    <div className="col-6 px-1 mt-3">
-                      <label style={{ textTransform: "uppercase", fontSize: "18px" }}>
-                        แผนก
-                      </label>
-                      <label className="red">*</label>
+          {selectedUser ? (
+            <div className="col-12">
+              <div className="row">
+                <div className="col-12 px-1 mt-1">
+                  <label
+                    className="label-content"
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                  >
+                    เลขบัตรประชาชน :{" "}
+                  </label>
+                  <label
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                  >
+                    {" "}
+                    {selectedUser.id_card}
+                  </label>
+                </div>
+                <div className="col-12 px-1 mt-3">
+                  <label
+                    className="label-content"
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                  >
+                    ชื่อ :{" "}
+                  </label>
+                  <label
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                  >
+                    {" "}
+                    {selectedUser.prefix_name} {selectedUser.first_name}{" "}
+                    {selectedUser.last_name}
+                  </label>
+                </div>
+                <Form.Group className="col-12 px-1 mt-3">
+                  <Form.Label
+                    className="label-content"
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                  >
+                    อาการเบื้องต้น
+                  </Form.Label>
+                  <label className="red">*</label>
+                  <Form.Control
+                    id="BookingWalkinsymptom"
+                    name="symptom" // ต้องตรงกับชื่อใน state queue
+                    type="text"
+                    placeholder="กรุณาระบุอาการเบื้องต้น"
+                    value={booking.symptom}
+                    onChange={handleBookingChange}
+                  />
+                </Form.Group>
+                <div className="col-6 px-1 mt-3">
+                  <label
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                  >
+                    แผนก
+                  </label>
+                  <label className="red">*</label>
 
-                      <select
-                       id="BookingWalkindepartment_id"
-                        class="form-select"
-                        name="department_id"
-                        style={{ textTransform: "uppercase", fontSize: "18px" }}
-                        value={booking.department_id} // นำค่า department_id มาจากตัวแปร queue
-                        onChange={handleBookingChange} // เรียกใช้ฟังก์ชัน handleChange เมื่อผู้ใช้เลือกแผนก
-                        aria-label="Default select example"
-                      >
-                        <option selected>เลือกแผนก</option>
-                        <option value="1">ทันตกรรม</option>
-                        <option value="2">กุมารเวช</option>
-                        <option value="3">ทั่วไป</option>
-                        <option value="4">สูติ-นรีเวช</option>
-                        <option value="6">ศัลยกรรม</option>
-                        <option value="7">หัวใจ</option>
-                        <option value="8">ผิวหนัง</option>
-                        <option value="23">จักษุ</option>
-                        <option value="26">ความงาม</option>
-                      </select>
-                      {/* <ErrorMessage
-                            component="div"
-                            name="department_id"
-                            className="text-invalid"
-                          /> */}
-                    </div>
-                    <div className="col-6 px-1 mt-3">
-                      <label style={{ textTransform: "uppercase", fontSize: "18px" }}>
-                        วันที่เข้ารับการรักษา
-                      </label>
-                      <label className="red">*</label>
-                      <input
-                       id="BookingWalkinqueue_date"
-                        name="queue_date"
-                        type="date"
-                        style={{ textTransform: "uppercase", fontSize: "18px" }}
-                        className="form-input"
-                        value={booking.queue_date} // นำค่า queue_date มาจากตัวแปร queue
-                        onChange={handleBookingChange} // เรียกใช้ฟังก์ชัน handleChange เมื่อผู้ใช้กรอกข้อมูล
-                      />
-                    </div>
+                  <select
+                    id="BookingWalkindepartment_id"
+                    class="form-select"
+                    name="department_id"
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                    value={booking.department_id} // นำค่า department_id มาจากตัวแปร queue
+                    onChange={handleBookingChange} // เรียกใช้ฟังก์ชัน handleChange เมื่อผู้ใช้เลือกแผนก
+                    aria-label="Default select example"
+                  >
+                    <option selected>เลือกแผนก</option>
+                    <option value="1">ทันตกรรม</option>
+                    <option value="2">กุมารเวช</option>
+                    <option value="3">ทั่วไป</option>
+                    <option value="4">สูติ-นรีเวช</option>
+                    <option value="6">ศัลยกรรม</option>
+                    <option value="7">หัวใจ</option>
+                    <option value="8">ผิวหนัง</option>
+                    <option value="23">จักษุ</option>
+                    <option value="26">ความงาม</option>
+                  </select>
+                  
                 </div>
+                <div className="col-6 px-1 mt-3">
+                  <label
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                  >
+                    วันที่เข้ารับการรักษา
+                  </label>
+                  <label className="red">*</label>
+                  <input
+                    id="BookingWalkinqueue_date"
+                    name="queue_date"
+                    type="date"
+                    style={{ textTransform: "uppercase", fontSize: "18px" }}
+                    className="form-input"
+                    value={booking.queue_date} // นำค่า queue_date มาจากตัวแปร queue
+                    onChange={handleBookingChange} // เรียกใช้ฟังก์ชัน handleChange เมื่อผู้ใช้กรอกข้อมูล
+                  />
                 </div>
-                 ) : (
-                    <div>Loading...</div>
-                  )}
+              </div>
+            </div>
+          ) : (
+            <div>Loading...</div>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <button  id="BookingWalkinBooking"
-                       type="button" className="btn btn-primary" onClick={handleBooking}>
+          <button
+            id="BookingWalkinBooking"
+            type="button"
+            className="btn btn-primary"
+            onClick={handleBooking}
+          >
             จองคิว
           </button>
         </Modal.Footer>
@@ -498,12 +504,12 @@ function Showdata() {
         <div>จำนวน {pageData.length} รายการ</div>
         <div>
           <Pagination
-          id="BookingWalkinpageSize"
-          activePage={page}
-          itemsCountPerPage={pageSize}
-          totalItemsCount={pageData.length}
-          pageRangeDisplayed={5}
-          onChange={setPage}
+            id="BookingWalkinpageSize"
+            activePage={page}
+            itemsCountPerPage={pageSize}
+            totalItemsCount={pageData.length}
+            pageRangeDisplayed={5}
+            onChange={setPage}
           />
         </div>
       </div>
