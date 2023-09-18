@@ -1,19 +1,17 @@
-
-import React, { useState, useEffect } from 'react';
-import Pagination from 'react-js-pagination';
+import React, { useState, useEffect } from "react";
+import Pagination from "react-js-pagination";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Spinner from "react-bootstrap/Spinner";
 import Table from "react-bootstrap/Table";
-import de from 'date-fns/esm/locale/de';
+import de from "date-fns/esm/locale/de";
 import {
   getDepartment,
   deleteDepartmentById,
 } from "../../../../service/DepartmentType.Service";
 import "../../../../style/showdepartments.css";
-
 
 function ShowData() {
   const navigate = useNavigate();
@@ -25,29 +23,27 @@ function ShowData() {
   const [searchDepartment, setSearchDepartment] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState(null);
 
-
   useEffect(() => {
     getDepartment()
-    .then((response) => {
-      setDepartments(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching Departments: ", error);
-    });
+      .then((response) => {
+        setDepartments(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching Departments: ", error);
+      });
   }, []);
 
   useEffect(() => {
     const filteredDepartments = departments.filter((department) => {
-      const nameFilter =
-      department.department_name
-          .toLowerCase()
-          .includes(searchDepartment.toLowerCase());
+      const nameFilter = department.department_name
+        .toLowerCase()
+        .includes(searchDepartment.toLowerCase());
 
-          const departmentFilter =
-          !selectedDepartment ||
-          department.department_name === selectedDepartment.value;
-    
-        return nameFilter && departmentFilter ;
+      const departmentFilter =
+        !selectedDepartment ||
+        department.department_name === selectedDepartment.value;
+
+      return nameFilter && departmentFilter;
     });
 
     const pagedatacount = Math.ceil(filteredDepartments.length / pageSize);
@@ -71,9 +67,8 @@ function ShowData() {
     setSearchDepartment(query);
   };
 
-  
   const handleCancelClick = () => {
-    setSearchDepartment("")
+    setSearchDepartment("");
     setSelectedDepartment(null);
     setPage(1);
     setPageData(departments.slice(0, pageSize));
@@ -82,17 +77,17 @@ function ShowData() {
   const getDepartmentOptions = () => {
     const department = Array.from(
       new Set(departments.map((departments) => departments.department_name))
-      );
-      return departments.map((department) => ({
-        value: department,
-        label: department,
-      }));
-    };
+    );
+    return departments.map((department) => ({
+      value: department,
+      label: department,
+    }));
+  };
 
-    const handleSearchSelectChange = (selectedOption) => {
-      setSelectedDepartment(selectedOption);
-    };
-  
+  const handleSearchSelectChange = (selectedOption) => {
+    setSelectedDepartment(selectedOption);
+  };
+
   const loadEdit = (id) => {
     navigate("/admin/edit-department/form/" + id);
   };
@@ -110,8 +105,8 @@ function ShowData() {
         deleteDepartmentById(department_id)
           .then((res) => {
             Swal.fire({
-              icon: 'success',
-              title: 'ลบข้อมูลแผนกสำเร็จ',
+              icon: "success",
+              title: "ลบข้อมูลแผนกสำเร็จ",
               showConfirmButton: false,
               timer: 1700,
             });
@@ -122,13 +117,12 @@ function ShowData() {
               title: "เกิดข้อผิดพลาด",
               text: "เกิดข้อผิดพลาดขณะลบข้อมูลแผนก.",
               icon: "error",
-              timer: "1500"
+              timer: "1500",
             });
           });
       }
     });
   };
-
 
   return (
     <div className="w-full">
@@ -137,6 +131,7 @@ function ShowData() {
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
           <label>ค้นหาแผนก</label>
           <Select
+            id="DeselectedDepartment"
             value={selectedDepartment}
             options={getDepartmentOptions()}
             onChange={handleSearchSelectChange}
@@ -146,6 +141,7 @@ function ShowData() {
         </div>
         <div className="col-12 col-lg-8 pt-4">
           <button
+            id="DehandleCancelClickt"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
@@ -158,6 +154,7 @@ function ShowData() {
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
+            id="DepageSize"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
@@ -170,7 +167,7 @@ function ShowData() {
         </div>
         <div>
           <button
-           id="department_create"
+            id="department_create"
             type="button"
             className="btn btn-success"
             onClick={() => {
@@ -187,44 +184,43 @@ function ShowData() {
         <table className="table">
           <thead>
             <tr className="table-primary">
-              <th scope="col" style={{ width: '5%' }}>
+              <th scope="col" style={{ width: "5%" }}>
                 ลำดับที่
               </th>
 
-              <th scope="col" style={{ width: '10%' }}>
+              <th scope="col" style={{ width: "10%" }}>
                 รูปภาพแผนก
               </th>
 
-              <th scope="col" style={{ width: '10%' }}>
+              <th scope="col" style={{ width: "10%" }}>
                 ชื่อแผนก
               </th>
 
-              <th scope="col" style={{ width: '10%' }}>
+              <th scope="col" style={{ width: "10%" }}>
                 เวลาเปิด
               </th>
 
-              <th scope="col" style={{ width: '10%' }}>
+              <th scope="col" style={{ width: "10%" }}>
                 เวลาปิด
               </th>
 
-              <th scope="col" style={{ width: '5%' }}>
+              <th scope="col" style={{ width: "5%" }}>
                 อาคาร
               </th>
 
-              <th scope="col" style={{ width: '5%' }}>
+              <th scope="col" style={{ width: "5%" }}>
                 ชั้น
               </th>
 
-              <th scope="col" style={{ width: '10%' }}>
+              <th scope="col" style={{ width: "10%" }}>
                 เบอร์โทรแผนก
               </th>
 
-              <th scope="col" style={{ width: '10%' }}>
+              <th scope="col" style={{ width: "10%" }}>
                 จำนวนคิวสูงสุด
               </th>
 
-
-              <th scope="col justify-content-center" style={{ width: '15%' }}>
+              <th scope="col justify-content-center" style={{ width: "15%" }}>
                 จัดการ
               </th>
             </tr>
@@ -236,7 +232,9 @@ function ShowData() {
                   <tr key={item.department_id}>
                     <td>{(page - 1) * 10 + index + 1}</td>
                     {/* <td> */}
-                    <td><img className="img-d" src={item.department_image} /></td>
+                    <td>
+                      <img className="img-d" src={item.department_image} />
+                    </td>
                     {/* </td> */}
                     <td>{item.department_name}</td>
 
@@ -248,7 +246,7 @@ function ShowData() {
                     <td>{item.max_queue_number}</td>
                     <td>
                       <button
-                       id="department_edit"
+                        id="department_edit"
                         type="button"
                         className="btn btn-warning text-white mx-1 mt-1"
                         onClick={() => {
@@ -274,28 +272,27 @@ function ShowData() {
               })
             ) : (
               <tr>
-              <td colSpan="8" className="text-center">
-                No doctors found.
-              </td>
-            </tr>
-              )}
+                <td colSpan="8" className="text-center">
+                  No doctors found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
       <div className="d-flex justify-content-between">
-        <div> 
+        <div>
           จำนวน {pageData.length} รายการ จากทั้งหมด {departments.length} รายการ
         </div>
         <div>
           <div className="Pagination">
             <Pagination
-
+              id="DePagination"
               activePage={page}
               itemsCountPerPage={pageSize}
               totalItemsCount={departments.length}
               pageRangeDisplayed={10}
               onChange={setPage}
-
             />
           </div>
         </div>

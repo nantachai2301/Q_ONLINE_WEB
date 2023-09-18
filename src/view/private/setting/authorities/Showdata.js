@@ -112,6 +112,7 @@ function ShowData() {
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
           <label>ค้นหา</label>
           <input
+          id="AuthorSearchs"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -121,6 +122,7 @@ function ShowData() {
         </div>
         <div className="col-12 col-lg-8 pt-4">
           <button
+            id="AuthorShandleCancelClicks"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
@@ -133,6 +135,7 @@ function ShowData() {
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
+            id="AuthorpageSize"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
@@ -249,6 +252,7 @@ function ShowData() {
       จำนวน {pageData.length} รายการ จากทั้งหมด {user.length} รายการ
         <div>
           <Pagination
+            id="AuthorPagination"
             activePage={page}
             itemsCountPerPage={10}
             totalItemsCount={user.length}
