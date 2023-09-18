@@ -267,9 +267,9 @@ function ShowData() {
       </div>
       <div className="d-flex justify-content-between">
         จำนวน {pageData.length} รายการ จากทั้งหมด {user.length} รายการ
-        <div>
+        <div className="Pagination"  id="PaginationhUser">
           <Pagination
-           id="PaginationhUser"
+         
             activePage={page}
             itemsCountPerPage={pageSize}
             totalItemsCount={user.length}

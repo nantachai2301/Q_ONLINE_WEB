@@ -395,9 +395,9 @@ function ShowData() {
           จำนวน {pageData.length} รายการ จากทั้งหมด {doctors.length} รายการ
         </div>
         <div>
-          <div className="Pagination">
+          <div className="Pagination" id="DPagination">
             <Pagination
-             id="DPagination"
+            
               activePage={page}
               itemsCountPerPage={pageSize}
               totalItemsCount={doctors.length}
