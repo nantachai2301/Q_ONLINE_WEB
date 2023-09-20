@@ -203,6 +203,7 @@ function ShowData() {
           <label>ค้นหา</label>
           <input
             id="SearchDoc"
+            name="doctor_first_name"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -214,6 +215,7 @@ function ShowData() {
           <label>ค้นหาแผนก</label>
           <Select
            id="SearchDepartDoc"
+           name="department_name"
             value={selectedDepartment}
             options={getDepartmentOptions()}
             onChange={handleSearchSelectChange}
@@ -226,6 +228,7 @@ function ShowData() {
           <label>สถานะการใช้งาน </label>
           <Select
           id="SearchselectStatus"
+            name="doctor_status"
             value={selectStatus}
             options={getStatusOptions()}
             onChange={handleStatusSelectChange}
@@ -236,6 +239,7 @@ function ShowData() {
         <div className="col-12 col-lg-3 pt-4">
           <button
             id="SearchhandleCancelClicks"
+            name="SearchhandleCancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}

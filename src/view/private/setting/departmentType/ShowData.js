@@ -132,6 +132,7 @@ function ShowData() {
           <label>ค้นหาแผนก</label>
           <Select
             id="DeselectedDepartment"
+            name="department_name"
             value={selectedDepartment}
             options={getDepartmentOptions()}
             onChange={handleSearchSelectChange}
@@ -142,6 +143,7 @@ function ShowData() {
         <div className="col-12 col-lg-8 pt-4">
           <button
             id="DehandleCancelClickt"
+            name="DehandleCancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}

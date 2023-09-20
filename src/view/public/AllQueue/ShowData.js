@@ -128,7 +128,9 @@ function ShowData() {
         <div className="col-5 col-md-2 col-lg-3">
           <label>ค้นหา</label>
           <input
+            id="searchQueue_symptom"
             type="text"
+            name="symptom"
             className="form-control"
             placeholder="Search..."
             value={searchQueue}
@@ -138,6 +140,8 @@ function ShowData() {
         <div className="col-12 col-md-3 col-lg-3">
           <label>ค้นหาแผนก</label>
           <Select
+            id="search_selectedDepartment"
+            name="department_name"
             value={selectedDepartment}
             options={getDepartmentOptions()}
             onChange={handleSearchSelectChange}
@@ -148,6 +152,8 @@ function ShowData() {
         <div className="col-12 col-md-3 col-lg-2">
           <label>สถานะการใช้งาน </label>
           <Select
+            id="search_selectStatus"
+            name="queue_status_name"
             value={selectStatus}
             options={getStatusOptions()}
             onChange={handleStatusSelectChange}
@@ -157,7 +163,9 @@ function ShowData() {
         </div>
         <div className="col-12 col-lg-3 pt-4">
           <button
+          id="button_CancelClick"
             type="button"
+            name="cancelClick"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
           >
