@@ -66,29 +66,17 @@ function EditDepartment() {
         cancelButtonText: "ยกเลิก",
       });
 
-      if (result.isConfirmed) {
-        const {
-          department_id,
-          department_name,
-          department_image,
-          open_time,
-          close_time,
-          max_queue_number,
-          floor,
-          building,
-          department_phone
-        } = departments;
+      if (result.isConfirmed) { 
         const response = await updateDepartmentById(
-          department_id,
-          department_name,
-          department_image,
-          open_time,
-          close_time,
-          max_queue_number,
-          floor,
-          building,
-          department_phone,
-          {}
+          departments.department_id,
+          departments.department_name,
+          departments.department_image,
+          departments.open_time,
+          departments.close_time,
+          departments.max_queue_number,
+          departments.floor,
+          departments.building,
+          departments.department_phone,
         );
 
         if (response.status === 200) {

@@ -95,6 +95,7 @@ function ShowData({}) {
           <label>ค้นหา</label>
           <input
             id="MainHistoryAuthorSearch"
+            name="first_name"
             type="text"
             className="form-control"
             placeholder="Search..."

@@ -338,6 +338,7 @@ function ShowData({}) {
           <label>ค้นหา</label>
           <input
             id="Manager_MainSearch" 
+            name="firstName"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -350,6 +351,7 @@ function ShowData({}) {
           <label>ค้นหาตามวันที่</label>
           <input
             id="Manager_MainSearch_date" 
+            name="queue_date"
             type="date"
             className="form-control"
             value={searchDate}
@@ -358,7 +360,8 @@ function ShowData({}) {
         </div>
         <div className="col-3 col-lg-3 pt-4">
           <button
-            id="Manager_MainSearch_button" 
+            id="Manager_MainSearch_button"
+            name="cancel" 
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancel}
@@ -372,6 +375,7 @@ function ShowData({}) {
       <div className="d-flex justify-content-end mb-2">
         <Select
           id="Manager_Search_Department" 
+          name="department_name"
           value={selectedDepartment}
           options={getDepartmentOptions()}
           onChange={handleSearchSelectChange}

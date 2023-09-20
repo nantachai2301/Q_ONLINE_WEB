@@ -213,6 +213,7 @@ function Showdata() {
           <label>ค้นหา</label>
           <input
             id="BookingWalkinSearch"
+            name="first_name"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -223,6 +224,7 @@ function Showdata() {
         <div className="col-12 col-lg-8 pt-4">
           <button
             id="BookingWalkinSearchCancel"
+            name="Cancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
@@ -460,6 +462,7 @@ function Showdata() {
         <Modal.Footer>
           <button
             id="BookingWalkinBooking"
+            name="Booking"
             type="button"
             className="btn btn-primary"
             onClick={handleBooking}

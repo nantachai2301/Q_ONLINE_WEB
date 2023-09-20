@@ -257,7 +257,7 @@ const validateForm = () => {
                       <label>ชื่อแผนก</label>
                       <label className="red">*</label>
                       <input
-                      id="department_partment_name"
+                        id="department_partment_name"
                         name="department_name"
                         type="text"
                         placeholder="กรอกชื่อแผนก"
