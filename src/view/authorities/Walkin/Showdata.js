@@ -59,7 +59,18 @@ function Showdata() {
     e.preventDefault();
 
     const { department_id, queue_date, symptom } = booking;
-
+    const currentDate = new Date(); // วันที่ปัจจุบัน
+    const selectedDate = new Date(queue_date); // แปลงวันที่ที่ผู้ใช้เลือกเป็นออบเจ็กต์ Date
+    
+    if (selectedDate < currentDate) {
+      Swal.fire({
+        icon: "error",
+        title: "ไม่สามารถเลือกวันที่ย้อนหลังได้",
+        text: "กรุณาเลือกวันที่ที่มากกว่าหรือเท่ากับวันที่ปัจจุบัน",
+        showConfirmButton: true,
+      });
+      return;
+    }
     try {
       // ตรวจสอบความถูกต้องของข้อมูลที่ผู้ใช้กรอกเข้ามา
       if (!booking.symptom || !booking.department_id) {
@@ -130,6 +141,7 @@ function Showdata() {
             showConfirmButton: true,
           });
         }
+        window.location.reload();
       }
     } catch (error) {
       console.log(error);
@@ -238,6 +250,7 @@ function Showdata() {
         <div className="w-pagesize">
           <select
             id="BookingWalkinpageSize"
+            name="BookingpageSize"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
@@ -479,8 +492,8 @@ function Showdata() {
            
             activePage={page}
             itemsCountPerPage={pageSize}
-            totalItemsCount={pageData.length}
-            pageRangeDisplayed={5}
+            totalItemsCount={user.length}
+            pageRangeDisplayed={10}
             onChange={setPage}
           />
         </div>

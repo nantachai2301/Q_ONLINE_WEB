@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import axios from "axios";
-import Doctor from "../../../../../image/doctor.jpg";
+import Hospitals from "../../../../../image/hospitals.jpg";
 import Schema from "./Validation";
 import Swal from 'sweetalert2';
 import { createDepartment } from "../../../../../service/DepartmentType.Service";
@@ -227,7 +227,7 @@ const validateForm = () => {
                       ) : (
                         <img
                           className="img-hpts mx-auto"
-                          src={Doctor}
+                          src={Hospitals}
                           alt="Default Departments"
                         />
                       )}
@@ -253,27 +253,29 @@ const validateForm = () => {
                   <br />
                   <br />
                   <form class="row g-3 d-flex justify-content-center ">
-                    <div className="col-10 col-md-6">
-                      <label>ชื่อแผนก</label>
-                      <label className="red">*</label>
-                      <input
-                        id="department_partment_name"
-                        name="department_name"
-                        type="text"
-                        placeholder="กรอกชื่อแผนก"
-                        value={departments.department_name}
-                        className={`form-control ${touched.department_name &&
-                          errors.department_name &&
-                          "is-invalid"
-                          }`}
-                        onChange={handleChange}
-                      />
-                      <ErrorMessage
-                        name="department_name"
-                        component="div"
-                        className="error-message"
-                      />
-                    </div>
+                  <div className="col-10 col-md-6 ">
+                    <label>ชื่อแผนก</label>
+                    <label className="red">*</label>
+                    <input
+                      id="Depart_department_id"
+                      name="department_id"
+                      type="text"
+                      value={departments.department_name}
+                      className={`form-control ${touched.department_id &&
+                        errors.department_id
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      onChange={handleChange}
+                    />
+                     
+                    <ErrorMessage
+                      name="department_id"
+                      component="div"
+                      className="error-message"
+                    />
+
+                  </div>
 
                     <div className="col-10 col-md-6">
                       <label>เวลาเปิด</label>

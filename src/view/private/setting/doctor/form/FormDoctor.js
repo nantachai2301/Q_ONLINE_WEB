@@ -318,6 +318,7 @@ function FormDoctor() {
                         <option value="6">ศัลยกรรม</option>
                         <option value="7">หัวใจ</option>
                         <option value="8">ผิวหนัง</option>
+                        <option value="23">จักษุ</option>
                       </select>
                       <ErrorMessage
                         name="department_id"

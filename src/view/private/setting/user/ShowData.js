@@ -153,6 +153,7 @@ function ShowData() {
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
+          name="pageSizeUser"
            id="pageSizeUser"
             class="form-select"
             value={pageSize}

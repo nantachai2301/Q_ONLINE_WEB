@@ -78,6 +78,7 @@ function NavBar(props) {
         <Typography
                 variant="body1"
                 component="div"
+              
                 color="#000"
               >
                 ยินดีต้อนรับคุณ : {userData?.data.fullname}

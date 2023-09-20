@@ -13,7 +13,7 @@ function MainPdf({ dataQ }) {
       </div>
       <div className="text-center">
       <div>
-        <b className='me-1'>ใบคิว </b>
+        <b className='me-1'>บัตรคิว </b>
        
       </div>
         <p className="font-number-q">{dataQ ? dataQ.queue_id : '-'}</p>

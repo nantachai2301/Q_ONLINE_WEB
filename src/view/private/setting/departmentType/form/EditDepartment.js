@@ -220,27 +220,19 @@ function EditDepartment() {
                   <div className="col-10 col-md-6 ">
                     <label>ชื่อแผนก</label>
                     <label className="red">*</label>
-                    <select
+                    <input
                       id="Depart_department_id"
                       name="department_id"
                       type="text"
-                      className={`form-select ${touched.department_id &&
+                      value={departments.department_name}
+                      className={`form-control ${touched.department_id &&
                         errors.department_id
                         ? "is-invalid"
                         : ""
                         }`}
                       onChange={handleChange}
-                    >
-                      <option selected>กรุณาเลือกแผนก</option>
-                      <option value="ทันตกรรม">ทันตกรรม</option>
-                      <option value="จักษุ">จักษุ</option>
-                      <option value="หัวใจ">หัวใจ</option>
-                      <option value="ผิวหนัง">ผิวหนัง</option>
-                      <option value="ศัลยกรรม">ศัลยกรรม</option>
-                      <option value="ทั่วไป">ทั่วไป</option>
-                      <option value="กุมารเวช">กุมารเวช</option>
-                      <option value="สูติ-นรีเวช">สูติขนรีเวช</option>
-                    </select>
+                    />
+                     
                     <ErrorMessage
                       name="department_id"
                       component="div"
