@@ -415,7 +415,7 @@ function ShowData({}) {
                 จัดการสถานะคิว
               </th>
               <th scope="col" style={{ width: "2%" }}>
-                ใบคิว
+            บัตรคิว
               </th>
               <th scope="col" style={{ width: "3%" }}>
                 ลบ
