@@ -414,10 +414,10 @@ function ShowData({}) {
               <th scope="col" style={{ width: "10%" }}>
                 จัดการสถานะคิว
               </th>
-              <th scope="col" style={{ width: "2%" }}>
+              <th scope="col" style={{ width: "5%" }}>
             บัตรคิว
               </th>
-              <th scope="col" style={{ width: "3%" }}>
+              <th scope="col" style={{ width: "2%" }}>
                 ลบ
               </th>
               <th scope="col" style={{ width: "15%" }}>
