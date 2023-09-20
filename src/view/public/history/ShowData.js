@@ -308,6 +308,7 @@ function ShowData() {
           <label>ค้นหาตามวันที่</label>
           <input
             id="TableBookDate"
+            name="create_at"
             type="date"
             className="form-control"
             value={selectedDate}
@@ -317,6 +318,7 @@ function ShowData() {
         <div className="col-5 col-md-2 col-lg-3 p-4">
           <select
             id="TableBookselectedDepartment"
+            name="department_id"
             className="form-select"
             value={selectedDepartment}
             onChange={(e) => setSelectedDepartment(e.target.value)}
@@ -335,6 +337,7 @@ function ShowData() {
         <div className="col-3 col-lg-3 pt-4">
           <button
             id="TableBookhandleCancel"
+            name="BookhandleCancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancel}
@@ -348,6 +351,7 @@ function ShowData() {
       <div className="col-2" style={{ marginBottom: "10px" }}>
         <select
          id="TableBookselectedStatusId"
+         name="queue_status_id"
           className="form-select"
           value={selectedStatusId}
           onChange={(e) => setSelectedStatusId(e.target.value)}
@@ -611,6 +615,7 @@ function ShowData() {
                             </label>
                             <label className="red">*</label>
                             <input
+                            id="Date_queue_date"
                               name="queue_date"
                               type="date"
                               style={{

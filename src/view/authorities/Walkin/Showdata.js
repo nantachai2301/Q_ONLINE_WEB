@@ -249,6 +249,7 @@ function Showdata() {
         <div>
           <button
             id="BookingWalkinAddbook-an-appointment"
+            name="Addbook"
             type="button"
             className="btn btn-success"
             onClick={() => {

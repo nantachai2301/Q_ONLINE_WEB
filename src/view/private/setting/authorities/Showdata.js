@@ -112,7 +112,8 @@ function ShowData() {
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
           <label>ค้นหา</label>
           <input
-          id="AuthorSearchs"
+            id="AuthorSearchs"
+            name="first_name"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -123,6 +124,7 @@ function ShowData() {
         <div className="col-12 col-lg-8 pt-4">
           <button
             id="AuthorShandleCancelClicks"
+            name="AuthorShandleCancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}

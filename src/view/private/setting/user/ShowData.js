@@ -114,6 +114,7 @@ function ShowData() {
           <label>ค้นหา</label>
           <input
            id="SearchUser"
+            name="first_name"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -124,7 +125,8 @@ function ShowData() {
         <div className="col-3 col-lg-3 pt-4">
           {/* ส่วนของการเลือกค่า role_id */}
           <select
-           id="selectedUser"
+            id="selectedUser"
+            name="role"
             className="form-select"
             value={selectedRoleId}
             onChange={(e) => setSelectedRoleId(e.target.value)}
@@ -137,6 +139,7 @@ function ShowData() {
         <div className="col-3 col-lg-3 pt-4">
           <button
            id="CencelUser"
+            name="cancelUsers"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
