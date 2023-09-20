@@ -113,7 +113,7 @@ function ShowData() {
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
           <label>ค้นหา</label>
           <input
-          id="SearchUser"
+           id="SearchUser"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -267,8 +267,9 @@ function ShowData() {
       </div>
       <div className="d-flex justify-content-between">
         จำนวน {pageData.length} รายการ จากทั้งหมด {user.length} รายการ
-        <div>
+        <div className="Pagination"  id="PaginationhUser">
           <Pagination
+         
             activePage={page}
             itemsCountPerPage={pageSize}
             totalItemsCount={user.length}

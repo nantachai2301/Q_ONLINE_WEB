@@ -473,9 +473,9 @@ function Showdata() {
       </Modal>
       <div className="d-flex justify-content-between">
         <div>จำนวน {pageData.length} รายการ</div>
-        <div>
+        <div className="Pagination"  id="BookingWalkinpageSize">
           <Pagination
-            id="BookingWalkinpageSize"
+           
             activePage={page}
             itemsCountPerPage={pageSize}
             totalItemsCount={pageData.length}

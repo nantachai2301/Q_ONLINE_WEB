@@ -202,6 +202,7 @@ function ShowData() {
         <div className="col-5 col-md-2 col-lg-3">
           <label>ค้นหา</label>
           <input
+            id="SearchDoc"
             type="text"
             className="form-control"
             placeholder="Search..."
@@ -212,6 +213,7 @@ function ShowData() {
         <div className="col-12 col-md-3 col-lg-3">
           <label>ค้นหาแผนก</label>
           <Select
+           id="SearchDepartDoc"
             value={selectedDepartment}
             options={getDepartmentOptions()}
             onChange={handleSearchSelectChange}
@@ -223,6 +225,7 @@ function ShowData() {
         <div className="col-12 col-md-3 col-lg-2">
           <label>สถานะการใช้งาน </label>
           <Select
+          id="SearchselectStatus"
             value={selectStatus}
             options={getStatusOptions()}
             onChange={handleStatusSelectChange}
@@ -232,6 +235,7 @@ function ShowData() {
         </div>
         <div className="col-12 col-lg-3 pt-4">
           <button
+            id="SearchhandleCancelClicks"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancelClick}
@@ -244,6 +248,7 @@ function ShowData() {
       <div className="d-flex justify-content-between mb-2">
         <div className="w-pagesize">
           <select
+            id="DpageSize"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
@@ -390,8 +395,9 @@ function ShowData() {
           จำนวน {pageData.length} รายการ จากทั้งหมด {doctors.length} รายการ
         </div>
         <div>
-          <div className="Pagination">
+          <div className="Pagination" id="DPagination">
             <Pagination
+            
               activePage={page}
               itemsCountPerPage={pageSize}
               totalItemsCount={doctors.length}

@@ -307,6 +307,7 @@ function ShowData() {
           <i className="fa-solid fa-calendar mx-1"></i>
           <label>ค้นหาตามวันที่</label>
           <input
+            id="TableBookDate"
             type="date"
             className="form-control"
             value={selectedDate}
@@ -315,6 +316,7 @@ function ShowData() {
         </div>
         <div className="col-5 col-md-2 col-lg-3 p-4">
           <select
+            id="TableBookselectedDepartment"
             className="form-select"
             value={selectedDepartment}
             onChange={(e) => setSelectedDepartment(e.target.value)}
@@ -332,6 +334,7 @@ function ShowData() {
         </div>
         <div className="col-3 col-lg-3 pt-4">
           <button
+            id="TableBookhandleCancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancel}
@@ -344,6 +347,7 @@ function ShowData() {
 
       <div className="col-2" style={{ marginBottom: "10px" }}>
         <select
+         id="TableBookselectedStatusId"
           className="form-select"
           value={selectedStatusId}
           onChange={(e) => setSelectedStatusId(e.target.value)}
@@ -649,7 +653,7 @@ function ShowData() {
       </div>
       <div className="d-flex justify-content-between">
         <div>จำนวน {pageData.length} รายการ</div>
-        <div>
+        <div className="Pagination" id="TableBookPagination">
           <Pagination
             activePage={page}
             itemsCountPerPage={pageSize}
