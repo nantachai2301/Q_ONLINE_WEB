@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://tan-hippopotamus-hem.cyclic.app/apis/";
+const API_URL = "https://encouraging-peplum-newt.cyclic.cloud/apis/";
 
 const getAuthorities = async () => {
   return await axios.get(API_URL + "authorities ",);
