@@ -13,7 +13,7 @@ import {
 
 function EditDepartment() {
   const location = useLocation();
-  const [departments, setDepartments] = useState({
+  const [department, setDepartment] = useState({
     department_id: "",
     department_name: "",
     department_image: "",
@@ -29,7 +29,7 @@ function EditDepartment() {
   useEffect(() => {
     getDepartmentById(department_id)
       .then((response) => {
-        setDepartments(response.data);
+        setDepartment(response.data);
       })
       .catch((error) => {
         console.error("Error fetching departments: ", error);
@@ -41,12 +41,12 @@ function EditDepartment() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDepartments((prev) => ({ ...prev, [name]: value }));
+    setDepartment((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleClick = async () => {
     try {
-      const isValid = await Schema.isValid(departments);
+      const isValid = await Schema.isValid(department);
       if (!isValid) {
         Swal.fire({
           icon: "error",
@@ -68,15 +68,15 @@ function EditDepartment() {
 
       if (result.isConfirmed) { 
         const response = await updateDepartmentById(
-          departments.department_id,
-          departments.department_name,
-          departments.department_image,
-          departments.open_time,
-          departments.close_time,
-          departments.max_queue_number,
-          departments.floor,
-          departments.building,
-          departments.department_phone,
+          department.department_id,
+          department.department_name,
+          department.department_image,
+          department.open_time,
+          department.close_time,
+          department.max_queue_number,
+          department.floor,
+          department.building,
+          department.department_phone,
         );
 
         if (response.status === 200) {
@@ -132,8 +132,8 @@ function EditDepartment() {
             const resizedImageURL = window.URL.createObjectURL(blob);
             console.log('Resized Image URL:', resizedImageURL);
 
-            setDepartments((prevDepartments) => ({
-              ...prevDepartments,
+            setDepartment((prevDepartment) => ({
+              ...prevDepartment,
               department_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
             }));
           }, 'image/jpeg', 0.8);
@@ -142,7 +142,7 @@ function EditDepartment() {
       reader.readAsDataURL(file);
     }
   };
-  console.log('department_image:', departments.department_image); // ตรวจสอบค่าของ department_image
+  console.log('department_image:', department.department_image); // ตรวจสอบค่าของ department_image
 
 
 
@@ -179,7 +179,7 @@ function EditDepartment() {
         <Formik
           enableReinitialize={true}
           validationSchema={Schema}
-          initialValues={departments}
+          initialValues={department}
           onSubmit={handleClick}
         >
           {({ errors, touched }) => (
@@ -191,7 +191,7 @@ function EditDepartment() {
                   <div className=" d-flex flex-column justify-content-center align-items-center">
                     <img
                       className="img-hpts mx-auto"
-                      src={departments.department_image}
+                      src={department.department_image}
                       alt="รูปภาพแผนก"
                     />
 
@@ -224,7 +224,7 @@ function EditDepartment() {
                       id="Depart_department_id"
                       name="department_id"
                       type="text"
-                      value={departments.department_name}
+                      value={department.department_name}
                       className={`form-control ${touched.department_id &&
                         errors.department_id
                         ? "is-invalid"
@@ -249,7 +249,7 @@ function EditDepartment() {
                       name="open_time"
                       type="time"
                       placeholder="กรอกเวลาเปิด"
-                      value={departments.open_time}
+                      value={department.open_time}
                       className={`form-control ${touched.open_time &&
                         errors.open_time &&
                         "is-invalid"
@@ -271,7 +271,7 @@ function EditDepartment() {
                       name="close_time"
                       type="time"
                       placeholder="เวลาปิด"
-                      value={departments.close_time}
+                      value={department.close_time}
                       className={`form-select ${touched.close_time &&
                         errors.close_time &&
                         "is-invalid"
@@ -293,7 +293,7 @@ function EditDepartment() {
                       name="building"
                       type="text"
                       placeholder="กรอกอาคาร"
-                      value={departments.building}
+                      value={department.building}
                       className={`form-control ${touched.building &&
                         errors.building &&
                         "is-invalid"
@@ -315,7 +315,7 @@ function EditDepartment() {
                       name="floor"
                       type="text"
                       placeholder="ชั้น"
-                      value={departments.floor}
+                      value={department.floor}
                       className={`form-control ${touched.floor &&
                         errors.floor &&
                         "is-invalid"
@@ -337,7 +337,7 @@ function EditDepartment() {
                       name="department_phone"
                       type="text"
                       placeholder="เบอร์โทรแผนก"
-                      value={departments.department_phone}
+                      value={department.department_phone}
                       className={`form-control ${touched.department_phone &&
                         errors.department_phone &&
                         "is-invalid"
@@ -359,7 +359,7 @@ function EditDepartment() {
                       name="max_queue_number"
                       type="text"
                       placeholder="จำนวนคิวสูงสุด"
-                      value={departments.max_queue_number}
+                      value={department.max_queue_number}
                       className={`form-control ${touched.max_queue_number &&
                         errors.max_queue_number &&
                         "is-invalid"
