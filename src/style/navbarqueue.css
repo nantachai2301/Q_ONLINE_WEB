@@ -1,0 +1,11 @@
+.navbar {
+    padding: 20px;
+    background-color: #3498db;  /* สีพื้นหลังของ NavBar */
+    color: white;  /* สีข้อความ */
+  }
+  
+  /* สไตล์ข้อความวิ่ง */
+  marquee {
+    font-size: 2em;
+  }
+  

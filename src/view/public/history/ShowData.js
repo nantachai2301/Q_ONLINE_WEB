@@ -4,7 +4,8 @@ import Pagination from "react-js-pagination";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { Formik } from "formik";
-// import { useReactToPrint } from 'react-to-print';
+import { useReactToPrint } from "react-to-print";
+import MainPdf from "../../authorities/history/pdf/MainPdf";
 import Swal from "sweetalert2";
 import {
   getQueue,
@@ -19,6 +20,7 @@ import Spinner from "react-bootstrap/Spinner";
 
 function ShowData() {
   const navigate = useNavigate();
+  const [data, setData] = useState(null);
   const [pageData, setPageData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
@@ -200,7 +202,7 @@ function ShowData() {
 
       console.log("Values received in handleEditSubmit:", values);
       console.log("Sending request with data:", updatedData);
-      // ส่งค่าไปยัง API สำหรับการแก้ไขคิว
+    
       const response = await updateQueues(
         selectedQueueData.users_id,
         formatDateToAPI(selectedQueueData.queue_date),
@@ -209,23 +211,22 @@ function ShowData() {
       );
 
       console.log("Response from server:", response.data);
-      // อัปเดตรายการคิวใน state หลังจากแก้ไขเรียบร้อย
+ 
       setQueueList((prevQueueList) =>
         prevQueueList.map((queue) =>
           queue.queue_id === selectedQueueData.queue_id &&
           queue.queue_date === selectedQueueData.queue_date
             ? {
                 ...queue,
-                symptom: updatedData.symptom, // อัปเดตเฉพาะฟิลด์ symptom เท่านั้น
+                symptom: updatedData.symptom, 
               }
             : queue
         )
       );
 
-      // ปิด Modal แก้ไข
+    
       setEditModalShow(false);
 
-      // แสดงตัวแจ้งเตือนการแก้ไขสำเร็จ
       Swal.fire({
         icon: "success",
         title: "แก้ไขคิวสำเร็จ",
@@ -234,7 +235,7 @@ function ShowData() {
       });
     } catch (error) {
       console.error("Error editing queue:", error);
-      // แสดงตัวแจ้งเตือนเมื่อการแก้ไขไม่สำเร็จ
+   
       Swal.fire({
         icon: "error",
         title: "การแก้ไขคิวไม่สำเร็จ",
@@ -262,12 +263,12 @@ function ShowData() {
           const response = await deleteQueueById(users_id, formattedDate);
 
           if (response.data.affectedRows > 0) {
-            // หากลบสำเร็จ ทำการอัปเดตข้อมูลใหม่ด้วยการอัปเดต state หรือที่เก็บข้อมูลที่ใช้ในการแสดงผล
+            
             const updatedQueueList = queueList.filter(
               (queue) =>
                 queue.users_id !== users_id || queue.queue_date !== queue_date
             );
-            setQueueList(updatedQueueList); // อัปเดต state ด้วยข้อมูลใหม่
+            setQueueList(updatedQueueList); 
 
             Swal.fire({
               title: "ไม่พบคิวที่ต้องการยกเลิก",
@@ -281,7 +282,7 @@ function ShowData() {
               icon: "success",
               timer: 1500,
             }).then(() => {
-              window.location.reload(); // รีโหลดหน้าใหม่หลังจากที่ยืนยันการยกเลิกคิวสำเร็จ
+              window.location.reload(); 
             });
           }
         } catch (error) {
@@ -300,6 +301,34 @@ function ShowData() {
     const [day, month, year] = dateString.split("-");
     return `${year}-${month}-${day}`;
   }
+  const pageStyle = `
+  @page{
+    size :6in 5in;
+  }
+  
+  
+  `;
+
+  const componentsRef = useRef();
+  useEffect(() => {
+    if (data) {
+      print();
+    }
+  }, [data]);
+  const print = useReactToPrint({
+    content: () => componentsRef.current,
+    documentTitle: "Q_Online",
+    pageStyle: pageStyle,
+    pageStyle: `
+      @page {
+        size: 6in 5in;
+      }
+    `,
+    pageStyle: "@page { size: 6in 5in; }",
+    onAfterPrint: () => {
+      window.location.reload();
+    },
+  });
   return (
     <div>
       <div className="row justify-content-start mb-2">
@@ -350,8 +379,8 @@ function ShowData() {
 
       <div className="col-2" style={{ marginBottom: "10px" }}>
         <select
-         id="TableBookselectedStatusId"
-         name="queue_status_id"
+          id="TableBookselectedStatusId"
+          name="queue_status_id"
           className="form-select"
           value={selectedStatusId}
           onChange={(e) => setSelectedStatusId(e.target.value)}
@@ -372,13 +401,13 @@ function ShowData() {
                     ? "#4682B4"
                     : selectedStatusId === "1"
                     ? "#4682B4"
-                    : "#4682B4", // กำหนดสีตามเงื่อนไข
+                    : "#4682B4",
                 color: "#fff",
               }}
             >
-              {/* ... ส่วนอื่น ๆ ของการแสดงข้อมูลในตาราง */}
+           
               <th scope="col" style={{ width: "5%", textAlign: "center" }}>
-               รายการ
+                รายการ
               </th>
               <th scope="col" style={{ width: "15%", textAlign: "center" }}>
                 อาการเบื้องต้น
@@ -413,34 +442,49 @@ function ShowData() {
                   (selectedStatusId === "" ||
                     selectedStatusId.includes(queue.queue_status_id.toString()))
               )
-              .slice(0, 10) // เลือกแสดงเฉพาะ 10 รายการแรก
+              .slice(0, 10) 
               .map((queue, index) => (
                 <tr key={queue.id}>
                   <td style={{ textAlign: "center" }}>
                     {(page - 1) * 10 + index + 1}
                   </td>{" "}
-                  {/* แสดงลำดับเริ่มจาก 1 */}
+                 
                   <td style={{ textAlign: "center" }}>{queue.symptom}</td>
                   <td style={{ textAlign: "center" }}>
                     {queue.department_name}
                   </td>
                   <td style={{ textAlign: "center" }}>{queue.queue_date}</td>
                   <td style={{ textAlign: "center" }}>{queue.create_at}</td>
-                  <td style={{ textAlign: "center" }}>{queue.queue_status_name}</td>
-                  <td style={{ textAlign: "center" }}>{queue.queue_id}</td>
                   <td style={{ textAlign: "center" }}>
-        {(queue.queue_status_id === 1 ||
-          (queue.queue_status_id === 2 && selectedStatusId !== "2") ||
-          (queue.queue_status_id === 4 && selectedStatusId !== "4")) && (
-          <div>
-            <button
-              id="EditQueue"
-              type="button"
-              className="btn btn-warning text-white mx-1 mt-1"
-              onClick={() => handleEditClick(queue)}
-            >
-              <i className="fa-solid fa-pen-to-square"></i>
-            </button>
+                    {queue.queue_status_name}
+                  </td>
+                  <td style={{ textAlign: "center" }}>
+                    <button
+                      id="Manager_button_status"
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => {
+                        setData(queue);
+                      }}
+                    >
+                      <i className="fa-solid fa-print text-white"></i>
+                    </button>
+                  </td>
+                  <td style={{ textAlign: "center" }}>
+                    {(queue.queue_status_id === 1 ||
+                      (queue.queue_status_id === 2 &&
+                        selectedStatusId !== "2") ||
+                      (queue.queue_status_id === 4 &&
+                        selectedStatusId !== "4")) && (
+                      <div>
+                        <button
+                          id="EditQueue"
+                          type="button"
+                          className="btn btn-warning text-white mx-1 mt-1"
+                          onClick={() => handleEditClick(queue)}
+                        >
+                          <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
                         <button
                           id="RemoveQueue"
                           type="button"
@@ -456,7 +500,7 @@ function ShowData() {
                   </td>
                 </tr>
               ))}
-            {filteredData.length === 0 && ( // เพิ่มเงื่อนไขตรวจสอบว่าไม่มีข้อมูล
+            {filteredData.length === 0 && ( 
               <tr>
                 <td colSpan="7" style={{ textAlign: "center" }}>
                   ไม่มีข้อมูล
@@ -487,10 +531,7 @@ function ShowData() {
                   queue_date: selectedQueueData
                     ? selectedQueueData.queue_date
                     : "",
-                  //  queue_status_name: selectedQueueData
-                  //   ? selectedQueueData.queue_status_name
-                  //   : "",
-                  //   prefix_name: selectedQueueData ? selectedQueueData.prefix_name : "",
+                 
                 }}
                 onSubmit={(values) => handleEditSubmit(values)}
               >
@@ -554,11 +595,11 @@ function ShowData() {
                             <label className="red">*</label>
                             <Form.Control
                               id="Editsymptom"
-                              name="symptom" // ตรงตามชื่อที่ใช้ใน initialValues
+                              name="symptom" 
                               type="text"
                               placeholder="กรุณาระบุอาการเบื้องต้น"
-                              value={values.symptom} // ใช้ค่าจาก Formik values
-                              onChange={handleChange} // อัปเดตค่าใน Formik state
+                              value={values.symptom} 
+                              onChange={handleChange} 
                             />
                           </Form.Group>
                           <small className="red">
@@ -597,11 +638,7 @@ function ShowData() {
                               <option value="8">ผิวหนัง</option>
                               <option value="23">จักษุ</option>
                             </select>
-                            {/* <ErrorMessage
-                            component="div"
-                            name="department_id"
-                            className="text-invalid"
-                          /> */}
+                            
                           </div>
 
                           <div className="col-6 px-1 mt-3">
@@ -615,7 +652,7 @@ function ShowData() {
                             </label>
                             <label className="red">*</label>
                             <input
-                            id="Date_queue_date"
+                              id="Date_queue_date"
                               name="queue_date"
                               type="date"
                               style={{
@@ -632,7 +669,7 @@ function ShowData() {
                     )}
                     <Modal.Footer>
                       <button
-                       id="QSubmit"
+                        id="QSubmit"
                         type="submit"
                         className="btn btn-primary"
                         onClick={() => {
@@ -669,6 +706,13 @@ function ShowData() {
             pageRangeDisplayed={5}
             onChange={setPage}
           />
+        </div>
+      </div>
+      <div className="d-flex justify-content-center">
+        <div className="hidden">
+          <div ref={componentsRef}>
+            <MainPdf dataQ={data} />
+          </div>
         </div>
       </div>
     </div>

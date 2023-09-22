@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import DesktopQueue from "../../view/public/DesktopQueue/DesktopQueue"
 import "../../style/Home.css";
+import NavBarQueue from "../../components/Public/NavBarQueue";
 
 function Home() {
   
@@ -136,27 +137,7 @@ function Home() {
         <MainBook show={showMainBook} setShow={setShowMainBook} />
       )}
               </div>
-              <div className="col" style={{ margin: "0 20px" }}>
-                <div className="Home-Desktop"  id="Home-Desktop">
-                <FontAwesomeIcon
-               
-                onClick={handleAllQueueDesktop}
-                icon={faDesktop}
-                class="fa-solid fa-Desktop"
-                  style={{ color: "#4b86d2", marginTop: "70px", width : "auto" }}
-                /></div>
-                <div className="Name-icon3">
-                <a
-                   onClick={handleAllQueueDesktop}
-                  style={{ color: "#4b86d2", cursor: "pointer" }}
-                >
-                  <h4 className="title-name-home mt-3 mx-5">
-                  หน้าจอเรียกคิว
-                  </h4>
-                  
-                </a>
-                </div>
-              </div>
+              
               {isLoggedIn && (
      <div className="col" style={{ margin: "0 20px" }}>
         <div className="Home-Queue"  id="Home-Queue">
@@ -209,7 +190,8 @@ function Home() {
           </div>
         </div>
 
-     <DesktopQueue></DesktopQueue>
+     <NavBarQueue/>
+     <DesktopQueue/>
       <div class="container5 p-5 my-5 border">
         <div className="d-flex justify-content-center ">
           <Carousel variant="dark">

@@ -31,7 +31,7 @@ import EditProfile from "../view/public/Profile/EditProfile";
 
 import TableBooking from "../view/public/history/TableBooking";
 import Home from "../layout/public/Home";
-
+import NavBarQueue from "../components/Public/NavBarQueue";
 import ShowDepartmentAll from "../view/public/Department/ShowDepartmentAll";
 import Dental from "../view/public/Department/DetailDepartment/dental/Dental";
 import LoginModal from "../components/Login/LoginModal";
