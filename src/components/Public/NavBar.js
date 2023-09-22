@@ -67,11 +67,10 @@ const Navbar = () => {
     setIsDrawerOpen(false); // ปิดเมนูแฮมเบอร์เกอร์ก่อน
     setShowLogoutButton(false); // ปิดปุ่มออกจากระบบ
     Swal.fire({
-      title: "ออกจากระบบ",
-      text: "คุณแน่ใจที่ต้องการออกจากระบบหรือไม่",
-      icon: "warning",
+      title: "คุณต้องการออกจากระบบใช่หรือไม่?",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: "ใช่, ฉันต้องการออกจากระบบ",
+      confirmButtonText: "ออกจากระบบ",
       cancelButtonText: "ยกเลิก",
       reverseButtons: true,
     }).then((result) => {
@@ -127,7 +126,7 @@ const Navbar = () => {
   const handleLoginPopup = () => {
     setShowLogin(true);
   };
-  const navbarHeight = showLogin ? "400px" : "80px";
+  const navbarHeight = showLogin ? "500px" : "80px";
 
   const renderMenuItems = () => {
     return (

@@ -73,7 +73,7 @@ useEffect(() => {
         </div>
       <div className="container45">
         <div className="row" >
-        <div className="departs" style={{ justifyContent: "flex-start" }}>
+        <div className="departs" style={{ justifyContent: "center" }}>
           {doctors.map((doctor) =>
             doctor.doctor_status === "ใช้งาน" ? (
               <div className="card dental-card" key={doctor.id} style={{ width: "320px", height: "300px"  , alignItems: 'center',}}>

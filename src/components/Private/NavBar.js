@@ -31,11 +31,10 @@ function NavBar(props) {
   }, []);
   const handleLogout = () => {
     Swal.fire({
-      title: 'คุณแน่ใจหรือไม่?',
-      text: 'คุณต้องการออกจากระบบใช่หรือไม่?',
+      title: 'คุณต้องการออกจากระบบใช่หรือไม่?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'ใช่, ออกจากระบบ',
+      confirmButtonText: 'ออกจากระบบ',
       cancelButtonText: 'ยกเลิก',
       reverseButtons: true,
     }).then((result) => {

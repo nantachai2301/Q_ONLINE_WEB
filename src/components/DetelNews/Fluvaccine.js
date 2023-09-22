@@ -1,4 +1,6 @@
 import React from "react";
+import c2 from "../../image/c2.jpg";
+import Card from "react-bootstrap/Card";
 
 const Fluvaccine = () => {
   const iframeStyle = {
@@ -10,11 +12,11 @@ const Fluvaccine = () => {
     <div className="NewsItem">
       <div className="card">
       <div className="card-image">
-        <img
-          src="https://scontent.fkdt1-1.fna.fbcdn.net/v/t39.30808-6/355665823_1147737346174702_3151967588245513412_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeGVnoKl7GD1c3mbWRkI3K7XrPuP76ema6Ss-4_vp6ZrpPguUoAo8YL0N9-zNTEJ-fVHhxjvbTD-8N67huuxzZXb&_nc_ohc=MeiZH3hZrncAX_G-AVa&_nc_ht=scontent.fkdt1-1.fna&oh=00_AfCaCWPVRHAQP0TMfcZXRgXRb7B6IZO8j4Mfs4CU0HZKWA&oe=64E797EC"
-          className="newsImg"
-          style={{ width: "100%", height: "100%" }}
-        ></img>
+      <Card.Img
+              variant="top"
+              src={c2}
+              style={{ width: "95%", height: "90%" }}
+            />
       </div></div>
       <div className="siDesc">
         <h1 className="NewsTitle">

@@ -75,10 +75,10 @@ function DesktopQueue({ departmentData, selectedDate }) {
                 </div>
               </div>
             </div>
-            <h6 className="text" style={{ marginLeft: "auto" }}>
+            <h6 className="text" style={{ marginLeft: "auto" , marginRight: "20px"}}>
               รอรับบริการ : {bookedQueues}
             </h6>
-            <h6 className="text" style={{ marginLeft: "auto" }}>
+            <h6 className="text" style={{ marginLeft: "auto" ,marginRight: "20px"}}>
               ให้บริการแล้ว: {bookedQueues}
             </h6>
           </div>

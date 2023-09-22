@@ -1,17 +1,19 @@
 import React from "react";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Card from "react-bootstrap/Card";
+import c1 from "../../image/c1.jpg";
 
 const Dentalnews = () => {
   return (
     <div className="NewsItem">
         <div className="card">
         <div className="card-image">
-          <img
-            src="https://scontent.fkdt1-1.fna.fbcdn.net/v/t39.30808-6/356410044_1150054712609632_216190863377804940_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=8bfeb9&_nc_eui2=AeHEgKV5FauIBjUrqKUVtihWV_jUHmTVFoVX-NQeZNUWhSeqzS7hObWLRiIujdr8luyMTWrcanzpeYYvRfuI1Qsu&_nc_ohc=4KxoGKJHkB0AX-zC2g5&_nc_ht=scontent.fkdt1-1.fna&oh=00_AfCi9FlaSVp8u4a5Xw8ipzge__Zgw5Q4ARXjLmgxsKyWqg&oe=64E88650"
-            className="newsImg"
-            style={{ width: "100%", height: "100%" }}
-          />
+        <Card.Img
+              variant="top"
+              src={c1}
+              style={{ width: "95%", height: "105%" }}
+            />
         </div></div>
         <div className="siDesc">
         <h1 className="NewsTitle">ขั้นตอนการรับบริการทันตกรรม</h1>

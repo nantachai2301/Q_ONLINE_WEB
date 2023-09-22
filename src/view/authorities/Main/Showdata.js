@@ -155,12 +155,12 @@ function ShowData({}) {
 
   const handleCancelClick = (users_id, queue_date) => {
     Swal.fire({
-      title: "คุณแน่ใจที่จะลบการจองคิวนี้?",
-      text: "การจองคิวนี้จะถูกลบและไม่สามารถกู้คืนได้",
-      icon: "warning",
+      title: "คุณต้องการลบรายการนี้ใช่หรือไม่?",
+      text: "หากยืนยันที่จะลบรายการนี้ เมื่อถูกลบจะไม่สามารถกู้คืนได้",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: "ใช่, ลบคิว",
-      cancelButtonText: "ไม่, ยกเลิก",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -214,11 +214,11 @@ function ShowData({}) {
 
     const newQueueStatusId = currentStatus === "ยืนยัน" ? 4 : 2; // ค่า newQueueStatusId ควรเป็น 3
     Swal.fire({
-      title: `คุณต้องการอัพเดทสถานะรายการนี้ใช่หรือไม่ ! `,
-      text: `คุณต้องการอัพเดทสถานะให้เป็น ! ${newStatus}?`,
-      icon: "warning",
+      title: `คุณต้องการอัพเดทสถานะใช่หรือไม่ ? `,
+      text: `อัพเดทสถานะให้เป็น ! ${newStatus}?`,
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: "เปลี่ยน",
+      confirmButtonText: "อัพเดต",
       cancelButtonText: "ยกเลิก",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -388,39 +388,42 @@ function ShowData({}) {
         <table className="table">
           <thead>
             <tr className="table-success">
-              <th scope="col" style={{ width: "2%" }}>
-                ที่
+              <th scope="col" style={{ width: "2%",textAlign: 'center'  }}>
+                ลำดับ
               </th>
-              <th scope="col" style={{ width: "20%" }}>
+              <th scope="col" style={{ width: "8%" ,textAlign: 'center' }}>
+                หมายเลขคิว
+              </th>
+              <th scope="col" style={{ width: "20%" ,textAlign: 'center' }}>
                 ชื่อ-สกุล
               </th>
-              <th scope="col" style={{ width: "10%" }}>
+              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
                 อาการเบื้องต้น
               </th>
-              <th scope="col" style={{ width: "10%" }}>
+              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
                 แผนก
               </th>
-              <th scope="col" style={{ width: "10%" }}>
+              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
                 วันที่จอง<br></br>
                 ป/ด/ว
               </th>
-              <th scope="col" style={{ width: "15%" }}>
+              <th scope="col" style={{ width: "15%",textAlign: 'center'  }}>
                 เวลาที่จอง
               </th>
-              <th scope="col" style={{ width: "10%" }}>
+              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
                 สถานะคิว
               </th>
 
-              <th scope="col" style={{ width: "10%" }}>
+              <th scope="col" style={{ width: "15%",textAlign: 'center'  }}>
                 จัดการสถานะคิว
               </th>
-              <th scope="col" style={{ width: "5%" }}>
+              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
             บัตรคิว
               </th>
-              <th scope="col" style={{ width: "2%" }}>
+              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
                 ลบ
               </th>
-              <th scope="col" style={{ width: "15%" }}>
+              <th scope="col" style={{ width: "20%",textAlign: 'center'  }}>
                 เรียกคิว
               </th>
             </tr>
@@ -431,15 +434,15 @@ function ShowData({}) {
                 return (
                   <tr key={item.queue_id}>
                     <td>{(page - 1) * 10 + index + 1}</td>
-
-                    <td>
+                    <td style={{ textAlign: 'center' }}>{item.queue_id}</td>
+                    <td style={{ textAlign: 'center' }}>
                       {item.prefix_name} {item.first_name} {item.last_name}
                     </td>
-                    <td>{item.symptom}</td>
-                    <td>{item.department_name}</td>
-                    <td>{item.queue_date}</td>
-                    <td>{item.create_at}</td>
-                    <td>
+                    <td style={{ textAlign: 'center' }}>{item.symptom}</td>
+                    <td style={{ textAlign: 'center' }}>{item.department_name}</td>
+                    <td style={{ textAlign: 'center' }}>{item.queue_date}</td>
+                    <td style={{ textAlign: 'center' }}>{item.create_at}</td>
+                    <td style={{ textAlign: 'center' }}>
                       {item.queue_status_id === 3 ? (
                         <span className="text-warning">รับการรักษาแล้ว</span>
                       ) : (
@@ -453,7 +456,7 @@ function ShowData({}) {
                       )}
                     </td>
 
-                    <td>
+                    <td style={{ textAlign: 'center' }}>
                       <button
                         id="buttonStatus"
                         type="button"
@@ -493,7 +496,7 @@ function ShowData({}) {
                         )}
                       </button>
                     </td>
-                    <td>
+                    <td style={{ textAlign: 'center' }}>
                       <button
                         id="Manager_button_status" 
                         type="button"

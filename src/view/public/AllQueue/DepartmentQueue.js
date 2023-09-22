@@ -46,42 +46,41 @@ function DepartmentQueue({ departmentData, selectedDate }) {
   }, [selectedDate, departmentData]);
   return (
     <div className="department-card555">
-      <div className="department-image">
-        <img
-          src={departmentData.department_image}
-          alt={departmentData.department_name}
-          className="department-icon"
-          style={{ width: "200px", height: "200px" }}
-        />
-      </div>
+  <div className="content-container">
+    <div className="department-image">
+      <img
+        src={departmentData.department_image}
+        alt={departmentData.department_name}
+        className="department-icon"
+        style={{ width: "200px", height: "200px" }}
+      />
+    </div>
+    <div className="info-container">
       <h3 className="department-name">{departmentData.department_name}</h3>
-      <div className="queue-row">
-        <div className="queue-card">
-          <div className="icon-container">
-            <FontAwesomeIcon icon={faUsers} className="queue-icon" />
-          </div>
-          <div className="queue-info">
-            <p>จำนวนคิวทั้งหมด : {departmentData.max_queue_number}</p>
-          </div>
+      <div className="queue-card">
+        <div className="icon-container">
+          <FontAwesomeIcon icon={faUsers} className="queue-icon" />
         </div>
-        <div className="queue-card">
-          <div className="icon-container">
-            <FontAwesomeIcon icon={faUsers} className="queue-icon" />
-          </div>
-          <div className="queue-info">
-            <p>จำนวนคิวที่จองแล้ว : {bookedQueues}</p>
-          </div>
+        <div className="queue-info">
+          <p>จำนวนคิวทั้งหมด: {departmentData.max_queue_number}</p>
         </div>
-        <div className="queue-card">
-          <div className="icon-container">
-            <FontAwesomeIcon icon={faClock} className="queue-icon" />
-          </div>
-          <div className="queue-info">
-            <p>จำนวนคิวที่ว่างรับ: {availableQueues}</p>
-          </div>
+        <div className="icon-container">
+          <FontAwesomeIcon icon={faUsers} className="queue-icon" />
+        </div>
+        <div className="queue-info">
+          <p>จำนวนคิวที่จองแล้ว: {bookedQueues}</p>
+        </div>
+        <div className="icon-container">
+          <FontAwesomeIcon icon={faClock} className="queue-icon" />
+        </div>
+        <div className="queue-info">
+          <p>จำนวนคิวที่ว่างรับ: {availableQueues}</p>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
   );
 }
 

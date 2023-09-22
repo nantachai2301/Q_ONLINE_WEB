@@ -116,11 +116,11 @@ function MainBookAuthor() {
     const usersWithAge = { ...users, age: age };
     try {
       const result = await Swal.fire({
-        title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างผู้ใช้ ?",
+        title: "คุณต้องการสร้างผู้ใช้ใช่หรือไม่?",
         text: "",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
+        confirmButtonText: "ยืนยัน",
         cancelButtonText: "ยกเลิก",
       });
       if (users.birthday) {

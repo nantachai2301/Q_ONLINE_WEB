@@ -76,9 +76,9 @@ function ShowData() {
 
   const handleDeletePatient = (users_id) => {
     Swal.fire({
-      title:  `ลบรายการเจ้าหน้าที่นี้หรือไม่ ? `,
-      text: "เมื่อรายการเจ้าหน้าที่ถูกลบ คุณจะไม่สามาถกู้คืนได้",
-      icon: "warning",
+      title:  `คุณต้องการลบรายการนี้ใช่หรือไม่ ? `,
+      text: "เมื่อรายการนี้ถูกลบ คุณจะไม่สามาถกู้คืนได้",
+      icon: "question",
       showCancelButton: true,
       confirmButtonText: "ตกลง",
       cancelButtonText: "ยกเลิก",

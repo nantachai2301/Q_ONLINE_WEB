@@ -249,11 +249,11 @@ function ShowData() {
   };
   const removeQueue = async (users_id, queue_date) => {
     Swal.fire({
-      title: "คุณแน่ใจที่จะยกเลิกการจองคิว !",
+      title: "คุณแน่ใจที่จะยกเลิกการจองคิว ?",
       text: "เมื่อรายการจองคิวถูกยกเลิก คุณจะไม่สามาถกู้คืนได้",
-      icon: "warning",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: "ตกลง",
+      confirmButtonText: "ยืนยัน",
       cancelButtonText: "ยกเลิก",
     }).then(async (result) => {
       if (result.isConfirmed) {

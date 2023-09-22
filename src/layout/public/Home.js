@@ -19,7 +19,7 @@ import HomeSlide from "../../image/HomeSlide.png";
 import MainBook from "../../view/public/book/MainBook";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import DesktopQueue from "../../view/public/DesktopQueue/DesktopQueue"
 import "../../style/Home.css";
 
 function Home() {
@@ -209,7 +209,7 @@ function Home() {
           </div>
         </div>
 
-     
+     <DesktopQueue></DesktopQueue>
       <div class="container5 p-5 my-5 border">
         <div className="d-flex justify-content-center ">
           <Carousel variant="dark">
@@ -227,7 +227,7 @@ function Home() {
         </div>
         <hr></hr>
         <div className="row">
-          <Card style={{ width: "20rem" }}>
+          <Card style={{ width: "18rem" }}>
             <Card.Img
               variant="top"
               src={c1}
@@ -245,7 +245,7 @@ function Home() {
                 </Link>
               </div>
           </Card>
-          <Card style={{ width: "20rem" }}>
+          <Card style={{ width: "18rem" }}>
             <Card.Img
               variant="top"
               src={c2}
@@ -265,7 +265,7 @@ function Home() {
                 </Link>
               </div>
           </Card>
-          <Card style={{ width: "20rem" }}>
+          <Card style={{ width: "18rem" }}>
             <Card.Img
               variant="top"
               src={c3}
@@ -285,7 +285,7 @@ function Home() {
                 </Link>
               </div>
           </Card>
-          <Card id="NewsfoodN" style={{ width: "20rem" }}>
+          <Card id="NewsfoodN" style={{ width: "18rem" }}>
             <Card.Img
               variant="top"
               src={c4}

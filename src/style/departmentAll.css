@@ -50,13 +50,13 @@ width: 100px;
 margin-left: 230px;
 }
 
-.button-card{
-  margin-top: 10px;
-  margin-left: 90px;
-  width: 100px;
+.button-card1{
+  margin-top: 20px;
+  width: 130px;
   height: 60px;
   
 }
+
 
 .row{
   line-height: 25px;
@@ -98,7 +98,7 @@ margin-left: 230px;
 
 .depart-card:hover {
   transform: scale(1.10);
-  background-color: #e0edf5; /* เปลี่ยนสีพื้นหลังของการ์ดเมื่อโฮเวอร์ */
+  background-color: #bbd8e9; /* เปลี่ยนสีพื้นหลังของการ์ดเมื่อโฮเวอร์ */
 }
 
 

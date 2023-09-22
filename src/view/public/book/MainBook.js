@@ -169,7 +169,7 @@ const MainBook = (props) => {
         text: "คุณแน่ใจหรือไม่ ว่าต้องการจองคิว ?",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "ตกลง",
+        confirmButtonText: "ยืนยัน",
         cancelButtonText: "ยกเลิก",
       });
 
