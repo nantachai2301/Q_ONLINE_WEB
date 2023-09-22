@@ -23,7 +23,7 @@ function ShowData({}) {
   const [pageData, setPageData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(100);
   const [searchUsers, setSearchUsers] = useState("");
   const [searchDate, setSearchDate] = useState(
     format(new Date(), "yyyy-MM-dd")
@@ -315,26 +315,7 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
     pageStyle: "@page { size: 6in 5in; }",
   });
 
-  const [calledQueueData, setCalledQueueData] = useState([]);
-  const [pendingQueueData, setPendingQueueData] = useState([]);
-  const [dataToSend, setDataToSend] = useState(null);
-  const handleCallQueue = (queue) => {
-    // สร้างรายการคิวที่ถูกเรียกในตัวแปรใหม่
-    const newCalledQueueData = [...calledQueueData, queue];
-    // ลบคิวที่ถูกเรียกออกจากรายการคิวที่รอในตัวแปรใหม่
-    const newPendingQueueData = pendingQueueData.filter(
-      (item) => item.queue_id !== queue.queue_id
-    );
 
-    // อัพเดตสถานะของข้อมูลใน state
-    setCalledQueueData(newCalledQueueData);
-    setPendingQueueData(newPendingQueueData);
-
-    setDataToSend(queue);
-
-    // ส่งไปยังหน้า CallQueue โดยไม่เปลี่ยนหน้า
-    navigate("/CallQueue");
-  };
 
   return (
     <div className="w-full">
@@ -377,7 +358,20 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
         </div>
       </div>
 
-      <div className="d-flex justify-content-end mb-2">
+      <div className="d-flex justify-content-between  mb-2">
+      <div className="w-pagesize">
+          <select
+            id="QpageSize"
+            class="form-select"
+            value={pageSize}
+            onChange={handlePageSizeChange}
+          >
+            <option value={100}>100</option>
+            <option value={50}>50</option>
+            <option value={30}>30</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
         <Select
           id="Manager_Search_Department" 
           name="department_name"
@@ -432,7 +426,7 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
             {pageData.length > 0 ? (
               pageData.map((item, index) => {
                 return (
-                  <tr key={item.queue_id}>
+                  <tr key={item.users_id}>
                     <td>{(page - 1) * 10 + index + 1}</td>
                     <td style={{ textAlign: 'center' }}>{item.queue_id}</td>
                     <td style={{ textAlign: 'center' }}>
@@ -539,21 +533,7 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
           </tbody>
         </table>
       </div>
-      <div className="d-flex justify-content-between">
-        <div>จำนวน {pageData.length} รายการ</div>
-        <div>
-          <div className="Pagination" id="Manager_mainBooking_pageSize">
-            <Pagination
-             
-              activePage={page}
-              itemsCountPerPage={10}
-              totalItemsCount={pageData.length}
-              pageRangeDisplayed={10}
-              onChange={handlePageChange}
-            />
-          </div>
-        </div>
-      </div>
+      
       <div className="d-flex justify-content-center">
         <div className="hidden">
           <div ref={componentsRef}>
