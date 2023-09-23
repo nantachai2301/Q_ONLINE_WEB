@@ -113,6 +113,7 @@ function ShowData() {
           <i className="fa-solid fa-magnifying-glass mx-1"></i>
           <label>ค้นหา</label>
           <input
+            style={{ cursor: 'pointer' }}
            id="SearchUser"
             name="first_name"
             type="text"
@@ -125,6 +126,7 @@ function ShowData() {
         <div className="col-3 col-lg-3 pt-4">
           {/* ส่วนของการเลือกค่า role_id */}
           <select
+            style={{ cursor: 'pointer' }}
             id="selectedUser"
             name="role"
             className="form-select"
@@ -138,6 +140,7 @@ function ShowData() {
         </div>
         <div className="col-3 col-lg-3 pt-4">
           <button
+            style={{ cursor: 'pointer' }}
            id="CencelUser"
             name="cancelUsers"
             type="button"

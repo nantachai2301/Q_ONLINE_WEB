@@ -1,80 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { Carousel } from "react-bootstrap";
-import pro1 from "../../image/pro1.png";
-import sl1 from "../../image/sl1.png";
-import sl2 from "../../image/sl2.png";
 import {
   faPerson,
   faCalendarDays,
   faUser,
   faChalkboardUser,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import "../../style/admin.css";
 import Chart from "chart.js/auto";
-import { Doughnut, Bar, Line } from "react-chartjs-2";
-import "../../style/homeauthorities.css";
-import { getQueue } from "../../service/Queue.Service";
+import { Doughnut, Bar, Line, Pie } from "react-chartjs-2";
+import { getDoctor } from "../../service/Doctor.Service";
+import { getPatient } from "../../service/Patient.Service";
 import { getDepartment } from "../../service/DepartmentType.Service";
-import moment from "moment/moment";
-import { FilterRounded } from "@mui/icons-material";
-/**หน้าจองคิวของเจ้าหน้าที่จองให้ผู้ป่วย */
-function HomeAuthorities() {
+import 'chartjs-plugin-datalabels'; 
+function HomePrivate() {
   const [counts, setCounts] = useState({});
   const [patients, setPatients] = useState({});
   const [department, setDepartment] = useState([]);
   const [department_id, setDepartment_id] = useState([]);
   const [data, setData] = useState([]);
-  const [FilteredData, setFilteredData] = useState([]);
   const [id, setId] = useState({});
-  const [queue, setQueue] = useState([]);
-  const [queue_id, setQueue_id] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [doctor_id, setdoctor_id] = useState([]);
   const [department_name, setDepartment_name] = useState([]);
   const [table, setTable] = useState([]);
   const [idCount, setIdCount] = useState(0);
-  const [CountQ, setCountQ] = useState(0);
-  const [count, setCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
-  const [counTspp, setCountsPP] = useState(0);
+  const [counTsp, setCountsP] = useState(0);
   const [departments, setDepartments] = useState([]);
-  const [patientsByDepartment, setPatientsByDepartment] = useState({});
-  const [queueByDepartment, setQueueByDepartment] = useState({});
-  const [usersAndDepartmentChartData, setUsersAndDepartmentChartData] =
+  const [doctorsByDepartment, setDoctorsByDepartment] = useState({});
+  const [usersAndDoctorsChartData, setUsersAndDoctorsChartData] =
     useState(null);
-  const [queue_status_id, setQueue_status_id] = useState({});
-  const [viewType, setViewType] = useState("daily"); // Initially set to 'daily'
-  const [dailyAppointments, setDailyAppointments] = useState([]);
-  const [weeklyAppointments, setWeeklyAppointments] = useState([]);
-  const [monthlyAppointments, setMonthlyAppointments] = useState([]);
-  const [filteredAppointments, setFilteredAppointments] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res1 = await getQueue();
+        const res1 = await getDoctor();
+        //         let workingDoctorsCount = 0;
+        //         let onLeaveDoctorsCount = 0;
+        // // นับจำนวนแพทย์ที่ใช้งานและพักงานตามสถานะ
+        // doctors.forEach((doctor) => {
+        //   if (doctor.doctor_status === 'ใช้งาน') {
+        //     workingDoctorsCount++;
+        //   } else if (doctor.doctor_status === 'พักงาน') {
+        //     onLeaveDoctorsCount++;
+        //   }
+        // });
+        // console.log('จำนวนแพทย์ที่ใช้งาน:', workingDoctorsCount);
+        //     console.log('จำนวนแพทย์ที่พักงาน:', onLeaveDoctorsCount);
 
         const res2 = await getDepartment();
 
-        console.log(res1?.data?.filter(el=>el.queue_status_id===5));
+        console.log(res1);
         console.log(res2);
-        setFilteredData(res1.data)
-        setCountQ(res1.data?.length)
-        setQueue(res1.data);
+        setDoctors(res1.data);
         setId(res1.data);
         setCounts(res1.data);
         setData(res1.data);
-        setQueue_id(res1.data);
+        setdoctor_id(res1.data);
         setDepartment_id(res1.data);
         setTable(res1.data);
         setDepartments(res2.data);
         setDepartment_name(res2.data);
         setDepartment(res2.data);
-         setQueue_status_id(res1.data);
 
-        const resQueue = await getQueue();
-        SummaryQueueByDepartment(resQueue.data)
-        
+        const resDoctors = await getDoctor();
+        const doctorsData = resDoctors.data;
+
+        const doctorsCountByDepartment = doctorsData.reduce((acc, doctor) => {
+          const department_id = doctor.department_id;
+          acc[department_id] = (acc[department_id] || 0) + 1;
+          return acc;
+        }, {});
+
+        setDoctorsByDepartment(doctorsCountByDepartment);
       } catch (error) {
         console.log(error);
       }
@@ -82,289 +81,198 @@ function HomeAuthorities() {
 
     fetchData();
   }, []);
-  function SummaryQueueByDepartment(queueData) {
-    const queueCountByDepartment = queueData.reduce((acc, queue) => {
-      const department_id = queue.department_id;
-      acc[department_id] = (acc[department_id] || 0) + 1;
-      return acc;
-    }, {});
-
-    setQueueByDepartment(queueCountByDepartment);
-  }
+  const count = counts.length;
 
   const countD = department.length;
-
   useEffect(() => {
-    getQueue()
+    getPatient()
       .then((res) => {
-        const queueData = res.data;
-        console.log(queueData?.filter(el=>el.queue_status_id===4));
-        const countUsersWithRole1 = queueData.filter(
-          (user) => user.queue_status_id === 1
-        ).length;
-        setCountsPP(countUsersWithRole1);
+        console.log(res);
+        const patientsData = res.data;
 
-        const countUsersWithRole2 = queueData.filter(
-          (user) => user.queue_status_id === 2
+        const countUsersWithRole1 = patientsData.filter(
+          (user) => user.role_id === 1
         ).length;
-        setUserCount(countUsersWithRole2);
+        setIdCount(countUsersWithRole1);
 
-        const countUsersWithRole4 = queueData.filter(
-          (user) => user.queue_status_id === 4
+        const countUsersWithRole2 = patientsData.filter(
+          (user) => user.role_id === 2
         ).length;
-        setCount(countUsersWithRole4);
-        setQueue(res.data);
+        setCountsP(countUsersWithRole2);
+
+        const countUsersWithRole0 = patientsData.filter(
+          (user) => user.role_id === 0
+        ).length;
+        setUserCount(countUsersWithRole0);
+        setPatients(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
-  const chartData = {
-    labels: [
-      "จำนวนผู้ใช้ที่ยืนยันสถานะ",
-      "จำนวนผู้ใช้ที่รับการรักษาแล้ว",
-      "จำนวนผู้ใช้ที่ยังไม่ยืนยันสถานะ",
-    ],
-    datasets: [
-      {
-        label: "จำนวน",
-        data: [userCount, counTspp, count],
-        backgroundColor: ["#5bfc83", "#b1fcc4", "#05a82e"],
-      },
-    ],
-  };
-
   useEffect(() => {
-    // สร้างข้อมูลสำหรับแผนภูมิแท่ง
-    const usersAndDepartmentData = {
+    const usersAndDoctorsData = {
       labels: departments.map((department) => department.department_name),
       datasets: [
         {
-          label: "จำนวนผู้ป่วยที่จองคิว",
+          label: "จำนวนแพทย์ทั้งหมด",
           data: departments.map(
-            (department) => queueByDepartment[department.department_id] || 0
+            (department) => doctorsByDepartment[department.department_id] || 0
           ),
-          backgroundColor: "#5bfc83",
-          // backgroundColor:"#b1fcc4",
-          borderColor: "#05a82e",
-          borderWidth: 1,
+          backgroundColor: "#98EDC3",
+        },
+        {
+          label: "จำนวนแพทย์ที่ใช้งาน",
+          data: departments.map((department) =>
+            doctors
+              .filter(
+                (doctor) =>
+                  doctor.department_id === department.department_id &&
+                  doctor.doctor_status === "ใช้งาน"
+              )
+              .length.toFixed(0)
+          ),
+          backgroundColor: "rgba(255, 99, 132, 0.5)",
+        },
+        {
+          label: "จำนวนแพทย์ที่พักงาน",
+          data: departments.map((department) =>
+            doctors
+              .filter(
+                (doctor) =>
+                  doctor.department_id === department.department_id &&
+                  doctor.doctor_status === "พักงาน"
+              )
+              .length.toFixed(0)
+          ),
+          backgroundColor: "rgba(53, 162, 235, 0.5)",
         },
       ],
     };
-    setUsersAndDepartmentChartData(usersAndDepartmentData);
-  }, [departments, queueByDepartment]);
 
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-    },
-  };
+    setUsersAndDoctorsChartData(usersAndDoctorsData);
+  }, [departments, doctorsByDepartment]);
 
   const barChartOptions = {
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        suggestedMax: 10,
+      },
+    },
     responsive: true,
-    maintainAspectRatio: true, // ค่าเริ่มต้นคือ true
     plugins: {
       legend: {
         position: "top",
       },
+      title: {
+        display: true,
+        text: "แผนภูมิแท่งแสดงจำนวนแพทย์แต่ละแผนก",
+      },
     },
-  };
-
-  const handleToggleView = async (selectedViewType) => {
-    setViewType(selectedViewType);
-
-    switch (selectedViewType) {
-      case "daily":
-        filterDataForDailyView();
-        break;
-
-      case "weekly":
-        filterDataForWeeklyView();
-        break;
-
-      case "monthly":
-        filterDataForMonthlyView();
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  const filterDataForDailyView = () => {
-    const today = moment()
-
-    const filteredData = data.filter((appointment) => {
-      const appointmentDate = moment(appointment.queue_date,"DD-MM-YYYY");
-      
-      return (
-        appointmentDate.date() === today.date() &&
-        appointmentDate.month() === today.month() &&
-        appointmentDate.year() === today.year()
-      );
-    });
-    updateDashboardData(filteredData);
-    setDailyAppointments(filteredData);
-  };
-
-  const filterDataForWeeklyView = () => {
-    const today = new Date();
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay());
-
-    const endOfWeek = new Date(today);
-    endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
-
-    const filteredData = data.filter((appointment) => {
-      const appointmentDate = moment(appointment.queue_date,"DD-MM-YYYY");
-      return appointmentDate >= startOfWeek && appointmentDate <= endOfWeek;
-    });
-    updateDashboardData(filteredData);
-    setWeeklyAppointments(filteredData);
-  };
-
-  const filterDataForMonthlyView = () => {
-    const today = new Date();
-    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-    const filteredData = data.filter((appointment) => {
-      const appointmentDate = moment(appointment.queue_date,"DD-MM-YYYY");
-      return appointmentDate >= startOfMonth && appointmentDate <= endOfMonth;
-    });
-    updateDashboardData(filteredData);
-    setMonthlyAppointments(filteredData);
-  };
-
-  const updateDashboardData = (filteredData) => {
-    const countQ = filteredData.length;
-    const confirmedCount = filteredData.filter(
-      (item) => item.queue_status_id === 2
-    ).length;
-    const awaitingConfirmationCount = filteredData.filter(
-      (item) => item.queue_status_id === 3
-    ).length;
-    const treatedCount = filteredData.filter(
-      (item) => item.queue_status_id === 4
-    ).length;
-    console.log(countQ);
-    setFilteredData(filteredData)
-    SummaryQueueByDepartment(filteredData)
-    setCountQ(countQ)
-    setCountsPP(confirmedCount);
-    setUserCount(awaitingConfirmationCount);
-    setCount(treatedCount);
-
-    // Update the appointments based on the filtered data
-    setFilteredAppointments(filteredData);
   };
 
   return (
-    <div className="w-full">
-      <h2 className="title-content">เจ้าหน้าที่</h2>
-      <div className="button-container" style={{ justifyContent: "flex-end" }}>
-        <button
-          className={`button ${viewType === "daily" ? "active" : ""}`}
-          onClick={() => handleToggleView("daily")}
-        >
-          แสดงรายวัน
-        </button>
-        <button
-          className={`button ${viewType === "weekly" ? "active" : ""}`}
-          onClick={() => handleToggleView("weekly")}
-        >
-          แสดงรายสัปดาห์
-        </button>
-        <button
-          className={`button ${viewType === "monthly" ? "active" : ""}`}
-          onClick={() => handleToggleView("monthly")}
-        >
-          แสดงรายเดือน
-        </button>
-      </div>
-      
+    <div className="w-fulls">
+      <h2 className="title-content">ผู้ดูแลระบบ</h2>
       <div className="container22">
-        <div className="box">
-          <div className="icon-box1">
-            <h3 className="D">
+        <div className="boxs">
+          <div className="icon-box">
+            <h3 className="d">
+              <i class="fa-solid fa-user-doctor"></i>
+            </h3>
+            <center>
+              <h2 className="C">{count}</h2>
+              <p className="C">จำนวนแพทย์</p>
+            </center>
+          </div>
+        </div>
+        <div className="boxs">
+          <div className="icon-box">
+            <h3 className="d">
               <i class="fa-solid fa-hospital"></i>
             </h3>
             <center>
-              <h2 className="g">{countD}</h2>
-              <p className="g">จำนวนแผนก</p>
+              <h2 className="C">{countD}</h2>
+              <p className="C">จำนวนแผนก</p>
             </center>
           </div>
         </div>
 
-        <div className="box">
-          <div className="icon-box1">
-            <h3 className="D">
-              <i class="fa-solid fa-users"></i>
+        <div className="boxs">
+          <div className="icon-box">
+            <h3 className="d">
+              <i class="fa-solid fa-user-injured"></i>
             </h3>
             <center>
-              <h2 className="g">{CountQ}</h2>
-              <p className="g">จำนวนผู้ป่วยที่จองคิว</p>
+              <h2 className="C">{idCount}</h2>
+              <p className="C">จำนวนผู้ใช้มีบัญชีในระบบ</p>
             </center>
           </div>
         </div>
-
-        <div className="box">
-          <div className="icon-box1">
-            <h3 className="D">
-              <i class="fa-solid fa-user-plus"></i>
+        <div className="boxs">
+          <div className="icon-box">
+            <h3 className="d">
+              <i class="fa-solid fa-person-walking"></i>
             </h3>
             <center>
-              <h2 className="g">{userCount}</h2>
-              <p className="g">ยืนยันสถานะแล้ว</p>
+              <h2 className="C">{userCount}</h2>
+              <p className="C">จำนวนผู้ใช้ไม่มีบัญชีในระบบ</p>
             </center>
           </div>
         </div>
-
-        <div className="box">
-          <div className="icon-box1">
-            <h3 className="D">
-              <i class="fa-solid fa-user-clock"></i>
+        <div className="boxs">
+          <div className="icon-box">
+            <h3 className="d">
+              <i class="fa-solid fa-user-nurse"></i>
             </h3>
             <center>
-              <h2 className="g">{counTspp}</h2>
-              <p className="g">รอยืนยันสถานะ</p>
+              <h2 className="C">{counTsp}</h2>
+              <p className="C">จำนวนเจ้าหน้าที่</p>
             </center>
           </div>
         </div>
 
-        <div className="box">
-          <div className="icon-box1">
-            <h3 className="D">
-              <i class="fa-solid fa-user-check"></i>
-            </h3>
-            <center>
-              <h2 className="g">{count}</h2>
-              <p className="g">รับการรักษาแล้ว</p>
-            </center>
-          </div>
-        </div>
-
-        <div className="col-md-3 p-3">
-          <div className="ta11d">
-            <table className="Tables">
-              <thead className="thead">
+        <div className=" col-md-3">
+          <h6>จำนวนแพทย์ในแต่ละแผนก</h6>
+          <div className="t1d">
+            <table class="tables">
+              <thead class="theads">
                 <tr>
                   <th>#</th>
                   <th>แผนก</th>
-                  <th>จำนวนผู้ป่วย</th>
+                  <th>จำนวนแพทย์</th>
+                  <th>ใช้งาน</th>
+                  <th>พักงาน</th>
                 </tr>
               </thead>
-
               <tbody>
                 {departments.map((department, index) => (
                   <tr key={department.department_id}>
                     <td>{index + 1}</td>
                     <td>{department.department_name}</td>
-                    <td>{queueByDepartment[department.department_id] || 0}</td>
+                    <td>
+                      {doctorsByDepartment[department.department_id] || 0}
+                    </td>
+                    <td>
+                      {
+                        doctors.filter(
+                          (doctor) =>
+                            doctor.department_id === department.department_id &&
+                            doctor.doctor_status === "ใช้งาน"
+                        ).length
+                      }
+                    </td>
+                    <td>
+                      {
+                        doctors.filter(
+                          (doctor) =>
+                            doctor.department_id === department.department_id &&
+                            doctor.doctor_status === "พักงาน"
+                        ).length
+                      }
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -372,54 +280,22 @@ function HomeAuthorities() {
           </div>
         </div>
 
-        <div className="col-md-5 p-3">
+        <div className="col-md-8">
+          <h6>แผนภูมิแท่งแสดงจำนวนแพทย์แต่ละแผนก</h6>
           <div className="bar-chart">
-            {usersAndDepartmentChartData && (
+            {usersAndDoctorsChartData && (
               <Bar
-                data={usersAndDepartmentChartData}
+                data={usersAndDoctorsChartData}
                 options={barChartOptions}
+                id="yourBarChartId"
+                width={500}
+                height={400}
               />
             )}
-          </div>
-        </div>
-
-        <div className="col-md-2 p-3">
-          <div className="chart-container1">
-            <Doughnut data={chartData} options={chartOptions} />
-          </div>
-        </div>
-        <br></br>
-        <div className="container-left">
-          <div className="card">
-            <h3>คำอธิบาย</h3>
-            <ul>
-              <li>
-                box : ข้างบนนั้นใช้แสดงจำนวน แผนกทั้งหมด คิวที่ผูป่วยจองทั้งหมด
-                จำนวนผู้ป่วยที่ยืนยันสถานะและก็ที่ยังไม่ยืนยันสถานะ
-                และจำนวนที่ได้รับการรักษาไปแล้ว.
-              </li>
-              <li>
-                Table :
-                ใช้แสดงแผนกและจำนวนผู้ป่วยที่จองคิวเพื่อเข้ารักษาในแผนกนั้นๆ
-                แบบเป็นตาราง.
-              </li>
-              <li>
-                ในส่วนของกราฟแท่ง (Bar Chart):
-                เพื่อใช้แสดงจำนวนของผู้ป่วยที่จองคิว
-                เมื่อแตะตรงแท่งกราฟนั้นๆก็จะแสดงจำนวนผู้ป่วยที่จองคิวไว้กับแผนกนั้นๆ.
-              </li>
-              <li>
-                (Doughnut Chart) : แสดงเปอร์เซ้นความมากน้อยของ
-                ผู้ป่วยที่ยืนยันสถานะแล้ว
-                กับที่ยังไม่ยืนยันและจำนวนที่ข้ารับการรักษา
-                โดยจะเห็นจำนวนที่แน่ชัดเมื่อเลือกที่แถบสีนั้นๆ.
-              </li>
-            </ul>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default HomeAuthorities;
+export default HomePrivate;

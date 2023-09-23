@@ -75,6 +75,7 @@ function NavBar(props) {
                 variant="body1"
                 component="div"
                 color="#000"
+                style={{   fontWeight: 'bold'}}
               >
                 ยินดีต้อนรับคุณ : {userData?.data.fullname}
               </Typography>
@@ -82,29 +83,9 @@ function NavBar(props) {
       <Navbar.Collapse id="responsive-navbar-nav">
      
           <Nav className="me-auto px-3">
-            {Menu.map((item) => (
-              <Fragment key={item.id}>
-                {item.type === 1 ? (
-                  <Link to={item.pathname} className={`nav-link menu-mobile ${checkActive(location, item.pathname) ? 'nav-active' : ''}`} key={item.id}>
-                    {item.title}
-                  </Link>
-                ) : item.type === 2 && item.subMenu ? (
-                  <Fragment>
-                    <NavDropdown title={item.title} id="collasible-nav-dropdown">
-                      {item.subMenu.map((sub) => (
-                        <div className="px-2" key={sub.id}>
-                          <Link to={sub.pathname} className={`nav-link text-black ${checkActive(location, sub.pathname) ? 'nav-active' : ''}`}>
-                            {sub.title}
-                          </Link>
-                        </div>
-                      ))}
-                    </NavDropdown>
-                  </Fragment>
-                ) : null}
-              </Fragment>
-            ))}
+          
           </Nav>
-          <Nav className="pl-3">
+          <Nav className=" pl-3">
           <Link to="#" className="nav-link text-black" onClick={handleLogout}>
               ออกจากระบบ
             </Link>

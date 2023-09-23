@@ -9,7 +9,9 @@ const Schema = Yup.object().shape({
     .required("กรุณากรอก เลขบัตรประชาชน"),
 
   birthday: Yup.string().required("กรุณากรอก วันเดือนปีเกิด"),
-
+  phoneNumber: Yup.string()
+  .required("กรุณากรอก เบอร์โทรศัพท์")
+  .matches(/^\d{10}$/, "กรุณากรอกเบอร์โทรศัพท์ 10 หลัก"),
   gender: Yup.string().required("กรุณาเลือก เพศ"),
 
   password: Yup.string()

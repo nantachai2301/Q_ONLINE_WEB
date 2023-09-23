@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import axios from "axios";
+import { Formik, ErrorMessage } from "formik";
+
+import Schema from "./Validation";
+
 import Swal from "sweetalert2";
 import { TextField, Button, Container, Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
@@ -40,8 +43,15 @@ const LoginModal = (props) => {
   const [show, setShow] = useState(false); // เพิ่มตัวแปรเพื่อควบคุมสถานะการแสดง Modal
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const navigate = useNavigate();
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   const handleLogin = async () => {
+    setIsButtonClicked(true);
+    if (password.length < 6 || id_card.length < 13) {
+      // แจ้งเตือนให้กรอกข้อมูลครบถ้วน
+      Swal.fire("กรุณากรอกข้อมูลให้ครบถ้วน", "", "warning");
+      return;
+    }
+
     try {
       const response = await Sendlogin(id_card, password);
 
@@ -70,21 +80,26 @@ const LoginModal = (props) => {
           window.location.href = "/";
         });
       } else {
-        Swal.fire("รหัสผ่านไม่ถูกต้อง", "รหัสของคุณไม่ถูกต้อง", "error");
+        Swal.fire(
+          "เข้าสู่ระบบไม่สำเร็จ",
+          "รหัสผ่านหรือรหัสบัตรประชาชนไม่ถูกต้อง",
+          "error"
+        );
       }
     } catch (error) {
       console.error(error);
       if (error.response) {
-        Swal.fire("รหัสผ่านไม่ถูกต้อง", "รหัสของคุณไม่ถูกต้อง", "error");
+        Swal.fire(
+          "เข้าสู่ระบบไม่สำเร็จ",
+          "รหัสผ่านหรือรหัสบัตรประชาชนไม่ถูกต้อง",
+          "error"
+        );
       } else {
         Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถเข้าสู่ระบบได้ในขณะนี้", "error");
       }
     }
-    // Handle login logic here
-    console.log(id_card, password);
     props.setShow(false);
   };
-
   const handleForgetPassword = () => {
     setShowResetPasswordModal(true);
   };
@@ -110,44 +125,71 @@ const LoginModal = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>รหัสประจำตัวประชาชน</Form.Label>
-              <Form.Control
-              id="LoginID_Card"
-                type="text"
-                placeholder="Enter ID number"
-                value={id_card}
-                onChange={(e) => setIdCard(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>รหัสผ่าน</Form.Label>
-              <Form.Control
-              id="LoginPassword"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <a
-              href="#"
-              onClick={handleForgetPassword}
-              style={{
-                float: "left",
-                color: "blue",
-                textDecoration: "underline",
-                fontSize: "17px",
-              }}
-            >
-              ลืมรหัสผ่าน
-            </a>
-          </Form>
+          <Formik
+            enableReinitialize={true}
+            validationSchema={Schema}
+            initialValues={{
+              id_card:"",
+              password:"",
+            }}
+            onSubmit={handleLogin}
+          >
+            {({  errors, touched }) => (
+              <Form>
+                <Form.Group className="mb-3">
+                  <Form.Label>รหัสประจำตัวประชาชน</Form.Label>
+                  <Form.Control
+                    id="LoginID_Card"
+                    type="text"
+                    name="id_card"
+                    placeholder="Enter ID number"
+                    value={id_card}
+                    className={`form-control ${(!id_card && isButtonClicked) ? "is-invalid" : ""}`}
+                    onChange={(e) => setIdCard(e.target.value)}
+                  />
+                  <ErrorMessage
+                  
+                    name="id_card"
+                    component="div"
+                    className="error-message"
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>รหัสผ่าน</Form.Label>
+                  <Form.Control
+                    id="LoginPassword"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={password}
+                    className={`form-control ${(!password && isButtonClicked) ? "is-invalid" : ""}`}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="error-message"
+                  />
+                </Form.Group>
+                <a
+                  href="#"
+                  onClick={handleForgetPassword}
+                  style={{
+                    float: "left",
+                    color: "blue",
+                    textDecoration: "underline",
+                    fontSize: "17px",
+                  }}
+                >
+                  ลืมรหัสผ่าน
+                </a>
+              </Form>
+            )}
+          </Formik>
         </Modal.Body>
         <Modal.Footer>
           <button
-          id="Login"
+            id="Login"
             type="button"
             className="btn btn-primary"
             onClick={handleLogin}
@@ -171,10 +213,14 @@ const LoginModal = (props) => {
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control  id="Resetemail" type="email" placeholder="Enter email" />
+              <Form.Control
+                id="Resetemail"
+                type="email"
+                placeholder="Enter email"
+              />
             </Form.Group>
             <button
-            id="ResetPassword"
+              id="ResetPassword"
               type="button"
               className="btn btn-primary"
               onClick={handleResetPassword}

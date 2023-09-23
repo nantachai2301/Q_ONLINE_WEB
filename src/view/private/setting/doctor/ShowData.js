@@ -202,6 +202,7 @@ function ShowData() {
         <div className="col-5 col-md-2 col-lg-3">
           <label>ค้นหา</label>
           <input
+            style={{ cursor: 'pointer' }}
             id="SearchDoc"
             name="doctor_first_name"
             type="text"
@@ -214,6 +215,7 @@ function ShowData() {
         <div className="col-12 col-md-3 col-lg-3">
           <label>ค้นหาแผนก</label>
           <Select
+            style={{ cursor: 'pointer' }}
            id="SearchDepartDoc"
            name="department_name"
             value={selectedDepartment}
@@ -227,6 +229,7 @@ function ShowData() {
         <div className="col-12 col-md-3 col-lg-2">
           <label>สถานะการใช้งาน </label>
           <Select
+            style={{ cursor: 'pointer' }}
           id="SearchselectStatus"
             name="doctor_status"
             value={selectStatus}

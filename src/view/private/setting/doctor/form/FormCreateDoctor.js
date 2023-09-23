@@ -1,9 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import Doctor from "../../../../../image/doctor.jpg";
-import axios from "axios";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import { createDoctor } from "../../../../../service/Doctor.Service";
@@ -67,6 +65,22 @@ function FormCreateDoctor() {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    if (
+      !doctor.prefix_name ||
+      !doctor.doctor_first_name ||
+      !doctor.doctor_last_name ||
+      !doctor.doctor_status ||
+      !doctor.department_id
+    ) {
+      // ตรวจสอบว่ามีข้อมูลที่ไม่ถูกกรอกให้ครบหรือไม่
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณากรอกข้อมูลให้ครบ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง",
+        showConfirmButton: true,
+      });
+      return;
+    }
 
     try {
       const result = await Swal.fire({
@@ -186,13 +200,12 @@ function FormCreateDoctor() {
                       <select
                         id="doctor_createprefix_name"
                         name="prefix_name"
-                        className={`form-select ${touched.prefix_name && errors.prefix_name
-                            ? "is-invalid"
-                            : ""
-                          }`}
+                        className={`form-control ${
+                          touched.prefix_name && errors.prefix_name && "is-invalid"
+                        }`}
                         onChange={handleChange}
                       >
-                        <option selected>เลือกคำนำหน้าชื่อ</option>
+                       <option value="" selected>เลือกคำนำหน้าชื่อ</option>
                         <option value="ศาสตราจารย์นายแพทย์">
                           ศาสตราจารย์นายแพทย์
                         </option>
@@ -219,17 +232,16 @@ function FormCreateDoctor() {
                         placeholder="กรอกชื่อ"
                         type="text"
                         value={doctor.doctor_first_name}
-                        className={`form-control ${touched.doctor_first_name &&
-                          errors.doctor_first_name &&
-                          "is-invalid"
-                          }`}
+                        className={`form-control ${
+                          touched.doctor_first_name && errors.doctor_first_name && "is-invalid"
+                        }`}
                         onChange={handleChange}
                       />
-                      <ErrorMessage
-                        name="doctor_first_name"
-                        component="div"
-                        className="error-message"
-                      />
+                     <ErrorMessage
+                            name="doctor_first_name"
+                            component="div"
+                            className="error-message"
+                          />
                     </div>
                     <div class="col-10 col-md-6">
                       <label>นามสกุล</label>
@@ -262,7 +274,7 @@ function FormCreateDoctor() {
                         aria-label="Default select example"
                         onChange={handleChange}
                       >
-                        <option selected>เลือกสถานะการใช้งาน</option>
+                        <option value="" selected>เลือกสถานะการใช้งาน</option>
                         <option value="พักงาน">พักงาน</option>
                         <option value="ใช้งาน">ใช้งาน</option>
                       </select>
@@ -286,7 +298,7 @@ function FormCreateDoctor() {
                         value={doctor.department_id} // Set the value to doctor.department_id
                         onChange={handleChange}
                       >
-                        <option selected>เลือกแผนก</option>
+                       <option value="" selected>เลือกแผนก</option>
                         <option value="1">ทันตกรรม</option>
                         <option value="2">กุมารเวชกรรม</option>
                         <option value="3">ทั่วไป</option>

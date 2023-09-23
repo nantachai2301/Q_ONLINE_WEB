@@ -24,7 +24,7 @@ function FormAuthorities() {
   });
 
   const location = useLocation();
-
+  const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log("Input Value:", value); // ตรวจสอบค่าใน console
@@ -44,6 +44,53 @@ function FormAuthorities() {
       ...prevUsers,
       [name]: value,
     }));
+    if (isDataValid()) {
+      setSubmitDisabled(false);
+    } else {
+      setSubmitDisabled(true);
+    }
+  };
+  const handleSubmit = () => {
+    
+    if (isDataValid()) {
+    
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "กรุณากรอกข้อมูลให้ครบ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง",
+        showConfirmButton: true,
+      });
+    }
+  };
+  const isDataValid = () => {
+    const {
+      id_card,
+      prefix_name,
+      first_name,
+      last_name,
+      gender,
+      birthday,
+     phoneNumber,
+
+     
+    } = users;
+
+    if (
+      !id_card !== 13 ||
+      !prefix_name ||
+      !first_name ||
+      !last_name ||
+      !gender ||
+      !birthday ||
+      !phoneNumber.length !== 10 
+     
+      
+    ) {
+      return false;
+    }
+
+    return true;
   };
   const handleClick = async () => {
     const usersWithAge = { ...users, age: age };
@@ -66,10 +113,34 @@ function FormAuthorities() {
         setAge(calculatedAge);
       }
   
-      if (result.isConfirmed) {
+     
       const dataToSend = { ...users, age: age, users_id: users.users_id };
+      if (result.isConfirmed) {
+        const requiredFields = [
+          "id_card",
+          "prefix_name",
+          "first_name",
+          "last_name",
+          "gender",
+          "birthday",
+          
+          "phoneNumber",
+       
+        ];
   
+        const missingFields = requiredFields.filter(fieldName => !dataToSend[fieldName]);
+  
+        if (missingFields.length > 0) {
+          Swal.fire({
+            icon: "warning",
+            title: "กรุณากรอกข้อมูลให้ครบ",
+            text: `กรุณากรอกข้อมูลให้ครบ`,
+            showConfirmButton: true,
+          });
+          return; 
+        }
         try {
+         
           await createAuthorities(
             dataToSend.users_id,
             dataToSend.id_card,
@@ -93,11 +164,11 @@ function FormAuthorities() {
          
           navigate("/admin/authorities");
         } catch (error) {
-          console.error(error);
+          console.log(error);
           Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาด",
-            text: `เกิดข้อผิดพลาดในการเพิ่มข้อมูลหน้าที่: ${error.message}`, // แสดงข้อความข้อผิดพลาดจาก API หรือการร้องขอ POST
+            icon: "warning",
+            title: "มีบัญชีผู้ใช้อยู่แล้ว",
+            text: "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว",
             showConfirmButton: true,
           });
         }
@@ -112,7 +183,7 @@ function FormAuthorities() {
       });
     }
   };
-  
+ 
   const ageToShow = age !== null ? age : "";
   return (
     <Fragment>
@@ -191,7 +262,7 @@ function FormAuthorities() {
                             }`}
                             onChange={handleChange}
                           >
-                            <option selected>เลือกคำนำหน้าชื่อ</option>
+                             <option value="" selected>เลือกคำนำหน้าชื่อ</option>
                             <option value="นาย">นาย</option>
                             <option value="นางสาว">นางสาว</option>
                             <option value="นาง">นาง</option>
@@ -259,7 +330,7 @@ function FormAuthorities() {
                             }`}
                             onChange={handleChange}
                           >
-                            <option selected>เลือกเพศ</option>
+                             <option value="" selected>เลือกเพศ</option>
                             <option value="ชาย">ชาย</option>
                             <option value="หญิง">หญิง</option>
                           </select>
@@ -368,7 +439,7 @@ function FormAuthorities() {
                             id="Authors_submit"
                           type="submit"
                           className="btn btn-success mx-1"
-                          onClick={handleClick}
+                          onClick={handleSubmit} 
                         >
                           บันทึก
                         </button>

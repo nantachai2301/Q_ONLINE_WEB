@@ -106,9 +106,9 @@ function ShowData({}) {
       });
 
       const sortedData = dataToDisplay.sort((a, b) => {
-        const dateA = new Date(a.queue_id);
-        const dateB = new Date(b.queue_id);
-        return dateA - dateB;
+        const dateA = new Date(`01-01-1970 ${a.create_at.split(" ")[1]}`);
+               const dateB = new Date(`01-01-1970 ${b.create_at.split(" ")[1]}`);
+        return dateB - dateA;
       });
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
       const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
@@ -424,7 +424,15 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
           </thead>
           <tbody>
             {pageData.length > 0 ? (
-              pageData.map((item, index) => {
+             pageData
+             .slice()
+             .sort((a, b) => {
+               // แยกวันที่และเวลาจากสตริง "dd-MM-yyyy HH:mm:ss"
+               const dateA = new Date(`01-01-1970 ${a.create_at.split(" ")[1]}`);
+               const dateB = new Date(`01-01-1970 ${b.create_at.split(" ")[1]}`);
+               
+               return dateA - dateB;
+             }).map((item, index) => {
                 return (
                   <tr key={item.users_id}>
                     <td>{(page - 1) * 10 + index + 1}</td>
@@ -463,19 +471,32 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
                         <i className="fa-solid fa-print text-white"></i>
                       </button>
                     </td>
-
                     <td style={{ textAlign: 'center' }}>
-                      <button
-                        id="buttoCancels"
-                        type="button"
-                        className="btn btn-danger"
-                        onClick={() => {
-                          handleCancelClick(item.users_id, item.queue_date);
-                        }}
-                      >
-                        <i className="fa-solid fa-trash-can"></i>
-                      </button>
-                    </td>
+  {item.queue_status_id === 2 || item.queue_status_id === 3 ? (
+    <button
+      id="buttoCancels"
+      type="button"
+      className="btn btn-danger"
+      disabled
+    >
+      <i className="fa-solid fa-trash-can"></i>
+    </button>
+  ) : (
+    <button
+      id="buttoCancels"
+      type="button"
+      className="btn btn-danger"
+      onClick={() => {
+        handleCancelClick(item.users_id, item.queue_date);
+      }}
+    >
+      <i className="fa-solid fa-trash-can"></i>
+    </button>
+  )}
+</td>
+
+
+
                     <td style={{ textAlign: 'center' }}>
                       <button
                         id="buttonStatus"

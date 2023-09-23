@@ -56,7 +56,7 @@ function Router(props) {
   return (
     <Fragment>
       <BrowserRouter>
-        {role === 1 ? (
+      {role === 1 ||role === 0 ? (
           <PublicLayout>
             <Routes>
               <Route path="/" element={<Home />} />

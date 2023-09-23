@@ -4,7 +4,7 @@ import pro1 from "../../image/pro1.png";
 import sl1 from "../../image/sl1.png";
 import sl2 from "../../image/sl2.png";
 import {
-   faPerson,
+  faPerson,
   faCalendarDays,
   faUser,
   faChalkboardUser,
@@ -15,17 +15,18 @@ import axios from "axios";
 import Chart from "chart.js/auto";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
 import "../../style/homeauthorities.css";
-import { getQueue} from "../../service/Queue.Service";
-import { getDepartment} from "../../service/DepartmentType.Service";
+import { getQueue } from "../../service/Queue.Service";
+import { getDepartment } from "../../service/DepartmentType.Service";
+import moment from "moment/moment";
+import { FilterRounded } from "@mui/icons-material";
 /**หน้าจองคิวของเจ้าหน้าที่จองให้ผู้ป่วย */
 function HomeAuthorities() {
-
-
   const [counts, setCounts] = useState({});
   const [patients, setPatients] = useState({});
   const [department, setDepartment] = useState([]);
   const [department_id, setDepartment_id] = useState([]);
   const [data, setData] = useState([]);
+  const [FilteredData, setFilteredData] = useState([]);
   const [id, setId] = useState({});
   const [queue, setQueue] = useState([]);
   const [queue_id, setQueue_id] = useState([]);
@@ -39,8 +40,14 @@ function HomeAuthorities() {
   const [departments, setDepartments] = useState([]);
   const [patientsByDepartment, setPatientsByDepartment] = useState({});
   const [queueByDepartment, setQueueByDepartment] = useState({});
-  const [usersAndDepartmentChartData, setUsersAndDepartmentChartData] = useState(null);
+  const [usersAndDepartmentChartData, setUsersAndDepartmentChartData] =
+    useState(null);
   const [queue_status_id, setQueue_status_id] = useState({});
+  const [viewType, setViewType] = useState("daily"); // Initially set to 'daily'
+  const [dailyAppointments, setDailyAppointments] = useState([]);
+  const [weeklyAppointments, setWeeklyAppointments] = useState([]);
+  const [monthlyAppointments, setMonthlyAppointments] = useState([]);
+  const [filteredAppointments, setFilteredAppointments] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,11 +56,10 @@ function HomeAuthorities() {
 
         const res2 = await getDepartment();
 
-
-        console.log(res1);
+        console.log(res1?.data?.filter(el=>el.queue_status_id===5));
         console.log(res2);
-
-
+        setFilteredData(res1.data)
+        setCountQ(res1.data?.length)
         setQueue(res1.data);
         setId(res1.data);
         setCounts(res1.data);
@@ -64,19 +70,11 @@ function HomeAuthorities() {
         setDepartments(res2.data);
         setDepartment_name(res2.data);
         setDepartment(res2.data);
-        setQueue_status_id(res1.data);
+         setQueue_status_id(res1.data);
 
-        const resQueue = await getQueue(
-        );
-        const queueData = resQueue.data;
-
-        const queueCountByDepartment = queueData.reduce((acc, queue) => {
-          const department_id = queue.department_id;
-          acc[department_id] = (acc[department_id] || 0) + 1;
-          return acc;
-        }, {});
-
-        setQueueByDepartment(queueCountByDepartment);
+        const resQueue = await getQueue();
+        SummaryQueueByDepartment(resQueue.data)
+        
       } catch (error) {
         console.log(error);
       }
@@ -84,16 +82,23 @@ function HomeAuthorities() {
 
     fetchData();
   }, []);
-  const countQ = counts.length;
+  function SummaryQueueByDepartment(queueData) {
+    const queueCountByDepartment = queueData.reduce((acc, queue) => {
+      const department_id = queue.department_id;
+      acc[department_id] = (acc[department_id] || 0) + 1;
+      return acc;
+    }, {});
+
+    setQueueByDepartment(queueCountByDepartment);
+  }
 
   const countD = department.length;
 
   useEffect(() => {
     getQueue()
       .then((res) => {
-        console.log(res);
         const queueData = res.data;
-
+        console.log(queueData?.filter(el=>el.queue_status_id===4));
         const countUsersWithRole1 = queueData.filter(
           (user) => user.queue_status_id === 1
         ).length;
@@ -116,7 +121,11 @@ function HomeAuthorities() {
   }, []);
 
   const chartData = {
-    labels: ["จำนวนผู้ใช้ที่ยืนยันสถานะ", "จำนวนผู้ใช้ที่รับการรักษาแล้ว", "จำนวนผู้ใช้ที่ยังไม่ยืนยันสถานะ"],
+    labels: [
+      "จำนวนผู้ใช้ที่ยืนยันสถานะ",
+      "จำนวนผู้ใช้ที่รับการรักษาแล้ว",
+      "จำนวนผู้ใช้ที่ยังไม่ยืนยันสถานะ",
+    ],
     datasets: [
       {
         label: "จำนวน",
@@ -165,12 +174,132 @@ function HomeAuthorities() {
     },
   };
 
+  const handleToggleView = async (selectedViewType) => {
+    setViewType(selectedViewType);
+
+    switch (selectedViewType) {
+      case "daily":
+        filterDataForDailyView();
+        break;
+
+      case "weekly":
+        filterDataForWeeklyView();
+        break;
+
+      case "monthly":
+        filterDataForMonthlyView();
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const filterDataForDailyView = () => {
+    const today = moment()
+
+    const filteredData = data.filter((appointment) => {
+      const appointmentDate = moment(appointment.queue_date,"DD-MM-YYYY");
+      
+      return (
+        appointmentDate.date() === today.date() &&
+        appointmentDate.month() === today.month() &&
+        appointmentDate.year() === today.year()
+      );
+    });
+    updateDashboardData(filteredData);
+    setDailyAppointments(filteredData);
+  };
+
+  const filterDataForWeeklyView = () => {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+
+    const endOfWeek = new Date(today);
+    endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
+
+    const filteredData = data.filter((appointment) => {
+      const appointmentDate = moment(appointment.queue_date,"DD-MM-YYYY");
+      return appointmentDate >= startOfWeek && appointmentDate <= endOfWeek;
+    });
+    updateDashboardData(filteredData);
+    setWeeklyAppointments(filteredData);
+  };
+
+  const filterDataForMonthlyView = () => {
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    const filteredData = data.filter((appointment) => {
+      const appointmentDate = moment(appointment.queue_date,"DD-MM-YYYY");
+      return appointmentDate >= startOfMonth && appointmentDate <= endOfMonth;
+    });
+    updateDashboardData(filteredData);
+    setMonthlyAppointments(filteredData);
+  };
+
+  const updateDashboardData = (filteredData) => {
+    const countQ = filteredData.length;
+    const confirmedCount = filteredData.filter(
+      (item) => item.queue_status_id === 2
+    ).length;
+    const awaitingConfirmationCount = filteredData.filter(
+      (item) => item.queue_status_id === 3
+    ).length;
+    const treatedCount = filteredData.filter(
+      (item) => item.queue_status_id === 4
+    ).length;
+    console.log(countQ);
+    setFilteredData(filteredData)
+    SummaryQueueByDepartment(filteredData)
+    setCountQ(countQ)
+    setCountsPP(confirmedCount);
+    setUserCount(awaitingConfirmationCount);
+    setCount(treatedCount);
+
+    // Update the appointments based on the filtered data
+    setFilteredAppointments(filteredData);
+  };
+
   return (
     <div className="w-full">
-
       <h2 className="title-content">เจ้าหน้าที่</h2>
-      <br></br>
-      <div className="container22">
+      <div className="button-container d-flex justify-content-end" >
+        <button
+        style={{
+          
+          marginRight: "5px",
+        }}
+          className={`button ${viewType === "daily" ? "active" : ""}`}
+          onClick={() => handleToggleView("daily")}
+        >
+          แสดงรายวัน
+        </button>
+        <button
+          style={{
+          
+            marginRight: "5px",
+          }}
+          className={`button ${viewType === "weekly" ? "active" : ""}`}
+          onClick={() => handleToggleView("weekly")}
+        >
+          แสดงรายสัปดาห์
+        </button>
+        <button
+          style={{
+          
+            marginRight: "5px",
+          }}
+          className={`button ${viewType === "monthly" ? "active" : ""}`}
+          onClick={() => handleToggleView("monthly")}
+        >
+          แสดงรายเดือน
+        </button>
+      </div>
+      
+       <div className="container22">
         <div className="box">
           <div className="icon-box1">
             <h3 className="D">
@@ -189,12 +318,11 @@ function HomeAuthorities() {
               <i class="fa-solid fa-users"></i>
             </h3>
             <center>
-              <h2 className="g">{countQ}</h2>
+              <h2 className="g">{CountQ}</h2>
               <p className="g">จำนวนผู้ป่วยที่จองคิว</p>
             </center>
           </div>
         </div>
-
 
         <div className="box">
           <div className="icon-box1">
@@ -248,9 +376,7 @@ function HomeAuthorities() {
                   <tr key={department.department_id}>
                     <td>{index + 1}</td>
                     <td>{department.department_name}</td>
-                    <td>
-                      {queueByDepartment[department.department_id] || 0}
-                    </td>
+                    <td>{queueByDepartment[department.department_id] || 0}</td>
                   </tr>
                 ))}
               </tbody>
@@ -261,7 +387,10 @@ function HomeAuthorities() {
         <div className="col-md-5 p-3">
           <div className="bar-chart">
             {usersAndDepartmentChartData && (
-              <Bar data={usersAndDepartmentChartData} options={barChartOptions} />
+              <Bar
+                data={usersAndDepartmentChartData}
+                options={barChartOptions}
+              />
             )}
           </div>
         </div>
@@ -271,23 +400,37 @@ function HomeAuthorities() {
             <Doughnut data={chartData} options={chartOptions} />
           </div>
         </div>
-        <br>
-        </br>
+        <br></br>
         <div className="container-left">
           <div className="card">
             <h3>คำอธิบาย</h3>
             <ul>
-              <li>box : ข้างบนนั้นใช้แสดงจำนวน แผนกทั้งหมด คิวที่ผูป่วยจองทั้งหมด จำนวนผู้ป่วยที่ยืนยันสถานะและก็ที่ยังไม่ยืนยันสถานะ และจำนวนที่ได้รับการรักษาไปแล้ว.</li>
-              <li>Table : ใช้แสดงแผนกและจำนวนผู้ป่วยที่จองคิวเพื่อเข้ารักษาในแผนกนั้นๆ แบบเป็นตาราง.</li>
-              <li>ในส่วนของกราฟแท่ง (Bar Chart): เพื่อใช้แสดงจำนวนของผู้ป่วยที่จองคิว เมื่อแตะตรงแท่งกราฟนั้นๆก็จะแสดงจำนวนผู้ป่วยที่จองคิวไว้กับแผนกนั้นๆ.</li>
-              <li>(Doughnut Chart) : แสดงเปอร์เซ้นความมากน้อยของ ผู้ป่วยที่ยืนยันสถานะแล้ว กับที่ยังไม่ยืนยันและจำนวนที่ข้ารับการรักษา โดยจะเห็นจำนวนที่แน่ชัดเมื่อเลือกที่แถบสีนั้นๆ.</li>
+              <li>
+                box : ข้างบนนั้นใช้แสดงจำนวน แผนกทั้งหมด คิวที่ผูป่วยจองทั้งหมด
+                จำนวนผู้ป่วยที่ยืนยันสถานะและก็ที่ยังไม่ยืนยันสถานะ
+                และจำนวนที่ได้รับการรักษาไปแล้ว.
+              </li>
+              <li>
+                Table :
+                ใช้แสดงแผนกและจำนวนผู้ป่วยที่จองคิวเพื่อเข้ารักษาในแผนกนั้นๆ
+                แบบเป็นตาราง.
+              </li>
+              <li>
+                ในส่วนของกราฟแท่ง (Bar Chart):
+                เพื่อใช้แสดงจำนวนของผู้ป่วยที่จองคิว
+                เมื่อแตะตรงแท่งกราฟนั้นๆก็จะแสดงจำนวนผู้ป่วยที่จองคิวไว้กับแผนกนั้นๆ.
+              </li>
+              <li>
+                (Doughnut Chart) : แสดงเปอร์เซ้นความมากน้อยของ
+                ผู้ป่วยที่ยืนยันสถานะแล้ว
+                กับที่ยังไม่ยืนยันและจำนวนที่ข้ารับการรักษา
+                โดยจะเห็นจำนวนที่แน่ชัดเมื่อเลือกที่แถบสีนั้นๆ.
+              </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-
-
   );
 }
 
