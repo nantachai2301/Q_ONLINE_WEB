@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://encouraging-peplum-newt.cyclic.cloud/apis/";
+const API_URL = "https://blue-sparkling-gosling.cyclic.cloud/apis/";
 
 const getDepartment = async () => {
   return await axios.get(API_URL + "departments",);
