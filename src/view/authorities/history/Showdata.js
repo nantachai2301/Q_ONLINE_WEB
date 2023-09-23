@@ -153,7 +153,7 @@ function ShowData({}) {
         <div className="col-5 col-md-2 col-lg-3">
           <label>ค้นหา</label>
           <input
-            id="Manager_MainSearch"
+            id="H_MainSearch"
             name="firstName"
             type="text"
             className="form-control"
@@ -166,7 +166,7 @@ function ShowData({}) {
           <i className="fa-solid fa-calendar mx-1"></i>
           <label>ค้นหาตามวันที่</label>
           <input
-            id="Manager_MainSearch_date"
+            id="H_MainSearch_date"
             name="queue_date"
             type="date"
             className="form-control"
@@ -178,7 +178,7 @@ function ShowData({}) {
          
           <label>ค้นหาแผนก</label>
           <Select
-          id="Manager_Search_Department"
+          id="H_Search_Department"
           name="department_name"
           value={selectedDepartment}
           options={getDepartmentOptions()}
@@ -189,7 +189,7 @@ function ShowData({}) {
         </div>
         <div className="col-3 col-lg-3 pt-4">
           <button
-            id="Manager_MainSearch_button"
+            id="H_MainSearch_button"
             name="cancel"
             type="button"
             className="btn btn-secondary ml-2"
@@ -204,7 +204,7 @@ function ShowData({}) {
       <div className="d-flex justify-content-between  mb-2">
         <div className="w-pagesize">
           <select
-            id="QpageSize"
+            id="HpageSize"
             class="form-select"
             value={pageSize}
             onChange={handlePageSizeChange}
