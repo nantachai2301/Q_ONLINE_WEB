@@ -301,7 +301,7 @@ function Register() {
                             }`}
                             onChange={handleChange}
                           >
-                            <option selected>เลือกคำนำหน้าชื่อ</option>
+                             <option value="" selected>เลือกคำนำหน้าชื่อ</option>
                             <option value="นาย">นาย</option>
                             <option value="นางสาว">นางสาว</option>
                             <option value="นาง">นาง</option>
@@ -368,7 +368,7 @@ function Register() {
                             }`}
                             onChange={handleChange}
                           >
-                            <option selected>เลือกเพศ</option>
+                            <option value="" selected>เลือกเพศ</option>
                             <option value="ชาย">ชาย</option>
                             <option value="หญิง">หญิง</option>
                           </select>
