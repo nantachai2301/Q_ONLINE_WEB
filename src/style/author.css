@@ -196,3 +196,31 @@
   align-items: center;
   
 }
+
+.button-container1 {
+  display: flex;
+  gap: 10px;
+}
+
+.button-container {
+  text-align: right;  /* จัดเนื้อหาไปทางขวา */
+}
+
+.button-container button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #99E2B4;
+  color: white;
+  cursor: pointer;
+  float: right; /* จัดตำแหน่งทางขวา */
+  border-radius: 5px; /* ทำให้มุมโค้ง */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+}
+
+.button-container button:hover {
+  background-color: #99E2B4;
+}
+
+.button-container button.active {
+  background-color: #12c465;
+}

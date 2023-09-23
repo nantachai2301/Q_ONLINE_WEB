@@ -2,7 +2,7 @@
 .queue-page {
     text-align: center;
     padding: 20px;
-    min-height: 100vh;
+    min-height: 150vh;
   }
   
 
@@ -18,7 +18,7 @@ h2 {
 }
 
 .department-button {
-  background-color: #007bff;
+  background-color: #d6943e;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -28,7 +28,7 @@ h2 {
 }
 
 .department-button.selected {
-  background-color: #0056b3;
+  background-color: #2f843e;
 }
 
 .department-card555 {

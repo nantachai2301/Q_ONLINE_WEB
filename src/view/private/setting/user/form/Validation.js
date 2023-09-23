@@ -4,16 +4,26 @@ const Schema = Yup.object().shape({
   prefix_name: Yup.string().required("กรุณาเลือก คำนำหน้า"),
   first_name: Yup.string().required("กรุณากรอก ชื่อ"),
   last_name: Yup.string().required("กรุณากรอก นามสกุล"),
-  id_card: Yup.string().min(13, "กรุณากรอกให้ครบ 13 หลัก").required("กรุณากรอก เลขบัตรประชาชน"),
+  
+  id_card: Yup.string()
+  .required("กรุณากรอก เลขบัตรประชาชน")
+  .matches(/^\d{13}$/, "กรุณากรอกเลขบัตรประชาชน 13 หลัก")
+  .test(
+    "is-13-characters",
+    "กรุณากรอกเลขบัตรประชาชน 13 หลัก",
+    (value) => value.length === 13
+  ),
   password: Yup.string()
   .min(6, "กรุณากรอกให้ครบ 6 หลัก")
   .required("กรุณากรอก รหัสผ่าน"),
 
   phoneNumber: Yup.string()
-  .required("กรุณากรอก เบอร์โทรผู้ติดต่อ")
-  .matches(/^[0-9]{10}$/, "Invalid phone number"),
+    .required("กรุณากรอก เบอร์โทรศัพท์")
+    .matches(/^\d{10}$/, "กรุณากรอกเบอร์โทรศัพท์ 10 หลัก"),
+
+
   birthday: Yup.string().required("กรุณากรอก วันเดือนปีเกิด"),
-  phoneNumber: Yup.string().min(10, "กรุณากรอกให้ครบ 10 หลัก").required("กรุณากรอก เบอร์โทรศัพท์"),
+
   gender: Yup.string().required("กรุณาเลือก เพศ"),
   address: Yup.string().required("กรุณากรอก ที่อยู่"),
   weight: Yup.string().required("กรุณากรอก น้ำหนัก"),
@@ -27,10 +37,11 @@ const Schema = Yup.object().shape({
   contact_last_name: Yup.string().required("กรุณากรอก นามสกุลผู้ติดต่อ"),
 
   contact_phoneNumber: Yup.string()
-  .required("กรุณากรอก เบอร์โทรผู้ติดต่อ")
-  .matches(/^[0-9]{10}$/, "Invalid phone number"),
-
-
+    .required("กรุณากรอก เบอร์โทรผู้ติดต่อ")
+    .matches(/^[0-9]{10}$/, "Invalid phone number"),
+  password: Yup.string()
+    .min(6, "กรุณากรอกให้ครบ 6 หลัก")
+    .required("กรุณากรอก รหัสผ่าน"),
 });
 
 export default Schema;

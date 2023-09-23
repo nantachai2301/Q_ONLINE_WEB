@@ -4,7 +4,7 @@ const Schema = Yup.object().shape({
   prefix_name: Yup.string().required("กรุณาเลือก คำนำหน้า"),
   first_name: Yup.string().required("กรุณากรอก ชื่อ"),
   last_name: Yup.string().required("กรุณากรอก นามสกุล"),
-
+  
   id_card: Yup.string()
   .required("กรุณากรอก เลขบัตรประชาชน")
   .matches(/^\d{13}$/, "กรุณากรอกเลขบัตรประชาชน 13 หลัก")

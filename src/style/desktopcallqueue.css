@@ -55,9 +55,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #93B9DD;
+    background-color: #628a72;
     width: 380px;
-    border: 1px solid #ccc;
+   
     border-radius: 10px;
     height: 270px;
   }

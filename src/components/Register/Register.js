@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import LoginModal from "../../components/Login/LoginModal";
 import { createPatient } from "../../service/Patient.Service";
 function Register() {
-const [age, setAge] = useState(0);
+  const [age, setAge] = useState(0);
   const [users, setUsers] = useState({
     users_id: null,
     id_card: "",
@@ -66,9 +66,7 @@ const [age, setAge] = useState(0);
     }
   };
   const handleSubmit = () => {
-    
     if (isDataValid()) {
-    
     } else {
       Swal.fire({
         icon: "warning",
@@ -90,6 +88,17 @@ const [age, setAge] = useState(0);
       weight,
       height,
       phoneNumber,
+
+      contact_first_name,
+      contact_last_name,
+      contact_relation_id,
+      contact_phoneNumber,
+      address,
+      subdistrict,
+      district,
+      province,
+      postcode,
+      subdistrictsId,
     } = users;
 
     if (
@@ -101,14 +110,22 @@ const [age, setAge] = useState(0);
       !birthday ||
       !weight ||
       !height ||
-      !phoneNumber ||
+      !contact_first_name ||
+      !contact_last_name ||
+      !contact_relation_id ||
+      !contact_phoneNumber ||
+      !address ||
+      !subdistrict ||
+      !district ||
+      !province ||
+      !postcode ||
+      !subdistrictsId ||
+      !phoneNumber.length !== 10 ||
       id_card.length !== 13 ||
-      phoneNumber.length !== 10 
+      phoneNumber.length !== 10
     ) {
       return false;
     }
-
-   
 
     return true;
   };
@@ -133,7 +150,7 @@ const [age, setAge] = useState(0);
         setAge(calculatedAge);
       }
       const dataToSend = { ...users, age: age, users_id: users.users_id };
-  
+
       if (result.isConfirmed) {
         const requiredFields = [
           "id_card",
@@ -145,11 +162,12 @@ const [age, setAge] = useState(0);
           "weight",
           "height",
           "phoneNumber",
-       
         ];
-  
-        const missingFields = requiredFields.filter(fieldName => !dataToSend[fieldName]);
-  
+
+        const missingFields = requiredFields.filter(
+          (fieldName) => !dataToSend[fieldName]
+        );
+
         if (missingFields.length > 0) {
           Swal.fire({
             icon: "warning",
@@ -159,9 +177,9 @@ const [age, setAge] = useState(0);
           });
           return; // Exit the function, don't proceed with registration
         }
-  
+
         try {
-          await createPatient( 
+          await createPatient(
             dataToSend.users_id,
             dataToSend.id_card,
             dataToSend.password,
@@ -186,9 +204,9 @@ const [age, setAge] = useState(0);
             dataToSend.postcode,
             dataToSend.subdistrictsId,
             dataToSend.img,
-            dataToSend.role_id,
+            dataToSend.role_id
           );
-  
+
           Swal.fire({
             icon: "success",
             title: "สมัครสมาชิกสำเร็จ",
@@ -196,7 +214,7 @@ const [age, setAge] = useState(0);
             showConfirmButton: false,
             timer: 1500,
           });
-  
+
           setTimeout(() => {
             navigate("/"); // Redirect to the homepage after registration
           }, 1500);
@@ -220,7 +238,7 @@ const [age, setAge] = useState(0);
       });
     }
   };
-  
+
   const ageToShow = age !== null ? age : "";
   return (
     <Fragment>
@@ -274,7 +292,7 @@ const [age, setAge] = useState(0);
                             :{" "}
                           </label>{" "}
                           <select
-                           id="user_prefix_name"
+                            id="user_prefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -343,7 +361,7 @@ const [age, setAge] = useState(0);
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
-                          id="user_gender"
+                            id="user_gender"
                             name="gender"
                             className={`form-select ${
                               touched.gender && errors.gender && "is-invalid"
@@ -366,7 +384,7 @@ const [age, setAge] = useState(0);
                           <label className="red">*</label>
 
                           <input
-                           id="user_birthday"
+                            id="user_birthday"
                             name="birthday"
                             type="date"
                             value={users.birthday}
@@ -395,13 +413,12 @@ const [age, setAge] = useState(0);
                             style={{ backgroundColor: "lightgray" }}
                             className="form-control"
                           />
-                        
                         </div>
                         <div className="col-3">
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
-                           id="user_weight"
+                            id="user_weight"
                             type="text"
                             name="weight"
                             placeholder="น้ำหนัก"
@@ -441,7 +458,7 @@ const [age, setAge] = useState(0);
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
-                          id="user_phoneNumbe"
+                            id="user_phoneNumbe"
                             type="phone"
                             name="phoneNumber"
                             placeholder="เบอร์โทร"
@@ -461,9 +478,9 @@ const [age, setAge] = useState(0);
                         </div>
                         <div className="col-4 px-1 mt-2">
                           <label>โรคประจำตัว</label>
-                          <label className="red">*</label>
+
                           <input
-                           id="user_congenital_disease"
+                            id="user_congenital_disease"
                             type="text"
                             placeholder="โรคประจำตัว"
                             name="congenital_disease"
@@ -474,9 +491,9 @@ const [age, setAge] = useState(0);
                         </div>
                         <div className="col-4 px-1 mt-2">
                           <label>ประวัติแพ้ยา</label>
-                          <label className="red">*</label>
+
                           <input
-                           id="user_drugallergy"
+                            id="user_drugallergy"
                             type="text"
                             placeholder="ประวัติแพ้ยา"
                             name="drugallergy"
@@ -495,7 +512,7 @@ const [age, setAge] = useState(0);
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
-                               id="user_password"
+                                id="user_password"
                                 type="password"
                                 placeholder="รหัสผ่าน"
                                 name="password"
@@ -580,7 +597,7 @@ const [age, setAge] = useState(0);
                               }`}
                               onChange={handleChange}
                             >
-                              <option selected>เลือกความสัมพันธ์</option>
+                             <option value="" selected> เลือกความสัมพันธ์</option>
                               <option value="บิดา">บิดา</option>
                               <option value="มารดา">มารดา</option>
                               <option value="สามี">สามี</option>
@@ -595,28 +612,27 @@ const [age, setAge] = useState(0);
                             />
                           </div>
                           <div className="col-3">
-                          <label>เบอร์โทร</label>
-                          <label className="red">*</label>
-                          <input
-                           id="user_contact_phoneNumber"
-                            type="phone"
-                            name="contact_phoneNumber"
-                            placeholder="เบอร์โทร"
-                            value={users.contact_phoneNumber}
-                            className={`form-control ${
-                              touched.contact_phoneNumber &&
-                              errors.contact_phoneNumber  &&
-                              "is-invalid"
-                            }`}
-                            onChange={handleChange}
-                          />
-                          <ErrorMessage
-                            name="phoneNumber"
-                            component="div"
-                            className="error-message"
-                          />
-                        </div>
-                          
+                            <label>เบอร์โทร</label>
+                            <label className="red">*</label>
+                            <input
+                              id="user_contact_phoneNumber"
+                              type="phone"
+                              name="contact_phoneNumber"
+                              placeholder="เบอร์โทร"
+                              value={users.contact_phoneNumber}
+                              className={`form-control ${
+                                touched.contact_phoneNumber &&
+                                errors.contact_phoneNumber &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="phoneNumber"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
                         </div>
                       </div>
                       <br></br>
@@ -627,7 +643,7 @@ const [age, setAge] = useState(0);
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
-                            id="user_address"
+                              id="user_address"
                               type="text"
                               name="address"
                               placeholder="บ้านเลขที่"
@@ -651,7 +667,7 @@ const [age, setAge] = useState(0);
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
-                             id="user_province"
+                              id="user_province"
                               name="province"
                               className={`form-control ${
                                 touched.province &&
@@ -762,7 +778,7 @@ const [age, setAge] = useState(0);
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
-                             id="user_district"
+                              id="user_district"
                               placeholder="อำเภอ"
                               type="text"
                               name="district"
@@ -784,8 +800,8 @@ const [age, setAge] = useState(0);
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
-                             id="user_subdistrict"
-                             type="text"
+                              id="user_subdistrict"
+                              type="text"
                               name="subdistrict"
                               placeholder="ตำบล"
                               value={users.subdistrict}
@@ -806,7 +822,7 @@ const [age, setAge] = useState(0);
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
-                            id="user_postcode"
+                              id="user_postcode"
                               placeholder="รหัสไปรษณีย์"
                               name="postcode"
                               value={users.postcode}
@@ -827,15 +843,15 @@ const [age, setAge] = useState(0);
                       </div>
                       <div className="d-flex justify-content-center mt-3">
                         <button
-                        id="buttonRegisterUser"
+                          id="buttonRegisterUser"
                           type="submit"
                           className="btn btn-success mx-1"
-                          onClick={handleSubmit} 
-                         >
+                          onClick={handleSubmit}
+                        >
                           บันทึก
                         </button>
                         <button
-                        id="buttonCancelUser"
+                          id="buttonCancelUser"
                           className="btn btn-danger mx-1"
                           onClick={() => navigate("/")}
                         >

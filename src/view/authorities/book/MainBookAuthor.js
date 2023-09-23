@@ -90,6 +90,17 @@ function MainBookAuthor() {
       weight,
       height,
       phoneNumber,
+
+      contact_first_name,
+      contact_last_name,
+      contact_relation_id,
+      contact_phoneNumber,
+      address,
+      subdistrict,
+      district,
+      province,
+      postcode,
+      subdistrictsId,
     } = users;
 
     if (
@@ -101,9 +112,19 @@ function MainBookAuthor() {
       !birthday ||
       !weight ||
       !height ||
-      !phoneNumber ||
+      !contact_first_name ||
+      !contact_last_name ||
+      !contact_relation_id ||
+      !contact_phoneNumber ||
+      !address ||
+      !subdistrict ||
+      !district ||
+      !province ||
+      !postcode ||
+      !subdistrictsId ||
+      !phoneNumber.length !== 10 ||
       id_card.length !== 13 ||
-      phoneNumber.length !== 10 
+      phoneNumber.length !== 10
     ) {
       return false;
     }
@@ -611,7 +632,7 @@ function MainBookAuthor() {
                               }`}
                               onChange={handleChange}
                             >
-                              <option selected>เลือกความสัมพันธ์</option>
+                              <option value="" selected> เลือกความสัมพันธ์</option>
                               <option value="บิดา">บิดา</option>
                               <option value="มารดา">มารดา</option>
                               <option value="สามี">สามี</option>
@@ -635,7 +656,7 @@ function MainBookAuthor() {
                               placeholder="เบอร์โทร"
                               name="contact_phoneNumber"
                               value={users.contact_phoneNumber}
-                              className={`form-select ${
+                              className={`form-control ${
                                 touched.contact_phoneNumber &&
                                 errors.contact_phoneNumber &&
                                 "is-invalid"

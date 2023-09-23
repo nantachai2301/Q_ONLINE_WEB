@@ -9,7 +9,7 @@ import { getQueue } from "../../../service/Queue.Service";
 import { getDepartment } from "../../../service/DepartmentType.Service";
 import doctor from "../../../image/doctor.png"
 import doctor2 from "../../../image/doctor2.png"
-
+import bg1 from "../../../image/bg1.png"
 import { th } from 'date-fns/locale';
 
 function DesktopQueue({ departmentData, selectedDate }) {
@@ -60,23 +60,25 @@ function DesktopQueue({ departmentData, selectedDate }) {
     fetchQueueInfo();
     const intervalId = setInterval(() => {
       fetchQueueInfo();
-    }, 5000);
+    }, 1000);
 
     return () => clearInterval(intervalId);
   }, [selectedDate, departmentData]);
 
+
   return (
     <div className="w-full">
       <div className="container23">
-        <div className="col-md-5">
+        
+        <div className="col-8"> 
           {bookedQueues > 0 && (
-            <div className="call-queue" >
+            <div className="call-queue"style={{marginLeft:"500px"}} >
               <h2>กำลังเรียกคิว</h2>
-              <table className="table" >
+              <table className="table">
                 <thead>
                   <tr style={{ background: "#3a72aa", color: "white" }}>
-                    <th style={{ textAlign: 'center', fontSize: "25px" }}>คิวที่</th>
-                    <th style={{ textAlign: 'center', fontSize: "25px" }}>รหัสผู้ใช้</th>
+                    <th style={{ textAlign: 'center', fontSize: "22px", }}>คิวที่</th>
+                    <th style={{ textAlign: 'center', fontSize: "22px" }}>รหัสผู้ใช้</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -84,8 +86,8 @@ function DesktopQueue({ departmentData, selectedDate }) {
                     .filter((queue) => queue.queue_status_name === 'กำลังเข้ารับการรักษา')
                     .map((queue, index) => (
                       <tr key={index}>
-                        <td style={{ textAlign: 'center', fontSize: '25px', fontWeight: 'bold' }}>{queue.queue_id}</td>
-                        <td style={{ textAlign: 'center', fontSize: '25px', fontWeight: 'bold' }}>{queue.users_id}</td>
+                        <td style={{ textAlign: 'center', fontSize: '50px', fontWeight: 'bold',width: "100px", height: "80px" ,}}>{queue.queue_id}</td>
+                        <td style={{ textAlign: 'center', fontSize: '50px', fontWeight: 'bold',width: "100px", height: "80px" }}>{queue.users_id}</td>
 
                       </tr>
                     ))}
@@ -98,52 +100,14 @@ function DesktopQueue({ departmentData, selectedDate }) {
 
               </table>
             </div>
-          )}
-        </div>
-
-
-        <div className="col-md-3">
-          {bookedQueues > 0 && (
-            <div className="wait-queue" >
-              <h2>รอรับบริการเรียกคิว</h2>
-              <table className="table">
-                <thead>
-                  <tr style={{ background: "#78A3D4", color: "white" }}>
-                    <th style={{ textAlign: 'center' }}>คิวที่</th>
-                    <th style={{ textAlign: 'center' }}>รหัสผู้ใช้</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredQueues
-                    .filter((queue) => queue.queue_status_name === 'ยืนยัน')
-                    .map((queue, index) => (
-                      <tr key={index}>
-                        <td style={{ textAlign: 'center' }}>{queue.queue_id}</td>
-                        <td style={{ textAlign: 'center' }}>{queue.users_id}</td>
-                      </tr>
-                    ))}
-                  {filteredQueues.every((queue) => queue.queue_status_name !== 'ยืนยัน') && (
-                    <tr>
-                      <td colSpan="2" style={{ textAlign: 'center' }}>ยังไม่มีคิว</td>
-                    </tr>
-                  )}
-                </tbody>
-
-
-              </table>
-            </div>
-          )}
-
+          )}    
           {bookedQueues === 0 && (
-            <div className="no-queue-message" >
+            <div className="no-queue-message" style={{marginLeft:"450px"}} >
               <p style={{ fontSize: "30px" }}>{noQueueMessage}</p>
               <img src={doctor2} alt="Cute Box" className="doctor" style={{ width: '300px', height: '300px' }} />
-
             </div>
-          )}
-
+          )}  
         </div>
-
         <div className="col-md-3" style={{ marginTop: '-30px' }}>
           <div className="callqueue-card2">
             <div className="doctor-row">
@@ -181,6 +145,41 @@ function DesktopQueue({ departmentData, selectedDate }) {
               </div>
             </div>
           </div>
+        </div>
+        <div className="col-8">
+          {bookedQueues > 0 && (
+            <div className="wait-queue" style={{marginLeft:"500px"}}>
+              <h4>รอรับบริการเรียกคิว</h4>
+              <table className="table" >
+                <thead>
+                  <tr style={{ background: "#78A3D4", color: "white" }}>
+                    <th style={{ textAlign: 'center' ,width:"20px"}}>คิวที่</th>
+                    <th style={{ textAlign: 'center' ,width:"20px"}}>รหัสผู้ใช้</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredQueues
+                    .filter((queue) => queue.queue_status_name === 'ยืนยัน')
+                    .map((queue, index) => (
+                      <tr key={index}>
+                        <td style={{ textAlign: 'center' }}>{queue.queue_id}</td>
+                        <td style={{ textAlign: 'center' }}>{queue.users_id}</td>
+                      </tr>
+                    ))}
+                  {filteredQueues.every((queue) => queue.queue_status_name !== 'ยืนยัน') && (
+                    <tr>
+                      <td colSpan="2" style={{ textAlign: 'center' }}>ยังไม่มีคิว</td>
+                    </tr>
+                  )}
+                </tbody>
+
+
+              </table>
+            </div>
+          )}
+
+        
+
         </div>
       </div>
     </div>
@@ -243,13 +242,20 @@ function QueuePage() {
       console.log("ไม่สามารถเลือกวันที่ย้อนหลังได้");
     }
   };
-
-
+  const sectionStyle = {
+    backgroundImage: `url(${bg1})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    
+    zIndex: '999',  // ตั้งค่า zIndex เพื่อให้รูปอยู่ด้านหลังสุด
+  };
+  
   return (
-    <div className="queue-page">
+    <div className="queue-page"  style={sectionStyle}>
       <div className="row justify-content-start mb-2" style={{ padding: '10px' }}>
       
-        <span className="text" style={{ color: "red", fontSize: "23px", textAlign: "left"  }}>
+        <span className="text" style={{ color: "white", fontSize: "23px", textAlign: "left"  }}>
         <i class="fa-solid fa-hand-point-down fa-flip-horizontal" style={{color:"#5678bd",marginRight:"20px",fontSize:"35px"}}></i>* กรุณาเลือกแผนกที่ต้องการดูคิว
         </span>
         <div className="department-list" style={{ marginTop: "10px" }}>
@@ -277,6 +283,7 @@ function QueuePage() {
           <span className="text" style={{ color: "black", fontSize: "20px" }}>
             วันที่: {formattedDate}
           </span>
+          
         </div>
       </div>
 

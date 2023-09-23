@@ -90,6 +90,17 @@ function FormCreateUser() {
       weight,
       height,
       phoneNumber,
+
+      contact_first_name,
+      contact_last_name,
+      contact_relation_id,
+      contact_phoneNumber,
+      address,
+      subdistrict,
+      district,
+      province,
+      postcode,
+      subdistrictsId,
     } = users;
 
     if (
@@ -101,14 +112,22 @@ function FormCreateUser() {
       !birthday ||
       !weight ||
       !height ||
-      !phoneNumber ||
+      !contact_first_name ||
+      !contact_last_name ||
+      !contact_relation_id ||
+      !contact_phoneNumber ||
+      !address ||
+      !subdistrict ||
+      !district ||
+      !province ||
+      !postcode ||
+      !subdistrictsId ||
+      !phoneNumber.length !== 10 ||
       id_card.length !== 13 ||
-      phoneNumber.length !== 10 
+      phoneNumber.length !== 10
     ) {
       return false;
     }
-
-   
 
     return true;
   };
@@ -468,7 +487,7 @@ function FormCreateUser() {
                         </div>
                         <div className="col-4 px-1 mt-2">
                           <label>โรคประจำตัว</label>
-                          <label className="red">*</label>
+                     
                           <input
                             id="Addcongenital_disease"
                             type="text"
@@ -481,7 +500,7 @@ function FormCreateUser() {
                         </div>
                         <div className="col-4 px-1 mt-2">
                           <label>ประวัติแพ้ยา</label>
-                          <label className="red">*</label>
+                        
                           <input
                            id="Adddrugallergy"
                             type="text"
@@ -586,7 +605,7 @@ function FormCreateUser() {
                               }`}
                               onChange={handleChange}
                             >
-                              <option selected>เลือกความสัมพันธ์</option>
+                              <option value="" selected> เลือกความสัมพันธ์</option>
                               <option value="บิดา">บิดา</option>
                               <option value="มารดา">มารดา</option>
                               <option value="สามี">สามี</option>
