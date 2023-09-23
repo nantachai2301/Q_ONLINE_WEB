@@ -35,7 +35,9 @@ function ShowData({}) {
     const response = await getQueue();
     const filteredData = response.data.filter(
       (item) =>
-      item.queue_status_id === 1 || item.queue_status_id === 2 || item.queue_status_id === 3
+        item.queue_status_id === 1 ||
+        item.queue_status_id === 2 ||
+        item.queue_status_id === 3
     );
     setDataQ(filteredData);
   };
@@ -105,11 +107,8 @@ function ShowData({}) {
         return nameFilter && departmentFilter;
       });
 
-      const sortedData = dataToDisplay.sort((a, b) => {
-        const dateA = new Date(`01-01-1970 ${a.create_at.split(" ")[1]}`);
-               const dateB = new Date(`01-01-1970 ${b.create_at.split(" ")[1]}`);
-        return dateB - dateA;
-      });
+      const sortedData = dataToDisplay.slice().sort((a, b) => a.queue_id - b.queue_id);
+
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
       const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
       const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
@@ -210,14 +209,19 @@ function ShowData({}) {
     })();
 
     console.log(formattedQueueDate);
-     const newStatus =
-  currentStatus === "ยืนยัน"
-    ? "กำลังเข้ารับการรักษา"
-    : currentStatus === "กำลังเข้ารับการรักษา"
-    ? "รับการรักษาแล้ว"
-    : "ยืนยัน";
+    const newStatus =
+      currentStatus === "ยืนยัน"
+        ? "กำลังเข้ารับการรักษา"
+        : currentStatus === "กำลังเข้ารับการรักษา"
+        ? "รับการรักษาแล้ว"
+        : "ยืนยัน";
 
-const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentStatus === "กำลังเข้ารับการรักษา" ? 4 : 2;
+    const newQueueStatusId =
+      currentStatus === "ยืนยัน"
+        ? 3
+        : currentStatus === "กำลังเข้ารับการรักษา"
+        ? 4
+        : 2;
     Swal.fire({
       title: `คุณต้องการอัพเดทสถานะใช่หรือไม่ ? `,
       text: `อัพเดทสถานะให้เป็น ! ${newStatus}?`,
@@ -315,15 +319,13 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
     pageStyle: "@page { size: 6in 5in; }",
   });
 
-
-
   return (
     <div className="w-full">
       <div className="row justify-content-start mb-2">
         <div className="col-5 col-md-2 col-lg-3">
           <label>ค้นหา</label>
           <input
-            id="Manager_MainSearch" 
+            id="Manager_MainSearch"
             name="firstName"
             type="text"
             className="form-control"
@@ -336,7 +338,7 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
           <i className="fa-solid fa-calendar mx-1"></i>
           <label>ค้นหาตามวันที่</label>
           <input
-            id="Manager_MainSearch_date" 
+            id="Manager_MainSearch_date"
             name="queue_date"
             type="date"
             className="form-control"
@@ -347,7 +349,7 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
         <div className="col-3 col-lg-3 pt-4">
           <button
             id="Manager_MainSearch_button"
-            name="cancel" 
+            name="cancel"
             type="button"
             className="btn btn-secondary ml-2"
             onClick={handleCancel}
@@ -359,7 +361,7 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
       </div>
 
       <div className="d-flex justify-content-between  mb-2">
-      <div className="w-pagesize">
+        <div className="w-pagesize">
           <select
             id="QpageSize"
             class="form-select"
@@ -373,7 +375,7 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
           </select>
         </div>
         <Select
-          id="Manager_Search_Department" 
+          id="Manager_Search_Department"
           name="department_name"
           value={selectedDepartment}
           options={getDepartmentOptions()}
@@ -387,165 +389,163 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
         <table className="table">
           <thead>
             <tr className="table-success">
-              <th scope="col" style={{ width: "2%",textAlign: 'center'  }}>
+              <th scope="col" style={{ width: "2%", textAlign: "center" }}>
                 ลำดับ
               </th>
-              <th scope="col" style={{ width: "5%" ,textAlign: 'center' }}>
+              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
                 คิวที่
               </th>
-              <th scope="col" style={{ width: "20%" ,textAlign: 'center' }}>
+              <th scope="col" style={{ width: "20%", textAlign: "center" }}>
                 ชื่อ-สกุล
               </th>
-              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
                 อาการเบื้องต้น
               </th>
-              <th scope="col" style={{ width: "8%",textAlign: 'center'  }}>
+              <th scope="col" style={{ width: "8%", textAlign: "center" }}>
                 แผนก
               </th>
-              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
                 วันที่จอง
               </th>
-              <th scope="col" style={{ width: "15%",textAlign: 'center'  }}>
+              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
                 เวลาที่จอง
               </th>
-              <th scope="col" style={{ width: "10%",textAlign: 'center'  }}>
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
                 สถานะคิว
               </th>
-              <th scope="col" style={{ width: "5%",textAlign: 'center'  }}>
-            บัตรคิว
+              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
+                บัตรคิว
               </th>
-              <th scope="col" style={{ width: "5%",textAlign: 'center'  }}>
+              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
                 ลบ
               </th>
-              <th scope="col" style={{ width: "20%",textAlign: 'center'  }}>
-                 จัดการสถานะคิว
+              <th scope="col" style={{ width: "20%", textAlign: "center" }}>
+                จัดการสถานะคิว
               </th>
             </tr>
           </thead>
           <tbody>
             {pageData.length > 0 ? (
-             pageData
-             .slice()
-             .sort((a, b) => {
-               // แยกวันที่และเวลาจากสตริง "dd-MM-yyyy HH:mm:ss"
-               const dateA = new Date(`01-01-1970 ${a.create_at.split(" ")[1]}`);
-               const dateB = new Date(`01-01-1970 ${b.create_at.split(" ")[1]}`);
-               
-               return dateA - dateB;
-             }).map((item, index) => {
-                return (
-                  <tr key={item.users_id}>
-                    <td>{(page - 1) * 10 + index + 1}</td>
-                    <td style={{ textAlign: 'center' }}>{item.queue_id}</td>
-                    <td style={{ textAlign: 'center' }}>
-                      {item.prefix_name} {item.first_name} {item.last_name}
-                    </td>
-                    <td style={{ textAlign: 'center' }}>{item.symptom}</td>
-                    <td style={{ textAlign: 'center' }}>{item.department_name}</td>
-                    <td style={{ textAlign: 'center' }}>{item.queue_date}</td>
-                    <td style={{ textAlign: 'center' }}>{item.create_at}</td>
-                    <td style={{ textAlign: 'center' }}>
-                      {item.queue_status_id === 3 ? (
-                        <span className="text-primary">กำลังเข้ารับการรักษา</span>
-                      ) : (
-                        <span
-                          className={`text-${
-                            item.queue_status_id === 2 ? "success" : "warning"
-                          }`}
+              pageData
+
+                .slice()
+                .sort((a, b) => a.queue_id - b.queue_id)
+                .map((item, index) => {
+                  return (
+                    <tr key={item.users_id}>
+                      <td>{(page - 1) * 10 + index + 1}</td>
+                      <td style={{ textAlign: "center" }}>{item.queue_id}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {item.prefix_name} {item.first_name} {item.last_name}
+                      </td>
+                      <td style={{ textAlign: "center" }}>{item.symptom}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {item.department_name}
+                      </td>
+                      <td style={{ textAlign: "center" }}>{item.queue_date}</td>
+                      <td style={{ textAlign: "center" }}>{item.create_at}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {item.queue_status_id === 3 ? (
+                          <span className="text-primary">
+                            กำลังเข้ารับการรักษา
+                          </span>
+                        ) : (
+                          <span
+                            className={`text-${
+                              item.queue_status_id === 2 ? "success" : "warning"
+                            }`}
+                          >
+                            {item.queue_status_name}
+                          </span>
+                        )}
+                      </td>
+
+                      <td style={{ textAlign: "center" }}>
+                        <button
+                          id="Manager_button_status"
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => {
+                            setData(item);
+                          }}
                         >
-                          {item.queue_status_name}
-                        </span>
-                      )}
-                    </td>
-
-                    
-                    <td style={{ textAlign: 'center' }}>
-                      <button
-                        id="Manager_button_status" 
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => {
-                          setData(item);
-                        }}
-                      >
-                        <i className="fa-solid fa-print text-white"></i>
-                      </button>
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
-  {item.queue_status_id === 2 || item.queue_status_id === 3 ? (
-    <button
-      id="buttoCancels"
-      type="button"
-      className="btn btn-danger"
-      disabled
-    >
-      <i className="fa-solid fa-trash-can"></i>
-    </button>
-  ) : (
-    <button
-      id="buttoCancels"
-      type="button"
-      className="btn btn-danger"
-      onClick={() => {
-        handleCancelClick(item.users_id, item.queue_date);
-      }}
-    >
-      <i className="fa-solid fa-trash-can"></i>
-    </button>
-  )}
-</td>
-
-
-
-                    <td style={{ textAlign: 'center' }}>
-                      <button
-                        id="buttonStatus"
-                        type="button"
-                        className={`btn ${
-                          item.queue_status_name === "ยืนยัน"
-                            ? "btn-success"
-                            : item.queue_status_name === "กำลังเข้ารับการรักษา"
-                            ? "btn-primary"
-                            : item.queue_status_name === "รับการรักษาแล้ว"
-                            ? "btn-danger"
-                            : "btn-warning"
-                        }`}
-                        onClick={() => {
-                          changeStatus(
-                            item.queue_id,
-                            item.queue_status_name, // นี่คือค่า currentStatus
-                            item.queue_date,
-                            item.create_at,
-                            item.symptom,
-                            item.queue_status_id,
-                            item.department_id,
-                            item.questionaire_id,
-                            item.users_id,
-                            item.department_name,
-                            item.formatted_birthday
-                          );
-                          // Update pageData with the new queue status
-
-                          // Reload data and keep the same search and department filter
-                          getdataQ();
-                        }}
-                      >
-                        {item.queue_status_name === "ปกติ" && (
-                          <i class="fa-solid fa-user-check"></i>
+                          <i className="fa-solid fa-print text-white"></i>
+                        </button>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        {item.queue_status_id === 2 ||
+                        item.queue_status_id === 3 ? (
+                          <button
+                            id="buttoCancels"
+                            type="button"
+                            className="btn btn-danger"
+                            disabled
+                          >
+                            <i className="fa-solid fa-trash-can"></i>
+                          </button>
+                        ) : (
+                          <button
+                            id="buttoCancels"
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => {
+                              handleCancelClick(item.users_id, item.queue_date);
+                            }}
+                          >
+                            <i className="fa-solid fa-trash-can"></i>
+                          </button>
                         )}
-                        {item.queue_status_name === "ยืนยัน" && (
-                          <i class="fa-solid fa-user-check"></i>
-                        )}
-                         {item.queue_status_name === "กำลังเข้ารับการรักษา" && (
-                          <i class="fa-solid fa-user-check"></i>
-                        )}
-                      
-                      </button>
-                    </td>
-                   
-                  </tr>
-                );
-              })
+                      </td>
+
+                      <td style={{ textAlign: "center" }}>
+                        <button
+                          id="buttonStatus"
+                          type="button"
+                          className={`btn ${
+                            item.queue_status_name === "ยืนยัน"
+                              ? "btn-success"
+                              : item.queue_status_name ===
+                                "กำลังเข้ารับการรักษา"
+                              ? "btn-primary"
+                              : item.queue_status_name === "รับการรักษาแล้ว"
+                              ? "btn-danger"
+                              : "btn-warning"
+                          }`}
+                          onClick={() => {
+                            changeStatus(
+                              item.queue_id,
+                              item.queue_status_name, // นี่คือค่า currentStatus
+                              item.queue_date,
+                              item.create_at,
+                              item.symptom,
+                              item.queue_status_id,
+                              item.department_id,
+                              item.questionaire_id,
+                              item.users_id,
+                              item.department_name,
+                              item.formatted_birthday
+                            );
+                            // Update pageData with the new queue status
+
+                            // Reload data and keep the same search and department filter
+                            getdataQ();
+                          }}
+                        >
+                          {item.queue_status_name === "ปกติ" && (
+                            <i class="fa-solid fa-user-check"></i>
+                          )}
+                          {item.queue_status_name === "ยืนยัน" && (
+                            <i class="fa-solid fa-user-check"></i>
+                          )}
+                          {item.queue_status_name ===
+                            "กำลังเข้ารับการรักษา" && (
+                            <i class="fa-solid fa-user-check"></i>
+                          )}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
             ) : (
               <div className="d-flex justify-content-center mt-4">
                 Loading... <Spinner animation="border" variant="danger" />
@@ -554,7 +554,7 @@ const newQueueStatusId = currentStatus === "ยืนยัน" ? 3 : currentSta
           </tbody>
         </table>
       </div>
-      
+
       <div className="d-flex justify-content-center">
         <div className="hidden">
           <div ref={componentsRef}>
