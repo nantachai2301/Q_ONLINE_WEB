@@ -251,7 +251,7 @@ function ShowData() {
   const removeQueue = async (users_id, queue_date) => {
     Swal.fire({
       title: "คุณแน่ใจที่จะยกเลิกการจองคิว ?",
-      text: "เมื่อรายการจองคิวถูกยกเลิก คุณจะไม่สามาถกู้คืนได้",
+      text: "เมื่อรายการจองคิวถูกยกเลิก คุณต้องจองคิวใหม่เท่านั้น",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "ยืนยัน",
@@ -509,7 +509,7 @@ function ShowData() {
             )}
           </tbody>
 
-          <Modal
+          <Modal style={{ marginTop:"50px" }}
             show={editModalShow}
             onHide={() => setEditModalShow(false)}
             centered

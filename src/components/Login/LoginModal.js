@@ -171,18 +171,7 @@ const LoginModal = (props) => {
                     className="error-message"
                   />
                 </Form.Group>
-                <a
-                  href="#"
-                  onClick={handleForgetPassword}
-                  style={{
-                    float: "left",
-                    color: "blue",
-                    textDecoration: "underline",
-                    fontSize: "17px",
-                  }}
-                >
-                  ลืมรหัสผ่าน
-                </a>
+              
               </Form>
             )}
           </Formik>
@@ -199,37 +188,6 @@ const LoginModal = (props) => {
         </Modal.Footer>
       </Modal>
 
-      <Modal
-        show={showResetPasswordModal}
-        onHide={handleCloseResetPasswordModal}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-            รีเซ็ตรหัสผ่าน
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                id="Resetemail"
-                type="email"
-                placeholder="Enter email"
-              />
-            </Form.Group>
-            <button
-              id="ResetPassword"
-              type="button"
-              className="btn btn-primary"
-              onClick={handleResetPassword}
-            >
-              ส่งข้อความสำหรับรีเซ็ตรหัสผ่าน
-            </button>
-          </Form>
-        </Modal.Body>
-      </Modal>
     </>
   );
 };

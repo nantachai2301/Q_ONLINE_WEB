@@ -231,7 +231,7 @@ const MainBook = (props) => {
   return (
     <>
       {isLoggedIn && userData && (
-        <Modal show={props.show} onHide={() => props.setShow(false)} centered>
+        <Modal  style={{ marginTop:"50px" }}show={props.show} onHide={() => props.setShow(false)} centered>
           <Modal.Header onClick={handlecloseLogin} closeButton>
             <Modal.Title
               style={{ width: "100%", textAlign: "center", fontSize: "25px" }}
