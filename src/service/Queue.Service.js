@@ -89,15 +89,21 @@ const createQueue = async (
   });
 };
 
-
-export { getQueue,  updateQueues, deleteQueueById, updateQueueById,createQueue };
+const updateQueue = async (users_id, queue_date, symptom) => {
+  return await axios.put(`${API_URL}/queue/${users_id}`, {
+    queue_date,
+    symptom,
+  });
+};
+export { getQueue,  updateQueues, deleteQueueById, updateQueueById,createQueue,updateQueue };
 
 const DoctorService = {
   getQueue,
   updateQueues,
   deleteQueueById,
   updateQueueById,
-  createQueue
+  createQueue,
+  updateQueue
 };
 
 export default DoctorService;
