@@ -179,7 +179,7 @@ const LoginModal = (props) => {
         <Modal.Footer>
           <button
             id="Login"
-            type="button"
+            type="submit"
             className="btn btn-primary"
             onClick={handleLogin}
           >
