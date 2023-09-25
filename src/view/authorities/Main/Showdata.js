@@ -582,7 +582,7 @@ function ShowData({}) {
                       </td>
                       <td style={{ textAlign: "center" }}>
                       <button
-                          id="EditQueue"
+                          id="EditQueues"
                           type="button"
                           className="btn btn-warning text-white mx-1 mt-1"
                           onClick={() => handleEditClick(item)}
@@ -836,6 +836,7 @@ function ShowData({}) {
               </small>
                     <Modal.Footer>
                       <button
+                      id="Asubmit"
                         type="submit"
                         className="btn btn-primary"
                         onClick={() => {

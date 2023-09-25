@@ -660,6 +660,7 @@ function ShowData() {
                             </Form.Label>
                             <label className="red">*</label>
                             <Form.Control
+                              id="Editsymptom"
                               name="symptom" // ตรงตามชื่อที่ใช้ใน initialValues
                               type="text"
                               placeholder="กรุณาระบุอาการเบื้องต้น"
@@ -680,6 +681,7 @@ function ShowData() {
               </small>
                     <Modal.Footer>
                       <button
+                      id="QSubmit"
                         type="submit"
                         className="btn btn-primary"
                         onClick={() => {
