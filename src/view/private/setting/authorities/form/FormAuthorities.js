@@ -96,7 +96,7 @@ function FormAuthorities() {
     const usersWithAge = { ...users, age: age };
     try {
       const result = await Swal.fire({
-        title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างหน้าที่ ?",
+        title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างเจ้าหน้าที่ ?",
         text: "",
         icon: "question",
         showCancelButton: true,
@@ -156,7 +156,7 @@ function FormAuthorities() {
   
           Swal.fire({
             icon: "success",
-            title: "เพิ่มข้อมูลเจ้าหน้าที่สำเร็จ",
+            title: "สร้างข้อมูลเจ้าหน้าที่สำเร็จ",
             showConfirmButton: false,
             timer: 1500,
           });
@@ -178,7 +178,7 @@ function FormAuthorities() {
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการเพิ่มข้อมูลหน้าที่",
+        text: "เกิดข้อผิดพลาดในการสร้างข้อมูลหน้าที่",
         showConfirmButton: true,
       });
     }

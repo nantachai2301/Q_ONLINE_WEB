@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate} from "react-router-dom";
 import Pagination from "react-js-pagination";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -9,14 +9,13 @@ import MainPdf from "../../authorities/history/pdf/MainPdf";
 import Swal from "sweetalert2";
 import {
   getQueue,
-  updateQueues,
   deleteQueueById,
+  updateQueue
 } from "../../../service/Queue.Service";
 import { getPatient } from "../../../service/Patient.Service";
 import { getDepartment } from "../../../service/DepartmentType.Service";
-import axios from "axios";
 import _ from "lodash";
-import Spinner from "react-bootstrap/Spinner";
+
 
 function ShowData() {
   const navigate = useNavigate();
@@ -195,23 +194,25 @@ function ShowData() {
         });
         return;
       }
+      const formattedQueueDate = formatDateToAPI(values.queue_date);
       const updatedData = {
         symptom: values.symptom,
-        queue_date: formatDateToAPI(values.queue_date),
+        queue_date: formattedQueueDate,
       };
-
+     
       console.log("Values received in handleEditSubmit:", values);
       console.log("Sending request with data:", updatedData);
-    
-      const response = await updateQueues(
+      console.log("selectedQueueData.queue_date:", selectedQueueData.queue_date);
+      
+      const response = await updateQueue(
         selectedQueueData.users_id,
         formatDateToAPI(selectedQueueData.queue_date),
-        updatedData.queue_date,
+       
+      
         updatedData.symptom
       );
-
       console.log("Response from server:", response.data);
- 
+      
       setQueueList((prevQueueList) =>
         prevQueueList.map((queue) =>
           queue.queue_id === selectedQueueData.queue_id &&
@@ -509,7 +510,8 @@ function ShowData() {
             )}
           </tbody>
 
-          <Modal style={{ marginTop:"50px" }}
+         
+          <Modal
             show={editModalShow}
             onHide={() => setEditModalShow(false)}
             centered
@@ -531,7 +533,7 @@ function ShowData() {
                   queue_date: selectedQueueData
                     ? selectedQueueData.queue_date
                     : "",
-                 
+                  
                 }}
                 onSubmit={(values) => handleEditSubmit(values)}
               >
@@ -582,30 +584,7 @@ function ShowData() {
                             </label>
                           </div>
 
-                          <Form.Group className="col-12 px-1 mt-3">
-                            <Form.Label
-                              className="label-content"
-                              style={{
-                                textTransform: "uppercase",
-                                fontSize: "18px",
-                              }}
-                            >
-                              อาการเบื้องต้น
-                            </Form.Label>
-                            <label className="red">*</label>
-                            <Form.Control
-                              id="Editsymptom"
-                              name="symptom" 
-                              type="text"
-                              placeholder="กรุณาระบุอาการเบื้องต้น"
-                              value={values.symptom} 
-                              onChange={handleChange} 
-                            />
-                          </Form.Group>
-                          <small className="red">
-                            *
-                            แก้ไขเฉพาะกรณีอาการเบื้องต้นที่ไม่ชัดเจนหรือพิมพ์ผิดเท่านั้น
-                          </small>
+                        
                           <div className="col-6 px-1 mt-3">
                             <label
                               style={{
@@ -637,6 +616,7 @@ function ShowData() {
                               <option value="7">หัวใจ</option>
                               <option value="8">ผิวหนัง</option>
                               <option value="23">จักษุ</option>
+                              <option value="26">ความงาม</option>
                             </select>
                             
                           </div>
@@ -652,7 +632,6 @@ function ShowData() {
                             </label>
                             <label className="red">*</label>
                             <input
-                              id="Date_queue_date"
                               name="queue_date"
                               type="date"
                               style={{
@@ -660,16 +639,47 @@ function ShowData() {
                                 fontSize: "18px",
                               }}
                               className="form-input"
-                              value={formatDate(values.queue_date)}
+                              value={
+                                values.queue_date
+                                  ? formatDate(values.queue_date)
+                                  : ""
+                              }
                               disabled={true}
                             />
                           </div>
+
+                          <Form.Group className="col-12 px-1 mt-3">
+                            <Form.Label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              อาการเบื้องต้น
+                            </Form.Label>
+                            <label className="red">*</label>
+                            <Form.Control
+                              name="symptom" // ตรงตามชื่อที่ใช้ใน initialValues
+                              type="text"
+                              placeholder="กรุณาระบุอาการเบื้องต้น"
+                              value={values.symptom} // ใช้ค่าจาก Formik values
+                              onChange={handleChange} // อัปเดตค่าใน Formik state
+                            />
+                          </Form.Group>
+                          <small className="red">
+                            *
+                            แก้ไขเฉพาะกรณีอาการเบื้องต้นที่ไม่ชัดเจนหรือพิมพ์ผิดเท่านั้น
+                          </small>
                         </div>
                       </div>
                     )}
+                    <small className="red">
+                * หากผู้ป่วยเลือกแผนกผิดหรือจองคิววันที่เข้ารับการรักษาผิด
+                จะต้องยกเลิกการจองคิวเดิมและจองคิวใหม่เท่านั้น
+              </small>
                     <Modal.Footer>
                       <button
-                        id="QSubmit"
                         type="submit"
                         className="btn btn-primary"
                         onClick={() => {
@@ -685,10 +695,7 @@ function ShowData() {
                   </Form>
                 )}
               </Formik>
-              <small className="red">
-                * หากผู้ป่วยเลือกแผนกผิดหรือจองคิววันที่เข้ารับการรักษาผิด
-                จะต้องยกเลิกการจองคิวเดิมและจองคิวใหม่เท่านั้น
-              </small>
+             
             </Modal.Body>
           </Modal>
         </table>

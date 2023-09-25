@@ -7,14 +7,17 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Select from "react-select";
 import Swal from "sweetalert2";
-
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import { Formik } from "formik";
 import { format } from "date-fns";
 import {
   getQueue,
-  updateStatusQueue,
+ updateQueue,
   updateQueueById,
   deleteQueueById,
 } from "../../../service/Queue.Service";
+import { getPatient,getPatientById } from "../../../service/Patient.Service";
 function ShowData({}) {
   const [data, setData] = useState(null);
   const [dataQ, setDataQ] = useState([]);
@@ -25,12 +28,12 @@ function ShowData({}) {
   const [pageCount, setPageCount] = useState(0);
   const [pageSize, setPageSize] = useState(100);
   const [searchUsers, setSearchUsers] = useState("");
-  const [searchDate, setSearchDate] = useState(
-    format(new Date(), "yyyy-MM-dd")
-  ); // เริ่มต้นด้วยวันที่ปัจจุบัน
-
+  const [searchDate, setSearchDate] = useState(format(new Date(), "yyyy-MM-dd"));
+  const [userData, setUserData] = useState(null); 
+  const [queueList, setQueueList] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
-
+  const [editModalShow, setEditModalShow] = useState(false);
+  const [selectedQueueData, setSelectedQueueData] = useState(null);
   const getdataQ = async () => {
     const response = await getQueue();
     const filteredData = response.data.filter(
@@ -319,6 +322,113 @@ function ShowData({}) {
     pageStyle: "@page { size: 6in 5in; }",
   });
 
+    // สร้างฟังก์ชันเพื่อกำหนดคิวที่เลือกใน Modal แก้ไข
+    const handleEditClick = (item) => {
+     setUserData(null); 
+     setSelectedQueueData(item); 
+     getUserById (item.users_id,item.queue_date);
+     
+     setEditModalShow(true); 
+    };
+
+    const getUserById = async (users_id) => {
+      try {
+       
+        const response = await getPatientById(users_id);
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user by ID:", error);
+      }
+    };
+   useEffect(() => {
+    const fetchUserQueue = async (users_id,queue_date) => {
+      try {
+        const formattedDate = formatDateToAPI(queue_date);
+        const response = await getQueue(users_id, formattedDate);
+       setDataQ(response.data);
+      } catch (error) {
+        console.error("Error fetching user by ID:", error);
+      }
+    };
+
+    fetchUserQueue();
+  }, [userData]);
+ const handleEditSubmit = async (values) => {
+    try {
+      if (!values.symptom) {
+        Swal.fire({
+          icon: "error",
+          title: "กรุณากรอกอาการเบื้องต้น",
+          showConfirmButton: true,
+        });
+        return;
+      }
+      const updatedData = {
+        symptom:values.symptom,
+        queue_date:formatDateToAPI(values.queue_date),
+      
+        queue_id: selectedQueueData.queue_id, // แก้ค่า queue_id ให้ถูกต้อง
+       
+      };
+
+      console.log("Values received in handleEditSubmit:", values);
+      console.log("Sending request with data:", updatedData);
+     
+      const response = await updateQueue(
+        selectedQueueData.users_id,
+        formatDateToAPI(selectedQueueData.queue_date),
+       
+      
+        updatedData.symptom
+      );
+      console.log("Response from server:", response.data);
+ 
+    setDataQ((prevDataQ) =>
+    prevDataQ.map((queue) =>
+          queue.queue_id === selectedQueueData.queue_id &&
+          queue.queue_date === selectedQueueData.queue_date
+            ? {
+                ...queue,
+                symptom:updatedData.symptom, 
+              }
+            : queue
+        )
+      );
+
+    
+      setEditModalShow(false);
+
+      Swal.fire({
+        icon: "success",
+        title: "แก้ไขคิวสำเร็จ",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      console.error("Error editing queue:", error);
+   
+      Swal.fire({
+        icon: "error",
+        title: "การแก้ไขคิวไม่สำเร็จ",
+        text: "เกิดข้อผิดพลาดในการแก้ไขคิว กรุณาลองใหม่อีกครั้ง",
+        showConfirmButton: true,
+      });
+    }
+  };
+    const formatDate = (dateString) => {
+      if (!dateString) {
+        return ""; // Return an empty string or handle it as needed in your application
+      }
+    
+      const [day, month, year] = dateString.split("-");
+      return `${year}-${month}-${day}`;
+    };
+
+
+
+
+
+
   return (
     <div className="w-full">
       <div className="row justify-content-start mb-2">
@@ -392,9 +502,7 @@ function ShowData({}) {
               <th scope="col" style={{ width: "2%", textAlign: "center" }}>
                 ลำดับ
               </th>
-              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
-                คิวที่
-              </th>
+           
               <th scope="col" style={{ width: "20%", textAlign: "center" }}>
                 ชื่อ-สกุล
               </th>
@@ -416,8 +524,8 @@ function ShowData({}) {
               <th scope="col" style={{ width: "5%", textAlign: "center" }}>
                 บัตรคิว
               </th>
-              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
-                ลบ
+              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+              จัดการ
               </th>
               <th scope="col" style={{ width: "20%", textAlign: "center" }}>
                 จัดการสถานะคิว
@@ -434,7 +542,7 @@ function ShowData({}) {
                   return (
                     <tr key={item.users_id}>
                       <td>{(page - 1) * 10 + index + 1}</td>
-                      <td style={{ textAlign: "center" }}>{item.queue_id}</td>
+                    
                       <td style={{ textAlign: "center" }}>
                         {item.prefix_name} {item.first_name} {item.last_name}
                       </td>
@@ -473,6 +581,14 @@ function ShowData({}) {
                         </button>
                       </td>
                       <td style={{ textAlign: "center" }}>
+                      <button
+                          id="EditQueue"
+                          type="button"
+                          className="btn btn-warning text-white mx-1 mt-1"
+                          onClick={() => handleEditClick(item)}
+                        >
+                          <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
                         {item.queue_status_id === 2 ||
                         item.queue_status_id === 3 ? (
                           <button
@@ -514,7 +630,7 @@ function ShowData({}) {
                           onClick={() => {
                             changeStatus(
                               item.queue_id,
-                              item.queue_status_name, // นี่คือค่า currentStatus
+                              item.queue_status_name, 
                               item.queue_date,
                               item.create_at,
                               item.symptom,
@@ -525,9 +641,7 @@ function ShowData({}) {
                               item.department_name,
                               item.formatted_birthday
                             );
-                            // Update pageData with the new queue status
-
-                            // Reload data and keep the same search and department filter
+                           
                             getdataQ();
                           }}
                         >
@@ -552,6 +666,194 @@ function ShowData({}) {
               </div>
             )}
           </tbody>
+          <Modal
+            show={editModalShow}
+            onHide={() => setEditModalShow(false)}
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title
+                style={{ width: "100%", textAlign: "center", fontSize: "25px" }}
+              >
+                แก้ไขจองคิว
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Formik
+                initialValues={{
+                  symptom: selectedQueueData ? selectedQueueData.symptom : "",
+                  department_id: selectedQueueData
+                    ? selectedQueueData.department_id
+                    : "",
+                  queue_date: selectedQueueData
+                    ? selectedQueueData.queue_date
+                    : "",
+                  
+                }}
+                onSubmit={(values) => handleEditSubmit(values)}
+              >
+                {({ handleSubmit, handleChange, values }) => (
+                  <Form onSubmit={handleSubmit}>
+                    { userData && (
+                      <div className="col-12">
+                        <div className="row">
+                          <div className="col-12 px-1 mt-1">
+                            <label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              เลขบัตรประชาชน :{" "}
+                            </label>
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              {" "}
+                              {userData.id_card}
+                            </label>
+                          </div>
+                          <div className="col-12 px-1 mt-3">
+                            <label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              ชื่อ :{" "}
+                            </label>
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              {" "}
+                              {userData.prefix_name} {userData.first_name}{" "}
+                              {userData.last_name}
+                            </label>
+                          </div>
+
+                        
+                          <div className="col-6 px-1 mt-3">
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              แผนก
+                            </label>
+                            <label className="red">*</label>
+
+                            <select
+                              class="form-select"
+                              name="department_id"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                              value={values.department_id}
+                              disabled={true}
+                              aria-label="Default select example"
+                            >
+                              <option selected>เลือกแผนก</option>
+                              <option value="1">ทันตกรรม</option>
+                              <option value="2">กุมารเวช</option>
+                              <option value="3">ทั่วไป</option>
+                              <option value="4">สูติ-นรีเวช</option>
+                              <option value="6">ศัลยกรรม</option>
+                              <option value="7">หัวใจ</option>
+                              <option value="8">ผิวหนัง</option>
+                              <option value="23">จักษุ</option>
+                              <option value="26">ความงาม</option>
+                            </select>
+                            
+                          </div>
+
+                          <div className="col-6 px-1 mt-3">
+                            <label
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              วันที่เข้ารับการรักษา
+                            </label>
+                            <label className="red">*</label>
+                            <input
+                              name="queue_date"
+                              type="date"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                              className="form-input"
+                              value={
+                                values.queue_date
+                                  ? formatDate(values.queue_date)
+                                  : ""
+                              }
+                              disabled={true}
+                            />
+                          </div>
+
+                          <Form.Group className="col-12 px-1 mt-3">
+                            <Form.Label
+                              className="label-content"
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "18px",
+                              }}
+                            >
+                              อาการเบื้องต้น
+                            </Form.Label>
+                            <label className="red">*</label>
+                            <Form.Control
+                            id="ASymptom"
+                              name="symptom" // ตรงตามชื่อที่ใช้ใน initialValues
+                              type="text"
+                              placeholder="กรุณาระบุอาการเบื้องต้น"
+                              value={values.symptom} // ใช้ค่าจาก Formik values
+                              onChange={handleChange} // อัปเดตค่าใน Formik state
+                            />
+                          </Form.Group>
+                          <small className="red">
+                            *
+                            แก้ไขเฉพาะกรณีอาการเบื้องต้นที่ไม่ชัดเจนหรือพิมพ์ผิดเท่านั้น
+                          </small>
+                        </div>
+                      </div>
+                    )}
+                    <small className="red">
+                * หากผู้ป่วยเลือกแผนกผิดหรือจองคิววันที่เข้ารับการรักษาผิด
+                จะต้องยกเลิกการจองคิวเดิมและจองคิวใหม่เท่านั้น
+              </small>
+                    <Modal.Footer>
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        onClick={() => {
+                          handleEditSubmit({
+                            symptom: values.symptom,
+                            queue_date: values.queue_date,
+                          });
+                        }}
+                      >
+                        บันทึกการแก้ไข
+                      </button>
+                    </Modal.Footer>
+                  </Form>
+                )}
+              </Formik>
+             
+            </Modal.Body>
+          </Modal>
         </table>
       </div>
 

@@ -138,7 +138,7 @@ function EditAuthorities() {
         if (response.status === 200) {
           Swal.fire({
             icon: "success",
-            title: "อัพเดตข้อมูลสำเจ้าหน้าที่เร็จ",
+            title: "อัพเดตข้อมูลสำเจ้าหน้าที่สำเร็จ",
             showConfirmButton: false,
             timer: 2000,
           });
@@ -177,14 +177,14 @@ function EditAuthorities() {
                 className="breadcrumb-item text-black fw-semibold"
                 aria-current="page"
               >
-                {location.state ? "แก้ไข" : "เพิ่ม"}ข้อมูลรายชื่อเจ้าหน้าที่
+                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อเจ้าหน้าที่
               </li>
             </ol>
           </nav>
         </div>
         <div className="w-full mb-5">
           <h2 className="title-content">
-            {location.state ? "แก้ไข" : "เพิ่ม"}ข้อมูลรายชื่อเจ้าหน้าที่
+            {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อเจ้าหน้าที่
           </h2>
         </div>
         <Formik
@@ -198,7 +198,7 @@ function EditAuthorities() {
               <div className="container mt-2 ">
                 <div className="mb-4">
                   <div className="card border-0 shadow p-4">
-                    <h6 className="font ">ข้อมูลเจ้าหน้าที่</h6>
+                    <h6 className="font ">แก้ไขข้อมูลเจ้าหน้าที่</h6>
                     <br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
