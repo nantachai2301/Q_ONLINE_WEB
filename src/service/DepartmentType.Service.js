@@ -22,6 +22,7 @@ const updateDepartmentById = async (
   department_phone,
 ) => {
   return await axios.put(API_URL + "departments/" +  department_id, {
+    department_id,
     department_name,
     department_image,
     open_time,

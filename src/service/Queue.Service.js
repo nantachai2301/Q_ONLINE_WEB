@@ -61,7 +61,7 @@ const updateQueueById = async (
     symptom,
     queue_status_id,
     department_id,
-  
+   
     department_name,
     queue_status_name,
     first_name,
@@ -85,7 +85,7 @@ const createQueue = async (
     department_id,
     queue_date,
     symptom,
-    queue_status_id, 
+    queue_status_id, // ตรวจสอบว่าค่า queue_status_id ถูกส่งไปยัง API ในฟังก์ชันนี้
   });
 };
 
@@ -95,7 +95,10 @@ const updateQueue = async (users_id, queue_date, symptom) => {
     symptom,
   });
 };
-export { getQueue,  updateQueues, deleteQueueById, updateQueueById,createQueue,updateQueue };
+const getQueuebyid = async (users_id, queue_date) => {
+  return await axios.get(`${API_URL}/queue/${users_id}?queue_date=${queue_date}`);
+};
+export { getQueue,  updateQueues, deleteQueueById, updateQueueById,createQueue,updateQueue, getQueuebyid };
 
 const DoctorService = {
   getQueue,
@@ -103,7 +106,8 @@ const DoctorService = {
   deleteQueueById,
   updateQueueById,
   createQueue,
-  updateQueue
+  updateQueue,
+  getQueuebyid
 };
 
 export default DoctorService;

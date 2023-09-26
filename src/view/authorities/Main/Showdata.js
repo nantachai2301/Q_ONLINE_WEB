@@ -274,8 +274,8 @@ function ShowData({}) {
           })
           .catch((error) => {
             Swal.fire({
-              title: "Error",
-              text: "An error occurred while changing the status.",
+              title: "เกิดข้อผิดพลาด",
+              text: "ไม่สามารถเปลี่ยนสถานะ",
               icon: "error",
             });
           });
@@ -404,6 +404,7 @@ function ShowData({}) {
         showConfirmButton: false,
         timer: 1500,
       });
+     
     } catch (error) {
       console.error("Error editing queue:", error);
    

@@ -10,9 +10,19 @@ const Sendlogin = async (
     password,
   });
 };
-export { Sendlogin};
+const forgotpassword = async (
+  id_card,
+ 
+) => {
+  return await axios.post(API_URL +"forgotpassword", {
+    id_card,
+  
+  });
+};
 
-const Authen = {Sendlogin
+export { Sendlogin,forgotpassword};
+
+const Authen = {Sendlogin,forgotpassword
  
 };
 

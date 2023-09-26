@@ -11,7 +11,8 @@ import { styled } from "@mui/system";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AUTHEN, USERINFO } from "../../actions/Authen";
-import { Sendlogin } from "../../service/Authen.Service";
+import { Sendlogin ,forgotpassword} from "../../service/Authen.Service";
+
 const StyledContainer = styled(Container)`
   display: flex;
   flex-direction: column;
@@ -37,17 +38,19 @@ const StyledBox = styled(Box)`
 const StyledButton = styled(Button)`
   margin: 0.5rem;
 `;
+
 const LoginModal = (props) => {
   const [id_card, setIdCard] = useState("");
+  const [birthday, setBirthday] = useState(""); // เพิ่ม state สำหรับ birthday
   const [password, setPassword] = useState("");
-  const [show, setShow] = useState(false); // เพิ่มตัวแปรเพื่อควบคุมสถานะการแสดง Modal
+  const [show, setShow] = useState(false);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const navigate = useNavigate();
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+
   const handleLogin = async () => {
     setIsButtonClicked(true);
     if (password.length < 6 || id_card.length < 13) {
-      // แจ้งเตือนให้กรอกข้อมูลครบถ้วน
       Swal.fire("กรุณากรอกข้อมูลให้ครบถ้วน", "", "warning");
       return;
     }
@@ -95,11 +98,16 @@ const LoginModal = (props) => {
           "error"
         );
       } else {
-        Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถเข้าสู่ระบบได้ในขณะนี้", "error");
+        Swal.fire(
+          "เกิดข้อผิดพลาด",
+          "ไม่สามารถเข้าสู่ระบบได้ในขณะนี้",
+          "error"
+        );
       }
     }
     props.setShow(false);
   };
+
   const handleForgetPassword = () => {
     setShowResetPasswordModal(true);
   };
@@ -108,14 +116,45 @@ const LoginModal = (props) => {
     setShowResetPasswordModal(false);
   };
 
-  const handleResetPassword = () => {
-    // Handle reset password logic here
-    console.log("Reset password");
-    setShowResetPasswordModal(false); // Close the reset password modal
+  const handleResetPassword = async () => {
+    try {
+      const id_card = document.getElementById('id_card').value;
+  
+      if (!id_card) {
+        Swal.fire({
+          icon: 'error',
+          title: 'กรุณากรอกหมายเลขบัตรประชาชน',
+        });
+        return;
+      }
+  
+      const response = await forgotpassword(id_card);
+      const data = response.data;
+  
+      if (data.success) {
+        const newPassword = data.newPassword;
+        Swal.fire({
+          icon: 'success',
+          title: 'รีเซ็ตรหัสผ่านสำเร็จ!',
+          text: `รหัสผ่านใหม่ของคุณคือ: ${newPassword}`,
+          showConfirmButton: true,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน',
+        });
+      }
+    } catch (error) {
+      console.error('เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน:', error);
+    }
   };
+  
+
   const handlecloseLogin = () => {
     navigate("/");
   };
+
   return (
     <>
       <Modal show={props.show} onHide={() => props.setShow(false)} centered>
@@ -129,26 +168,27 @@ const LoginModal = (props) => {
             enableReinitialize={true}
             validationSchema={Schema}
             initialValues={{
-              id_card:"",
-              password:"",
+              id_card: "",
+              password: "",
             }}
             onSubmit={handleLogin}
           >
-            {({  errors, touched }) => (
+            {({ errors, touched }) => (
               <Form>
                 <Form.Group className="mb-3">
                   <Form.Label>รหัสประจำตัวประชาชน</Form.Label>
                   <Form.Control
-                    id="LoginID_Card"
+                    id="id_cardF"
                     type="text"
                     name="id_card"
                     placeholder="Enter ID number"
                     value={id_card}
-                    className={`form-control ${(!id_card && isButtonClicked) ? "is-invalid" : ""}`}
+                    className={`form-control ${
+                      !id_card && isButtonClicked ? "is-invalid" : ""
+                    }`}
                     onChange={(e) => setIdCard(e.target.value)}
                   />
                   <ErrorMessage
-                  
                     name="id_card"
                     component="div"
                     className="error-message"
@@ -162,7 +202,9 @@ const LoginModal = (props) => {
                     name="password"
                     placeholder="Password"
                     value={password}
-                    className={`form-control ${(!password && isButtonClicked) ? "is-invalid" : ""}`}
+                    className={`form-control ${
+                      !password && isButtonClicked ? "is-invalid" : ""
+                    }`}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <ErrorMessage
@@ -171,11 +213,23 @@ const LoginModal = (props) => {
                     className="error-message"
                   />
                 </Form.Group>
-              
+                <a
+                  href="#"
+                  onClick={handleForgetPassword}
+                  style={{
+                    float: "left",
+                    color: "blue",
+                    textDecoration: "underline",
+                    fontSize: "17px",
+                  }}
+                >
+                  ลืมรหัสผ่าน
+                </a>
               </Form>
             )}
           </Formik>
         </Modal.Body>
+
         <Modal.Footer>
           <button
             id="Login"
@@ -187,6 +241,38 @@ const LoginModal = (props) => {
           </button>
         </Modal.Footer>
       </Modal>
+      <Modal style={{ width: "100%" }} show={showResetPasswordModal} onHide={handleCloseResetPasswordModal} centered>
+  <Modal.Header closeButton>
+    <Modal.Title style={{ width: "100%", textAlign: "center" }}>
+      รีเซ็ตรหัสผ่าน
+    </Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form>
+    <small className="red">*กรอกบัตรประชาชนแล้วจะได้รหัสรับผ่านใหม่</small>
+      <Form.Group className="mb-3">
+      
+        <Form.Label>บัตรประชาชน</Form.Label>
+        <label className="red">*</label>
+        <Form.Control
+          id="id_card"
+          type="text"
+          name="id_card"
+          className="form-control"
+        />
+      </Form.Group>
+   
+      <button
+        id="ResetPassword"
+        type="button"
+        className="btn btn-primary"
+        onClick={handleResetPassword} // เรียกใช้ handleResetPassword เมื่อคลิกปุ่ม "รีเซ็ตรหัสผ่าน"
+      >
+        รีเซ็ตรหัสผ่าน
+      </button>
+    </Form>
+  </Modal.Body>
+</Modal>
 
     </>
   );
