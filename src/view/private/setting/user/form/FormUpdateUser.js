@@ -26,7 +26,7 @@ function FormUpdateUser() {
 
         setUsers(res.data);
 
-        const password = res.data.password;
+        
 
         if (res.data.birthday) {
           const birthDateObj = new Date(res.data.birthday);
@@ -134,7 +134,7 @@ function FormUpdateUser() {
           district,
           province,
           postcode,
-          subdistrictsId,
+        
           img,
           role_id,
         } = users;
@@ -161,7 +161,7 @@ function FormUpdateUser() {
           district,
           province,
           postcode,
-          subdistrictsId,
+         
           img,
           role_id,
           {}
