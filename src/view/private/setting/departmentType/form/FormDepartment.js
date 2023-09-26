@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { createDepartment } from "../../../../../service/DepartmentType.Service";
 import * as Yup from 'yup';
 
+
 function FormDepartment() {
   const location = useLocation();
   const [departments, setDepartments] = useState({
@@ -71,9 +72,9 @@ function FormDepartment() {
   const handleClick = async (e) => {
     e.preventDefault();
 
-     const formValid = validateForm(); // เช็คว่าฟอร์มถูกต้องหรือไม่
+    const formValid = validateForm(); // เช็คว่าฟอร์มถูกต้องหรือไม่
 
-     if (!formValid) {
+    if (!formValid) {
       // ถ้าฟอร์มไม่ถูกต้อง แสดง SweetAlert
       Swal.fire({
         icon: 'warning',
@@ -82,7 +83,7 @@ function FormDepartment() {
       });
       return;
     }
-    
+
 
     try {
       const result = await Swal.fire({
@@ -128,51 +129,51 @@ function FormDepartment() {
 
   // เขียนฟังก์ชันสำหรับตรวจสอบความถูกต้องของฟอร์ม
   // เพิ่มเงื่อนไขใน validateForm ในส่วนของเบอร์โทรแผนก
-const validateForm = () => {
-  const {
-    department_name,
-    open_time,
-    close_time,
-    max_queue_number,
-    floor,
-    building,
-    department_phone,
-  } = departments;
+  const validateForm = () => {
+    const {
+      department_name,
+      open_time,
+      close_time,
+      max_queue_number,
+      floor,
+      building,
+      department_phone,
+    } = departments;
 
-  // ตรวจสอบว่ามีข้อมูลทุกช่องหรือไม่
-  if (
-    !department_name ||
-    !open_time ||
-    !close_time ||
-    !max_queue_number ||
-    !floor ||
-    !building ||
-    !department_phone
-  ) {
-    // แสดง SweetAlert แจ้งให้กรอกข้อมูลเบอร์โทรแผนกให้ครบถ้วน
-    Swal.fire({
-      icon: 'warning',
-      title: 'กรุณากรอกข้อมูลเบอร์โทรแผนกให้ครบถ้วน',
-      showConfirmButton: true,
-    });
-    return false;
-  }
-  // เพิ่มเงื่อนไขตรวจสอบความถูกต้องของข้อมูลอื่น ๆ ตามความต้องการ
-  // ตรวจสอบเวลาเปิด-ปิดว่าเป็นรูปแบบเวลาที่ถูกต้องหรือไม่
-  // ตรวจสอบรูปภาพแผนกว่ามีหรือไม่
-   // เพิ่มเงื่อนไขตรวจสอบความถูกต้องของเบอร์โทร
-   if (!/^\d{10}$/.test(department_phone)) {
-    // แสดง SweetAlert แจ้งให้กรอกเบอร์โทรแผนกให้ถูกต้อง
-    Swal.fire({
-      icon: 'warning',
-      title: 'กรุณากรอกเบอร์โทรแผนกให้ถูกต้อง (10 หลักและเป็นตัวเลขเท่านั้น)',
-      showConfirmButton: true,
-    });
-    return false;
-  }
-  // ถ้าผ่านทุกเงื่อนไขให้ส่งค่า true
-  return true;
-};
+    // ตรวจสอบว่ามีข้อมูลทุกช่องหรือไม่
+    if (
+      !department_name ||
+      !open_time ||
+      !close_time ||
+      !max_queue_number ||
+      !floor ||
+      !building ||
+      !department_phone
+    ) {
+      // แสดง SweetAlert แจ้งให้กรอกข้อมูลเบอร์โทรแผนกให้ครบถ้วน
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอกข้อมูลเบอร์โทรแผนกให้ครบถ้วน',
+        showConfirmButton: true,
+      });
+      return false;
+    }
+    // เพิ่มเงื่อนไขตรวจสอบความถูกต้องของข้อมูลอื่น ๆ ตามความต้องการ
+    // ตรวจสอบเวลาเปิด-ปิดว่าเป็นรูปแบบเวลาที่ถูกต้องหรือไม่
+    // ตรวจสอบรูปภาพแผนกว่ามีหรือไม่
+    // เพิ่มเงื่อนไขตรวจสอบความถูกต้องของเบอร์โทร
+    if (!/^\d{10}$/.test(department_phone)) {
+      // แสดง SweetAlert แจ้งให้กรอกเบอร์โทรแผนกให้ถูกต้อง
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอกเบอร์โทรแผนกให้ถูกต้อง (10 หลักและเป็นตัวเลขเท่านั้น)',
+        showConfirmButton: true,
+      });
+      return false;
+    }
+    // ถ้าผ่านทุกเงื่อนไขให้ส่งค่า true
+    return true;
+  };
 
   return (
     <Fragment>
@@ -239,7 +240,7 @@ const validateForm = () => {
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <div class="col-10 col-md-6 ">
                       <input
-                       id="department_createdepartment_image"
+                        id="department_createdepartment_image"
                         type="file"
                         name="department_image"
                         accept="image/*"
@@ -253,35 +254,36 @@ const validateForm = () => {
                   <br />
                   <br />
                   <form class="row g-3 d-flex justify-content-center ">
-                  <div className="col-10 col-md-6 ">
-                    <label>ชื่อแผนก</label>
-                    <label className="red">*</label>
-                    <input
-                      id="Depart_department_id"
-                      name="department_id"
-                      type="text"
-                      value={departments.department_name}
-                      className={`form-control ${touched.department_id &&
-                        errors.department_id
-                        ? "is-invalid"
-                        : ""
-                        }`}
-                      onChange={handleChange}
-                    />
-                     
-                    <ErrorMessage
-                      name="department_id"
-                      component="div"
-                      className="error-message"
-                    />
+                    <div className="col-10 col-md-6 ">
+                      <label>ชื่อแผนก</label>
+                      <label className="red">*</label>
+                      <input
+                        id="Depart_department_id"
+                        name="department_name"
+                        type="text"
+                        placeholder="กรุณากรอกชื่อแผนก"
+                        value={departments.department_name}
+                        className={`form-control ${touched.department_name &&
+                          errors.department_name
+                          ? "is-invalid"
+                          : ""
+                          }`}
+                        onChange={handleChange}
+                      />
 
-                  </div>
+                      <ErrorMessage
+                        name="department_name"
+                        component="div"
+                        className="error-message"
+                      />
 
-                    <div className="col-10 col-md-6">
+                    </div>
+
+                    <div className="col-10 col-md-6 ">
                       <label>เวลาเปิด</label>
                       <label className="red">*</label>
                       <input
-                         id="department_open_time"
+                        id="Depart_open_time"
                         name="open_time"
                         type="time"
                         placeholder="กรอกเวลาเปิด"
@@ -299,16 +301,16 @@ const validateForm = () => {
                       />
                     </div>
 
-                    <div className="col-10 col-md-6">
+                    <div className="col-10 col-md-6 ">
                       <label>เวลาปิด</label>
                       <label className="red">*</label>
                       <input
-                       id="department_close_time"
+                        id="Depart_close_time"
                         name="close_time"
                         type="time"
-                        placeholder="เวลาปิด"
+                        placeholder="กรอกเวลาปิด"
                         value={departments.close_time}
-                        className={`form-select ${touched.close_time &&
+                        className={`form-control ${touched.close_time &&
                           errors.close_time &&
                           "is-invalid"
                           }`}
@@ -321,16 +323,16 @@ const validateForm = () => {
                       />
                     </div>
 
-                    <div className="col-10 col-md-6">
+                    <div className="col-10 col-md-6 ">
                       <label>อาคาร</label>
                       <label className="red">*</label>
                       <input
-                       id="department_building"
+                        id="Depart_building"
                         name="building"
                         type="text"
                         placeholder="กรอกอาคาร"
                         value={departments.building}
-                        className={`form-select ${touched.building &&
+                        className={`form-control ${touched.building &&
                           errors.building &&
                           "is-invalid"
                           }`}
@@ -343,16 +345,16 @@ const validateForm = () => {
                       />
                     </div>
 
-                    <div className="col-10 col-md-6">
+                    <div className="col-10 col-md-6 ">
                       <label>ชั้น</label>
                       <label className="red">*</label>
                       <input
-                      id="department_floor"
+                        id="Depart_floor"
                         name="floor"
                         type="text"
                         placeholder="ชั้น"
                         value={departments.floor}
-                        className={`form-select ${touched.floor &&
+                        className={`form-control ${touched.floor &&
                           errors.floor &&
                           "is-invalid"
                           }`}
@@ -365,16 +367,16 @@ const validateForm = () => {
                       />
                     </div>
 
-                    <div className="col-10 col-md-6">
+                    <div className="col-10 col-md-6 ">
                       <label>เบอร์โทรแผนก</label>
                       <label className="red">*</label>
                       <input
-                        id="department_department_phone"
+                        id="Depart_department_phone"
                         name="department_phone"
                         type="text"
                         placeholder="เบอร์โทรแผนก"
                         value={departments.department_phone}
-                        className={`form-select ${touched.department_phone &&
+                        className={`form-control ${touched.department_phone &&
                           errors.department_phone &&
                           "is-invalid"
                           }`}
@@ -387,16 +389,16 @@ const validateForm = () => {
                       />
                     </div>
 
-                    <div className="col-10 col-md-6">
+                    <div className="col-10 col-md-6 ">
                       <label>จำนวนคิวสูงสุด</label>
                       <label className="red">*</label>
                       <input
-                        id="department_max_queue_number"
+                        id="Depart_max_queue_number"
                         name="max_queue_number"
                         type="text"
                         placeholder="จำนวนคิวสูงสุด"
                         value={departments.max_queue_number}
-                        className={`form-select ${touched.max_queue_number &&
+                        className={`form-control ${touched.max_queue_number &&
                           errors.max_queue_number &&
                           "is-invalid"
                           }`}
@@ -412,7 +414,7 @@ const validateForm = () => {
                   </form>
                   <div className="d-flex justify-content-center mt-3">
                     <button
-                     id="department_creatSubmit"
+                      id="department_creatSubmit"
                       type="submit"
                       className="btn btn-success mx-1"
                       onClick={handleClick}
@@ -421,7 +423,7 @@ const validateForm = () => {
                     </button>
                     <button className="btn btn-danger mx-1">
                       <Link
-                       id="department_CancleSubmit"
+                        id="department_CancleSubmit"
                         to="/admin/department-type"
                         style={{ textDecoration: "none", color: "#fff" }}
                       >

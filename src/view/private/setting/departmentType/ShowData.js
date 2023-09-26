@@ -6,10 +6,10 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Spinner from "react-bootstrap/Spinner";
 import Table from "react-bootstrap/Table";
-import de from "date-fns/esm/locale/de";
 import {
   getDepartment,
-  deleteDepartmentById,
+  updateDepartmentById,
+  deleteDepartmentById
 } from "../../../../service/DepartmentType.Service";
 import "../../../../style/showdepartments.css";
 
@@ -35,9 +35,10 @@ function ShowData() {
 
   useEffect(() => {
     const filteredDepartments = departments.filter((department) => {
-      const nameFilter = department.department_name
-        .toLowerCase()
-        .includes(searchDepartment.toLowerCase());
+      const nameFilter =
+        department.department_name
+          .toLowerCase()
+          .includes(searchDepartment.toLowerCase());
 
       const departmentFilter =
         !selectedDepartment ||
@@ -75,17 +76,19 @@ function ShowData() {
   };
 
   const getDepartmentOptions = () => {
-    const department = Array.from(
-      new Set(departments.map((departments) => departments.department_name))
+    const departmentNames = Array.from(
+      new Set(departments.map((department) => department.department_name))
     );
-    return departments.map((department) => ({
-      value: department,
-      label: department,
+
+    return departmentNames.map((departmentName) => ({
+      value: departmentName,
+      label: departmentName,
     }));
   };
 
   const handleSearchSelectChange = (selectedOption) => {
     setSelectedDepartment(selectedOption);
+    setPage(1); // เมื่อค้นหาเปลี่ยนแผนกให้กลับไปที่หน้าที่ 1
   };
 
   const loadEdit = (id) => {
@@ -161,7 +164,6 @@ function ShowData() {
             value={pageSize}
             onChange={handlePageSizeChange}
           >
-            <option value={5}>5</option>
             <option value={10}>10</option>
             <option value={15}>15</option>
             <option value={20}>20</option>
@@ -233,7 +235,7 @@ function ShowData() {
                 return (
                   <tr key={item.department_id}>
                     <td>{(page - 1) * 10 + index + 1}</td>
-                    {/* <td> */}
+                    {/* ... ส่วนอื่น ๆ ของแถว */}
                     <td>
                       <img className="img-d" src={item.department_image} />
                     </td>
@@ -247,7 +249,7 @@ function ShowData() {
                     <td>{item.department_phone}</td>
                     <td>{item.max_queue_number}</td>
                     <td>
-                      <button
+                    <button
                         id="department_edit"
                         type="button"
                         className="btn btn-warning text-white mx-1 mt-1"
@@ -257,6 +259,7 @@ function ShowData() {
                       >
                         <i className="fa-solid fa-pen-to-square"></i>
                       </button>
+
 
                       <button
                         id="department_delete"
@@ -287,9 +290,9 @@ function ShowData() {
           จำนวน {pageData.length} รายการ จากทั้งหมด {departments.length} รายการ
         </div>
         <div>
-          <div className="Pagination"id="DePagination">
+          <div className="Pagination" id="DePagination">
             <Pagination
-              
+
               activePage={page}
               itemsCountPerPage={pageSize}
               totalItemsCount={departments.length}
