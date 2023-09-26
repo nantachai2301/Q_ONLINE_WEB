@@ -47,7 +47,7 @@ const updateQueueById = async (
   symptom,
   queue_status_id,
   department_id,
-  questionaire_id,
+ 
   department_name,
   queue_status_name,
   first_name,
@@ -61,7 +61,7 @@ const updateQueueById = async (
     symptom,
     queue_status_id,
     department_id,
-    questionaire_id,
+  
     department_name,
     queue_status_name,
     first_name,
@@ -85,7 +85,7 @@ const createQueue = async (
     department_id,
     queue_date,
     symptom,
-    queue_status_id, // ตรวจสอบว่าค่า queue_status_id ถูกส่งไปยัง API ในฟังก์ชันนี้
+    queue_status_id, 
   });
 };
 

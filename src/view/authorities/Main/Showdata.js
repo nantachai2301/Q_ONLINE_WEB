@@ -581,14 +581,27 @@ function ShowData({}) {
                         </button>
                       </td>
                       <td style={{ textAlign: "center" }}>
-                      <button
-                          id="EditQueues"
-                          type="button"
-                          className="btn btn-warning text-white mx-1 mt-1"
-                          onClick={() => handleEditClick(item)}
-                        >
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </button>
+                        {item.queue_status_id === 2 ||
+                        item.queue_status_id === 3 ? (
+                          <button
+                            id="EditQueues"
+                            type="button"
+                            className="btn btn-warning text-white mx-1 mt-1"
+                            disabled
+                          >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                        ) : (
+                          <button
+                            id="EditQueues"
+                            type="button"
+                            className="btn btn-warning text-white mx-1 mt-1"
+                            onClick={() => handleEditClick(item)}
+                          >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                        )}
+
                         {item.queue_status_id === 2 ||
                         item.queue_status_id === 3 ? (
                           <button
