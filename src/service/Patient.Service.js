@@ -2,8 +2,8 @@ import axios from "axios";
 
 const API_URL = "https://good-gray-starfish-belt.cyclic.cloud/apis/";
 
-const getPatient= async () => {
-  return await axios.get(API_URL + "patients" );
+const getPatient = async () => {
+  return await axios.get(API_URL + "patients");
 };
 const getPatientById = async (users_id) => {
   return await axios.get(API_URL + "patients/" + users_id);
@@ -31,7 +31,6 @@ const updatePatientById = async (
   district,
   province,
   postcode,
-  subdistrictsId,
   img,
   role_id
 ) => {
@@ -57,7 +56,6 @@ const updatePatientById = async (
     district,
     province,
     postcode,
-    subdistrictsId,
     img,
     role_id,
   });
@@ -88,7 +86,7 @@ const createPatient = async (
   district,
   province,
   postcode,
-  subdistrictsId,
+
   img,
   role_id
 ) => {
@@ -115,19 +113,25 @@ const createPatient = async (
     district,
     province,
     postcode,
-    subdistrictsId,
+
     img,
-    role_id
+    role_id,
   });
 };
-export { getPatient, getPatientById,updatePatientById,deletePatientById ,createPatient};
+export {
+  getPatient,
+  getPatientById,
+  updatePatientById,
+  deletePatientById,
+  createPatient,
+};
 
 const PatientService = {
   getPatient,
   getPatientById,
   deletePatientById,
   updatePatientById,
-  createPatient
+  createPatient,
 };
 
 export default PatientService;
