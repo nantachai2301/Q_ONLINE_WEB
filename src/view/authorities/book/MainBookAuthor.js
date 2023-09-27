@@ -32,7 +32,7 @@ function MainBookAuthor() {
     district: "",
     province: "",
     postcode: "",
-    subdistritsId: "",
+   
     img: "",
     role_id:0,
     department_id:null,
@@ -100,7 +100,7 @@ function MainBookAuthor() {
       district,
       province,
       postcode,
-      subdistrictsId,
+    
     } = users;
 
     if (
@@ -121,7 +121,7 @@ function MainBookAuthor() {
       !district ||
       !province ||
       !postcode ||
-      !subdistrictsId ||
+   
       !phoneNumber.length !== 10 ||
       id_card.length !== 13 ||
       phoneNumber.length !== 10
@@ -202,7 +202,7 @@ function MainBookAuthor() {
             dataToSend.district,
             dataToSend.province,
             dataToSend.postcode,
-            dataToSend.subdistrictsId,
+         
             dataToSend.img,
             dataToSend.role_id,
           );
