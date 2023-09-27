@@ -11,6 +11,7 @@ import { getPatient, getPatientById } from "../../../service/Patient.Service";
 import { createQueue, deleteQueueById } from "../../../service/Queue.Service";
 function Showdata() {
   const [user, setUser] = useState([]);
+  console.log(user)
   const [selectedUser, setSelectedUser] = useState([]);
   const navigate = useNavigate();
   const [pageData, setPageData] = useState([]);
@@ -293,7 +294,9 @@ function Showdata() {
           </thead>
           <tbody>
             {pageData.length > 0 ? (
-              pageData.map((item, index) => {
+              pageData
+              .sort((a, b) => new Date(b.users_id) - new Date(a.users_id))
+              .map((item, index) => {
                 if (item.role_id === 0) {
                   const userBirthdate = new Date(item.birthday); // ตั้งค่าวันเกิดของผู้ใช้งานในรูปแบบ Date
 
@@ -310,9 +313,10 @@ function Showdata() {
                       today.getDate() < birthdateDay)
                       ? 1
                       : 0);
+                      
                   return (
                     <tr key={item.users_id}>
-                      <td>{index + 1}</td>
+                      <td>{(page - 1) * 10 + index + 1}</td>
                       <td>{item.id_card}</td>
                       <td>
                         {item.prefix_name} {item.first_name} {item.last_name}

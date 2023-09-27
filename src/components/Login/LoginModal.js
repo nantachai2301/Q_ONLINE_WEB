@@ -178,7 +178,7 @@ const LoginModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>รหัสประจำตัวประชาชน</Form.Label>
                   <Form.Control
-                    id="id_cardF"
+                    id="LoginID_Card"
                     type="text"
                     name="id_card"
                     placeholder="Enter ID number"
