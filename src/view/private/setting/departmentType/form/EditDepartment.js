@@ -66,7 +66,7 @@ function EditDepartment() {
         cancelButtonText: "ยกเลิก",
       });
 
-      if (result.isConfirmed) { 
+      if (result.isConfirmed) {
         const response = await updateDepartmentById(
           department.department_id,
           department.department_name,
@@ -155,7 +155,7 @@ function EditDepartment() {
               <li className="breadcrumb-item">
                 <Link to="/admin/department-type" className="nav-breadcrumb">
                   ข้อมูลแผนกและการตรวจรักษา
-              </Link>
+                </Link>
 
               </li>
               <li
@@ -163,7 +163,7 @@ function EditDepartment() {
                 aria-current="page"
               >
                 {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
-            </li>
+              </li>
 
             </ol>
 
@@ -173,7 +173,7 @@ function EditDepartment() {
         <div className="w-full mb-5">
           <h2 className="title-content">
             {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
-        </h2>
+          </h2>
         </div>
 
         <Formik
@@ -232,7 +232,7 @@ function EditDepartment() {
                         }`}
                       onChange={handleChange}
                     />
-                     
+
                     <ErrorMessage
                       name="department_id"
                       component="div"
@@ -263,6 +263,7 @@ function EditDepartment() {
                     />
                   </div>
 
+
                   <div className="col-10 col-md-6 ">
                     <label>เวลาปิด</label>
                     <label className="red">*</label>
@@ -272,7 +273,7 @@ function EditDepartment() {
                       type="time"
                       placeholder="เวลาปิด"
                       value={department.close_time}
-                      className={`form-select ${touched.close_time &&
+                      className={`form-control ${touched.close_time &&
                         errors.close_time &&
                         "is-invalid"
                         }`}
@@ -284,6 +285,7 @@ function EditDepartment() {
                       className="error-message"
                     />
                   </div>
+
 
                   <div className="col-10 col-md-6 ">
                     <label>อาคาร</label>
