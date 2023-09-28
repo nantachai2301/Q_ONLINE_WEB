@@ -25,21 +25,19 @@ import NavBarQueue from "../../components/Public/NavBarQueue";
 
 function Home() {
   
-  // เพิ่ม state สำหรับตรวจสอบสถานะการล็อกอิน
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [showMainBook, setShowMainBook] = useState(false);
 
-  // ฟังก์ชันสำหรับตรวจสอบล็อกอิน
   const checkLogin = () => {
-    // เช่นในกรณีที่คุณมีตัวแปรใน localStorage หากมีค่าแสดงว่าผู้ใช้ล็อกอินแล้ว
-    // ให้นำตัวแปรนี้มาใช้ตรวจสอบเพื่อกำหนดค่า isLoggedIn ให้เป็น true
+  
     const storedUserData = localStorage.getItem("userData");
     const isLoggedIn = storedUserData ? true : false;
     setIsLoggedIn(isLoggedIn);
   };
 
-  // เรียกใช้ฟังก์ชัน checkLogin เมื่อโหลดหน้า Home เพื่อตรวจสอบสถานะการล็อกอิน
+  
   useEffect(() => {
     checkLogin();
   }, []);
@@ -65,7 +63,7 @@ function Home() {
 
 
   const handleMainBookPopup = () => {
-    // ตรวจสอบสถานะการล็อกอินก่อนเปิดโมดัล
+    
     if (!isLoggedIn) {
       Swal.fire({
         icon: "warning",

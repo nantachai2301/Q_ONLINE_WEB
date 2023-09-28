@@ -1,9 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import Pagination from "react-js-pagination";
 import { useReactToPrint } from "react-to-print";
 import MainPdf from "../history/pdf/MainPdf";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Select from "react-select";
 import Swal from "sweetalert2";
@@ -11,26 +8,19 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { Formik } from "formik";
 import { format } from "date-fns";
-import {
-  getQueue,
- updateQueue,
-  updateQueueById,
-  deleteQueueById,
-} from "../../../service/Queue.Service";
-import { getPatient,getPatientById } from "../../../service/Patient.Service";
+import { getQueue,updateQueue,updateQueueById,deleteQueueById,} from "../../../service/Queue.Service";
+import {getPatientById } from "../../../service/Patient.Service";
+
 function ShowData({}) {
   const [data, setData] = useState(null);
   const [dataQ, setDataQ] = useState([]);
-  console.log(dataQ);
-  const navigate = useNavigate();
   const [pageData, setPageData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [pageSize, setPageSize] = useState(100);
   const [searchUsers, setSearchUsers] = useState("");
-  const [searchDate, setSearchDate] = useState(format(new Date(), "yyyy-MM-dd"));
-  const [userData, setUserData] = useState(null); 
-  const [queueList, setQueueList] = useState([]);
+  const [searchDate, setSearchDate] = useState(format(new Date(),"yyyy-MM-dd"));
+  const [userData, setUserData] = useState(null);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [editModalShow, setEditModalShow] = useState(false);
   const [selectedQueueData, setSelectedQueueData] = useState(null);
@@ -48,17 +38,12 @@ function ShowData({}) {
   useEffect(() => {
     getdataQ();
   }, []);
-  const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-  };
-
-  const handlePageSizeChange = (event) => {
+const handlePageSizeChange = (event) => {
     const newPageSize = parseInt(event.target.value);
     setPageSize(newPageSize);
     setPage(1);
   };
-
-  const filterDataBySearchAndDate = (
+const filterDataBySearchAndDate = (
     dataQ,
     searchDate,
     formattedCurrentDate
@@ -71,52 +56,52 @@ function ShowData({}) {
           return item.queue_date === formattedSearchDate;
         }
       }
-
-      return item.queue_date === formattedCurrentDate;
+    return item.queue_date === formattedCurrentDate;
     });
   };
 
   useEffect(() => {
-    const currentDate = new Date(); // วันที่ปัจจุบัน
-    const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
-
-    const filteredData = filterDataBySearchAndDate(
+const currentDate = new Date(); 
+const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
+const filteredData = filterDataBySearchAndDate(
       dataQ,
       searchDate,
       formattedCurrentDate
     );
 
-    const pagedatacount = Math.ceil(dataQ.length / pageSize);
+const pagedatacount = Math.ceil(dataQ.length / pageSize);
     setPageCount(pagedatacount);
 
     if (page) {
-      const LIMIT = pageSize;
-      const skip = LIMIT * (page - 1);
-      const dataToDisplay = filteredData.filter((dataItem) => {
-        const firstName = dataItem.first_name || "";
-        const lastName = dataItem.last_name || "";
-        const departmentName = dataItem.department_name || "";
-        const symptom = dataItem.symptom || "";
+const LIMIT = pageSize;
+const skip = LIMIT * (page - 1);
+const dataToDisplay = filteredData.filter((dataItem) => {
+const firstName = dataItem.first_name || "";
+const lastName = dataItem.last_name || "";
+const departmentName = dataItem.department_name || "";
+const symptom = dataItem.symptom || "";
 
-        const nameFilter =
+const nameFilter =
           firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
           lastName.toLowerCase().includes(searchUsers.toLowerCase()) ||
           departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
           symptom.toLowerCase().includes(searchUsers.toLowerCase());
 
-        const departmentFilter =
+const departmentFilter =
           !selectedDepartment || departmentName === selectedDepartment.value;
 
         return nameFilter && departmentFilter;
       });
 
-      const sortedData = dataToDisplay.slice().sort((a, b) => a.queue_id - b.queue_id);
+const sortedData = dataToDisplay
+        .slice()
+        .sort((a, b) => a.queue_id - b.queue_id);
 
-      const pageStartIndex = skip >= sortedData.length ? 0 : skip;
-      const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
-      const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
+const pageStartIndex = skip >= sortedData.length ? 0 : skip;
+const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
+const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
 
-      const newData = slicedData.map((item) => ({
+const newData = slicedData.map((item) => ({
         ...item,
         queue_id: item.queue_id,
       }));
@@ -125,37 +110,35 @@ function ShowData({}) {
     }
   }, [dataQ, page, pageSize, searchUsers, selectedDepartment, searchDate]);
 
-  const handleSearchChange = (event) => {
-    const query = event.target.value;
+const handleSearchChange = (event) => {
+const query = event.target.value;
     setSearchUsers(query);
     setSearchDate("");
     setPage(1);
     getdataQ();
   };
-
-  const handleDateSearch = (event) => {
-    const query = event.target.value;
+const handleDateSearch = (event) => {
+const query = event.target.value;
     setSearchDate(query);
     setSearchUsers("");
     setPage(1);
     getdataQ();
   };
-  const handleCancel = () => {
+const handleCancel = () => {
     setSearchUsers("");
-    setSearchDate(format(new Date(), "yyyy-MM-dd")); // กำหนดค่าวันที่เป็นวันที่ปัจจุบัน
+    setSearchDate(format(new Date(), "yyyy-MM-dd"));
     setPage(1);
 
-    // อัพเดตข้อมูลใหม่ในหน้าแสดงผลโดยให้ pageData เก็บข้อมูลที่ถูกกรองด้วยค่าค้นหาและวันที่ใหม่
-    const currentDate = new Date(); // วันที่ปัจจุบัน
-    const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
+const currentDate = new Date();
+const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
   };
 
-  const formatDateToAPI = (dateString) => {
+const formatDateToAPI = (dateString) => {
     const [day, month, year] = dateString.split("-");
     return `${year}-${month}-${day}`;
   };
 
-  const handleCancelClick = (users_id, queue_date) => {
+const handleCancelClick = (users_id, queue_date) => {
     Swal.fire({
       title: "คุณต้องการลบรายการนี้ใช่หรือไม่?",
       text: "หากยืนยันที่จะลบรายการนี้ เมื่อถูกลบจะไม่สามารถกู้คืนได้",
@@ -171,7 +154,7 @@ function ShowData({}) {
 
           Swal.fire({
             title: "ลบคิวสำเร็จ",
-            text: "การจองคิวถูกลบแล้ว",
+            text: `การจองคิวของผู้ป่วยหมายเลข ${users_id} ในวันที่ ${formattedDate} ถูกลบแล้ว`,
             icon: "success",
           });
 
@@ -187,17 +170,14 @@ function ShowData({}) {
       }
     });
   };
-
-  const changeStatus = (
+const changeStatus = (
     queue_id,
     currentStatus,
     queue_date,
     create_at,
     symptom,
     queue_status_id,
-
     department_id,
-    questionaire_id,
     users_id,
     department_name,
     queue_status_name,
@@ -212,14 +192,13 @@ function ShowData({}) {
     })();
 
     console.log(formattedQueueDate);
-    const newStatus =
+ const newStatus =
       currentStatus === "ยืนยัน"
         ? "กำลังเข้ารับการรักษา"
         : currentStatus === "กำลังเข้ารับการรักษา"
         ? "รับการรักษาแล้ว"
         : "ยืนยัน";
-
-    const newQueueStatusId =
+const newQueueStatusId =
       currentStatus === "ยืนยัน"
         ? 3
         : currentStatus === "กำลังเข้ารับการรักษา"
@@ -235,9 +214,8 @@ function ShowData({}) {
     }).then((result) => {
       if (result.isConfirmed) {
         const formattedQueueDate = formatDateToAPI(queue_date);
-        const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss"); // แปลงเวลาปัจจุบันเป็นข้อความ
-
-        // เรียกใช้ฟังก์ชัน updateQueueById แทน axios.put
+        const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+        
         updateQueueById(
           users_id,
           queue_id,
@@ -246,7 +224,6 @@ function ShowData({}) {
           symptom,
           newQueueStatusId,
           department_id,
-          questionaire_id,
           dataQ.department_name,
           dataQ.newStatus,
           prefix_name,
@@ -261,16 +238,15 @@ function ShowData({}) {
               icon: "success",
               timer: 1500,
             });
-            // รีเฟรชหน้าเพื่อแสดงสถานะใหม่
+
             getdataQ();
 
-            // อัพเดทการค้นหาและสถานะที่ถูกเลือก เพื่อให้หน้าพอรียังคงแสดงข้อมูลตามที่เลือกไว้
-            const searchData = searchUsers; // เก็บค่าการค้นหา
-            const selectedDep = selectedDepartment; // เก็บค่าแผนกที่เลือก
-            setSearchUsers(""); // เคลียร์ค้นหา
-            setSelectedDepartment(null); // เคลียร์แผนกที่เลือก
-            setSearchUsers(searchData); // กำหนดค่าค้นหากลับให้กับ state
-            setSelectedDepartment(selectedDep); // กำหนดค่าแผนกที่เลือกกลับให้กับ state
+            const searchData = searchUsers;
+            const selectedDep = selectedDepartment;
+            setSearchUsers("");
+            setSelectedDepartment(null);
+            setSearchUsers(searchData);
+            setSelectedDepartment(selectedDep);
           })
           .catch((error) => {
             Swal.fire({
@@ -322,38 +298,37 @@ function ShowData({}) {
     pageStyle: "@page { size: 6in 5in; }",
   });
 
-    // สร้างฟังก์ชันเพื่อกำหนดคิวที่เลือกใน Modal แก้ไข
-    const handleEditClick = (item) => {
-     setUserData(null); 
-     setSelectedQueueData(item); 
-     getUserById (item.users_id,item.queue_date);
-     
-     setEditModalShow(true); 
-    };
+ 
+  const handleEditClick = (item) => {
+    setUserData(null);
+    setSelectedQueueData(item);
+    getUserById(item.users_id, item.queue_date);
 
-    const getUserById = async (users_id) => {
-      try {
-       
-        const response = await getPatientById(users_id);
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching user by ID:", error);
-      }
-    };
-   useEffect(() => {
-    const fetchUserQueue = async (users_id,queue_date) => {
+    setEditModalShow(true);
+  };
+
+  const getUserById = async (users_id) => {
+    try {
+      const response = await getPatientById(users_id);
+      setUserData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    const fetchUserQueue = async (users_id, queue_date) => {
       try {
         const formattedDate = formatDateToAPI(queue_date);
         const response = await getQueue(users_id, formattedDate);
-       setDataQ(response.data);
+        setDataQ(response.data);
       } catch (error) {
-        console.error("Error fetching user by ID:", error);
+        console.error(error);
       }
     };
 
     fetchUserQueue();
   }, [userData]);
- const handleEditSubmit = async (values) => {
+  const handleEditSubmit = async (values) => {
     try {
       if (!values.symptom) {
         Swal.fire({
@@ -364,38 +339,32 @@ function ShowData({}) {
         return;
       }
       const updatedData = {
-        symptom:values.symptom,
-        queue_date:formatDateToAPI(values.queue_date),
-      
-        queue_id: selectedQueueData.queue_id, // แก้ค่า queue_id ให้ถูกต้อง
-       
-      };
+        symptom: values.symptom,
+        queue_date: formatDateToAPI(values.queue_date),
+};
 
       console.log("Values received in handleEditSubmit:", values);
       console.log("Sending request with data:", updatedData);
-     
+
       const response = await updateQueue(
         selectedQueueData.users_id,
         formatDateToAPI(selectedQueueData.queue_date),
-       
-      
         updatedData.symptom
       );
       console.log("Response from server:", response.data);
- 
-    setDataQ((prevDataQ) =>
-    prevDataQ.map((queue) =>
+
+      setDataQ((prevDataQ) =>
+        prevDataQ.map((queue) =>
           queue.queue_id === selectedQueueData.queue_id &&
           queue.queue_date === selectedQueueData.queue_date
             ? {
                 ...queue,
-                symptom:updatedData.symptom, 
+                symptom: updatedData.symptom,
               }
             : queue
         )
       );
 
-    
       setEditModalShow(false);
 
       Swal.fire({
@@ -404,10 +373,9 @@ function ShowData({}) {
         showConfirmButton: false,
         timer: 1500,
       });
-     
     } catch (error) {
       console.error("Error editing queue:", error);
-   
+
       Swal.fire({
         icon: "error",
         title: "การแก้ไขคิวไม่สำเร็จ",
@@ -416,19 +384,14 @@ function ShowData({}) {
       });
     }
   };
-    const formatDate = (dateString) => {
-      if (!dateString) {
-        return ""; // Return an empty string or handle it as needed in your application
-      }
-    
-      const [day, month, year] = dateString.split("-");
-      return `${year}-${month}-${day}`;
-    };
+  const formatDate = (dateString) => {
+    if (!dateString) {
+      return ""; 
+    }
 
-
-
-
-
+    const [day, month, year] = dateString.split("-");
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <div className="w-full">
@@ -503,7 +466,7 @@ function ShowData({}) {
               <th scope="col" style={{ width: "2%", textAlign: "center" }}>
                 ลำดับ
               </th>
-           
+
               <th scope="col" style={{ width: "20%", textAlign: "center" }}>
                 ชื่อ-สกุล
               </th>
@@ -526,7 +489,7 @@ function ShowData({}) {
                 บัตรคิว
               </th>
               <th scope="col" style={{ width: "10%", textAlign: "center" }}>
-              จัดการ
+                จัดการ
               </th>
               <th scope="col" style={{ width: "20%", textAlign: "center" }}>
                 จัดการสถานะคิว
@@ -543,7 +506,7 @@ function ShowData({}) {
                   return (
                     <tr key={item.users_id}>
                       <td>{(page - 1) * 10 + index + 1}</td>
-                    
+
                       <td style={{ textAlign: "center" }}>
                         {item.prefix_name} {item.first_name} {item.last_name}
                       </td>
@@ -571,7 +534,7 @@ function ShowData({}) {
 
                       <td style={{ textAlign: "center" }}>
                         <button
-                          id="Manager_button_status"
+                          id="Manager_button_print"
                           type="button"
                           className="btn btn-primary"
                           onClick={() => {
@@ -644,18 +607,17 @@ function ShowData({}) {
                           onClick={() => {
                             changeStatus(
                               item.queue_id,
-                              item.queue_status_name, 
+                              item.queue_status_name,
                               item.queue_date,
                               item.create_at,
                               item.symptom,
                               item.queue_status_id,
                               item.department_id,
-                              item.questionaire_id,
                               item.users_id,
                               item.department_name,
                               item.formatted_birthday
                             );
-                           
+
                             getdataQ();
                           }}
                         >
@@ -702,13 +664,12 @@ function ShowData({}) {
                   queue_date: selectedQueueData
                     ? selectedQueueData.queue_date
                     : "",
-                  
                 }}
                 onSubmit={(values) => handleEditSubmit(values)}
               >
                 {({ handleSubmit, handleChange, values }) => (
                   <Form onSubmit={handleSubmit}>
-                    { userData && (
+                    {userData && (
                       <div className="col-12">
                         <div className="row">
                           <div className="col-12 px-1 mt-1">
@@ -753,7 +714,6 @@ function ShowData({}) {
                             </label>
                           </div>
 
-                        
                           <div className="col-6 px-1 mt-3">
                             <label
                               style={{
@@ -787,7 +747,6 @@ function ShowData({}) {
                               <option value="23">จักษุ</option>
                               <option value="26">ความงาม</option>
                             </select>
-                            
                           </div>
 
                           <div className="col-6 px-1 mt-3">
@@ -829,7 +788,7 @@ function ShowData({}) {
                             </Form.Label>
                             <label className="red">*</label>
                             <Form.Control
-                            id="ASymptom"
+                              id="ASymptom"
                               name="symptom" // ตรงตามชื่อที่ใช้ใน initialValues
                               type="text"
                               placeholder="กรุณาระบุอาการเบื้องต้น"
@@ -845,12 +804,12 @@ function ShowData({}) {
                       </div>
                     )}
                     <small className="red">
-                * หากผู้ป่วยเลือกแผนกผิดหรือจองคิววันที่เข้ารับการรักษาผิด
-                จะต้องยกเลิกการจองคิวเดิมและจองคิวใหม่เท่านั้น
-              </small>
+                      * หากผู้ป่วยเลือกแผนกผิดหรือจองคิววันที่เข้ารับการรักษาผิด
+                      จะต้องยกเลิกการจองคิวเดิมและจองคิวใหม่เท่านั้น
+                    </small>
                     <Modal.Footer>
                       <button
-                      id="Asubmit"
+                        id="Asubmit"
                         type="submit"
                         className="btn btn-primary"
                         onClick={() => {
@@ -866,7 +825,6 @@ function ShowData({}) {
                   </Form>
                 )}
               </Formik>
-             
             </Modal.Body>
           </Modal>
         </table>

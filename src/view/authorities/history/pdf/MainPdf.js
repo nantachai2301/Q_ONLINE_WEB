@@ -8,7 +8,7 @@ function MainPdf({ dataQ }) {
     <div className="border content-pdf p-4 " style={{ textAlign: 'center' }}>
       <div className="d-flex justify-content-end">
       
-        <div>รหัสผู้ใช้ : {dataQ ? dataQ.users_id : '-'}</div>
+        <div>รหัสผู้ป่วย : {dataQ ? dataQ.users_id : '-'}</div>
       
       </div>
       <div className="text-center">

@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  faPerson,
-  faCalendarDays,
-  faUser,
-  faChalkboardUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
-import "../../style/admin.css";
-import Chart from "chart.js/auto";
-import { Doughnut, Bar, Line, Pie } from "react-chartjs-2";
+import {  Bar } from "react-chartjs-2";
 import { getDoctor } from "../../service/Doctor.Service";
 import { getPatient } from "../../service/Patient.Service";
 import { getDepartment } from "../../service/DepartmentType.Service";
@@ -36,19 +26,7 @@ function HomePrivate() {
     const fetchData = async () => {
       try {
         const res1 = await getDoctor();
-        //         let workingDoctorsCount = 0;
-        //         let onLeaveDoctorsCount = 0;
-        // // นับจำนวนแพทย์ที่ใช้งานและพักงานตามสถานะ
-        // doctors.forEach((doctor) => {
-        //   if (doctor.doctor_status === 'ใช้งาน') {
-        //     workingDoctorsCount++;
-        //   } else if (doctor.doctor_status === 'พักงาน') {
-        //     onLeaveDoctorsCount++;
-        //   }
-        // });
-        // console.log('จำนวนแพทย์ที่ใช้งาน:', workingDoctorsCount);
-        //     console.log('จำนวนแพทย์ที่พักงาน:', onLeaveDoctorsCount);
-
+       
         const res2 = await getDepartment();
 
         console.log(res1);

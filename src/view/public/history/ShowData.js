@@ -23,7 +23,7 @@ function ShowData() {
   const [pageData, setPageData] = useState([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
-  const [pageSize, setPageSize] = useState(10); // เปลี่ยนค่าเป็น 20 หรือค่าที่ต้องการ
+  const [pageSize, setPageSize] = useState(10); 
   const [userData, setUserData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [queueList, setQueueList] = useState([]);
@@ -39,13 +39,13 @@ function ShowData() {
   console.log(queueList);
 
   useEffect(() => {
-    // ตรวจสอบสถานะการล็อกอินเมื่อโหลดหน้า Profile
+    
     const storedUserData = localStorage.getItem("userData");
     const storedIsLoggedIn = storedUserData ? true : false;
     setIsLoggedIn(storedIsLoggedIn);
 
     if (storedIsLoggedIn) {
-      // ถ้าล็อกอินแล้ว ดึงข้อมูลผู้ใช้จาก localStorage
+     
       const userDataFromLocalStorage = JSON.parse(storedUserData);
       setUserData(userDataFromLocalStorage);
       getPatient(userDataFromLocalStorage.data.id_card)
@@ -59,13 +59,13 @@ function ShowData() {
           if (matchedUser) {
             const { users_id, prefix_name, first_name, last_name, id_card } =
               matchedUser;
-            // อัปเดตข้อมูลใน state queue
+           
             setQueue((prevQueue) => ({
               ...prevQueue,
               users_id: users_id,
             }));
 
-            // อัปเดตข้อมูลใน state userData
+           
             setUserData({
               ...userData,
               users_id: users_id,
@@ -101,7 +101,7 @@ function ShowData() {
     fetchUserQueue();
   }, [userData]);
 
-  // ในส่วนที่ใช้งาน useEffect สำหรับการคำนวณหน้าและข้อมูลที่แสดงใน Pagination
+ 
   useEffect(() => {
     const filteredData = queueList
       .filter((item) => {
@@ -137,7 +137,7 @@ function ShowData() {
     } else {
       setFilteredData(filteredData);
     }
-    const orderedData = _.orderBy(filteredData, ["queue_date"], ["desc"]); // เรียงข้อมูลตาม queue_date จากมากไปน้อย
+    const orderedData = _.orderBy(filteredData, ["queue_date"], ["desc"]);
     if (page) {
       const pagedatacount = Math.ceil(orderedData.length / pageSize);
       setPageCount(pagedatacount);
@@ -172,16 +172,16 @@ function ShowData() {
   }
 
   const handleCancel = () => {
-    setSelectedDepartment(""); // เคลียร์ค่าค้นหาแผนก
-    setSelectedDate(""); // เคลียร์ค่าค้นหาวันที่
-    setPage(1); // กลับไปที่หน้าแรก
-    setPageData(filteredData); // อัพเดตข้อมูลใหม่ในหน้าแสดงผล
+    setSelectedDepartment(""); 
+    setSelectedDate(""); 
+    setPage(1); 
+    setPageData(filteredData); 
   };
 
-  // สร้างฟังก์ชันเพื่อกำหนดคิวที่เลือกใน Modal แก้ไข
+ 
   const handleEditClick = (queue) => {
-    setSelectedQueueData(queue); // กำหนดค่ารายการคิวที่ถูกเลือกแก้ไข
-    setEditModalShow(true); // เปิด Modal แก้ไข
+    setSelectedQueueData(queue);
+    setEditModalShow(true); 
   };
 
   const handleEditSubmit = async (values) => {
