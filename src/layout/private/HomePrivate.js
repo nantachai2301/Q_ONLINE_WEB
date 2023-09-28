@@ -3,6 +3,7 @@ import {  Bar } from "react-chartjs-2";
 import { getDoctor } from "../../service/Doctor.Service";
 import { getPatient } from "../../service/Patient.Service";
 import { getDepartment } from "../../service/DepartmentType.Service";
+import "../../style/admin.css";
 import 'chartjs-plugin-datalabels'; 
 function HomePrivate() {
   const [counts, setCounts] = useState({});
