@@ -9,7 +9,10 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+ 
+
 } from "@mui/material";
+import HttpsIcon from '@mui/icons-material/Https';
 import { styled } from "@mui/system";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
@@ -20,7 +23,7 @@ import Logo from "../../image/logo.png";
 import { useMediaQuery } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import LoginModal from "../../components/Login/LoginModal";
-
+import ResetpasswordModal from "../Login/ResetpasswordModal";
 const CustomAppBar = styled(AppBar)`
   background-color: #133c55;
   backdrop-filter: blur(100px);
@@ -48,6 +51,7 @@ const Navbar = () => {
   const isDesktop = useMediaQuery("(min-width:1024px");
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   // เพิ่ม state สำหรับตรวจสอบสถานะการล็อกอิน
   const [isLoggedIn, setIsLoggedIn] = useState(true, false);
   const [showLogoutButton, setShowLogoutButton] = useState(false);
@@ -57,12 +61,17 @@ const Navbar = () => {
     // ให้นำตัวแปรนี้มาใช้ตรวจสอบเพื่อกำหนดค่า isLoggedIn ให้เป็น true
     const storedUserData = localStorage.getItem("userData");
     const isLoggedIn = storedUserData ? true : false;
+
     setIsLoggedIn(isLoggedIn);
   };
   useEffect(() => {
     checkLogin();
   }, []);
-
+ 
+  const handleResetPassword = () => {
+    setIsDrawerOpen(false);
+    setShowResetPasswordModal(true);
+  };
   const handleLogout = () => {
     setIsDrawerOpen(false); // ปิดเมนูแฮมเบอร์เกอร์ก่อน
     setShowLogoutButton(false); // ปิดปุ่มออกจากระบบ
@@ -143,6 +152,17 @@ const Navbar = () => {
           </ListItemIcon>
           <ListItemText primary="โปรไฟล์" />
         </ListItem>
+    <ListItem id="Reset"aria-label="เปลี่ยนรหัสผ่าน" button onClick={handleResetPassword}>
+          <ListItemIcon>
+            <HttpsIcon/>
+          </ListItemIcon>
+          <ListItemText primary="เปลี่ยนรหัสผ่าน" />
+        
+            
+        </ListItem>
+        
+      
+        
         {isLoggedIn && (
           <ListItem id="LogoutHam"aria-label="ออกจากระบบแฮ่ม" button onClick={handleLogout}>
             <ListItemIcon>
@@ -258,6 +278,7 @@ const Navbar = () => {
             {renderMenuItems()}
           </Drawer>
         )}
+          <ResetpasswordModal show={showResetPasswordModal} setShow={setShowResetPasswordModal} />
       </header>
     </>
   );

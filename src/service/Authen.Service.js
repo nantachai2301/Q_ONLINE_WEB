@@ -19,10 +19,21 @@ const forgotpassword = async (
   
   });
 };
+const Resetpassword = async (
+  id_card,
+  new_password
+ 
+) => {
+  return await axios.post(API_URL +"resetpassword", {
+    id_card,
+    new_password
+  
+  });
+};
 
-export { Sendlogin,forgotpassword};
+export { Sendlogin,forgotpassword,Resetpassword };
 
-const Authen = {Sendlogin,forgotpassword
+const Authen = {Sendlogin,forgotpassword,Resetpassword 
  
 };
 
