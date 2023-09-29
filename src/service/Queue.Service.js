@@ -1,18 +1,19 @@
 import axios from "axios";
 
-const API_URL = "https://good-gray-starfish-belt.cyclic.cloud/apis/";
+const API_URL = "https://teal-mushy-dalmatian.cyclic.cloud/apis/";
 
 const getQueue = async () => {
   return await axios.get(API_URL + "queue");
 };
-const updateQueues = async ( users_id,
+const updateQueues = async (
+  users_id,
   queue_id,
   queue_date,
   create_at,
   symptom,
   queue_status_id,
   department_id,
- 
+
   department_name,
   queue_status_name,
   prefix_name,
@@ -47,7 +48,7 @@ const updateQueueById = async (
   symptom,
   queue_status_id,
   department_id,
- 
+
   department_name,
   queue_status_name,
   first_name,
@@ -61,7 +62,7 @@ const updateQueueById = async (
     symptom,
     queue_status_id,
     department_id,
-   
+
     department_name,
     queue_status_name,
     first_name,
@@ -96,18 +97,27 @@ const updateQueue = async (users_id, queue_date, symptom) => {
   });
 };
 const getQueuebyid = async (users_id, queue_date) => {
-  return await axios.get(`${API_URL}/queue/${users_id}?queue_date=${queue_date}`);
+  return await axios.get(API_URL + "queue/" + users_id + "/" + queue_date);
 };
-export { getQueue,  updateQueues, deleteQueueById, updateQueueById,createQueue,updateQueue, getQueuebyid };
 
-const DoctorService = {
+export {
   getQueue,
   updateQueues,
   deleteQueueById,
   updateQueueById,
   createQueue,
   updateQueue,
-  getQueuebyid
+  getQueuebyid,
 };
 
-export default DoctorService;
+const QueueService = {
+  getQueue,
+  updateQueues,
+  deleteQueueById,
+  updateQueueById,
+  createQueue,
+  updateQueue,
+  getQueuebyid,
+};
+
+export default QueueService;

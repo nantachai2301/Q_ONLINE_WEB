@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Pagination from "react-js-pagination";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
 import Table from "react-bootstrap/Table";
 import { Modal, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { getPatient, getPatientById } from "../../../service/Patient.Service";
-import { createQueue, deleteQueueById } from "../../../service/Queue.Service";
+import { createQueue,getQueuebyid } from "../../../service/Queue.Service";
 function Showdata() {
   const [user, setUser] = useState([]);
   console.log(user)
@@ -40,7 +39,7 @@ function Showdata() {
     setIsModalOpen(false);
 
     if (shouldRefresh) {
-      getUser(); // รีเฟรชข้อมูลผู้ใช้งานหลังจากปิด Modal
+      getUser();
     }
   };
 
@@ -63,7 +62,8 @@ function Showdata() {
    
     
     try {
-      // ตรวจสอบความถูกต้องของข้อมูลที่ผู้ใช้กรอกเข้ามา
+     
+   
       if (!booking.symptom || !booking.department_id) {
         Swal.fire({
           icon: "error",
@@ -75,7 +75,7 @@ function Showdata() {
 
     
 
-      // แสดงตัวแจ้งเตือนสำหรับยืนยันการจองคิว
+    
       const result = await Swal.fire({
         title: "ยืนยัน",
         text: "คุณแน่ใจหรือไม่ ว่าต้องการจองคิว ?",
@@ -96,7 +96,7 @@ function Showdata() {
             queue_status_id: 1,
             symptom,
           };
-          // ทำการจองคิวโดยส่งข้อมูลที่อยู่ในตัวแปร queue ไปยัง API สำหรับการจองคิว
+     
           await createQueue(
             dataToSend.users_id,
             dataToSend.first_name,
@@ -107,7 +107,7 @@ function Showdata() {
             dataToSend.queue_status_id
           );
 
-          // แสดงตัวแจ้งเตือนการจองคิวสำเร็จ
+        
           Swal.fire({
             icon: "success",
             title: "จองคิวสำเร็จ",
@@ -117,13 +117,11 @@ function Showdata() {
           navigate("/author/Manage");
 
           closeModal(true);
-          // ทำการซ่อนป๊อปอัปการจองคิว
-
-          // นำค่าที่ต้องการแสดงใน console.log
+       
           console.log("จองคิวสำเร็จ!");
         } catch (error) {
           console.log(error);
-          // แสดงตัวแจ้งเตือนเมื่อการจองคิวไม่สำเร็จ
+        
           Swal.fire({
             icon: "error",
             title: "การจองคิวไม่สำเร็จ",
