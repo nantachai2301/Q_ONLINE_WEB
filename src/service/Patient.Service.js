@@ -3,10 +3,10 @@ import axios from "axios";
 const API_URL = "https://teal-mushy-dalmatian.cyclic.cloud/apis/";
 
 const getPatient = async () => {
-  return await axios.get(API_URL + "patients");
+  return await axios.get(API_URL + "user");
 };
 const getPatientById = async (users_id) => {
-  return await axios.get(API_URL + "patients/" + users_id);
+  return await axios.get(API_URL + "user/" + users_id);
 };
 const updatePatientById = async (
   users_id,
@@ -34,7 +34,7 @@ const updatePatientById = async (
   img,
   role_id
 ) => {
-  return await axios.put(API_URL + "patients/" + users_id, {
+  return await axios.put(API_URL + "user/" + users_id, {
     id_card,
     password,
     prefix_name,
@@ -61,7 +61,7 @@ const updatePatientById = async (
   });
 };
 const deletePatientById = async (users_id) => {
-  return await axios.delete(API_URL + "patients/" + users_id);
+  return await axios.delete(API_URL + "user/" + users_id);
 };
 const createPatient = async (
   users_id,
@@ -90,7 +90,7 @@ const createPatient = async (
   img,
   role_id
 ) => {
-  return await axios.post(API_URL + "patient", {
+  return await axios.post(API_URL + "user", {
     users_id,
     id_card,
     password,

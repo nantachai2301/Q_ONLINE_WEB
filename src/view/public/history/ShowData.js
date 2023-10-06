@@ -515,6 +515,7 @@ function ShowData() {
             show={editModalShow}
             onHide={() => setEditModalShow(false)}
             centered
+            style={{ marginTop:"70px"}}
           >
             <Modal.Header closeButton>
               <Modal.Title
