@@ -17,11 +17,12 @@ function FormDoctor() {
     prefix_name: "",
     doctor_first_name: "",
     doctor_last_name: "",
+    doctor_phone:"",
     doctor_image: null,
     doctor_status: "",
     department_id: "",
     department_name: "",
-    doctor_phone:"",
+    
   });
   const { doctors_id } = useParams();
   useEffect(() => {
@@ -75,7 +76,7 @@ function FormDoctor() {
           doctor.department_name,
        
         );
-        if (response.status === 200) {
+        if (response.status ===200) {
           Swal.fire({
             icon: "success",
             title: "อัพเดตข้อมูลแพทย์สำเร็จ",
