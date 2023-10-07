@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://teal-mushy-dalmatian.cyclic.cloud/apis/";
+const API_URL = "http://localhost:5000/apis/";
 
 const getDoctor = async ( ) => {
   return await axios.get(API_URL + "doctors",);
@@ -20,6 +20,7 @@ const updateStatusDoctor = async (
   prefix_name,
   doctor_first_name,
   doctor_last_name,
+  doctor_phone,
   doctor_image,
   doctor_status,
   department_id,
@@ -29,13 +30,14 @@ const updateStatusDoctor = async (
     prefix_name,
     doctor_first_name,
     doctor_last_name,
+    doctor_phone,
     doctor_image,
     doctor_status,
     department_id,
     department_name,
   });
 };
-const createDoctor = async ( doctor_id,prefix_name, doctor_first_name, doctor_last_name, doctor_image,doctor_status,department_id, department_name
+const createDoctor = async ( doctor_id,prefix_name, doctor_first_name, doctor_last_name,doctor_phone,doctor_image,doctor_status,department_id,department_name,
   ) => {
     return await axios.post(API_URL + "doctors", {
       doctor_id,
@@ -46,6 +48,7 @@ const createDoctor = async ( doctor_id,prefix_name, doctor_first_name, doctor_la
       doctor_status,
       department_id,
       department_name,
+      doctor_phone,
       
     });
   };
@@ -55,6 +58,7 @@ const createDoctor = async ( doctor_id,prefix_name, doctor_first_name, doctor_la
     prefix_name,
     doctor_first_name,
     doctor_last_name,
+    doctor_phone,
     doctor_image,
     doctor_status,
     department_id,
@@ -65,6 +69,7 @@ const createDoctor = async ( doctor_id,prefix_name, doctor_first_name, doctor_la
       doctor_first_name,
       doctor_last_name,
       doctor_image, 
+      doctor_phone,
       doctor_status,
       department_id,
       department_name,

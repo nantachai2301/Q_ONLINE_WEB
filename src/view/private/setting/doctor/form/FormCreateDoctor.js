@@ -12,10 +12,12 @@ function FormCreateDoctor() {
     prefix_name: "",
     doctor_first_name: "",
     doctor_last_name: "",
+    doctor_phone:"",
     doctor_image: "",
     doctor_status: "",
     department_id: "",
     department_name: "",
+  
   });
 
   const navigate = useNavigate();
@@ -71,6 +73,8 @@ function FormCreateDoctor() {
       !doctor.doctor_last_name ||
       !doctor.doctor_status ||
       !doctor.department_id
+  
+
     ) {
       // ตรวจสอบว่ามีข้อมูลที่ไม่ถูกกรอกให้ครบหรือไม่
       Swal.fire({
@@ -98,10 +102,12 @@ function FormCreateDoctor() {
           doctor.prefix_name,
           doctor.doctor_first_name,
           doctor.doctor_last_name,
+          doctor.doctor_phone,
           doctor.doctor_image,
           doctor.doctor_status,
           doctor.department_id,
-          doctor.department_name
+          doctor.department_name,
+        
         );
         Swal.fire({
           icon: "success",
@@ -295,7 +301,7 @@ function FormCreateDoctor() {
                             : ""
                           }`}
                         aria-label="Default select example"
-                        value={doctor.department_id} // Set the value to doctor.department_id
+                        value={doctor.department_id} 
                         onChange={handleChange}
                       >
                        <option value="" selected>เลือกแผนก</option>
@@ -309,6 +315,27 @@ function FormCreateDoctor() {
                       </select>
                       <ErrorMessage
                         name="department_id"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
+                    <div class="col-10 col-md-6">
+                      <label>เบอร์โทร</label>
+                      <label className="red">*</label>
+                      <input
+                        id="doctor_phone"
+                        name="doctor_phone"
+                        placeholder="นามสกุล"
+                        type="text"
+                        value={doctor.doctor_phone}
+                        className={`form-control ${touched.doctor_phone &&
+                          errors.doctor_phone&&
+                          "is-invalid"
+                          }`}
+                        onChange={handleChange}
+                      />
+                      <ErrorMessage
+                        name="doctor_phone"
                         component="div"
                         className="error-message"
                       />

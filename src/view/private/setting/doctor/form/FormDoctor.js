@@ -21,6 +21,7 @@ function FormDoctor() {
     doctor_status: "",
     department_id: "",
     department_name: "",
+    doctor_phone:"",
   });
   const { doctors_id } = useParams();
   useEffect(() => {
@@ -67,10 +68,12 @@ function FormDoctor() {
           doctor.prefix_name,
           doctor.doctor_first_name,
           doctor.doctor_last_name,
+          doctor.doctor_phone,
           doctor.doctor_image,
           doctor.doctor_status,
           doctor.department_id,
-          doctor.department_name
+          doctor.department_name,
+       
         );
         if (response.status === 200) {
           Swal.fire({
@@ -322,6 +325,27 @@ function FormDoctor() {
                       </select>
                       <ErrorMessage
                         name="department_id"
+                        component="div"
+                        className="error-message"
+                      />
+                    </div>
+                    <div class="col-10 col-md-6">
+                      <label>เบอร์โทร</label>
+                      <label className="red">*</label>
+                      <input
+                        id="doctor_phone"
+                        name="doctor_phone"
+                        placeholder="เบอร์โทร"
+                        type="text"
+                        value={doctor.doctor_phone}
+                        className={`form-control ${touched.doctor_phone &&
+                          errors.doctor_phone &&
+                          "is-invalid"
+                          }`}
+                        onChange={handleChange}
+                      />
+                      <ErrorMessage
+                        name="doctor_phone"
                         component="div"
                         className="error-message"
                       />

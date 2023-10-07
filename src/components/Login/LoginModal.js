@@ -244,7 +244,7 @@ const LoginModal = (props) => {
       <Modal style={{ width: "100%" }} show={showResetPasswordModal} onHide={handleCloseResetPasswordModal} centered>
   <Modal.Header closeButton>
     <Modal.Title style={{ width: "100%", textAlign: "center" }}>
-      รีเซ็ตรหัสผ่าน
+    ลืมรหัสผ่าน
     </Modal.Title>
   </Modal.Header>
   <Modal.Body>
