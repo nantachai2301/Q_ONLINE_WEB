@@ -336,7 +336,7 @@ function FormDoctor() {
                       <input
                         id="doctor_phone"
                         name="doctor_phone"
-                        placeholder="เบอร์โทร"
+                        placeholder="กรุณากรอกเบอร์โทร"
                         type="text"
                         value={doctor.doctor_phone}
                         className={`form-control ${touched.doctor_phone &&
