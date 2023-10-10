@@ -240,7 +240,7 @@ function FormDepartment() {
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <div class="col-10 col-md-6 ">
                       <input
-                        id="department_createdepartment_image"
+                        id="department_create_image"
                         type="file"
                         name="department_image"
                         accept="image/*"
