@@ -162,7 +162,7 @@ function EditDepartment() {
                 className="breadcrumb-item text-black fw-semibold"
                 aria-current="page"
               >
-                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
+                {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลแผนกและการตรวจรักษา
               </li>
 
             </ol>
@@ -172,7 +172,7 @@ function EditDepartment() {
         </div>
         <div className="w-full mb-5">
           <h2 className="title-content">
-            {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลรายชื่อแผนกและการตรวจรักษา
+            {location.state ? "แก้ไข" : "แก้ไข"}ข้อมูลแผนกและการตรวจรักษา
           </h2>
         </div>
 
