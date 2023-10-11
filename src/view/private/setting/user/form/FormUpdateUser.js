@@ -459,6 +459,7 @@ function FormUpdateUser() {
                           <label>ประวัติแพ้ยา</label>
 
                           <input
+                            id="Updatecongenital_drugallergy"
                             type="text"
                             name="drugallergy"
                             value={users.drugallergy}
@@ -525,7 +526,7 @@ function FormUpdateUser() {
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
-                               id="Updatecontact_last_name"
+                              id="Updatecontact_last_name"
                               type="contact_last_name"
                               name="contact_last_name"
                               value={users.contact_last_name}
@@ -713,7 +714,7 @@ function FormUpdateUser() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
-                             id="Updatedistrict"
+                              id="Updatedistrict"
                               type="district"
                               className="form-control"
                               name="district"
@@ -725,7 +726,7 @@ function FormUpdateUser() {
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
-                             id="Updatesubdistrict"
+                              id="Updatesubdistrict"
                               name="subdistrict"
                               className="form-control"
                               value={users.subdistrict}
@@ -737,7 +738,7 @@ function FormUpdateUser() {
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
-                             id="Updatepostcode"
+                              id="Updatepostcode"
                               name="postcode"
                               className="form-control"
                               value={users.postcode}
@@ -748,7 +749,7 @@ function FormUpdateUser() {
                       </div>
                       <div className="d-flex justify-content-center mt-3">
                         <button
-                         id="Updatessubmit"
+                          id="Updatessubmit"
                           type="submit"
                           className="btn btn-success mx-1"
                           onClick={handleClick}
