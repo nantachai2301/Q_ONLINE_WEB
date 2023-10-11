@@ -240,7 +240,7 @@ function FormCreateUser() {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link id="admin-user"to="/admin/user" className="nav-breadcrumb">
+                <Link id="admin-user" to="/admin/user" className="nav-breadcrumb">
                   ข้อมูลรายชื่อผู้ใช้
                 </Link>
               </li>
@@ -550,8 +550,8 @@ function FormCreateUser() {
                             <label>ชื่อ</label>
                             <label className="red">*</label>
                             <input
+                            id="Addcontact_first_name"
                               placeholder="ชื่อ"
-                              id="Addcontact_first_name"
                               type="contact_first_name"
                               name="contact_first_name"
                               value={users.contact_first_name}
@@ -572,8 +572,8 @@ function FormCreateUser() {
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
+                            id="Addcontact_last_name"
                               placeholder="นามสกุล"
-                              id="Addcontact_last_name"
                               type="contact_last_name"
                               name="contact_last_name"
                               value={users.contact_last_name}
@@ -786,8 +786,8 @@ function FormCreateUser() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
+                            id="Addsubdistrict"
                               placeholder="อำเภอ"
-                              id="Addsubdistrict"
                               type="district"
                               name="district"
                               value={users.district}

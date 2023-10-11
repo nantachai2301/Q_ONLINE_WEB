@@ -300,7 +300,7 @@ function FormAuthorities() {
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
-                              id="Authors_last_name"
+                          id="Authors_last_name"
                             type="text"
                             name="last_name"
                             placeholder="นามสกุล"
@@ -381,12 +381,12 @@ function FormAuthorities() {
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
-                             id="Authors_phoneNumber"
-                            type="phone"
-                            name="phoneNumber"
-                            placeholder="เบอร์โทร"
-                            value={users.phoneNumber}
-                            className={`form-control ${
+                           id="Authors_phoneNumber"
+                             type="phone"
+                             name="phoneNumber"
+                             placeholder="เบอร์โทร"
+                             value={users.phoneNumber}
+                             className={`form-control ${
                               touched.phoneNumber &&
                               errors.phoneNumber &&
                               "is-invalid"
@@ -409,7 +409,7 @@ function FormAuthorities() {
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
-                                 id="Authors_password"
+                                id="Authors_password"
                                 type="password"
                                 placeholder="รหัสผ่าน"
                                 name="password"
@@ -436,7 +436,7 @@ function FormAuthorities() {
 
                       <div className="d-flex justify-content-center mt-3">
                         <button
-                            id="Authors_submit"
+                          id="Authors_submit"
                           type="submit"
                           className="btn btn-success mx-1"
                           onClick={handleSubmit} 
