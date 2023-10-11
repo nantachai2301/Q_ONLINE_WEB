@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://adventurous-cyan-mite.cyclic.app/";
+const API_URL = "https://adventurous-cyan-mite.cyclic.app/apis/";
 
 const getQueue = async () => {
   return await axios.get(API_URL + "queue");
