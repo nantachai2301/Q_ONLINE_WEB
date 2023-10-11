@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://teal-mushy-dalmatian.cyclic.cloud/apis/";
+const API_URL = "https://adventurous-cyan-mite.cyclic.app/";
 const Sendlogin = async (
   id_card,
   password,

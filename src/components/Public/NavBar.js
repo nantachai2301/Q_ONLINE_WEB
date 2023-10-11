@@ -217,10 +217,10 @@ const Navbar = () => {
                   sx={{ marginLeft: "auto" }}
                 >
                   <ExitToAppIcon />
-                  <ListItemText primary="สมัครสมาชิก" />
+                  <ListItemText id="registerNavbar" primary="สมัครสมาชิก" />
                 </IconButton>
                 <IconButton
-                id="loginNavbar"
+                  id="loginNavbar"
                   size="large"
                   edge="start"
                   color="inherit"
@@ -228,7 +228,7 @@ const Navbar = () => {
                   onClick={handleLoginPopup}
                 >
                   <AccountCircleIcon />
-                  <ListItemText primary="เข้าสู่ระบบ" />
+                  <ListItemText  id="loginNavbar" primary="เข้าสู่ระบบ" />
                 </IconButton>
 
                 {showLogin && (
