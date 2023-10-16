@@ -28,7 +28,7 @@ export const Menu = [
     type: 1,
   },
    {
-    id: 3,title: 'ดูข้อมูลการจองคิว',
+    id: 3,title: 'ดูประวัติการจองคิว',
     icon: 'fa-solid  fa-users',
     pathname: '/author/history',
     type: 1,  
