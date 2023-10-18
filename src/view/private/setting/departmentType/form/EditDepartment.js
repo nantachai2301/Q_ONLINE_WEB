@@ -13,7 +13,7 @@ import {
 
 function EditDepartment() {
   const location = useLocation();
-  const [department, setDepartment] = useState({
+  const [departments, setDepartments] = useState({
     department_id: "",
     department_name: "",
     department_image: "",
@@ -29,7 +29,7 @@ function EditDepartment() {
   useEffect(() => {
     getDepartmentById(department_id)
       .then((response) => {
-        setDepartment(response.data);
+        setDepartments(response.data);
       })
       .catch((error) => {
         console.error("Error fetching departments: ", error);
@@ -41,72 +41,10 @@ function EditDepartment() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDepartment((prev) => ({ ...prev, [name]: value }));
+    setDepartments((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleClick = async () => {
-    try {
-      const isValid = await Schema.isValid(department);
-      if (!isValid) {
-        Swal.fire({
-          icon: "error",
-          title: "ข้อมูลไม่ถูกต้อง",
-          text: "กรุณากรอกข้อมูลให้ถูกต้องและครบถ้วน",
-          showConfirmButton: true,
-        });
-        return;
-      }
-
-      const result = await Swal.fire({
-        title: "คุณแน่ใจหรือไม่ ว่าต้องการจะอัพเดทข้อมูลรายชื่อแผนก ?",
-        text: "",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      });
-
-      if (result.isConfirmed) {
-        const response = await updateDepartmentById(
-          department.department_id,
-          department.department_name,
-          department.department_image,
-          department.open_time,
-          department.close_time,
-          department.max_queue_number,
-          department.floor,
-          department.building,
-          department.department_phone,
-        );
-
-        if (response.status === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "อัพเดตข้อมูลแผนกสำเร็จ",
-            showConfirmButton: false,
-            timer: 2000,
-          });
-          navigate("/admin/department-type");
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลแผนก",
-            text: "กรุณาลองอีกครั้ง",
-            showConfirmButton: true,
-          });
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการอัปเดตข้อมูลแผนก",
-        showConfirmButton: true,
-      });
-    }
-  };
-
+  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -132,8 +70,8 @@ function EditDepartment() {
             const resizedImageURL = window.URL.createObjectURL(blob);
             console.log('Resized Image URL:', resizedImageURL);
 
-            setDepartment((prevDepartment) => ({
-              ...prevDepartment,
+            setDepartments((prevDepartments) => ({
+              ...prevDepartments,
               department_image: resizedImageURL, // กำหนด URL รูปภาพใหม่ใน state
             }));
           }, 'image/jpeg', 0.8);
@@ -142,9 +80,111 @@ function EditDepartment() {
       reader.readAsDataURL(file);
     }
   };
-  console.log('department_image:', department.department_image); // ตรวจสอบค่าของ department_image
+  console.log('department_image:', departments.department_image); // ตรวจสอบค่าของ department_image
 
+  const handleClick = async (e) => {
+    e.preventDefault();
 
+    const formValid = validateForm(); // เช็คว่าฟอร์มถูกต้องหรือไม่
+
+    if (!formValid) {
+      // ถ้าฟอร์มไม่ถูกต้อง แสดง SweetAlert
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง !',
+        showConfirmButton: true,
+      });
+      return;
+    }
+    
+    try {
+      const result = await Swal.fire({
+        title: "คุณแน่ใจหรือไม่ ว่าต้องการจะอัพเดทข้อมูลรายชื่อแผนก ?",
+        text: "",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      });
+
+      if (result.isConfirmed) {
+        await updateDepartmentById(
+          departments.department_id,
+          departments.department_name,
+          departments.department_image,
+          departments.open_time,
+          departments.close_time,
+          departments.max_queue_number,
+          departments.floor,
+          departments.building,
+          departments.department_phone,
+        );
+          Swal.fire({
+            icon: "success",
+            title: "อัพเดตข้อมูลแผนกสำเร็จ",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          navigate("/admin/department-type");
+        }
+      } catch (error) {
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "เกิดข้อผิดพลาดในการอัพเดตข้อมูลแผนก",
+            text: "กรุณาลองอีกครั้ง",
+            showConfirmButton: true,
+          });
+        }
+     };
+
+    // เขียนฟังก์ชันสำหรับตรวจสอบความถูกต้องของฟอร์ม
+  // เพิ่มเงื่อนไขใน validateForm ในส่วนของเบอร์โทรแผนก
+  const validateForm = () => {
+    const {
+      department_name,
+      open_time,
+      close_time,
+      max_queue_number,
+      floor,
+      building,
+      department_phone,
+    } = departments;
+
+    // ตรวจสอบว่ามีข้อมูลทุกช่องหรือไม่
+    if (
+      !department_name ||
+      !open_time ||
+      !close_time ||
+      !max_queue_number ||
+      !floor ||
+      !building ||
+      !department_phone
+    ) {
+      // แสดง SweetAlert แจ้งให้กรอกข้อมูลเบอร์โทรแผนกให้ครบถ้วน
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอกข้อมูลเบอร์โทรแผนกให้ครบถ้วน',
+        showConfirmButton: true,
+      });
+      return false;
+    }
+    // เพิ่มเงื่อนไขตรวจสอบความถูกต้องของข้อมูลอื่น ๆ ตามความต้องการ
+    // ตรวจสอบเวลาเปิด-ปิดว่าเป็นรูปแบบเวลาที่ถูกต้องหรือไม่
+    // ตรวจสอบรูปภาพแผนกว่ามีหรือไม่
+    // เพิ่มเงื่อนไขตรวจสอบความถูกต้องของเบอร์โทร
+    if (!/^\d{10}$/.test(department_phone)) {
+      // แสดง SweetAlert แจ้งให้กรอกเบอร์โทรแผนกให้ถูกต้อง
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณากรอกเบอร์โทรแผนกให้ถูกต้อง (10 หลักและเป็นตัวเลขเท่านั้น)',
+        showConfirmButton: true,
+      });
+      return false;
+    }
+    // ถ้าผ่านทุกเงื่อนไขให้ส่งค่า true
+    return true;
+  };
 
   return (
     <Fragment>
@@ -179,19 +219,19 @@ function EditDepartment() {
         <Formik
           enableReinitialize={true}
           validationSchema={Schema}
-          initialValues={department}
+          initialValues={departments}
           onSubmit={handleClick}
         >
           {({ errors, touched }) => (
             <div className="row d-flex justify-content-center">
               <div className='UpdateDepart col-12 col-md-4 col-lg-8 border-1 shadow p-3' >
                 <div className="col-12 text-center align-items-center">
-                  <label>เลือกรูปภาพหมอ</label> <br />
+                  <label>เลือกรูปภาพแผนก</label> <br />
                   <br />
                   <div className=" d-flex flex-column justify-content-center align-items-center">
                     <img
                       className="img-hpts mx-auto"
-                      src={department.department_image}
+                      src={departments.department_image}
                       alt="รูปภาพแผนก"
                     />
 
@@ -224,7 +264,7 @@ function EditDepartment() {
                       id="Depart_department_id"
                       name="department_id"
                       type="text"
-                      value={department.department_name}
+                      value={departments.department_name}
                       className={`form-control ${touched.department_id &&
                         errors.department_id
                         ? "is-invalid"
@@ -249,7 +289,7 @@ function EditDepartment() {
                       name="open_time"
                       type="time"
                       placeholder="กรอกเวลาเปิด"
-                      value={department.open_time}
+                      value={departments.open_time}
                       className={`form-control ${touched.open_time &&
                         errors.open_time &&
                         "is-invalid"
@@ -272,7 +312,7 @@ function EditDepartment() {
                       name="close_time"
                       type="time"
                       placeholder="เวลาปิด"
-                      value={department.close_time}
+                      value={departments.close_time}
                       className={`form-control ${touched.close_time &&
                         errors.close_time &&
                         "is-invalid"
@@ -295,7 +335,7 @@ function EditDepartment() {
                       name="building"
                       type="text"
                       placeholder="กรอกอาคาร"
-                      value={department.building}
+                      value={departments.building}
                       className={`form-control ${touched.building &&
                         errors.building &&
                         "is-invalid"
@@ -317,7 +357,7 @@ function EditDepartment() {
                       name="floor"
                       type="text"
                       placeholder="ชั้น"
-                      value={department.floor}
+                      value={departments.floor}
                       className={`form-control ${touched.floor &&
                         errors.floor &&
                         "is-invalid"
@@ -339,7 +379,7 @@ function EditDepartment() {
                       name="department_phone"
                       type="text"
                       placeholder="เบอร์โทรแผนก"
-                      value={department.department_phone}
+                      value={departments.department_phone}
                       className={`form-control ${touched.department_phone &&
                         errors.department_phone &&
                         "is-invalid"
@@ -361,7 +401,7 @@ function EditDepartment() {
                       name="max_queue_number"
                       type="text"
                       placeholder="จำนวนคิวสูงสุด"
-                      value={department.max_queue_number}
+                      value={departments.max_queue_number}
                       className={`form-control ${touched.max_queue_number &&
                         errors.max_queue_number &&
                         "is-invalid"

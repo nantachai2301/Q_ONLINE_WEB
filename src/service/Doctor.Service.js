@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = "https://wild-rose-clam-wig.cyclic.app/apis/";
+
 const getDoctor = async ( ) => {
   return await axios.get(API_URL + "doctors",);
 };
@@ -23,7 +24,6 @@ const updateStatusDoctor = async (
   doctor_image,
   doctor_status,
   department_id,
-  doctor_url,
   department_name
 ) => {
   return await axios.put(API_URL + "doctors/" + doctor_id, {
@@ -34,26 +34,49 @@ const updateStatusDoctor = async (
     doctor_image,
     doctor_status,
     department_id,
-    doctor_url,
     department_name,
   });
 };
-const createDoctor = async (formData) => {
-  return await axios.post(API_URL + "doctors", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-};
+const createDoctor = async ( doctor_id,prefix_name, doctor_first_name, doctor_last_name,doctor_phone,doctor_image,doctor_status,department_id,department_name,
+  ) => {
+    return await axios.post(API_URL + "doctors", {
+      doctor_id,
+      prefix_name,
+      doctor_first_name,
+      doctor_last_name,
+      doctor_image,
+      doctor_status,
+      department_id,
+      department_name,
+      doctor_phone,
+      
+    });
+  };
 
-const updateDoctorById = async (doctor_id, formData) => {
-  return await axios.put(API_URL + "doctors/" + doctor_id, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const updateDoctorById = async (
+    doctor_id,
+    prefix_name,
+    doctor_first_name,
+    doctor_last_name,
+    doctor_phone,
+    doctor_image,
+    doctor_status,
+    department_id,
+    department_name
+  ) => {
+    return await axios.put(API_URL + "doctors/" + doctor_id, {
+      prefix_name,
+      doctor_first_name,
+      doctor_last_name,
+      doctor_image, 
+      doctor_phone,
+      doctor_status,
+      department_id,
+      department_name,
+    });
+ 
+  
 };
-
 const getDoctordepart = async (department_id) => {
   return await axios.get(API_URL + "/doctors/depart/" + department_id);
 };

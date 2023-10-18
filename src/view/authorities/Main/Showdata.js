@@ -206,7 +206,7 @@ const newQueueStatusId =
         : 2;
     Swal.fire({
       title: `คุณต้องการอัพเดทสถานะใช่หรือไม่ ? `,
-      text: `อัพเดทสถานะให้เป็น ! ${newStatus}?`,
+      text: `อัพเดทสถานะให้เป็น ${newStatus}?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "อัพเดต",
