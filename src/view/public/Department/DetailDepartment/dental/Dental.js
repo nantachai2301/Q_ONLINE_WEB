@@ -80,7 +80,7 @@ useEffect(() => {
                 <div className="card_d ">
                 <div className="circular-image-container">
                   <img
-                    src={doctor.doctor_image}
+                    src={doctor.doctor_url}
                     alt="Doctor"
                     className="circular-image" 
                   />

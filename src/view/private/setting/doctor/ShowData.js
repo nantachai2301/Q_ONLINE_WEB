@@ -151,11 +151,12 @@ function ShowData() {
     doctor_phone,
     doctor_image,
     doctor_status,
+    doctor_url,
     department_id,
     department_name
   ) => {
     const newStatus = currentStatus === "ใช้งาน" ? "พักงาน" : "ใช้งาน";
-
+  
     Swal.fire({
       title: `คุณต้องการอัพเดทสถานะรายการนี้ใช่หรือไม่  ?`,
       text: `อัพเดทสถานะเป็น ${newStatus}`,
@@ -175,6 +176,7 @@ function ShowData() {
           doctor_image,
           newStatus,
           department_id,
+          doctor_url,
           department_name
         )
           .then((response) => {
@@ -197,6 +199,7 @@ function ShowData() {
       }
     });
   };
+  
 
   return (
     <div className="w-full">
@@ -314,7 +317,7 @@ function ShowData() {
                   <tr key={item.doctor_id}>
                     <td>{(page - 1) * 10 + index + 1}</td>
                     <td>
-                      <img className="img-d" src={item.doctor_image} />
+                      <img className="img-d" src={item.doctor_url} />
                     </td>
                     <td>
                       {item.prefix_name} {item.doctor_first_name}{" "}
@@ -364,6 +367,7 @@ function ShowData() {
                             item.doctor_phone,
                             item.doctor_image,
                             item.doctor_status,
+                            item.doctor_url,
                             item.department_id,
                             item.department_name
                           )

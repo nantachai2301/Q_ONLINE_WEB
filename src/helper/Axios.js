@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseURL = 'https://tasty-trench-coat.cyclic.app/';
+export const baseURL = 'http://localhost:5000/apis/';
 
 export const InstanceFormBody = axios.create({
   baseURL: baseURL,

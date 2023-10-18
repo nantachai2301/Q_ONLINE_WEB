@@ -1,21 +1,13 @@
 import * as Yup from 'yup';
 
 const Schema = Yup.object().shape({
-  doctor_first_name: Yup.string().required("กรุณากรอกชื่อ"),
-  doctor_last_name: Yup.string().required("กรุณากรอกนามสกุล"),
-  prefix_name: Yup.string().required("กรุณากรอกคำนำหน้าชื่อ"),
-  doctor_status: Yup.string().required("กรุณากรอกสถานะ"),
-  department_id: Yup.string().required("กรุณากรอกแผนก"),
-  // doctor_image: Yup.string().matches(
-  //   /^\/img\/[^/]+\.(jpg|png)$/, // ตรวจสอบ URL รูปภาพว่ามีรูปแบบถูกต้องหรือไม่
-  //   "รูปภาพต้องอยู่ในรูปแบบ /img/ชื่อไฟล์.jpg"
-  // ),
-  
-  doctor_phone: Yup.string()
-    .required("กรุณากรอก เบอร์โทรศัพท์")
-    .matches(/^\d{10}$/, "กรุณากรอกเบอร์โทรศัพท์ 10 หลัก"),
-
-
+  prefix_name: Yup.string().required('กรุณากรอกคำนำหน้าชื่อ'),
+  doctor_first_name: Yup.string().required('กรุณากรอกชื่อ'),
+  doctor_last_name: Yup.string().required('กรุณากรอกนามสกุล'),
+  doctor_phone: Yup.string().required('กรุณากรอกเบอร์โทร'),
+  doctor_status: Yup.string().required('กรุณาเลือกสถานะการใช้งาน'),
+  department_id: Yup.string().required('กรุณาเลือกแผนก'),
 });
+
 
 export default Schema;
