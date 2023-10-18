@@ -888,7 +888,7 @@ function MainBookAuthor() {
                           className="btn btn-success mx-1"
                           onClick={handleSubmit} 
                         >
-                          บันทึก
+                          ลงทะเบียน
                         </button>
 
                         <button
