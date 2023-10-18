@@ -24,6 +24,7 @@ const updateStatusDoctor = async (
   doctor_image,
   doctor_status,
   department_id,
+  doctor_url,
   department_name
 ) => {
   return await axios.put(API_URL + "doctors/" + doctor_id, {
@@ -33,7 +34,8 @@ const updateStatusDoctor = async (
     doctor_phone,
     doctor_image,
     doctor_status,
-    department_id,
+     department_id,
+     doctor_url,
     department_name,
   });
 };
