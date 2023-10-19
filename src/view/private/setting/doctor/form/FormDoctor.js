@@ -111,7 +111,7 @@ const result = await Swal.fire({
       text: "เเก้ไขข้อมูลแพทย์แล้ว",
       icon: "success",
       showConfirmButton: false, // ซ่อนปุ่ม "ตกลง"
-      timer: 1500, // แสดงข้อความเป็นเวลา 1.5 วินาที
+      timer: 2500, // แสดงข้อความเป็นเวลา 1.5 วินาที
     });
     navigate("/admin/doctor");
   }

@@ -208,7 +208,7 @@ function FormCreateUser() {
             icon: "success",
             title: "เพิ่มข้อมูลผู้ใช้สำเร็จ",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 2500,
           });
 
           navigate("/admin/user");
@@ -786,7 +786,7 @@ function FormCreateUser() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
-                            id="Addsubdistrict"
+                            id="Adddistrict"
                               placeholder="อำเภอ"
                               type="district"
                               name="district"
