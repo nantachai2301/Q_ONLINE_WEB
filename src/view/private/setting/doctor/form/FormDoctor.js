@@ -44,14 +44,22 @@ function FormDoctor() {
   }, [doctors_id]);
 
   const navigate = useNavigate();
-
   const loadImage = (e) => {
     const doctor_image = e.target.files[0];
     setFile(doctor_image);
-    setPreview(URL.createObjectURL(doctor_image));
+    
+    if (doctor_image) {
+      const reader = new FileReader();
+  
+      reader.onload = (e) => {
+        const base64Image = e.target.result;
+        setPreview(base64Image);
+      };
+  
+      reader.readAsDataURL(doctor_image);
+    }
   };
-// ในฟังก์ชัน UpdateDoctor
-
+  
 const UpdateDoctor = async (e) => {
   e.preventDefault();
   if (!prefix_name || !doctor_first_name || !doctor_last_name || !doctor_phone || !doctor_status || !department_id) {
@@ -75,7 +83,10 @@ const result = await Swal.fire({
 
   // ตรวจสอบว่ามีการเลือกรูปภาพใหม่หรือไม่
   if (file) {
-    formData.append("file", file);
+    
+    formData.append("file", file.filename);
+    
+  
   } else {
     // ถ้าไม่มีการเลือกรูปภาพใหม่ ให้ใช้ URL รูปภาพเดิม
     formData.append("doctor_url", preview);
@@ -305,6 +316,7 @@ const result = await Swal.fire({
                         <option value="6">ศัลยกรรม</option>
                         <option value="7">หัวใจ</option>
                         <option value="8">ผิวหนัง</option>
+                        <option value="23">จักษุ</option>
                       </select>
                       <ErrorMessage
                         name="department_id"

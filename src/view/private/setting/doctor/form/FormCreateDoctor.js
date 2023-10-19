@@ -21,11 +21,18 @@ function FormCreateDoctor() {
   const location = useLocation();
   
   
-  
   const loadImage = (e) => {
     const doctor_image = e.target.files[0];
-    setFile(doctor_image);  // ตรวจสอบว่าเป็นไฟล์ที่ถูกต้อง
-    setPreview(URL.createObjectURL(doctor_image));
+    setFile(doctor_image);
+    const reader = new FileReader();
+  
+    reader.onload = () => {
+      setPreview(reader.result); // ตั้งค่าตัวแปรลิงก์รูปภาพเมื่ออัปโหลดเสร็จ
+    };
+  
+    if (doctor_image) {
+      reader.readAsDataURL(doctor_image);
+    }
   };
   
   const saveUsers = async (e) => {
@@ -274,6 +281,7 @@ function FormCreateDoctor() {
                         <option value="6">ศัลยกรรม</option>
                         <option value="7">หัวใจ</option>
                         <option value="8">ผิวหนัง</option>
+                        <option value="23">จักษุ</option>
                       </select>
                       <ErrorMessage
                         name="department_id"
