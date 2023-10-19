@@ -208,7 +208,7 @@ function FormCreateUser() {
             icon: "success",
             title: "เพิ่มข้อมูลผู้ใช้สำเร็จ",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 2500,
           });
 
           navigate("/admin/user");

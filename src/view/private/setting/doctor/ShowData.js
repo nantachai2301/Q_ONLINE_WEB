@@ -127,7 +127,7 @@ function ShowData() {
               icon: 'success',
               title: 'ลบข้อมูลแพทย์สำเร็จ',
               showConfirmButton: false,
-              timer: 1700,
+              timer: 2500,
             });
             window.location.reload();
           })
@@ -136,7 +136,7 @@ function ShowData() {
               title: "เกิดข้อผิดพลาด",
               text: "เกิดข้อผิดพลาดขณะลบข้อมูลแพทย์.",
               icon: "error",
-              timer: 1500,
+              timer: 2500,
             });
           });
       }
@@ -184,7 +184,7 @@ function ShowData() {
               title: "อัพเดทสถานะสำเร็จ",
               text: `สถานะได้เปลี่ยนเป็น ${newStatus}`,
               icon: "success",
-              timer: 1700,
+              timer: 2500,
             });
             // รีเฟรชหน้าเพื่อแสดงสถานะใหม่
             window.location.reload();
