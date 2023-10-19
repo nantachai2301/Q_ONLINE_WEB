@@ -786,7 +786,7 @@ function FormCreateUser() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
-                            id="Addsubdistrict"
+                            id="Adddistrict"
                               placeholder="อำเภอ"
                               type="district"
                               name="district"
