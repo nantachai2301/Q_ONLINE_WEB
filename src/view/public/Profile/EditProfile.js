@@ -157,7 +157,7 @@ function EditProfile() {
           district,
           province,
           postcode,
-          subdistrictsId,
+        
           img,
           role_id,
         } = users;
@@ -184,7 +184,7 @@ function EditProfile() {
           district,
           province,
           postcode,
-          subdistrictsId,
+         
           img,
           role_id,
           {}
@@ -197,7 +197,7 @@ function EditProfile() {
             showConfirmButton: false,
             timer: 2000,
           });
-          navigate("/admin/user");
+          navigate("/Profile");
         } else {
           Swal.fire({
             icon: "error",
@@ -217,7 +217,6 @@ function EditProfile() {
       });
     }
   };
-
   return (
     <Fragment>
       <div className="w-full">
