@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://spotless-ant-stockings.cyclic.app/apis/";
+const API_URL = "https://fair-cyan-capybara-kit.cyclic.app/apis/";
 
 const getDepartment = async () => {
   return await axios.get(API_URL + "departments",);
