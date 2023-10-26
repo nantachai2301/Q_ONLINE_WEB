@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import Doctor from "../../../../../image/doctor.jpg";
-import * as Yup from "yup";
 import Swal from "sweetalert2";
 import { getDoctorById, updateDoctorById } from "../../../../../service/Doctor.Service";
 import Schema from "./Validation";
@@ -32,7 +31,7 @@ function FormDoctor() {
         setDoctor_status(doctorData.doctor_status);
         setDepartment_id(doctorData.department_id);
         setDepartment_name(doctorData.department_name);
-        if (doctorData.doctor_image) {
+        if (doctorData.doctor_url) {
           setPreview(doctorData.doctor_url);
         }
       } catch (error) {
@@ -44,19 +43,18 @@ function FormDoctor() {
   }, [doctors_id]);
 
   const navigate = useNavigate();
+ 
   const loadImage = (e) => {
-    const doctor_image = e.target.files[0];
-    setFile(doctor_image);
-    
-    if (doctor_image) {
-      const reader = new FileReader();
+    const doctor_url = e.target.files[0];
+    setFile(doctor_url);
+    const reader = new FileReader();
   
-      reader.onload = (e) => {
-        const base64Image = e.target.result;
-        setPreview(base64Image);
-      };
+    reader.onload = () => {
+      setPreview(reader.result); // ตั้งค่าตัวแปรลิงก์รูปภาพเมื่ออัปโหลดเสร็จ
+    };
   
-      reader.readAsDataURL(doctor_image);
+    if (doctor_url) {
+      reader.readAsDataURL(doctor_url);
     }
   };
   
@@ -70,7 +68,7 @@ const UpdateDoctor = async (e) => {
     return; // ไม่ส่งข้อมูลถ้าข้อมูลไม่ครบ
   }
 const result = await Swal.fire({
-    title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างข้อมูลรายชื่อแพทย์ ?",
+    title: "คุณแน่ใจหรือไม่ ว่าต้องการแก้ไขข้อมูลรายชื่อแพทย์ ?",
     text: "",
     icon: "question",
     showCancelButton: true,
@@ -81,18 +79,7 @@ const result = await Swal.fire({
   if (result.isConfirmed) {
   const formData = new FormData();
 
-  // ตรวจสอบว่ามีการเลือกรูปภาพใหม่หรือไม่
-  if (file) {
-    
-    formData.append("file", file.filename);
-    
-  
-  } else {
-    // ถ้าไม่มีการเลือกรูปภาพใหม่ ให้ใช้ URL รูปภาพเดิม
-    formData.append("doctor_url", preview);
-    formData.append("doctor_image", preview);
-  }
-
+  formData.append("doctor_url", file);
   formData.append("prefix_name", prefix_name);
   formData.append("doctor_first_name", doctor_first_name);
   formData.append("doctor_last_name", doctor_last_name);
@@ -161,19 +148,19 @@ const result = await Swal.fire({
                     <label>เลือกรูปภาพหมอ</label> <br />
                     <br />
                     <div className="d-flex flex-column justify-content-center align-items-center">
-                      {preview ? (
+                    {preview ? (
                         <img
-                          className="img-hpts mx-auto"
+                          className="img-hptsด mx-auto"
                           src={preview}
                           alt="Doctor"
                         />
                       ) : (
-                        <img
-                          className="img-hpts mx-auto"
-                          src={Doctor}
-                          alt="Default Doctor"
-                        />
-                      )}
+                          <img
+                            className="img-hpts mx-auto"
+                            src={Doctor}
+                            alt="Default Doctor"
+                          />
+                        )}
                       <br />
                       <br />
                     </div>
@@ -182,9 +169,9 @@ const result = await Swal.fire({
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <div class="col-10 col-md-6 ">
                       <input
-                        id="image"
-                        type="file"
-                        name="file"
+                       id="doctor_url"
+                       type="file"
+                       name="doctor_url"
                         accept="image/*"
                         className="form-control"
                         onChange={loadImage}

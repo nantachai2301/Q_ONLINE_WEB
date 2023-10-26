@@ -15,9 +15,9 @@ th, td {
 
 }
 .img-d {
-  border-radius: 60%;
-  width: 64px;
-height: 64px;
+  border-radius: 48%;
+  width: 70px;
+height: 74px;
 overflow: hidden;
 text-align: center;
   object-fit: cover;
@@ -60,15 +60,15 @@ text-align: center;
 }
 
 
-.img-hpts {
-  border-radius: 80%;
+.img-hptsด {
+  border-radius: 50%;
  align-items: center;
  margin-right: 550px;
 overflow: hidden;
 text-align: center;
   object-fit: cover;
-  width: 200px;
-  height: 200px;
+  width: 214px;
+  height: 300px;
 }
 .UpdateDoc
 {

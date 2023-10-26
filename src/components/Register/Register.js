@@ -1,17 +1,18 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import React, { Fragment, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import province from "../../data/province.json";
 import { Formik, Form, ErrorMessage } from "formik";
-import axios from "axios";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
-import LoginModal from "../../components/Login/LoginModal";
 import { createPatient } from "../../service/Patient.Service";
+
 function Register() {
+  const navigate = useNavigate();
   const [age, setAge] = useState(0);
   const [users, setUsers] = useState({
     users_id: null,
     id_card: "",
-    password: "", // เปลี่ยนชื่อฟิลด์นี้เป็น password
+    password: "",
     prefix_name: "",
     first_name: "",
     last_name: "",
@@ -31,18 +32,13 @@ function Register() {
     district: "",
     province: "",
     postcode: "",
-  
     img: "",
     role_id: 1,
     department_id: null,
     birthday: "",
   });
-  const [isSubmitDisabled, setSubmitDisabled] = useState(true);
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
+ const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("Input Value:", value); // ตรวจสอบค่าใน console
     if (name === "birthday") {
       if (value) {
         const birthDateObj = new Date(value); // แปลงวันที่ปีเกิดใน state ของคุณให้กลายเป็นออบเจ็กต์ของ Date
@@ -59,125 +55,31 @@ function Register() {
       ...prevUsers,
       [name]: value,
     }));
-    if (isDataValid()) {
-      setSubmitDisabled(false);
-    } else {
-      setSubmitDisabled(true);
-    }
   };
-  const handleSubmit = () => {
-    if (isDataValid()) {
-    } else {
+ const handleClick = async (e) => {
+      if (!users.id_card || !users.prefix_name || !users.first_name || !users.last_name || !users.gender || !users.birthday || !users.weight ||!users.height ||!users.contact_first_name || !users.contact_last_name || !users.contact_relation_id || !users.contact_phoneNumber ||!users.address || !users.subdistrict ||  !users.district || !users.province || !users.postcode ||users.phoneNumber.length !== 10 ||
+      users.id_card.length !== 13 ||
+      users.phoneNumber.length !== 10) {
       Swal.fire({
-        icon: "warning",
-        title: "กรุณากรอกข้อมูลให้ครบ",
-        text: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง",
-        showConfirmButton: true,
+        title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+        text: 'กรุณาตรวจสอบข้อมูลที่ไม่ครบถ้วน',
+        icon: 'warning',
       });
+      return; 
     }
-  };
-
-  const isDataValid = () => {
-    const {
-      id_card,
-      prefix_name,
-      first_name,
-      last_name,
-      gender,
-      birthday,
-      weight,
-      height,
-      phoneNumber,
-
-      contact_first_name,
-      contact_last_name,
-      contact_relation_id,
-      contact_phoneNumber,
-      address,
-      subdistrict,
-      district,
-      province,
-      postcode,
-     
-    } = users;
-
-    if (
-      !id_card ||
-      !prefix_name ||
-      !first_name ||
-      !last_name ||
-      !gender ||
-      !birthday ||
-      !weight ||
-      !height ||
-      !contact_first_name ||
-      !contact_last_name ||
-      !contact_relation_id ||
-      !contact_phoneNumber ||
-      !address ||
-      !subdistrict ||
-      !district ||
-      !province ||
-      !postcode ||
-     
-      !phoneNumber.length !== 10 ||
-      id_card.length !== 13 ||
-      phoneNumber.length !== 10
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleClick = async () => {
-    const usersWithAge = { ...users, age: age };
-    try {
-      const result = await Swal.fire({
-        title: "ยืนยัน",
-        text: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างผู้ใช้ ?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "ตกลง",
-        cancelButtonText: "ยกเลิก",
-      });
-      if (users.birthday) {
-        const birthDateObj = new Date(users.birthday);
-        const today = new Date();
-        const diffInMilliseconds = Math.abs(today - birthDateObj);
-        const ageDate = new Date(diffInMilliseconds);
-        const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
-        setAge(calculatedAge);
-      }
-      const dataToSend = { ...users, age: age, users_id: users.users_id };
-
+try {
+   const result = await Swal.fire({
+          title: "ยืนยัน",
+          text: "คุณแน่ใจหรือไม่ ว่าต้องการสมัครสมาชิก ?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "ตกลง",
+          cancelButtonText: "ยกเลิก",
+        });
+  
+      const dataToSend = { ...users, age: age};
+      
       if (result.isConfirmed) {
-        const requiredFields = [
-          "id_card",
-          "prefix_name",
-          "first_name",
-          "last_name",
-          "gender",
-          "birthday",
-          "weight",
-          "height",
-          "phoneNumber",
-        ];
-
-        const missingFields = requiredFields.filter(
-          (fieldName) => !dataToSend[fieldName]
-        );
-
-        if (missingFields.length > 0) {
-          Swal.fire({
-            icon: "warning",
-            title: "กรุณากรอกข้อมูลให้ครบ",
-            text: `กรุณากรอกข้อมูลให้ครบ`,
-            showConfirmButton: true,
-          });
-          return; // Exit the function, don't proceed with registration
-        }
-
         try {
           await createPatient(
             dataToSend.users_id,
@@ -202,11 +104,10 @@ function Register() {
             dataToSend.district,
             dataToSend.province,
             dataToSend.postcode,
-          
             dataToSend.img,
             dataToSend.role_id
           );
-
+  
           Swal.fire({
             icon: "success",
             title: "สมัครสมาชิกสำเร็จ",
@@ -214,10 +115,11 @@ function Register() {
             showConfirmButton: false,
             timer: 1500,
           });
-
+  
           setTimeout(() => {
-            navigate("/"); // Redirect to the homepage after registration
+            navigate("/"); 
           }, 1500);
+       
         } catch (error) {
           console.log(error);
           Swal.fire({
@@ -238,8 +140,8 @@ function Register() {
       });
     }
   };
-
-  const ageToShow = age !== null ? age : "";
+  
+  
   return (
     <Fragment>
       <div className="w-full">
@@ -255,7 +157,7 @@ function Register() {
           initialValues={users}
           onSubmit={handleClick}
         >
-          {({ values, errors, touched, setFieldValue }) => (
+          {({ errors, touched}) => (
             <Form>
               <div className="container mt-2 ">
                 <div className="mb-4">
@@ -301,7 +203,9 @@ function Register() {
                             }`}
                             onChange={handleChange}
                           >
-                             <option value="" selected>เลือกคำนำหน้าชื่อ</option>
+                            <option value="" selected>
+                              เลือกคำนำหน้าชื่อ
+                            </option>
                             <option value="นาย">นาย</option>
                             <option value="นางสาว">นางสาว</option>
                             <option value="นาง">นาง</option>
@@ -368,7 +272,9 @@ function Register() {
                             }`}
                             onChange={handleChange}
                           >
-                            <option value="" selected>เลือกเพศ</option>
+                            <option value="" selected>
+                              เลือกเพศ
+                            </option>
                             <option value="ชาย">ชาย</option>
                             <option value="หญิง">หญิง</option>
                           </select>
@@ -407,7 +313,7 @@ function Register() {
                             id="user_age"
                             type="text"
                             name="age"
-                            value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
+                            value={age !== null ? age : ""} 
                             readOnly
                             disabled
                             style={{ backgroundColor: "lightgray" }}
@@ -597,7 +503,10 @@ function Register() {
                               }`}
                               onChange={handleChange}
                             >
-                             <option value="" selected> เลือกความสัมพันธ์</option>
+                              <option value="" selected>
+                                {" "}
+                                เลือกความสัมพันธ์
+                              </option>
                               <option value="บิดา">บิดา</option>
                               <option value="มารดา">มารดา</option>
                               <option value="สามี">สามี</option>
@@ -667,8 +576,9 @@ function Register() {
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
-                              id="user_province"
+                              id="province"
                               name="province"
+                              value={users.province}
                               className={`form-control ${
                                 touched.province &&
                                 errors.province &&
@@ -676,103 +586,20 @@ function Register() {
                               }`}
                               onChange={handleChange}
                             >
-                              <option value="" selected>
-                                --------- เลือกจังหวัด ---------
+                              <option value="" disabled>
+                                เลือกจังหวัด
                               </option>
-                              <option value="กรุงเทพมหานคร">
-                                กรุงเทพมหานคร
-                              </option>
-                              <option value="กระบี่">กระบี่ </option>
-                              <option value="กาญจนบุรี">กาญจนบุรี </option>
-                              <option value="กาฬสินธุ์">กาฬสินธุ์ </option>
-                              <option value="กำแพงเพชร">กำแพงเพชร </option>
-                              <option value="ขอนแก่น">ขอนแก่น</option>
-                              <option value="จันทบุรี">จันทบุรี</option>
-                              <option value="ฉะเชิงเทรา">ฉะเชิงเทรา </option>
-                              <option value="ชัยนาท">ชัยนาท </option>
-                              <option value="ชัยภูมิ">ชัยภูมิ </option>
-                              <option value="ชุมพร">ชุมพร </option>
-                              <option value="ชลบุรี">ชลบุรี </option>
-                              <option value="เชียงใหม่">เชียงใหม่ </option>
-                              <option value="เชียงราย">เชียงราย </option>
-                              <option value="ตรัง">ตรัง </option>
-                              <option value="ตราด">ตราด </option>
-                              <option value="ตาก">ตาก </option>
-                              <option value="นครนายก">นครนายก </option>
-                              <option value="นครปฐม">นครปฐม </option>
-                              <option value="นครพนม">นครพนม </option>
-                              <option value="นครราชสีมา">นครราชสีมา </option>
-                              <option value="นครศรีธรรมราช">
-                                นครศรีธรรมราช{" "}
-                              </option>
-                              <option value="นครสวรรค์">นครสวรรค์ </option>
-                              <option value="นราธิวาส">นราธิวาส </option>
-                              <option value="น่าน">น่าน </option>
-                              <option value="นนทบุรี">นนทบุรี </option>
-                              <option value="บึงกาฬ">บึงกาฬ</option>
-                              <option value="บุรีรัมย์">บุรีรัมย์</option>
-                              <option value="ประจวบคีรีขันธ์">
-                                ประจวบคีรีขันธ์{" "}
-                              </option>
-                              <option value="ปทุมธานี">ปทุมธานี </option>
-                              <option value="ปราจีนบุรี">ปราจีนบุรี </option>
-                              <option value="ปัตตานี">ปัตตานี </option>
-                              <option value="พะเยา">พะเยา </option>
-                              <option value="พระนครศรีอยุธยา">
-                                พระนครศรีอยุธยา{" "}
-                              </option>
-                              <option value="พังงา">พังงา </option>
-                              <option value="พิจิตร">พิจิตร </option>
-                              <option value="พิษณุโลก">พิษณุโลก </option>
-                              <option value="เพชรบุรี">เพชรบุรี </option>
-                              <option value="เพชรบูรณ์">เพชรบูรณ์ </option>
-                              <option value="แพร่">แพร่ </option>
-                              <option value="พัทลุง">พัทลุง </option>
-                              <option value="ภูเก็ต">ภูเก็ต </option>
-                              <option value="มหาสารคาม">มหาสารคาม </option>
-                              <option value="มุกดาหาร">มุกดาหาร </option>
-                              <option value="แม่ฮ่องสอน">แม่ฮ่องสอน </option>
-                              <option value="ยโสธร">ยโสธร </option>
-                              <option value="ยะลา">ยะลา </option>
-                              <option value="ร้อยเอ็ด">ร้อยเอ็ด </option>
-                              <option value="ระนอง">ระนอง </option>
-                              <option value="ระยอง">ระยอง </option>
-                              <option value="ราชบุรี">ราชบุรี</option>
-                              <option value="ลพบุรี">ลพบุรี </option>
-                              <option value="ลำปาง">ลำปาง </option>
-                              <option value="ลำพูน">ลำพูน </option>
-                              <option value="เลย">เลย </option>
-                              <option value="ศรีสะเกษ">ศรีสะเกษ</option>
-                              <option value="สกลนคร">สกลนคร</option>
-                              <option value="สงขลา">สงขลา </option>
-                              <option value="สมุทรสาคร">สมุทรสาคร </option>
-                              <option value="สมุทรปราการ">สมุทรปราการ </option>
-                              <option value="สมุทรสงคราม">สมุทรสงคราม </option>
-                              <option value="สระแก้ว">สระแก้ว </option>
-                              <option value="สระบุรี">สระบุรี </option>
-                              <option value="สิงห์บุรี">สิงห์บุรี </option>
-                              <option value="สุโขทัย">สุโขทัย </option>
-                              <option value="สุพรรณบุรี">สุพรรณบุรี </option>
-                              <option value="สุราษฎร์ธานี">
-                                สุราษฎร์ธานี{" "}
-                              </option>
-                              <option value="สุรินทร์">สุรินทร์ </option>
-                              <option value="สตูล">สตูล </option>
-                              <option value="หนองคาย">หนองคาย </option>
-                              <option value="หนองบัวลำภู">หนองบัวลำภู </option>
-                              <option value="อำนาจเจริญ">อำนาจเจริญ </option>
-                              <option value="อุดรธานี">อุดรธานี </option>
-                              <option value="อุตรดิตถ์">อุตรดิตถ์ </option>
-                              <option value="อุทัยธานี">อุทัยธานี </option>
-                              <option value="อุบลราชธานี">อุบลราชธานี</option>
-                              <option value="อ่างทอง">อ่างทอง </option>
-                              <option value="อื่นๆ">อื่นๆ</option>
-                              <ErrorMessage
-                                name="province"
-                                component="div"
-                                className="error-message"
-                              />
+                              {province.map((prov) => (
+                                <option key={prov.id} value={prov.Provinces}>
+                                  {prov.Provinces}
+                                </option>
+                              ))}
                             </select>
+                            <ErrorMessage
+                              name="province"
+                              component="div"
+                              className="error-message"
+                            />
                           </div>
                           <div className="col-3">
                             <label>อำเภอ</label>
@@ -846,7 +673,7 @@ function Register() {
                           id="buttonRegisterUser"
                           type="submit"
                           className="btn btn-success mx-1"
-                          onClick={handleSubmit}
+                          onClick={handleClick}
                         >
                           บันทึก
                         </button>

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import Pagination from "react-js-pagination";
 import { useNavigate } from "react-router-dom";
-import Spinner from "react-bootstrap/Spinner";
-import axios from "axios";
 import Swal from "sweetalert2";
 import Table from "react-bootstrap/Table";
 import {

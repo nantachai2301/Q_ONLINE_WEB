@@ -1,12 +1,11 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment,  useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import { createDoctor } from "../../../../../service/Doctor.Service";
-import { DropzoneImage } from "../../../../../components/DropzoneImage";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import Doctor from "../../../../../image/doctor.jpg";
-import axios from "axios";
+
 function FormCreateDoctor() {
   const [prefix_name ,setPrefix_name] = useState("");
   const [doctor_first_name ,setDoctor_first_name] = useState("");
@@ -22,16 +21,16 @@ function FormCreateDoctor() {
   
   
   const loadImage = (e) => {
-    const doctor_image = e.target.files[0];
-    setFile(doctor_image);
+    const doctor_url = e.target.files[0];
+    setFile(doctor_url);
     const reader = new FileReader();
   
     reader.onload = () => {
       setPreview(reader.result); // ตั้งค่าตัวแปรลิงก์รูปภาพเมื่ออัปโหลดเสร็จ
     };
   
-    if (doctor_image) {
-      reader.readAsDataURL(doctor_image);
+    if (doctor_url) {
+      reader.readAsDataURL(doctor_url);
     }
   };
   
@@ -56,7 +55,7 @@ function FormCreateDoctor() {
   
     if (result.isConfirmed) {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("doctor_url", file);
     formData.append("prefix_name", prefix_name);
     formData.append("doctor_first_name",doctor_first_name);
     formData.append("doctor_last_name", doctor_last_name);
@@ -147,9 +146,9 @@ function FormCreateDoctor() {
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <div class="col-10 col-md-6 ">
                       <input
-                         id="image"
+                         id="doctor_url"
                          type="file"
-                         name="image"
+                         name="doctor_url"
                          accept="image/*"
                          className="form-control"
                          onChange={loadImage}
