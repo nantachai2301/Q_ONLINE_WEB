@@ -10,55 +10,25 @@ const getDepartmentById = async (department_id) => {
   return await axios.get(API_URL + "departments/" + department_id);
 };
 
-const updateDepartmentById = async (
-  department_id,
-  department_name,
-  department_image,
-  open_time,
-  close_time,
-  max_queue_number,
-  floor,
-  building,
-  department_phone,
-) => {
-  return await axios.put(API_URL + "departments/" +  department_id, {
-    department_id,
-    department_name,
-    department_image,
-    open_time,
-    close_time,
-    max_queue_number,
-    floor,
-    building,
-    department_phone,
+const  updateDepartmentById = async (department_id, formData) => {
+  return await axios.put(API_URL + "departments/" + department_id, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data", // ต้องตั้งค่า Content-Type เป็น "multipart/form-data" เมื่อใช้ FormData
+    },
   });
 };
+
 const deleteDepartmentById = async (department_id) => {
   return await axios.delete(API_URL + "departments/" + department_id);
 };
-const createDepartment = async (  department_id,
-  department_name,
-  department_image,
-  open_time,
-  close_time,
-  max_queue_number,
-  floor,
-  building,
-  department_phone,
-  ) => {
-    return await axios.post(API_URL + "departments", {
-      department_id,
-  department_name,
-  department_image,
-  open_time,
-  close_time,
-  max_queue_number,
-  floor,
-  building,
-  department_phone,
-      
-    });
-  };
+
+const createDepartment = async (formData) => {
+  return await axios.post(API_URL + "departments", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data", // ต้องตั้งค่า Content-Type เป็น "multipart/form-data" เมื่อใช้ FormData
+    },
+  });
+};
 
   const getDepartmentbydepart = async (department_id) => {
     return await axios.get(API_URL + "departments/" + department_id);

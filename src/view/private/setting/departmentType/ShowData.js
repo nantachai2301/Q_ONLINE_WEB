@@ -2,13 +2,9 @@ import React, { useState, useEffect } from "react";
 import Pagination from "react-js-pagination";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
-import Spinner from "react-bootstrap/Spinner";
-import Table from "react-bootstrap/Table";
 import {
   getDepartment,
-  updateDepartmentById,
   deleteDepartmentById
 } from "../../../../service/DepartmentType.Service";
 import "../../../../style/showdepartments.css";
