@@ -1,63 +1,99 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import Hospitals from "../../../../../image/hospitals.jpg";
 import Schema from "./Validation";
-import Swal from 'sweetalert2';
-import { createDepartment } from "../../../../../service/DepartmentType.Service";
+import Swal from "sweetalert2";
+import { createDepartment, getDepartment } from "../../../../../service/DepartmentType.Service";
 
 function FormDepartment() {
-  const [department_name ,setDepartment_name] = useState("");
-  const [department_image ,setDepartment_image] = useState("");
-  const [open_time ,setOpen_time] = useState("");
-  const [close_time ,setClose_time] = useState("");
-  const [max_queue_number ,setMax_queue_number] = useState("");
-  const [floor ,setFloor] = useState("");
-  const [building ,setBuilding] = useState("");
-  const [department_phone ,setDepartment_phone] = useState("");
+  const [department_name, setDepartment_name] = useState("");
+  const [department_image, setDepartment_image] = useState("");
+  const [open_time, setOpen_time] = useState("");
+  const [close_time, setClose_time] = useState("");
+  const [max_queue_number, setMax_queue_number] = useState("");
+  const [floor, setFloor] = useState("");
+  const [building, setBuilding] = useState("");
+  const [department_phone, setDepartment_phone] = useState("");
   const [preview, setPreview] = useState("");
   const [file, setFile] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
-
   const loadImage = (e) => {
     const department_image = e.target.files[0];
     setFile(department_image);
     const reader = new FileReader();
-  
+
     reader.onload = () => {
       setPreview(reader.result); // ตั้งค่าตัวแปรลิงก์รูปภาพเมื่ออัปโหลดเสร็จ
     };
-  
+
     if (department_image) {
       reader.readAsDataURL(department_image);
     }
   };
 
+  const checkDepartmentExists = async (departmentName) => {
+    try {
+      // ส่งคำขอ GET เพื่อตรวจสอบว่าชื่อแผนกซ้ำหรือไม่
+      const response = await getDepartment(); // ส่งคำขอ GET ทั้งหมดเพื่อดึงข้อมูลแผนกทั้งหมดจาก API
+      const departments = response.data;
+
+      // ตรวจสอบว่ามีชื่อแผนกที่ซ้ำกับที่ผู้ใช้ป้อนหรือไม่
+      const departmentExists = departments.some(
+        (department) => department.department_name === departmentName
+      );
+
+      return departmentExists;
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการตรวจสอบชื่อแผนก: ", error);
+      return false;
+    }
+  };
 
   const saveUsers = async (e) => {
     e.preventDefault();
-    if ( !department_name || !open_time || !close_time || !max_queue_number || !floor || !building || !department_phone ) {
+    if (
+      !department_name ||
+      !open_time ||
+      !close_time ||
+      !max_queue_number ||
+      !floor ||
+      !building ||
+      !department_phone
+    ) {
       // ถ้าฟอร์มไม่ถูกต้อง แสดง SweetAlert
       Swal.fire({
-        icon: 'warning',
-        title: 'กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง !',
+        icon: "warning",
+        title: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง !",
         showConfirmButton: true,
       });
       return;
     }
 
-      const result = await Swal.fire({
-        title: 'คุณแน่ใจหรือไม่ ว่าต้องการสร้างข้อมูลรายชื่อแผนก ?',
-        text: '',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'ตกลง',
-        cancelButtonText: 'ยกเลิก',
-      });
+    const result = await Swal.fire({
+      title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างข้อมูลรายชื่อแผนก ?",
+      text: "",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "ตกลง",
+      cancelButtonText: "ยกเลิก",
+    });
 
-      if (result.isConfirmed) {
+    if (result.isConfirmed) {
+      const departmentExists = await checkDepartmentExists(department_name);
+
+      if (departmentExists) {
+        Swal.fire({
+          icon: "warning",
+          title: "ชื่อแผนกซ้ำ !",
+          text: "ชื่อแผนกที่คุณใส่นั้นมีอยู่ในระบบแล้ว",
+        });
+        return;
+      }
+      // ทำการสร้างข้อมูลแผนกใหม่หากชื่อแผนกไม่ซ้ำ
+      try {
         // ทำการอัปเดตข้อมูลแผนก
         const formData = new FormData();
         formData.append("department_name", department_name);
@@ -68,28 +104,27 @@ function FormDepartment() {
         formData.append("floor", floor);
         formData.append("building", building);
         formData.append("department_phone", department_phone);
-   
-        try {
-          await createDepartment(formData, {
-            headers: {
-              "Content-type": "multipart/form-data",
-            },
-          });
-          Swal.fire({
-            icon: 'success',
-            title: 'เพิ่มข้อมูลแผนกสำเร็จ !',
-            text: "ข้อมูลแผนกถูกเพิ่มลงในระบบแล้ว",
-            icon: "success",
-            showConfirmButton: false, // ซ่อนปุ่ม "ตกลง"
-            timer: 2500, // แสดงข้อความเป็นเวลา 2.5 วินาที
-          });
-          navigate("/admin/department-type");
-      } 
-      catch (error) {
+
+        await createDepartment(formData, {
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+        });
+
         Swal.fire({
-          title: 'เกิดข้อผิดพลาด',
-          text: 'เกิดข้อผิดพลาดในการอัปเดตข้อมูลแผนกและการตรวจรักษา',
-          icon: 'error',
+          icon: "success",
+          title: "เพิ่มข้อมูลแผนกสำเร็จ !",
+          text: "ข้อมูลแผนกถูกเพิ่มลงในระบบแล้ว",
+          icon: "success",
+          showConfirmButton: false, // ซ่อนปุ่ม "ตกลง"
+          timer: 2500, // แสดงข้อความเป็นเวลา 2.5 วินาที
+        });
+        navigate("/admin/department-type");
+      } catch (error) {
+        Swal.fire({
+          title: "เกิดข้อผิดพลาด",
+          text: "เกิดข้อผิดพลาดในการอัปเดตข้อมูลแผนกและการตรวจรักษา",
+          icon: "error",
         });
       }
     }
@@ -105,7 +140,6 @@ function FormDepartment() {
                 <Link to="/admin/department-type" className="nav-breadcrumb">
                   ข้อมูลแผนกและการตรวจรักษา
                 </Link>
-
               </li>
               <li
                 className="breadcrumb-item text-black fw-semibold"
@@ -113,11 +147,8 @@ function FormDepartment() {
               >
                 {location.state ? "แก้ไข" : "เพิ่ม"}ข้อมูลแผนกและการตรวจรักษา
               </li>
-
             </ol>
-
           </nav>
-
         </div>
         <div className="w-full mb-5">
           <h2 className="title-content">
@@ -125,15 +156,11 @@ function FormDepartment() {
           </h2>
         </div>
 
-        <Formik
-          enableReinitialize={true}
-          validationSchema={Schema}
-        >
-          {({ values, errors, touched, }) => (
+        <Formik enableReinitialize={true} validationSchema={Schema}>
+          {({ values, errors, touched }) => (
             <Form onSubmit={saveUsers}>
               <div className="row d-flex justify-content-center">
-                <div className='UpdateDepart col-12 col-md-4 col-lg-8 border-1 shadow p-3' >
-                  
+                <div className="UpdateDepart col-12 col-md-4 col-lg-8 border-1 shadow p-3">
                   <div className="col-12 text-center align-items-center">
                     <label>เลือกรูปภาพแผนก</label> <br />
                     <br />
@@ -181,11 +208,11 @@ function FormDepartment() {
                         type="text"
                         placeholder="กรุณากรอกชื่อแผนก"
                         value={department_name}
-                        className={`form-control ${touched.department_name &&
-                          errors.department_name
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-control ${
+                          touched.department_name && errors.department_name
+                            ? "is-invalid"
+                            : ""
+                        }`}
                         onChange={(e) => setDepartment_name(e.target.value)}
                       />
 
@@ -194,7 +221,6 @@ function FormDepartment() {
                         component="div"
                         className="error-message"
                       />
-
                     </div>
 
                     <div className="col-10 col-md-6 ">
@@ -206,11 +232,9 @@ function FormDepartment() {
                         type="time"
                         placeholder="กรอกเวลาเปิด"
                         value={open_time}
-                        className={`form-control ${touched.open_time &&
-                          errors.open_time &&
-                          "is-invalid"
-                          }`}
-                        
+                        className={`form-control ${
+                          touched.open_time && errors.open_time && "is-invalid"
+                        }`}
                         onChange={(e) => setOpen_time(e.target.value)}
                       />
                       <ErrorMessage
@@ -229,11 +253,12 @@ function FormDepartment() {
                         type="time"
                         placeholder="กรอกเวลาปิด"
                         value={close_time}
-                        className={`form-control ${touched.close_time &&
+                        className={`form-control ${
+                          touched.close_time &&
                           errors.close_time &&
                           "is-invalid"
-                          }`}
-                          onChange={(e) => setClose_time(e.target.value)}
+                        }`}
+                        onChange={(e) => setClose_time(e.target.value)}
                       />
 
                       <ErrorMessage
@@ -252,11 +277,10 @@ function FormDepartment() {
                         type="text"
                         placeholder="กรอกอาคาร"
                         value={building}
-                        className={`form-control ${touched.building &&
-                          errors.building &&
-                          "is-invalid"
-                          }`}
-                          onChange={(e) => setBuilding(e.target.value)}
+                        className={`form-control ${
+                          touched.building && errors.building && "is-invalid"
+                        }`}
+                        onChange={(e) => setBuilding(e.target.value)}
                       />
 
                       <ErrorMessage
@@ -275,11 +299,10 @@ function FormDepartment() {
                         type="text"
                         placeholder="ชั้น"
                         value={floor}
-                        className={`form-control ${touched.floor &&
-                          errors.floor &&
-                          "is-invalid"
-                          }`}
-                          onChange={(e) => setFloor(e.target.value)}
+                        className={`form-control ${
+                          touched.floor && errors.floor && "is-invalid"
+                        }`}
+                        onChange={(e) => setFloor(e.target.value)}
                       />
 
                       <ErrorMessage
@@ -298,11 +321,12 @@ function FormDepartment() {
                         type="text"
                         placeholder="เบอร์โทรแผนก"
                         value={department_phone}
-                        className={`form-control ${touched.department_phone &&
+                        className={`form-control ${
+                          touched.department_phone &&
                           errors.department_phone &&
                           "is-invalid"
-                          }`}
-                          onChange={(e) => setDepartment_phone(e.target.value)}
+                        }`}
+                        onChange={(e) => setDepartment_phone(e.target.value)}
                       />
 
                       <ErrorMessage
@@ -321,11 +345,12 @@ function FormDepartment() {
                         type="text"
                         placeholder="จำนวนคิวสูงสุด"
                         value={max_queue_number}
-                        className={`form-control ${touched.max_queue_number &&
+                        className={`form-control ${
+                          touched.max_queue_number &&
                           errors.max_queue_number &&
                           "is-invalid"
-                          }`}
-                          onChange={(e) => setMax_queue_number(e.target.value)}
+                        }`}
+                        onChange={(e) => setMax_queue_number(e.target.value)}
                       />
                       <ErrorMessage
                         name="max_queue_number"
@@ -335,7 +360,7 @@ function FormDepartment() {
                     </div>
                     <div class="col-10 col-md-6"></div>
                   </form>
-                  
+
                   <div className="d-flex justify-content-center mt-3">
                     <button
                       id="department_creatSubmit"
@@ -355,20 +380,13 @@ function FormDepartment() {
                       </Link>
                     </button>
                   </div>
-
-
-
                 </div>
-
               </div>
-
-
             </Form>
           )}
-
         </Formik>
-      </div >
-    </Fragment >
+      </div>
+    </Fragment>
   );
 }
 
