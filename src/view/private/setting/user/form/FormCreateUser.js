@@ -6,13 +6,13 @@ import Schema from "./Validation";
 import Swal from "sweetalert2";
 import { createPatient } from "../../../../../service/Patient.Service";
 function FormCreateUser() {
+  const navigate = useNavigate();
   const location = useLocation();
   const [age, setAge] = useState(0);
-  const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [users, setUsers] = useState({
-    users_id:null,
+    users_id: null,
     id_card: "",
-   
+    password: "",
     prefix_name: "",
     first_name: "",
     last_name: "",
@@ -32,18 +32,13 @@ function FormCreateUser() {
     district: "",
     province: "",
     postcode: "",
-   
     img: "",
-    role_id:1,
-    department_id:null,
+    role_id: 1,
+    department_id: null,
     birthday: "",
   });
-
-  const navigate = useNavigate();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("Input Value:", value); // ตรวจสอบค่าใน console
     if (name === "birthday") {
       if (value) {
         const birthDateObj = new Date(value); // แปลงวันที่ปีเกิดใน state ของคุณให้กลายเป็นออบเจ็กต์ของ Date
@@ -60,124 +55,52 @@ function FormCreateUser() {
       ...prevUsers,
       [name]: value,
     }));
-    if (isDataValid()) {
-      setSubmitDisabled(false);
-    } else {
-      setSubmitDisabled(true);
-    }
   };
-  const handleSubmit = () => {
-    
-    if (isDataValid()) {
-    
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: "กรุณากรอกข้อมูลให้ครบ",
-        text: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง",
-        showConfirmButton: true,
-      });
-    }
-  };
-  const isDataValid = () => {
-    const {
-      id_card,
-      prefix_name,
-      first_name,
-      last_name,
-      gender,
-      birthday,
-      weight,
-      height,
-      phoneNumber,
-
-      contact_first_name,
-      contact_last_name,
-      contact_relation_id,
-      contact_phoneNumber,
-      address,
-      subdistrict,
-      district,
-      province,
-      postcode,
-     
-    } = users;
-
+  const handleClick = async (e) => {
     if (
-      !id_card ||
-      !prefix_name ||
-      !first_name ||
-      !last_name ||
-      !gender ||
-      !birthday ||
-      !weight ||
-      !height ||
-      !contact_first_name ||
-      !contact_last_name ||
-      !contact_relation_id ||
-      !contact_phoneNumber ||
-      !address ||
-      !subdistrict ||
-      !district ||
-      !province ||
-      !postcode ||
-     
-      !phoneNumber.length !== 10 ||
-      id_card.length !== 13 ||
-      phoneNumber.length !== 10
+      !users.id_card ||
+      !users.prefix_name ||
+      !users.first_name ||
+      !users.last_name ||
+      !users.gender ||
+      !users.birthday ||
+      !users.weight ||
+      !users.height ||
+      !users.contact_first_name ||
+      !users.contact_last_name ||
+      !users.contact_relation_id ||
+      !users.contact_phoneNumber ||
+      !users.address ||
+      !users.subdistrict ||
+      !users.district ||
+      !users.province ||
+      !users.postcode ||
+      users.phoneNumber.length !== 10 ||
+      users.id_card.length !== 13
     ) {
-      return false;
+      Swal.fire({
+        title: "กรุณากรอกข้อมูลให้ครบถ้วน",
+        text: "กรุณาตรวจสอบข้อมูลที่ไม่ครบถ้วน",
+        icon: "warning",
+      });
+      return;
     }
 
-    return true;
-  };
-  const handleClick = async () => {
-    const usersWithAge = { ...users, age: age };
     try {
       const result = await Swal.fire({
-        title: "คุณแน่ใจหรือไม่ ว่าต้องการสร้างผู้ใช้ ?",
-        text: "",
+        title: "ยืนยัน",
+        text: "คุณแน่ใจหรือไม่ ว่าต้องการสมัครสมาชิก ?",
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
-      if (users.birthday) {
-        const birthDateObj = new Date(users.birthday); 
-        const today = new Date(); 
-        const diffInMilliseconds = Math.abs(today - birthDateObj);
-        const ageDate = new Date(diffInMilliseconds);
-        const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
-        setAge(calculatedAge); 
-      }
-      const dataToSend = { ...users, age: age, users_id: users.users_id };
+
+      const dataToSend = { ...users, age: age };
+
       if (result.isConfirmed) {
-        const requiredFields = [
-          "id_card",
-          "prefix_name",
-          "first_name",
-          "last_name",
-          "gender",
-          "birthday",
-          "weight",
-          "height",
-          "phoneNumber",
-       
-        ];
-  
-        const missingFields = requiredFields.filter(fieldName => !dataToSend[fieldName]);
-  
-        if (missingFields.length > 0) {
-          Swal.fire({
-            icon: "warning",
-            title: "กรุณากรอกข้อมูลให้ครบ",
-            text: `กรุณากรอกข้อมูลให้ครบ`,
-            showConfirmButton: true,
-          });
-          return; 
-        }
-  try {
-          await createPatient( 
+        try {
+          await createPatient(
             dataToSend.users_id,
             dataToSend.id_card,
             dataToSend.password,
@@ -200,39 +123,54 @@ function FormCreateUser() {
             dataToSend.district,
             dataToSend.province,
             dataToSend.postcode,
-           
             dataToSend.img,
-            dataToSend.role_id,
+            dataToSend.role_id
           );
+
           Swal.fire({
             icon: "success",
-            title: "เพิ่มข้อมูลผู้ใช้สำเร็จ",
+            title: "สมัครสมาชิกสำเร็จ",
+            text: "กรุณาเข้าสู่ระบบ",
             showConfirmButton: false,
-            timer: 2500,
+            timer: 1500,
           });
 
-          navigate("/admin/user");
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
         } catch (error) {
-          console.log(error);
+          console.error(error);
+          let errorMessage = "เกิดข้อผิดพลาดในการสมัครสมาชิก";
+          let icon = "error";
+
+          if (error.response) {
+            if (error.response.status === 400) {
+              errorMessage = "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว";
+              icon = "warning";
+            } else if (error.response.status === 404) {
+              errorMessage = "เกิดข้อผิดพลาดที่เซิร์ฟเวอร์";
+              icon = "error";
+            }
+          }
+
           Swal.fire({
-            icon: "warning",
-            title: "มีบัญชีผู้ใช้อยู่แล้ว",
-            text: "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว",
+            icon: icon,
+            title: "เกิดข้อผิดพลาด",
+            text: errorMessage,
             showConfirmButton: true,
           });
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการเพิ่มข้อมูลผู้ใช้",
+        text: "เกิดข้อผิดพลาดในการสมัครสมาชิก",
         showConfirmButton: true,
       });
     }
   };
-  const ageToShow = age !== null ? age : "";
   return (
     <Fragment>
       <div className="w-full">
@@ -853,7 +791,7 @@ function FormCreateUser() {
                         id="buttonAdminUser"
                           type="submit"
                           className="btn btn-success mx-1"
-                          onClick={handleSubmit} 
+                          onClick={handleClick}
                          >
                           บันทึก
                         </button>

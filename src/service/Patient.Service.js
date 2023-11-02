@@ -86,7 +86,6 @@ const createPatient = async (
   district,
   province,
   postcode,
-
   img,
   role_id
 ) => {
@@ -113,8 +112,7 @@ const createPatient = async (
     district,
     province,
     postcode,
-
-    img,
+img,
     role_id,
   });
 };

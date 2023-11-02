@@ -37,7 +37,7 @@ function Register() {
     department_id: null,
     birthday: "",
   });
- const handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "birthday") {
       if (value) {
@@ -56,29 +56,48 @@ function Register() {
       [name]: value,
     }));
   };
- const handleClick = async (e) => {
-      if (!users.id_card || !users.prefix_name || !users.first_name || !users.last_name || !users.gender || !users.birthday || !users.weight ||!users.height ||!users.contact_first_name || !users.contact_last_name || !users.contact_relation_id || !users.contact_phoneNumber ||!users.address || !users.subdistrict ||  !users.district || !users.province || !users.postcode ||users.phoneNumber.length !== 10 ||
-      users.id_card.length !== 13 ||
-      users.phoneNumber.length !== 10) {
+  const handleClick = async (e) => {
+    if (
+      !users.id_card ||
+      !users.prefix_name ||
+      !users.first_name ||
+      !users.last_name ||
+      !users.gender ||
+      !users.birthday ||
+      !users.weight ||
+      !users.height ||
+      !users.contact_first_name ||
+      !users.contact_last_name ||
+      !users.contact_relation_id ||
+      !users.contact_phoneNumber ||
+      !users.address ||
+      !users.subdistrict ||
+      !users.district ||
+      !users.province ||
+      !users.postcode ||
+      users.phoneNumber.length !== 10 ||
+      users.id_card.length !== 13
+    ) {
       Swal.fire({
-        title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
-        text: 'กรุณาตรวจสอบข้อมูลที่ไม่ครบถ้วน',
-        icon: 'warning',
+        title: "กรุณากรอกข้อมูลให้ครบถ้วน",
+        text: "กรุณาตรวจสอบข้อมูลที่ไม่ครบถ้วน",
+        icon: "warning",
       });
-      return; 
+      return;
     }
-try {
-   const result = await Swal.fire({
-          title: "ยืนยัน",
-          text: "คุณแน่ใจหรือไม่ ว่าต้องการสมัครสมาชิก ?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonText: "ตกลง",
-          cancelButtonText: "ยกเลิก",
-        });
-  
-      const dataToSend = { ...users, age: age};
-      
+
+    try {
+      const result = await Swal.fire({
+        title: "ยืนยัน",
+        text: "คุณแน่ใจหรือไม่ ว่าต้องการสมัครสมาชิก ?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "ตกลง",
+        cancelButtonText: "ยกเลิก",
+      });
+
+      const dataToSend = { ...users, age: age };
+
       if (result.isConfirmed) {
         try {
           await createPatient(
@@ -107,7 +126,7 @@ try {
             dataToSend.img,
             dataToSend.role_id
           );
-  
+
           Swal.fire({
             icon: "success",
             title: "สมัครสมาชิกสำเร็จ",
@@ -115,33 +134,44 @@ try {
             showConfirmButton: false,
             timer: 1500,
           });
-  
+
           setTimeout(() => {
-            navigate("/"); 
+            navigate("/");
           }, 1500);
-       
         } catch (error) {
-          console.log(error);
+          console.error(error);
+          let errorMessage = "เกิดข้อผิดพลาดในการสมัครสมาชิก";
+          let icon = "error"; // ไอคอนเริ่มต้นเป็น "error"
+
+          if (error.response) {
+            if (error.response.status === 400) {
+              errorMessage = "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว";
+              icon = "warning";
+            } else if (error.response.status === 404) {
+              errorMessage = "เกิดข้อผิดพลาดที่เซิร์ฟเวอร์";
+              icon = "error";
+            }
+          }
+
           Swal.fire({
-            icon: "warning",
-            title: "มีบัญชีผู้ใช้อยู่แล้ว",
-            text: "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว",
+            icon: icon,
+            title: "เกิดข้อผิดพลาด",
+            text: errorMessage,
             showConfirmButton: true,
           });
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการเพิ่มข้อมูลผู้ใช้",
+        text: "เกิดข้อผิดพลาดในการสมัครสมาชิก",
         showConfirmButton: true,
       });
     }
   };
-  
-  
+
   return (
     <Fragment>
       <div className="w-full">
@@ -157,7 +187,7 @@ try {
           initialValues={users}
           onSubmit={handleClick}
         >
-          {({ errors, touched}) => (
+          {({ errors, touched }) => (
             <Form>
               <div className="container mt-2 ">
                 <div className="mb-4">
@@ -313,7 +343,7 @@ try {
                             id="user_age"
                             type="text"
                             name="age"
-                            value={age !== null ? age : ""} 
+                            value={age !== null ? age : ""}
                             readOnly
                             disabled
                             style={{ backgroundColor: "lightgray" }}

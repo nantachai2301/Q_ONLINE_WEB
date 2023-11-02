@@ -13,7 +13,6 @@ function FormCreateDoctor() {
   const [doctor_phone ,setDoctor_phone] = useState("");
   const [doctor_status ,setDoctor_status] = useState("");
   const [department_id ,setDepartment_id] = useState("");
-  const [doctor_url ,setDoctor_url] = useState("");
   const [preview, setPreview] = useState("");
   const [file, setFile] = useState("");
   const navigate = useNavigate();
@@ -77,8 +76,15 @@ function FormCreateDoctor() {
         timer: 2500, // แสดงข้อความเป็นเวลา 1.5 วินาที
       });
       navigate("/admin/doctor");
-    }
-     catch (error) {
+    
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      Swal.fire({
+        title: "เบอร์โทรศัพท์ซ้ำกัน",
+        text: "ข้อมูลเบอร์โทรศัพท์นี้มีอยู่ในระบบแล้ว",
+        icon: "warning",
+      });
+    } else {
       Swal.fire({
         title: "เกิดข้อผิดพลาด",
         text: "เกิดข้อผิดพลาดในขณะที่เพิ่มข้อมูลแพทย์",
@@ -86,6 +92,7 @@ function FormCreateDoctor() {
       });
     }
   }
+}
 };
   return (
     <Fragment>
