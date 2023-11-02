@@ -80,8 +80,8 @@ function FormCreateDoctor() {
   } catch (error) {
     if (error.response && error.response.status === 400) {
       Swal.fire({
-        title: "เบอร์โทรศัพท์ซ้ำกัน",
-        text: "ข้อมูลเบอร์โทรศัพท์นี้มีอยู่ในระบบแล้ว",
+        title: "เกิดข้อผิดพลาด",
+        text: "มีแพทย์รายชื่อนี้อยู่ในระบบอยู่แล้ว",
         icon: "warning",
       });
     } else {
