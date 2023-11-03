@@ -1,11 +1,11 @@
-import React, { Fragment,  useState } from "react";
+import React, { Fragment,  useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
 import { createDoctor } from "../../../../../service/Doctor.Service";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import Doctor from "../../../../../image/doctor.jpg";
-
+import { getDepartment } from "../../../../../service/DepartmentType.Service";
 function FormCreateDoctor() {
   const [prefix_name ,setPrefix_name] = useState("");
   const [doctor_first_name ,setDoctor_first_name] = useState("");
@@ -13,11 +13,27 @@ function FormCreateDoctor() {
   const [doctor_phone ,setDoctor_phone] = useState("");
   const [doctor_status ,setDoctor_status] = useState("");
   const [department_id ,setDepartment_id] = useState("");
+  const [departments, setDepartments] = useState([]);
   const [preview, setPreview] = useState("");
   const [file, setFile] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  
+ 
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await getDepartment();
+
+        console.log(response.data); // Check the response data
+
+        setDepartments(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
   
   const loadImage = (e) => {
     const doctor_url = e.target.files[0];
@@ -277,17 +293,14 @@ function FormCreateDoctor() {
                         onChange={(e) => setDepartment_id(e.target.value)}
                       
                       >
-                        <option value="" selected>
-                          เลือกแผนก
-                        </option>
-                        <option value="1">ทันตกรรม</option>
-                        <option value="2">กุมารเวชกรรม</option>
-                        <option value="3">ทั่วไป</option>
-                        <option value="4">สูติ-นรีเวช</option>
-                        <option value="6">ศัลยกรรม</option>
-                        <option value="7">หัวใจ</option>
-                        <option value="8">ผิวหนัง</option>
-                        <option value="23">จักษุ</option>
+                        <option value="" disabled>
+                               เลือกแผนก
+                              </option>
+                              {departments.map((prov) => (
+                                <option key={prov.department_id} value={prov.department_id}>
+                                  {prov.department_name}
+                                </option>
+                              ))}
                       </select>
                       <ErrorMessage
                         name="department_id"

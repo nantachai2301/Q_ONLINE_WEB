@@ -4,6 +4,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 import Doctor from "../../../../../image/doctor.jpg";
 import Swal from "sweetalert2";
 import { getDoctorById, updateDoctorById } from "../../../../../service/Doctor.Service";
+import { getDepartment } from "../../../../../service/DepartmentType.Service";
 import Schema from "./Validation";
 function FormDoctor() {
   const location = useLocation();
@@ -16,6 +17,7 @@ function FormDoctor() {
   const [department_name, setDepartment_name] = useState("");
   const [preview, setPreview] = useState(""); // เพิ่ม state เพื่อเก็บรูปภาพ
   const [file, setFile] = useState("");
+  const [departments, setDepartments] = useState([]);
   const { doctors_id } = useParams();
 
   useEffect(() => {
@@ -42,6 +44,21 @@ function FormDoctor() {
     fetchDoctorData();
   }, [doctors_id]);
 
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await getDepartment();
+
+        console.log(response.data); // Check the response data
+
+        setDepartments(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
   const navigate = useNavigate();
  
   const loadImage = (e) => {
@@ -293,17 +310,14 @@ const result = await Swal.fire({
                         value={department_id}
                         onChange={(e) => setDepartment_id(e.target.value)}
                       >
-                        <option value="" selected>
-                          {department_name}
-                        </option>
-                        <option value="1">ทันตกรรม</option>
-                        <option value="2">กุมารเวชกรรม</option>
-                        <option value="3">ทั่วไป</option>
-                        <option value="4">สูติ-นรีเวช</option>
-                        <option value="6">ศัลยกรรม</option>
-                        <option value="7">หัวใจ</option>
-                        <option value="8">ผิวหนัง</option>
-                        <option value="23">จักษุ</option>
+                         <option value="" disabled>
+                              {department_name}
+                              </option>
+                              {departments.map((prov) => (
+                                <option key={prov.department_id} value={prov.department_id}>
+                                  {prov.department_name}
+                                </option>
+                              ))}
                       </select>
                       <ErrorMessage
                         name="department_id"

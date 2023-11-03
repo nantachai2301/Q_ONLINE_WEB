@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Formik, Form, ErrorMessage } from "formik";
-import axios from "axios";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import { createPatient } from "../../../../../service/Patient.Service";

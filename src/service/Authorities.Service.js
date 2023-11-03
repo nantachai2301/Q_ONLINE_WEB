@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://long-erin-jay-veil.cyclic.app/apis/";
+const API_URL = "https://worrisome-fly-skirt.cyclic.app/apis/";
 
 const getAuthorities = async () => {
   return await axios.get(API_URL + "authorities ",);
@@ -17,7 +17,7 @@ const updateAuthorities = async (
   phoneNumber,
   role_id
 ) => {
-  return await axios.put(API_URL + "patients/" + users_id, {
+  return await axios.put(API_URL + "user/" + users_id, {
     id_card,
     password,
     prefix_name,
@@ -41,7 +41,7 @@ const createAuthorities = async (
   phoneNumber,
   role_id
 ) => {
-  return await axios.post(API_URL +"patient", {
+  return await axios.post(API_URL +"user", {
     users_id,
     id_card,
     password,

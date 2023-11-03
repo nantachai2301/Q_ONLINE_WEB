@@ -4,15 +4,15 @@ import { Formik, Form, ErrorMessage } from "formik";
 import axios from "axios";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
-import { createPatient } from "../../../service/Patient.Service";
-function MainBookAuthor() {
+import { createAuthorities } from "../../../service/Authorities.Service";
+function FormCreateUser() {
+  const navigate = useNavigate();
   const location = useLocation();
   const [age, setAge] = useState(0);
-  const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [users, setUsers] = useState({
-    users_id:null,
+    users_id: null,
     id_card: "",
-    password: "", // เปลี่ยนชื่อฟิลด์นี้เป็น password
+    password: "",
     prefix_name: "",
     first_name: "",
     last_name: "",
@@ -32,18 +32,13 @@ function MainBookAuthor() {
     district: "",
     province: "",
     postcode: "",
-   
     img: "",
-    role_id:0,
-    department_id:null,
+    role_id: 1,
+    department_id: null,
     birthday: "",
   });
-
-  const navigate = useNavigate();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("Input Value:", value); // ตรวจสอบค่าใน console
     if (name === "birthday") {
       if (value) {
         const birthDateObj = new Date(value); // แปลงวันที่ปีเกิดใน state ของคุณให้กลายเป็นออบเจ็กต์ของ Date
@@ -60,126 +55,52 @@ function MainBookAuthor() {
       ...prevUsers,
       [name]: value,
     }));
-    if (isDataValid()) {
-      setSubmitDisabled(false);
-    } else {
-      setSubmitDisabled(true);
-    }
   };
-  const handleSubmit = () => {
-    
-    if (isDataValid()) {
-    
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: "กรุณากรอกข้อมูลให้ครบ",
-        text: "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง",
-        showConfirmButton: true,
-      });
-    }
-  };
-  const isDataValid = () => {
-    const {
-      id_card,
-      prefix_name,
-      first_name,
-      last_name,
-      gender,
-      birthday,
-      weight,
-      height,
-      phoneNumber,
-
-      contact_first_name,
-      contact_last_name,
-      contact_relation_id,
-      contact_phoneNumber,
-      address,
-      subdistrict,
-      district,
-      province,
-      postcode,
-    
-    } = users;
-
+  const handleClick = async (e) => {
     if (
-      !id_card ||
-      !prefix_name ||
-      !first_name ||
-      !last_name ||
-      !gender ||
-      !birthday ||
-      !weight ||
-      !height ||
-      !contact_first_name ||
-      !contact_last_name ||
-      !contact_relation_id ||
-      !contact_phoneNumber ||
-      !address ||
-      !subdistrict ||
-      !district ||
-      !province ||
-      !postcode ||
-   
-      !phoneNumber.length !== 10 ||
-      id_card.length !== 13 ||
-      phoneNumber.length !== 10
+      !users.id_card ||
+      !users.prefix_name ||
+      !users.first_name ||
+      !users.last_name ||
+      !users.gender ||
+      !users.birthday ||
+      !users.weight ||
+      !users.height ||
+      !users.contact_first_name ||
+      !users.contact_last_name ||
+      !users.contact_relation_id ||
+      !users.contact_phoneNumber ||
+      !users.address ||
+      !users.subdistrict ||
+      !users.district ||
+      !users.province ||
+      !users.postcode ||
+      users.phoneNumber.length !== 10 ||
+      users.id_card.length !== 13
     ) {
-      return false;
+      Swal.fire({
+        title: "กรุณากรอกข้อมูลให้ครบถ้วน",
+        text: "กรุณาตรวจสอบข้อมูลที่ไม่ครบถ้วน",
+        icon: "warning",
+      });
+      return;
     }
 
-   
-
-    return true;
-  };
-  const handleClick = async () => {
-    const usersWithAge = { ...users, age: age };
     try {
       const result = await Swal.fire({
-        title: "คุณต้องการสร้างผู้ใช้ใช่หรือไม่?",
-        text: "",
+        title: "ยืนยัน",
+        text: "คุณแน่ใจหรือไม่ ว่าต้องการจะลงทะเบียนจองคิว ?",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "ยืนยัน",
+        confirmButtonText: "ตกลง",
         cancelButtonText: "ยกเลิก",
       });
-      if (users.birthday) {
-        const birthDateObj = new Date(users.birthday); 
-        const today = new Date(); 
-        const diffInMilliseconds = Math.abs(today - birthDateObj);
-        const ageDate = new Date(diffInMilliseconds);
-        const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
-        setAge(calculatedAge); 
-      }
-      const dataToSend = { ...users, age: age, users_id: users.users_id };
+
+      const dataToSend = { ...users, age: age };
+
       if (result.isConfirmed) {
-        const requiredFields = [
-          "id_card",
-          "prefix_name",
-          "first_name",
-          "last_name",
-          "gender",
-          "birthday",
-          "weight",
-          "height",
-          "phoneNumber",
-       
-        ];
-  
-        const missingFields = requiredFields.filter(fieldName => !dataToSend[fieldName]);
-  
-        if (missingFields.length > 0) {
-          Swal.fire({
-            icon: "warning",
-            title: "กรุณากรอกข้อมูลให้ครบ",
-            text: `กรุณากรอกข้อมูลให้ครบ`,
-            showConfirmButton: true,
-          });
-          return; 
-        }
-  try {
-          await createPatient( 
+        try {
+          await createAuthorities (
             dataToSend.users_id,
             dataToSend.id_card,
             dataToSend.password,
@@ -202,58 +123,77 @@ function MainBookAuthor() {
             dataToSend.district,
             dataToSend.province,
             dataToSend.postcode,
-         
             dataToSend.img,
-            dataToSend.role_id,
+            dataToSend.role_id
           );
+
           Swal.fire({
             icon: "success",
-            title: "เพิ่มข้อมูลผู้ใช้สำเร็จ",
+            title: "ลงทะเบียนจองคิวสำเร็จ",
+            text: "กรุณาเข้าสู่ระบบ",
             showConfirmButton: false,
             timer: 1500,
           });
 
-          navigate("/author/Bookingwalkin");
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
         } catch (error) {
-          console.log(error);
+          console.error(error);
+          let errorMessage = "เกิดข้อผิดพลาดในการลงทะเบียนจองคิว";
+          let icon = "error";
+
+          if (error.response) {
+            if (error.response.status === 400) {
+              errorMessage = "คุณได้ลงทะเบียนโดยใช้เลขประจำตัวประชาชนนี้อยู่แล้ว";
+              icon = "warning";
+            } else if (error.response.status === 404) {
+              errorMessage = "เกิดข้อผิดพลาดที่เซิร์ฟเวอร์";
+              icon = "error";
+            }
+          }
+
           Swal.fire({
-            icon: "warning",
-            title: "มีบัญชีผู้ใช้อยู่แล้ว",
-            text: "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว",
+            icon: icon,
+            title: "เกิดข้อผิดพลาด",
+            text: errorMessage,
             showConfirmButton: true,
           });
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
-        text: "เกิดข้อผิดพลาดในการเพิ่มข้อมูลผู้ใช้",
+        text: "เกิดข้อผิดพลาดในการลงทะเบียนการจองคิว",
         showConfirmButton: true,
       });
     }
   };
-  const ageToShow = age !== null ? age : "";
-
   return (
     <Fragment>
       <div className="w-full">
         <div className="d-flex justify-content-end">
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link id="admin-user" to="/admin/user" className="nav-breadcrumb">
+                ลงทะเบียนจองคิว
+                </Link>
+              </li>
               <li
                 className="breadcrumb-item text-black fw-semibold"
                 aria-current="page"
               >
-                {location.state ? "แก้ไข" : "ลงทะเบียน"}การจองคิว
+                ลงทะเบียนจองคิว
               </li>
             </ol>
           </nav>
         </div>
         <div className="w-full mb-5">
           <h2 className="title-content">
-            {location.state ? "แก้ไข" : "ลงทะเบียน"}การจองคิว
+            ลงทะเบียนจองคิว
           </h2>
         </div>
         <Formik
@@ -264,19 +204,19 @@ function MainBookAuthor() {
         >
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
-              <div className="container mt-2">
+              <div className="container mt-2 ">
                 <div className="mb-4">
                   <div className="card border-0 shadow p-4">
                     <h6 className="font ">ข้อมูลทั่วไป</h6>
                     <br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
-                        <div className="col-3">
+                        <div className="col-4">
                           <label>เลขบัตรประชาชน</label>
                           <label className="red">*</label>
                           <br></br>
                           <input
-                            id="MainBookAuthor_id_card"
+                           id="Addid_card"
                             type="text"
                             name="id_card"
                             value={users.id_card}
@@ -293,13 +233,13 @@ function MainBookAuthor() {
                           />
                         </div>
 
-                        <div className="col-3">
+                        <div className="col-2">
                           <label>
                             คำนำหน้าชื่อ <label className="red">* &nbsp;</label>
                             :{" "}
                           </label>{" "}
                           <select
-                            id="MainBookAuthor_prefix_name"
+                            id="Addprefix_name"
                             name="prefix_name"
                             className={`form-select ${
                               touched.prefix_name &&
@@ -308,7 +248,7 @@ function MainBookAuthor() {
                             }`}
                             onChange={handleChange}
                           >
-                            <option value="" selected>เลือกคำนำหน้าชื่อ</option>
+                           <option value="" selected>เลือกคำนำหน้าชื่อ</option>
                             <option value="นาย">นาย</option>
                             <option value="นางสาว">นางสาว</option>
                             <option value="นาง">นาง</option>
@@ -319,13 +259,12 @@ function MainBookAuthor() {
                             className="error-message"
                           />
                         </div>
-
                         <div className="col-3">
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
-                            id="MainBookAuthor_first_name"
                             type="name"
+                            id="Addfirst_name"
                             name="first_name"
                             placeholder="ชื่อ"
                             value={users.first_name}
@@ -342,12 +281,11 @@ function MainBookAuthor() {
                             className="error-message"
                           />
                         </div>
-
                         <div className="col-3">
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
-                            id="MainBookAuthor_last_name"
+                           id="Addlast_name"
                             type="text"
                             name="last_name"
                             placeholder="นามสกุล"
@@ -365,20 +303,19 @@ function MainBookAuthor() {
                             className="error-message"
                           />
                         </div>
-
-                        <div className="col-3">
+                        <div className="col-2">
                           <label>
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
                           <select
-                            id="MainBookAuthor_gender"
+                          id="Addgender"
                             name="gender"
                             className={`form-select ${
                               touched.gender && errors.gender && "is-invalid"
                             }`}
                             onChange={handleChange}
                           >
-                             <option value="" selected>เลือกเพศ</option>
+                            <option value="" selected>เลือกเพศ</option>
                             <option value="ชาย">ชาย</option>
                             <option value="หญิง">หญิง</option>
                           </select>
@@ -389,12 +326,12 @@ function MainBookAuthor() {
                           />
                         </div>
 
-                        <div className="col-3">
+                        <div className="col-2 px-1 mt-2">
                           <label>วันเดือนปีเกิด</label>
                           <label className="red">*</label>
 
                           <input
-                            id="MainBookAuthor_birthday"
+                           id="Addbirthday"
                             name="birthday"
                             type="date"
                             value={users.birthday}
@@ -411,10 +348,10 @@ function MainBookAuthor() {
                             </div>
                           )}
                         </div>
-                        <div className="col-2">
+                        <div className="col-2 px-1 mt-2">
                           <label>อายุ</label>
                           <input
-                            id="MainBookAuthor_age"
+                           id="Addage"
                             type="text"
                             name="age"
                             value={age !== null ? age : ""} // ใช้ค่า state ของอายุที่คำนวณได้ ถ้ามีค่า (ไม่ใช่ null) ให้แสดงค่าอายุ ถ้าไม่ใช่ให้แสดงเป็นช่องว่าง
@@ -424,12 +361,11 @@ function MainBookAuthor() {
                             className="form-control"
                           />
                         </div>
-
                         <div className="col-3">
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
-                            id="MainBookAuthor_weight"
+                           id="Addweight"
                             type="weight"
                             name="weight"
                             placeholder="น้ำหนัก"
@@ -445,12 +381,11 @@ function MainBookAuthor() {
                             className="error-message"
                           />
                         </div>
-
                         <div className="col-3">
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
-                            id="MainBookAuthor_height"
+                          id="Addheight"
                             type="height"
                             name="height"
                             placeholder="ส่วนสูง"
@@ -466,12 +401,11 @@ function MainBookAuthor() {
                             className="error-message"
                           />
                         </div>
-
                         <div className="col-3">
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
-                            id="MainBookAuthor_phone"
+                            id="AddphoneNumber"
                             type="phone"
                             name="phoneNumber"
                             placeholder="เบอร์โทร"
@@ -489,53 +423,34 @@ function MainBookAuthor() {
                             className="error-message"
                           />
                         </div>
-
-                        <div className="col-3">
+                        <div className="col-4 px-1 mt-2">
                           <label>โรคประจำตัว</label>
-                        
+                     
                           <input
-                            id="MainBookAuthor_congenital_disease"
+                            id="Addcongenital_disease"
                             type="text"
                             placeholder="โรคประจำตัว"
                             name="congenital_disease"
                             value={users.congenital_disease}
-                            className={`form-control ${
-                              touched.congenital_disease &&
-                              errors.congenital_disease &&
-                              "is-invalid"
-                            }`}
+                            className="form-control"
                             onChange={handleChange}
                           />
-                          <ErrorMessage
-                            name="congenital_disease"
-                            component="div"
-                            className="error-message"
-                          />
                         </div>
-
-                        <div className="col-3">
+                        <div className="col-4 px-1 mt-2">
                           <label>ประวัติแพ้ยา</label>
-                         
+                        
                           <input
-                            id="MainBookAuthor_drugallerg"
+                           id="Adddrugallergy"
                             type="text"
                             placeholder="ประวัติแพ้ยา"
                             name="drugallergy"
                             value={users.drugallergy}
-                            className={`form-control ${
-                              touched.drugallergy &&
-                              errors.drugallergy &&
-                              "is-invalid"
-                            }`}
+                            className="form-control"
                             onChange={handleChange}
-                          />
-                          <ErrorMessage
-                            name="drugallergy"
-                            component="div"
-                            className="error-message"
                           />
                         </div>
                       </div>
+                      <br></br>
                       <h6>รหัสผ่าน</h6>
                       <div className="rounded border p-4">
                         <div className="col-8 ">
@@ -544,7 +459,7 @@ function MainBookAuthor() {
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
-                                id="MainAddpassword"
+                                id="Addpassword"
                                 type="password"
                                 placeholder="รหัสผ่าน"
                                 name="password"
@@ -566,16 +481,14 @@ function MainBookAuthor() {
                         </div>
                       </div>
                       <br></br>
-
                       <h6>บุคคลที่ติดต่อได้</h6>
-                      <br></br>
                       <div className="rounded border p-4">
                         <div className="row gx-3 gy-2 align-items-center">
-                          <div className="col-3">
+                          <div className="col-4">
                             <label>ชื่อ</label>
                             <label className="red">*</label>
                             <input
-                              id="MainBookAuthor_contact_first_name"
+                            id="Addcontact_first_name"
                               placeholder="ชื่อ"
                               type="contact_first_name"
                               name="contact_first_name"
@@ -593,12 +506,11 @@ function MainBookAuthor() {
                               className="error-message"
                             />
                           </div>
-
-                          <div className="col-3">
+                          <div className="col-4 px-1 mt-2">
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
-                              id="MainBookAuthor_contact_last_name"
+                            id="Addcontact_last_name"
                               placeholder="นามสกุล"
                               type="contact_last_name"
                               name="contact_last_name"
@@ -616,14 +528,13 @@ function MainBookAuthor() {
                               className="error-message"
                             />
                           </div>
-
-                          <div className="col-3">
+                          <div className="col-4 px-1 mt-2">
                             <label>
                               ความสัมพันธ์
                               <label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
-                              id="MainBookAuthor_contact_relation_id"
+                             id="Addcontact_relation_id"
                               name="contact_relation_id"
                               className={`form-select ${
                                 touched.contact_relation_id &&
@@ -646,17 +557,16 @@ function MainBookAuthor() {
                               className="error-message"
                             />
                           </div>
-
-                          <div className="col-3">
+                          <div className="col-4 px-1 mt-2">
                             <label>เบอร์โทร</label>
                             <label className="red">*</label>
                             <input
-                              id="MainBookAuthor_contact_phoneNumber"
+                            id="Addcontact_phoneNumber"
                               type="text"
                               placeholder="เบอร์โทร"
                               name="contact_phoneNumber"
                               value={users.contact_phoneNumber}
-                              className={`form-control ${
+                              className={`form-select ${
                                 touched.contact_phoneNumber &&
                                 errors.contact_phoneNumber &&
                                 "is-invalid"
@@ -671,18 +581,15 @@ function MainBookAuthor() {
                           </div>
                         </div>
                       </div>
-
                       <br></br>
-
-                      <h6>ข้อมูลที่อยู่</h6>
-                      <br></br>
+                      ข้อมูลที่อยู่
                       <div className="rounded border p-4">
                         <div className="row gx-3 gy-2 align-items-center">
                           <div className="col-3">
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
-                              id="MainBookAuthor_address"
+                            id="Addaddress"
                               type="address"
                               name="address"
                               placeholder="บ้านเลขที่"
@@ -706,7 +613,7 @@ function MainBookAuthor() {
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
                             <select
-                              id="MainBookAuthor_province"
+                            id="Addprovince"
                               name="province"
                               className={`form-control ${
                                 touched.province &&
@@ -817,7 +724,7 @@ function MainBookAuthor() {
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
-                              id="MainBookAuthor_district"
+                            id="Adddistrict"
                               placeholder="อำเภอ"
                               type="district"
                               name="district"
@@ -835,12 +742,11 @@ function MainBookAuthor() {
                               className="error-message"
                             />
                           </div>
-
                           <div className="col-3">
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
-                              id="MainBookAuthor_subdistrict"
+                             id="Addsubdistrict"
                               name="subdistrict"
                               placeholder="ตำบล"
                               value={users.subdistrict}
@@ -861,7 +767,7 @@ function MainBookAuthor() {
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
-                              id="MainBookAuthor_postcode"
+                             id="addpostcode"
                               placeholder="รหัสไปรษณีย์"
                               name="postcode"
                               value={users.postcode}
@@ -880,21 +786,20 @@ function MainBookAuthor() {
                           </div>
                         </div>
                       </div>
-
                       <div className="d-flex justify-content-center mt-3">
-                        <button
-                          id="MainBookAuthor_submit"
+                      <button
+                        id="buttonAdminUser"
                           type="submit"
                           className="btn btn-success mx-1"
-                          onClick={handleSubmit} 
-                        >
-                          ลงทะเบียน
+                          onClick={handleClick}
+                         >
+                          บันทึก
                         </button>
 
                         <button
-                          id="MainBookAuthor_Cencel"
+                         id="BackbuttonAdminUser"
                           className="btn btn-danger mx-1"
-                          onClick={() => navigate("/")}
+                          onClick={() => navigate("/admin/user")}
                         >
                           ยกเลิก
                         </button>
@@ -910,5 +815,4 @@ function MainBookAuthor() {
     </Fragment>
   );
 }
-
-export default MainBookAuthor;
+export default FormCreateUser;

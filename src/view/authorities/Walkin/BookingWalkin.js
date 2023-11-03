@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
-
 import { Formik, Form } from "formik";
 import ShowData from "./Showdata";
+
+
 function BookingWalkin() {
     return (
         <Fragment>

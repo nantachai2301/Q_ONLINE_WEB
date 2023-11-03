@@ -8,6 +8,7 @@ import { Button, Container, Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import DateTh from "../../../components/DateTh";
+import { getDepartment } from "../../../service/DepartmentType.Service";
 import { getPatient } from "../../../service/Patient.Service";
 import { createQueue } from "../../../service/Queue.Service";
 const StyledContainer = styled(Container)`
@@ -41,7 +42,7 @@ const MainBook = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const [departments, setDepartments] = useState([]);
   const [queue, setQueue] = useState({
     queue_id: "",
     create_at: "",
@@ -96,7 +97,21 @@ const MainBook = (props) => {
         });
     }
   }, []);
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await getDepartment();
 
+        console.log(response.data); // Check the response data
+
+        setDepartments(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
   const handleChange = (e) => {
     console.log("Input changed:", e.target.name, e.target.value);
     // const value = e.target.name === "department_id" ? Number(e.target.value) : e.target.value;
@@ -330,15 +345,14 @@ const MainBook = (props) => {
                           onChange={handleChange} // เรียกใช้ฟังก์ชัน handleChange เมื่อผู้ใช้เลือกแผนก
                           aria-label="Default select example"
                         >
-                          <option selected>เลือกแผนก</option>
-                          <option value="1">ทันตกรรม</option>
-                          <option value="2">กุมารเวช</option>
-                          <option value="3">ทั่วไป</option>
-                          <option value="4">สูติ-นรีเวช</option>
-                          <option value="6">ศัลยกรรม</option>
-                          <option value="7">หัวใจ</option>
-                          <option value="8">ผิวหนัง</option>
-                          <option value="23">จักษุ</option>
+                          <option value="" disabled>
+                               เลือกแผนก
+                              </option>
+                              {departments.map((prov) => (
+                                <option key={prov.department_id} value={prov.department_id}>
+                                  {prov.department_name}
+                                </option>
+                              ))}
                         </select>
                        
                       </div>

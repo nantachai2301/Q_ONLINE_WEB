@@ -6,11 +6,13 @@ import Swal from "sweetalert2";
 import Table from "react-bootstrap/Table";
 import { Modal, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import { getDepartment } from "../../../service/DepartmentType.Service";
 import { getPatient, getPatientById } from "../../../service/Patient.Service";
-import { createQueue,getQueuebyid } from "../../../service/Queue.Service";
+import { createQueue, getQueuebyid } from "../../../service/Queue.Service";
+
 function Showdata() {
   const [user, setUser] = useState([]);
-  console.log(user)
+  console.log(user);
   const [selectedUser, setSelectedUser] = useState([]);
   const navigate = useNavigate();
   const [pageData, setPageData] = useState([]);
@@ -19,6 +21,7 @@ function Showdata() {
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [departments, setDepartments] = useState([]);
   const [booking, setBooking] = useState({
     queue_id: "",
     create_at: "",
@@ -42,7 +45,21 @@ function Showdata() {
       getUser();
     }
   };
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await getDepartment();
 
+        console.log(response.data); // Check the response data
+
+        setDepartments(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
   const handlecloseLogin = () => {
     window.location.reload();
     window.location.href = "/author/Bookingwalkin/";
@@ -59,11 +76,8 @@ function Showdata() {
     e.preventDefault();
 
     const { department_id, queue_date, symptom } = booking;
-   
-    
+
     try {
-     
-   
       if (!booking.symptom || !booking.department_id) {
         Swal.fire({
           icon: "error",
@@ -73,9 +87,6 @@ function Showdata() {
         return;
       }
 
-    
-
-    
       const result = await Swal.fire({
         title: "ยืนยัน",
         text: "คุณแน่ใจหรือไม่ ว่าต้องการจองคิว ?",
@@ -96,7 +107,7 @@ function Showdata() {
             queue_status_id: 1,
             symptom,
           };
-     
+
           await createQueue(
             dataToSend.users_id,
             dataToSend.first_name,
@@ -107,7 +118,6 @@ function Showdata() {
             dataToSend.queue_status_id
           );
 
-        
           Swal.fire({
             icon: "success",
             title: "จองคิวสำเร็จ",
@@ -117,23 +127,31 @@ function Showdata() {
           navigate("/author/Manage");
 
           closeModal(true);
-       
+
           console.log("จองคิวสำเร็จ!");
         } catch (error) {
           console.log(error);
-        
+          let errorMessage = "เกิดข้อผิดพลาดในการจองคิว";
+          let icon = "error"; // ไอคอนเริ่มต้นเป็น "error"
+          if (error.response) {
+            if (error.response.status === 400) {
+              errorMessage = "คุณมีคิวที่จองแล้วในวันนี้";
+              icon = "warning";
+            } else if (error.response.status === 500) {
+              errorMessage = "ไม่สามารถจองคิวย้อนหลัง";
+              icon = "error";
+            }
+          }
           Swal.fire({
-            icon: "error",
-            title: "การจองคิวไม่สำเร็จ",
-            text: "เกิดข้อผิดพลาดในการจองคิว กรุณาลองใหม่อีกครั้ง",
+            icon: icon,
+            title: "เกิดข้อผิดพลาด",
+            text: errorMessage,
             showConfirmButton: true,
           });
         }
-        window.location.reload();
       }
     } catch (error) {
-      console.log(error);
-      // แสดงตัวแจ้งเตือนเมื่อเกิดข้อผิดพลาด
+      console.error(error);
       Swal.fire({
         icon: "error",
         title: "เกิดข้อผิดพลาด",
@@ -143,6 +161,7 @@ function Showdata() {
     }
     closeModal();
   };
+
 
   const getUser = async () => {
     const response = await getPatient();
@@ -293,56 +312,56 @@ function Showdata() {
           <tbody>
             {pageData.length > 0 ? (
               pageData
-              .sort((a, b) => new Date(b.users_id) - new Date(a.users_id))
-              .map((item, index) => {
-                if (item.role_id === 0) {
-                  const userBirthdate = new Date(item.birthday); // ตั้งค่าวันเกิดของผู้ใช้งานในรูปแบบ Date
+                .sort((a, b) => new Date(b.users_id) - new Date(a.users_id))
+                .map((item, index) => {
+                  if (item.role_id === 0) {
+                    const userBirthdate = new Date(item.birthday); // ตั้งค่าวันเกิดของผู้ใช้งานในรูปแบบ Date
 
-                  const today = new Date();
-                  const birthdateYear = userBirthdate.getFullYear();
-                  const birthdateMonth = userBirthdate.getMonth();
-                  const birthdateDay = userBirthdate.getDate();
+                    const today = new Date();
+                    const birthdateYear = userBirthdate.getFullYear();
+                    const birthdateMonth = userBirthdate.getMonth();
+                    const birthdateDay = userBirthdate.getDate();
 
-                  const age =
-                    today.getFullYear() -
-                    birthdateYear -
-                    (today.getMonth() < birthdateMonth ||
-                    (today.getMonth() === birthdateMonth &&
-                      today.getDate() < birthdateDay)
-                      ? 1
-                      : 0);
-                      
-                  return (
-                    <tr key={item.users_id}>
-                      <td>{(page - 1) * 10 + index + 1}</td>
-                      <td>{item.id_card}</td>
-                      <td>
-                        {item.prefix_name} {item.first_name} {item.last_name}
-                      </td>
-                      <td>{item.gender}</td>
-                      <td>{age} ปี</td>
-                      <td>{item.phoneNumber}</td>
+                    const age =
+                      today.getFullYear() -
+                      birthdateYear -
+                      (today.getMonth() < birthdateMonth ||
+                      (today.getMonth() === birthdateMonth &&
+                        today.getDate() < birthdateDay)
+                        ? 1
+                        : 0);
 
-                      <td>
-                        <div>
-                          <Button
-                            id="BookingWalkinopenModal"
-                            variant="success"
-                            className="text-white mx-1 mt-1"
-                            onClick={() => {
-                              setSelectedUser(null); // เคลียร์ข้อมูลที่ดึงมาก่อนหน้า
-                              loadUserById(item.users_id); // เรียกดึงข้อมูลตาม ID
-                              openModal();
-                            }}
-                          >
-                            <i class="fa-solid fa-calendar-check"></i>
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                }
-              })
+                    return (
+                      <tr key={item.users_id}>
+                        <td>{(page - 1) * 10 + index + 1}</td>
+                        <td>{item.id_card}</td>
+                        <td>
+                          {item.prefix_name} {item.first_name} {item.last_name}
+                        </td>
+                        <td>{item.gender}</td>
+                        <td>{age} ปี</td>
+                        <td>{item.phoneNumber}</td>
+
+                        <td>
+                          <div>
+                            <Button
+                              id="BookingWalkinopenModal"
+                              variant="success"
+                              className="text-white mx-1 mt-1"
+                              onClick={() => {
+                                setSelectedUser(null); // เคลียร์ข้อมูลที่ดึงมาก่อนหน้า
+                                loadUserById(item.users_id); // เรียกดึงข้อมูลตาม ID
+                                openModal();
+                              }}
+                            >
+                              <i class="fa-solid fa-calendar-check"></i>
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  }
+                })
             ) : (
               <div className="d-flex justify-content-center ">
                 Loading... <Spinner animation="border" variant="danger" />
@@ -428,18 +447,18 @@ function Showdata() {
                     onChange={handleBookingChange} // เรียกใช้ฟังก์ชัน handleChange เมื่อผู้ใช้เลือกแผนก
                     aria-label="Default select example"
                   >
-                    <option selected>เลือกแผนก</option>
-                    <option value="1">ทันตกรรม</option>
-                    <option value="2">กุมารเวช</option>
-                    <option value="3">ทั่วไป</option>
-                    <option value="4">สูติ-นรีเวช</option>
-                    <option value="6">ศัลยกรรม</option>
-                    <option value="7">หัวใจ</option>
-                    <option value="8">ผิวหนัง</option>
-                    <option value="23">จักษุ</option>
-                    <option value="26">ความงาม</option>
+                    <option value="" disabled>
+                      เลือกแผนก
+                    </option>
+                    {departments.map((prov) => (
+                      <option
+                        key={prov.department_id}
+                        value={prov.department_id}
+                      >
+                        {prov.department_name}
+                      </option>
+                    ))}
                   </select>
-                  
                 </div>
                 <div className="col-6 px-1 mt-3">
                   <label
@@ -478,9 +497,8 @@ function Showdata() {
       </Modal>
       <div className="d-flex justify-content-between">
         <div>จำนวน {pageData.length} รายการ</div>
-        <div className="Pagination"  id="BookingWalkinpageSize">
+        <div className="Pagination" id="BookingWalkinpageSize">
           <Pagination
-           
             activePage={page}
             itemsCountPerPage={pageSize}
             totalItemsCount={user.length}
