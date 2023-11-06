@@ -91,7 +91,7 @@ function DesktopQueue({ departmentData, selectedDate }) {
                     ))}
                   {filteredQueues.every((queue) => queue.queue_status_name !== 'กำลังเข้ารับการรักษา') && (
                     <tr>
-                      <td colSpan="2" style={{ textAlign: 'center' }}>ไม่มีการเรียกคิว</td>
+                      <td className="tdq" colSpan="2" style={{ textAlign: 'center' }}>ไม่มีการเรียกคิว</td>
                     </tr>
                   )}
                 </tbody>
@@ -149,7 +149,7 @@ function DesktopQueue({ departmentData, selectedDate }) {
         <div className="col-8">
           {bookedQueues > 0 && (
             <div className="wait-queue">
-              <h4>รอรับบริการเรียกคิว</h4>
+              <h4 className="q1">รอรับบริการเรียกคิว</h4>
               <table className="table" >
                 <thead className="th1">
                   <tr style={{ background: "#78A3D4", color: "white" }}>

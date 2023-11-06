@@ -190,7 +190,7 @@ function Home() {
 
      <NavBarQueue/>
      <DesktopQueue/>
-      {/* <div class="container5 p-5 my-5 border">
+      <div class="container5 p-5 my-5 border">
         <div className="d-flex justify-content-center ">
           <Carousel variant="dark">
             <Carousel.Item>
@@ -207,7 +207,7 @@ function Home() {
         </div>
         <hr></hr>
         <div className="row">
-          <Card style={{ width: "18rem" }}>
+          <Card className="cardh" style={{ width: "18rem" }}>
             <Card.Img
               variant="top"
               src={c1}
@@ -285,7 +285,7 @@ function Home() {
               </div>
           </Card>
         </div>
-      </div> */}
+      </div>
       </div>
     </Fragment>
   );
