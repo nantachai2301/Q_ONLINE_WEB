@@ -15,14 +15,14 @@ const FetchFooterData = () => {
 
   return (
     <footer id="public">
-      <div className="footer">
+      <div className="footers">
         <div className="justify-content-center">
           <div>
             {Object.keys(hospital).length > 0 ? (
-              <div className="Title-Footer">
+              <div className="Title-Footer" style={{ fontSize: "1.5vw" }}>
                  <div>
                 <div className="Footer-name">
-                  <h4 id="hospital_name">{hospital.hospital_name}</h4>
+                  <h4 style={{ fontSize: "2.2vw" }}id="hospital_name">{hospital.hospital_name}</h4>
                 </div>
                 <div className="Footer-Detail">
                    <p id="hospital_All">

@@ -263,8 +263,8 @@ font-size: 30px;
 }
 .call-queue{
   margin-top: 5px;
-  margin-left: -25px;
-  width: 165px;
+  margin-left: -30px;
+  width: 152px;
 }
 .th1{
   text-align: center;
@@ -279,7 +279,7 @@ font-size: 30px;
 
 }
 .callqueue-card2 {
-  margin-left: 145px; /* เพิ่มส่วนนี้เพื่อให้หน่วยงานนี้อยู่ริมขวา */
+  margin-left: 125px; /* เพิ่มส่วนนี้เพื่อให้หน่วยงานนี้อยู่ริมขวา */
   align-items: center;
   background-color: #628a72;
   width: 140px;
@@ -299,7 +299,7 @@ font-size: 30px;
   margin-top: -150px;
 }
 .callqueue-info{
-  margin-top: -10px;
+  margin-top: -20px;
   font-size: 10px;
   color: #000000;
 }
@@ -355,9 +355,11 @@ font-size: 30px;
 
 
 }
+
+
 .wait-queue{
-  margin-left: -20px;
-  width: 165px;
+  margin-left: -30px;
+  width: 152px;
 }
 .doctor4{
   width: 150px;
