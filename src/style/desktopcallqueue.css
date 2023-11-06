@@ -1,9 +1,17 @@
+.call-queue{
+  margin-left: 500px;
+}
+.wait-queue{
+  margin-left: 500px;
+}
 .callqueue-info{
   margin-top: 10px;
-  font-size: 20px;
+  font-size: 10px;
   color: #000000;
 }
-
+.p1{
+font-size: 30px;
+}
 .callcustom-header{
     background-color:  rgb(202, 87, 125);
     color:white;
@@ -20,7 +28,7 @@
 .callinfo-container{
     align-items: center;
     margin-top: 20px;
-    margin-left: 15px;
+    margin-right:15px;
   }
 .callqueue-card1 {
     flex: 1;
@@ -31,6 +39,7 @@
    margin-right: 20px;
     margin-top: 10px;
     margin-left: auto;
+    
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 150px;
     height: 100px; /* ปรับความสูงตามที่คุณต้องการ */
@@ -61,8 +70,299 @@
     border-radius: 10px;
     height: 270px;
   }
+  .doctor-image{
+    width: 150px;
+    height: 200px;
+  }
+  .t1{
+    color: #fff;
+    margin-right: 20px;
+    font-size: 25px;
+    text-align: left;
+    
+  }
+  .department-list1 {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .department-button1{
+    background-color: #d6943e;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
 
 
-
-
+  .texte1 {
+    flex-basis: 190px;
+    margin-left: auto;
+    background-color: #E18AAA;
+    padding: 10px;
+    border-radius: 10px;
+   
+  }
   
+  .text1 {
+    color: black;
+    font-size: 20px;
+  }
+  .texte2 {
+    flex-basis: 270px;
+    margin-left: auto;
+    margin-top: 5%;
+    background-color: #E4A0B7;
+    padding: 10px;
+    border-radius: 10px;
+  }
+.th1{
+  text-align: center;
+  font-size: 23px;
+}
+.imd{
+  margin-top: -30px;
+}
+.text-call{
+  margin-top: 40px;
+}
+.text7{
+  margin-left: 50px;
+  font-size: 20px;
+}
+.text8{
+  margin-left: 50px;
+  font-size: 20px;
+}
+.doctor4{
+  width: 300px;
+  height: 300px;
+}
+.no-queue-message{
+  margin-left: 350px;
+}
+  @media screen and (max-width: 600px) {
+    .callqueue-info{
+      margin-top: 10px;
+      font-size: 20px;
+      color: #000000;
+    }
+    
+    .callcustom-header{
+        background-color:  rgb(202, 87, 125);
+        color:white;
+        padding: 15px;
+        width: 100%;
+    }
+    .callcustom-header1{
+        background-color: rgb(222, 222, 222);
+        
+        font-size: 30px;
+        padding: 5px;
+        width: 100%;
+    }
+    .callinfo-container{
+        align-items: center;
+        margin-top: 20px;
+        margin-left: 15px;
+        
+      }
+    .callqueue-card1 {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+         margin-right: 20px;
+        margin-top: 1px;
+        margin-left: auto;
+        box-shadow:none;
+        width: 150px;
+        height: 90px; /* ปรับความสูงตามที่คุณต้องการ */
+      }
+      .container23 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 2200px;
+        margin: 0 auto;
+        padding: 20px;
+
+     }
+      .doctor-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .callqueue-card2 {
+        margin-left: auto; /* เพิ่มส่วนนี้เพื่อให้หน่วยงานนี้อยู่ริมขวา */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #628a72;
+        width: 380px;
+       
+        border-radius: 10px;
+        height: 270px;
+      }
+      .t1{
+        color: #fff;
+        margin-right: 20px;
+        font-size: 15px;
+        text-align: left;
+        
+      }
+    .department-list1{
+      display:grid;
+      grid-template-columns: auto auto auto;
+      margin-bottom: 20px;
+    }
+      .department-button1{
+        background-color: #d6943e;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+       font-size: 13px;
+      }
+      
+      .department-button.selected {
+        background-color: #2f843e;
+      }
+      .texte1 {
+        flex-basis: 140px;
+        margin-left: auto;
+        background-color: #E18AAA;
+        padding: 10px;
+        border-radius: 10px;
+       
+      }
+      
+      .text1 {
+        color: black;
+        font-size: 17px;
+       
+      }
+      .texte2 {
+        flex-basis: 230px;
+        margin-left: auto;
+        margin-top: 5%;
+        background-color: #E4A0B7;
+        padding: 10px;
+        border-radius: 10px;
+}
+
+.call-queue{
+  margin-left: -18px;
+  width: 180px;
+}
+.th1{
+  text-align: center;
+  font-size: 12px;
+}
+.doctor-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+}
+.callqueue-card2 {
+  margin-left: 180px; /* เพิ่มส่วนนี้เพื่อให้หน่วยงานนี้อยู่ริมขวา */
+  align-items: center;
+  background-color: #628a72;
+  width: 140px;
+  height: 140;
+  top: 100px;
+  border-radius: 10px;
+  height: 100px;
+}
+.doctor-image{
+  width: 40px;
+  height: 50px;
+ margin-left: 30px;
+ 
+}
+.imd{
+  margin-top: -150px;
+}
+.callqueue-info{
+  margin-top: -10px;
+  font-size: 10px;
+  color: #000000;
+}
+.callinfo-container{
+  align-items: center;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+.callqueue-card1 {
+  margin-top: -30px;
+  margin-left: 10px;
+ }
+.pt{
+  font-size: 9px;
+}
+.callcustom-header{
+  background-color:  rgb(202, 87, 125);
+  color:white;
+  padding: 4px;
+  width: 80px;
+}
+.callcustom-header1{
+  background-color: rgb(222, 222, 222);
+  height: 20px;
+  font-size: 12px;
+  padding: 4px;
+  width: 80px;
+}
+.q1{
+  font-size: 16px;
+}
+.text-call{
+  margin-top: -22px;
+  font-size: 2px;
+}
+.text7{
+  margin-left: 50px;
+  
+  font-size: 10px;
+
+
+}
+.text8{
+  margin-left: 50px;
+  font-size: 10px;
+
+
+}
+.departmentname{
+  margin-top: -60px;
+  margin-right: 20px;
+  font-size: 15px;
+
+
+}
+.wait-queue{
+  margin-left: -18px;
+  width: 180px;
+}
+.doctor4{
+  width: 150px;
+  height: 150px;
+}
+.no-queue-message{
+  margin-left: 50px;
+}
+.p1{
+  font-size: 20px;
+  }
+  }
+

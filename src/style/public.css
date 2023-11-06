@@ -1,30 +1,28 @@
-
-
-
+.main-public-layout {
+  min-height: 100vh;
+}
 .main-public-layout {
   min-height: 130vh;
   position: relative;
-  top: 130px;
+  top: 102px;
   background-color: #E3F2FD;
 }
-
+.p-layout {
+  padding-left: 40px !important;
+  padding-right: 80px !important;
+}
 #public .navbar {
-  color: #ffffff !important;
+  color: #ffff !important;
   background-color: #133C55;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   font-weight: bold;
-  height: 120px;
 }
 
 #public .logo-title {
   font-size: 35px;
   color: #ffff;
   text-decoration: none;
-  font-weight: bold;
 }
-
-
-
 
 #public .nav-link {
   color: #ffff;
@@ -33,200 +31,110 @@
 #public .nav-active {
   color: #f8bc07 !important;
 }
+@media screen and (max-width: 1250px) {
+  .p-layout {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  #public .navbar {
+    color: #ffff !important;
+    background-color: #133C55;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    font-weight: bold;
+  }
+  
+  #public .logo-title {
+    font-size: 35px;
+    color: #ffff;
+    text-decoration: none;
+  }
+  
+  #public .nav-link {
+    color: #ffff;
+  }
+  
 
-#public .footer {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  color: #ffff !important;
-  height: 250px;
-  background-color: #133C55;
-  text-align: center;
-}
-
-
-
-
-
-/*LOGO*/
-.logoImg{
-  height: 100px;
-  width: 100px;
-  display: flex;
-  justify-content: center;
-}
-
-.cardd{
- 
-  width: 70%;
-  display: flex;
-  gap: 100px;
-  max-width: 1024px;
-  justify-content: space-between;
-}
-
-.card-body>a{
-  text-align: center;
-  align-items: center;
   
 }
 
-.red{
-  color: red;
-}
-
-/* .container1{
-  display: block;
-  margin: auto auto;
+@media screen and (max-width: 600px) {
   
-} */
-
-
-/* .card.d-flex.justify-content-center{
-  display: block;
-  align-items: center;
-} */
-
-/*css Estimate(ประเมินระบบคิว)*/
-.estimate {
-  font-family: sans-serif;
-  text-align: center;
+.main-public-layout {
+  min-height: 130vh;
+  position: relative;
+  top: 50px;
+  background-color: #E3F2FD;
 }
-
-.containerRegister{
-
-  position: absolute;
-  top: 550px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background:#ffffff ;
-  padding: 20px;
-  border-radius: 10px;
-  width: 200px;
-
-  align-items: center;
   
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  #public .footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    color: #ffff !important;
+    height: 220px;
+    background-color: #133C55;
+    text-align: center;
+  }
   
-}
-.containerProfile{
-
-  position: absolute;
-  top: 450px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background:#ffffff ;
-  padding: 20px;
-  border-radius: 10px;
-  width: 200px;
-
-  align-items: center;
-  
-  
-}
-.containerEditProfile{
-
-  position: absolute;
-  top: 550px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background:#ffffff ;
-  padding: 20px;
-  border-radius: 10px;
-  width: 200px;
-
-  align-items: center;
-  
-  
-}
-.container2 {
-  position: absolute;
-  top: 350px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background:#4293C9 ;
-  padding: 20px;
-  border-radius: 10px;
-  width: 900px;
-  display: flex;
- gap: 10px;
-  flex-direction:column;
-  align-items: center;
-  justify-content:space-between;
-  
-}
-.textarea{
-  margin-top: 15px;
-  margin-bottom: 10px;
-}
-.radio{
-  justify-content: space-between;
-
-
-
-}
-
-textarea {
-  width:600px;
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 5000px;
-}
-.button1 {
-  width: 10%;
-  border-radius: 6px;
-  font-weight: bolder;
-  cursor: pointer;
-
-
- 
-}
-.Item{
-  justify-content: space-between;
-  width: 100%;
-  
-  
-}
-.container3 {
-  position: absolute;
-  top: 400px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background:#4293C9 ;
-  padding: 20px;
-  border-radius: 10px;
-  width: 900px;
-  display: flex;
- gap: 10px;
-  flex-direction:column;
-  align-items: center;
-  justify-content:space-between;
-  
-}
-
-.container4 {
-  position: absolute;
-  top: 410px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background:#A9D6E5 ;
-  padding: 20px;
-  border-radius: 10px;
-  
-
-  align-items: center;
-  
-}
-.card-align-items-center{
-  background:#A9D6E5 ;
-}
-
-.silder-home{
-  width: 70%;
-  margin-top: -30px;
-  margin-left: 150px;
-}
-
-.title-message{
-  margin-top: 25px;
-}

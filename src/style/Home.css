@@ -117,3 +117,38 @@
   width: 80px;
   cursor: pointer;
 }
+
+@media screen and (max-width: 600px) {
+
+  .Home-icon{
+    width: 10px;
+    cursor: pointer;
+  }
+  .Home-medical{
+    width: 50px;
+    cursor: pointer;
+  }
+  
+  .Home-calendarDays{
+    width: 50px;
+    cursor: pointer;
+  }
+  .Home-Desktop{
+    width: 50px;
+    cursor: pointer;
+  }
+  .Home-Queue{
+    width: 50px;
+    cursor: pointer;
+  }
+  .Name-icon8{
+    white-space:nowrap;
+  }
+  .Home-iconQ{
+    width: 50px;
+    cursor: pointer;
+  }
+
+
+
+}

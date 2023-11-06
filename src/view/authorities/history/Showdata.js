@@ -53,16 +53,16 @@ function ShowData({}) {
   useEffect(() => {
     const currentDate = new Date();
     const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
-
+  
     const filteredData = filterDataBySearchAndDate(
       dataQ,
       searchDate,
       formattedCurrentDate
     );
-
+  
     const pagedatacount = Math.ceil(filteredData.length / pageSize);
     setPageCount(pagedatacount);
-
+  
     if (page) {
       const LIMIT = pageSize;
       const skip = LIMIT * (page - 1);
@@ -71,38 +71,40 @@ function ShowData({}) {
         const lastName = dataItem.last_name || "";
         const departmentName = dataItem.department_name || "";
         const symptom = dataItem.symptom || "";
-
+  
         const nameFilter =
-          firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-          lastName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-          departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-          symptom.toLowerCase().includes(searchUsers.toLowerCase());
-
+       
+        firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+        lastName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+        departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+        symptom.toLowerCase().includes(searchUsers.toLowerCase());
+  
         const departmentFilter =
           !selectedDepartment || departmentName === selectedDepartment.value;
-
-        return nameFilter && departmentFilter;
+  
+        return nameFilter && departmentFilter && filterDataBySearchAndDate;
       });
-
+  
       const sortedData = dataToDisplay
         .slice()
         .sort((a, b) => a.queue_id - b.queue_id);
-
+  
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
       const pageEndIndex = Math.min(
         pageStartIndex + LIMIT,
         sortedData.length
       );
       const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
-
+  
       const newData = slicedData.map((item) => ({
         ...item,
         queue_id: item.queue_id,
       }));
-
+  
       setPageData(newData);
     }
   }, [dataQ, page, pageSize, searchUsers, selectedDepartment, searchDate]);
+  
 
   const handleSearchChange = (event) => {
     const query = event.target.value;

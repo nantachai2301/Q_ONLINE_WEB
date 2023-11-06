@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "../../../style/desktopcallqueue.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import "../../../style/desktopcallqueue.css";
 import { format, isSameDay } from "date-fns";
 import { parse } from "date-fns";
 import { getQueue } from "../../../service/Queue.Service";
@@ -72,13 +70,13 @@ function DesktopQueue({ departmentData, selectedDate }) {
         
         <div className="col-8"> 
           {bookedQueues > 0 && (
-            <div className="call-queue"style={{marginLeft:"500px"}} >
-              <h2>กำลังเรียกคิว</h2>
+            <div className="call-queue" >
+              <h2 className="q1">กำลังเรียกคิว</h2>
               <table className="table">
-                <thead>
+                <thead className="th1"> 
                   <tr style={{ background: "#3a72aa", color: "white" }}>
-                    <th style={{ textAlign: 'center', fontSize: "22px", }}>คิวที่</th>
-                    <th style={{ textAlign: 'center', fontSize: "22px" }}>รหัสผู้ใช้</th>
+                    <th>คิวที่</th>
+                    <th>รหัสผู้ป่วย</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -102,59 +100,61 @@ function DesktopQueue({ departmentData, selectedDate }) {
             </div>
           )}    
           {bookedQueues === 0 && (
-            <div className="no-queue-message" style={{marginLeft:"450px"}} >
-              <p style={{ fontSize: "30px" }}>{noQueueMessage}</p>
-              <img src={doctor2} alt="Cute Box" className="doctor" style={{ width: '300px', height: '300px' }} />
+            <div className="no-queue-message" >
+              <p className="p1">{noQueueMessage}</p>
+              <img src={doctor2} alt="Cute Box" className="doctor4"/>
             </div>
           )}  
         </div>
-        <div className="col-md-3" style={{ marginTop: '-30px' }}>
+        <div className="imd col-md-3">
           <div className="callqueue-card2">
             <div className="doctor-row">
               <img
                 src={doctor}
                 alt="Doctor"
                 className="doctor-image"
-                style={{ width: '150px', height: '200px' }}
+              
               />
 
               <div className="callinfo-container">
-                <h3 className="department-name" style={{ marginRight: '20px' }}>
+               
+                <div className="callqueue-card15">
+                <h3 className="departmentname">
                   {departmentData.department_name}
                 </h3>
-                <div className="callqueue-card1">
                   <div className="callqueue-card1">
                     <header className="callcustom-header">
-                      <h6>ผู้ป่วยทั้งหมด</h6>
+                      <h6 className="pt">ผู้ป่วยทั้งหมด</h6>
                     </header>
                     <div className="callcustom-header1" style={{ color: 'black' }}>
                       <p>{bookedQueues}</p>
                     </div>
                   </div>
                 </div>
-                <div className="text-call" style={{ marginTop: '40px' }}>
-                  <h6 className="text" style={{ marginLeft: '50px', fontSize: '20px' }}>
+                <div className="text-call" >
+                  <h6 className="text7">
                     รอรับบริการ : {filteredQueues.filter(queue => queue.queue_status_name === 'ยืนยัน').length}
                   </h6>
 
-                  <h6 className="text" style={{ marginLeft: '50px', fontSize: '20px' }}>
+                  <h6 className="text8">
                     ให้บริการแล้ว: {filteredQueues.filter(queue => queue.queue_status_name === 'เข้ารับการรักษาเรียบร้อยแล้ว').length}
                   </h6>
 
                 </div>
               </div>
+              
             </div>
           </div>
         </div>
         <div className="col-8">
           {bookedQueues > 0 && (
-            <div className="wait-queue" style={{marginLeft:"500px"}}>
+            <div className="wait-queue">
               <h4>รอรับบริการเรียกคิว</h4>
               <table className="table" >
-                <thead>
+                <thead className="th1">
                   <tr style={{ background: "#78A3D4", color: "white" }}>
                     <th style={{ textAlign: 'center' ,width:"20px"}}>คิวที่</th>
-                    <th style={{ textAlign: 'center' ,width:"20px"}}>รหัสผู้ใช้</th>
+                    <th style={{ textAlign: 'center' ,width:"20px"}}> รหัสผู้ป่วย</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -247,22 +247,23 @@ function QueuePage() {
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
-    
     zIndex: '999',  // ตั้งค่า zIndex เพื่อให้รูปอยู่ด้านหลังสุด
+    
+    
   };
   
   return (
     <div className="queue-page"  style={sectionStyle}>
-      <div className="row justify-content-start mb-2" style={{ padding: '10px' }}>
+      <div className="row justify-content-start mb-2" style={{ padding: '1px' }}>
       
-        <span className="text" style={{ color: "white", fontSize: "23px", textAlign: "left"  }}>
-        <i class="fa-solid fa-hand-point-down fa-flip-horizontal" style={{color:"#5678bd",marginRight:"20px",fontSize:"35px"}}></i>* กรุณาเลือกแผนกที่ต้องการดูคิว
+        <span className="t1" >
+        <i class="fa-solid fa-hand-point-down fa-flip-horizontal" ></i>* กรุณาเลือกแผนกที่ต้องการดูคิว
         </span>
-        <div className="department-list" style={{ marginTop: "10px" }}>
+        <div className="department-list1" style={{ marginTop: "10px" }}>
           {departments.map((department) => (
             <button
               key={department.department_id}
-              className={`department-button ${selectedDepartment === department.department_name
+              className={`department-button1 ${selectedDepartment === department.department_name
                 ? "selected"
                 : ""
                 }`}
@@ -273,20 +274,22 @@ function QueuePage() {
           ))}
         </div>
 
-        <div className="d-flex justify-content-start" style={{ backgroundColor: "#E18AAA", padding: "10px", borderRadius: "10px", maxWidth: "200px", marginLeft: "1250px", marginBottom: "2px" }}>
-          <span className="text" style={{ color: "black", fontSize: "20px" }}>
+        <div className="texte1 d-flex justify-content-start" >
+          <span className="text1" >
             เวลา: {formattedTime}
           </span>
-
         </div>
-        <div className="d-flex justify-content-start" style={{ backgroundColor: "#E4A0B7", padding: "10px", borderRadius: "10px", maxWidth: "300px", marginLeft: "1150px", marginTop: "10px" }}>
-          <span className="text" style={{ color: "black", fontSize: "20px" }}>
+        
+      </div>
+      <div className="row justify-content-start mb-2" style={{ padding: '1px'}}>
+      <div className="texte2 d-flex justify-content-start" >
+          <span className="text1">
             วันที่: {formattedDate}
           </span>
           
         </div>
       </div>
-
+     
       <div className="queue-details mt-3">
         {selectedDepartment && selectedDate && showQueueTable && (
           <DesktopQueue
