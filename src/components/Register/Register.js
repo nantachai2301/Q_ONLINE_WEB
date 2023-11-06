@@ -5,7 +5,6 @@ import { Formik, Form, ErrorMessage } from "formik";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import { createPatient } from "../../service/Patient.Service";
-import { format } from "date-fns";
 
 function Register() {
   const navigate = useNavigate();
@@ -219,14 +218,14 @@ function Register() {
         >
           {({ errors, touched }) => (
             <Form>
-              <div className="container mt-2 ">
+              <div className="container57 mt-2 ">
                 <div className="mb-4">
-                  <div className="card border-0 shadow p-4">
+                  <div className="card  border-0 shadow p-4">
                     <h6 className="font ">ข้อมูลทั่วไป</h6>
                     <br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
-                        <div className="col-4">
+                        <div className="col-10 col-md-3">
                           <label>เลขบัตรประชาชน</label>
                           <label className="red">*</label>
                           <br></br>
@@ -248,7 +247,7 @@ function Register() {
                           />
                         </div>
 
-                        <div className="col-2">
+                        <div className="col-10 col-md-3">
                           <label>
                             คำนำหน้าชื่อ <label className="red">* &nbsp;</label>
                             :{" "}
@@ -276,7 +275,7 @@ function Register() {
                             className="error-message"
                           />
                         </div>
-                        <div className="col-3">
+                        <div className="col-10 col-md-3">
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
@@ -298,7 +297,7 @@ function Register() {
                             className="error-message"
                           />
                         </div>
-                        <div className="col-3">
+                        <div className="col-10 col-md-3">
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
@@ -320,7 +319,7 @@ function Register() {
                             className="error-message"
                           />
                         </div>
-                        <div className="col-2">
+                        <div className="col-10 col-md-3">
                           <label>
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
@@ -345,7 +344,7 @@ function Register() {
                           />
                         </div>
 
-                        <div className="col-2 px-1 mt-2">
+                        <div className="col-10 col-md-3">
                           <label>วันเดือนปีเกิด</label>
                           <label className="red">*</label>
 
@@ -367,8 +366,7 @@ function Register() {
                             </div>
                           )}
                         </div>
-                        <div className="col-2 px-1 mt-2">
-                          <label>อายุ</label>
+                        <div className="col-10 col-md-3">
                           <input
                             id="user_age"
                             type="text"
@@ -380,7 +378,7 @@ function Register() {
                             className="form-control"
                           />
                         </div>
-                        <div className="col-3">
+                        <div className="col-10 col-md-3">
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
@@ -400,7 +398,7 @@ function Register() {
                             className="error-message"
                           />
                         </div>
-                        <div className="col-3">
+                        <div className="col-10 col-md-3">
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
@@ -420,7 +418,7 @@ function Register() {
                             className="error-message"
                           />
                         </div>
-                        <div className="col-3">
+                        <div className="col-10 col-md-3">
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
@@ -442,7 +440,7 @@ function Register() {
                             className="error-message"
                           />
                         </div>
-                        <div className="col-4 px-1 mt-2">
+                        <div className="col-10 col-md-3">
                           <label>โรคประจำตัว</label>
 
                           <input
@@ -455,7 +453,7 @@ function Register() {
                             onChange={handleChange}
                           />
                         </div>
-                        <div className="col-4 px-1 mt-2">
+                        <div className="col-10 col-md-3">
                           <label>ประวัติแพ้ยา</label>
 
                           <input
@@ -474,7 +472,7 @@ function Register() {
                       <div className="rounded border p-4">
                         <div className="col-8 ">
                           <div className="row">
-                            <div className="col-5 px-1 mt-8">
+                            <div className="col-10 col-md-3">
                               <label>รหัสผ่าน</label>
                               <label className="red">*</label>
                               <input
@@ -503,7 +501,7 @@ function Register() {
                       <h6>บุคคลที่ติดต่อได้</h6>
                       <div className="rounded border p-4">
                         <div className="row gx-3 gy-2 align-items-center">
-                          <div className="col-4">
+                          <div className="col-10 col-md-3">
                             <label>ชื่อ</label>
                             <label className="red">*</label>
                             <input
@@ -525,7 +523,7 @@ function Register() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-4 px-1 mt-2">
+                          <div className="col-10 col-md-3">
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
@@ -547,7 +545,7 @@ function Register() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-4 px-1 mt-2">
+                          <div className="col-10 col-md-3">
                             <label>
                               ความสัมพันธ์
                               <label className="red">* &nbsp;</label>:{" "}
@@ -580,7 +578,7 @@ function Register() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-3">
+                          <div className="col-10 col-md-3">
                             <label>เบอร์โทร</label>
                             <label className="red">*</label>
                             <input
@@ -608,7 +606,7 @@ function Register() {
                       ข้อมูลที่อยู่
                       <div className="rounded border p-4">
                         <div className="row gx-3 gy-2 align-items-center">
-                          <div className="col-3">
+                          <div className="col-10 col-md-3">
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
@@ -631,7 +629,7 @@ function Register() {
                             />
                           </div>
 
-                          <div className="col-3">
+                          <div className="col-10 col-md-3">
                             <label>
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
@@ -661,7 +659,7 @@ function Register() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-3">
+                          <div className="col-10 col-md-3">
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
@@ -683,7 +681,7 @@ function Register() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-3">
+                          <div className="col-10 col-md-3">
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
@@ -705,7 +703,7 @@ function Register() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-3">
+                          <div className="col-10 col-md-3">
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input

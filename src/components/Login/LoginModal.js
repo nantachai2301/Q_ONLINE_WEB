@@ -176,12 +176,12 @@ const LoginModal = (props) => {
             {({ errors, touched }) => (
               <Form>
                 <Form.Group className="mb-3">
-                  <Form.Label>รหัสประจำตัวประชาชน</Form.Label>
+                  <Form.Label>รหัสบัตรประจำตัวประชาชน</Form.Label>
                   <Form.Control
                     id="LoginID_Card"
                     type="text"
                     name="id_card"
-                    placeholder="Enter ID number"
+                    placeholder="กรุณากรอกรหัสบัตรประจำตัวประชาชน"
                     value={id_card}
                     className={`form-control ${
                       !id_card && isButtonClicked ? "is-invalid" : ""
@@ -200,7 +200,7 @@ const LoginModal = (props) => {
                     id="LoginPassword"
                     type="password"
                     name="password"
-                    placeholder="Password"
+                    placeholder="กรุณากรอกรหัสผ่าน"
                     value={password}
                     className={`form-control ${
                       !password && isButtonClicked ? "is-invalid" : ""

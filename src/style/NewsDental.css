@@ -90,3 +90,57 @@
       margin-bottom: 20px;
       background-color: white;
   }
+  @media screen and (max-width: 600px) {
+    .title-content {
+      text-align: center;
+      
+    }
+    .dente{
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .card-news {
+      margin-top: 5px;
+      margin-left: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      height: 70vh;
+    }
+   .card-image{
+   width: 150px;
+   }
+   .NewsTitle{
+   font-size: 13px;
+   }
+   .ListContainer{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .siDesc{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 2;
+    margin-top: 10px;
+    margin-left: -25px;
+
+  }
+.NewsItem4{
+  border: 1px solid lightgray;
+  border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+      background-color: white;
+}
+.notice-news{
+  font-size: 15px;
+  color: #010802;
+}
+.anamaidoh{
+  font-size: 10px;
+}
+  }
