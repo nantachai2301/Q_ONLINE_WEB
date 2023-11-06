@@ -108,8 +108,6 @@ function ShowData({}) {
     const query = event.target.value;
     setSearchUsers(query);
     setSearchDate("");
-    setPage(1);
-    getdataQ();
   };
 
   const handleDateSearch = (event) => {
@@ -154,7 +152,7 @@ function ShowData({}) {
           <label>ค้นหา</label>
           <input
             id="H_MainSearch"
-            name="firstName"
+            name="first_name"
             type="text"
             className="form-control"
             placeholder="Search..."
