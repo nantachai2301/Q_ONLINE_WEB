@@ -36,9 +36,9 @@ const CustomAppBar = styled(AppBar)`
 `;
 
 const LogoImg = styled("img")`
-  width: 130px;
+  width: 7vw;
   @media (max-width: 600px) {
-    width: 80px;
+    width:9vw;
   }
   cursor: pointer;
   z-index: 10000; /* กำหนดค่า z-index ให้มากกว่าค่า z-index ของ Popup Login */
@@ -46,9 +46,11 @@ const LogoImg = styled("img")`
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isHamOpen, setIsHamOpen] = useState(false);
   const storedUserData = localStorage.getItem("userData");
   const userData = storedUserData ? JSON.parse(storedUserData) : null;
   const isDesktop = useMediaQuery("(min-width:1024px");
+  const isMobile = useMediaQuery("(max-width:600px"); // Add this line to check for mobile screen size
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
@@ -118,14 +120,18 @@ const Navbar = () => {
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
-
+  const handleHamToggle = () => {
+    setIsHamOpen(!isHamOpen);
+  };
   const handleNavigateToIndex = () => {
     navigate("/");
     setIsDrawerOpen(false);
   };
 
   const handleRegister = () => {
-    navigate("/register");
+    
+    window.location.href = "/register"; // นำทางไปยังหน้า Profile
+   setIsHamOpen(false);
   };
   const handleNavigateToProfile = () => {
     window.location.href = "/Profile"; // นำทางไปยังหน้า Profile
@@ -133,13 +139,14 @@ const Navbar = () => {
   };
 
   const handleLoginPopup = () => {
+    setIsHamOpen(false)
     setShowLogin(true);
   };
   const navbarHeight = showLogin ? "500px" : "80px";
 
   const renderMenuItems = () => {
     return (
-      <List sx={{ paddingTop: "150px" }}>
+      <List sx={{ paddingTop: "115px" }}>
         <ListItem id="HomeHam"aria-label="หน้าหลัก" button onClick={handleNavigateToIndex}>
           <ListItemIcon>
             <HomeIcon />
@@ -174,6 +181,24 @@ const Navbar = () => {
       </List>
     );
   };
+  const HamMenuItems = () => {
+    return (
+      <List sx={{ paddingTop: "75px" ,fontSize :"10px",color:"#000"}}>
+        <ListItem    id="registerNavbar"  aria-label="สมัครสมาชิก"   button  onClick={handleRegister}>
+         
+          <ExitToAppIcon style={{marginRight:"2vw"}}/>
+          
+          <ListItemText id="registerNavbar" primary="สมัครสมาชิก" />
+        </ListItem>
+        <ListItem  id="loginNavbar" aria-label="เข้าสู่ระบบ"   button onClick={handleLoginPopup}>
+        
+          <AccountCircleIcon style={{marginRight:"2vw"}}/>
+          
+           <ListItemText  id="loginNavbar" primary="เข้าสู่ระบบ" style={{marginRight:"3vw"}}/>
+        </ListItem>
+        </List>
+    );
+  };
 
   const handleLogoClick = () => {
     navigate("/");
@@ -190,9 +215,9 @@ const Navbar = () => {
                 src={Logo}
                 alt="โลโก้"
                 onClick={handleLogoClick}
-                style={{ marginRight: "16px" }}
+                style={{ marginRight: "1vw" }}
               />
-              <Link to="/" className="logo-title" id="Hospital.17"style={{ fontSize: "28px" }}>
+              <Link to="/" className="logo-title" id="Hospital.17"style={{ fontSize: "2.2vw" }}>
                 โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
               </Link>
             </div>
@@ -200,12 +225,12 @@ const Navbar = () => {
               <Typography
                 variant="body1"
                 component="div"
-                sx={{ marginLeft: "480px" }}
+                sx={{ marginLeft: "440px" }}
               >
                 ยินดีต้อนรับคุณ : {userData?.data.fullname}
               </Typography>
             )}
-            {!userData && (
+            {!userData && isDesktop && (
               <>
                 <IconButton
                 id="registerNavbar"
@@ -214,10 +239,10 @@ const Navbar = () => {
                   color="inherit"
                   aria-label="สมัครสมาชิก"
                   onClick={handleRegister}
-                  sx={{ marginLeft: "auto" }}
+                  sx={{ marginLeft: "auto"}}
                 >
                   <ExitToAppIcon />
-                  <ListItemText id="registerNavbar" primary="สมัครสมาชิก" />
+                  <ListItemText className="registerNavbar" id="registerNavbar" style={{ fontSize:"0vw"}}>สมัครสมาชิก</ListItemText>
                 </IconButton>
                 <IconButton
                   id="loginNavbar"
@@ -231,11 +256,12 @@ const Navbar = () => {
                   <ListItemText  id="loginNavbar" primary="เข้าสู่ระบบ" />
                 </IconButton>
 
-                {showLogin && (
-                  <LoginModal show={showLogin} setShow={setShowLogin} />
-                )}
+                
               </>
             )}
+            {showLogin && (
+                  <LoginModal show={showLogin} setShow={setShowLogin} />
+                )}
             {userData && (
               <>
                 {isDesktop && (
@@ -260,25 +286,50 @@ const Navbar = () => {
                   color="inherit"
                   aria-label="แฮ่มเบอเกอร์"
                   onClick={handleDrawerToggle}
-                  sx={{ marginLeft: "16px" }}
+                  sx={{ marginLeft: "auto" }}
                 >
                   <MenuIcon />
                 </IconButton>
               </>
             )}
+            {!userData && isMobile && (
+  <IconButton
+    id="hamNavbar"
+    size="large"
+    edge="start"
+    color="inherit"
+    aria-label="แฮ่มเบอเกอร์"
+    onClick={handleHamToggle}
+    sx={{ marginLeft: "32vw" }}
+  >
+    <MenuIcon />
+  </IconButton>
+)}
+
           </Toolbar>
         </CustomAppBar>
-        {userData && (
+        {userData &&  (
           <Drawer
            id="isDrawerOpen"
             anchor="right"
             open={isDrawerOpen}
             onClose={handleDrawerToggle}
+            
           >
             {renderMenuItems()}
           </Drawer>
         )}
           <ResetpasswordModal show={showResetPasswordModal} setShow={setShowResetPasswordModal} />
+          {!userData && isMobile && (
+          <Drawer
+           id="isDrawerOpen"
+            anchor="right"
+            open={isHamOpen}
+            onClose={handleHamToggle}
+          >
+            {HamMenuItems()}
+          </Drawer>
+        )}
       </header>
     </>
   );
