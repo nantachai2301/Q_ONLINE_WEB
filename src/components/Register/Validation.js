@@ -22,7 +22,17 @@ const Schema = Yup.object().shape({
     .matches(/^\d{10}$/, "กรุณากรอกเบอร์โทรศัพท์ 10 หลัก"),
 
 
-  birthday: Yup.string().required("กรุณากรอก วันเดือนปีเกิด"),
+  birthday: Yup.string().required("กรุณากรอก วันเดือนปีเกิด")
+  .test("birthdate-not-before-2566", "ไม่สามารถใส่วันเกิดก่อนปี 2566", (value) => {
+    if (!value) {
+      return true; // ถ้าไม่ได้ใส่วันเกิด ให้ผ่านเช็คนี้
+    }
+    
+    const selectedDate = new Date(value);
+    const limitDate = new Date("2023-01-01"); // วันเริ่มต้นของปี 2566
+    
+    return selectedDate >= limitDate;
+  }),
 
   gender: Yup.string().required("กรุณาเลือก เพศ"),
   address: Yup.string().required("กรุณากรอก ที่อยู่"),

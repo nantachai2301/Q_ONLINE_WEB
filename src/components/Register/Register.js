@@ -5,6 +5,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
 import { createPatient } from "../../service/Patient.Service";
+import { format } from "date-fns";
 
 function Register() {
   const navigate = useNavigate();
@@ -37,8 +38,10 @@ function Register() {
     department_id: null,
     birthday: "",
   });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     if (name === "birthday") {
       if (value) {
         const birthDateObj = new Date(value); // แปลงวันที่ปีเกิดใน state ของคุณให้กลายเป็นออบเจ็กต์ของ Date
@@ -47,6 +50,22 @@ function Register() {
         const ageDate = new Date(diffInMilliseconds);
         const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
         setAge(calculatedAge); // อัปเดต state ของอายุด้วยค่าที่คำนวณได้
+
+        // ตรวจสอบว่าวันเกิดที่ใส่เข้ามามีค่ามากกว่าหรือเท่ากับวันเริ่มต้นของปี 2566
+        if (birthDateObj >= new Date("2023-01-01")) {
+          Swal.fire({
+            title: "คำเตือน !",
+            text: "กรุณาใส่วัน/เดือน/ปี ที่ไม่เริ่มต้นก่อน 1 มกราคม 2023",
+            icon: "warning",
+          });
+          // Clear ค่าวันเกิดให้เป็นค่าว่าง
+          setUsers((prevUsers) => ({
+            ...prevUsers,
+            [name]: "",
+          }));
+          setAge(null); // เคลียร์ค่าอายุให้เป็น null
+          return;
+        }
       } else {
         setAge(null); // ถ้าวันเกิดไม่ได้ถูกกรอก ให้เคลียร์ค่าอายุให้เป็น null
       }
@@ -56,6 +75,7 @@ function Register() {
       [name]: value,
     }));
   };
+
   const handleClick = async (e) => {
     if (
       !users.id_card ||
@@ -99,6 +119,16 @@ function Register() {
       const dataToSend = { ...users, age: age };
 
       if (result.isConfirmed) {
+        // เพิ่มเงื่อนไขการตรวจสอบวันเกิดก่อนส่งไปยัง createPatient
+        // if (dataToSend.birthday > new Date('2023-01-01')) {
+        //   Swal.fire({
+        //     title: "คำเตือน !",
+        //     text: "คุณไม่สามารถใส่วันเกิดก่อน 1 มกราคม 2023 ได้",
+        //     icon: "warning",
+        //   });
+        //   return;
+        // }
+
         try {
           await createPatient(
             dataToSend.users_id,
@@ -141,8 +171,8 @@ function Register() {
         } catch (error) {
           console.error(error);
           let errorMessage = "เกิดข้อผิดพลาดในการสมัครสมาชิก";
-          let icon = "error"; // ไอคอนเริ่มต้นเป็น "error"
-
+          let icon = "error";
+  
           if (error.response) {
             if (error.response.status === 400) {
               errorMessage = "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว";
