@@ -55,15 +55,17 @@ function Register() {
         if (birthDateObj >= new Date("2023-01-01")) {
           Swal.fire({
             title: "คำเตือน !",
-            text: "คุณไม่สามารถใส่วันเกิดก่อน 1 มกราคม 2023 ได้ กรุณาใส่ วัน/เดือน/ปี ใหม่",
+            text: "กรุณาใส่วัน/เดือน/ปี ที่ไม่เริ่มต้นก่อน 1 มกราคม 2023",
             icon: "warning",
           });
+          // Clear ค่าวันเกิดให้เป็นค่าว่าง
+          setUsers((prevUsers) => ({
+            ...prevUsers,
+            [name]: "",
+          }));
+          setAge(null); // เคลียร์ค่าอายุให้เป็น null
+          return;
         }
-        // Clear ค่าวันเกิดให้เป็นค่าว่าง
-        setUsers((prevUsers) => ({
-          ...prevUsers,
-          [name]: "",
-        }));
       } else {
         setAge(null); // ถ้าวันเกิดไม่ได้ถูกกรอก ให้เคลียร์ค่าอายุให้เป็น null
       }
@@ -73,6 +75,7 @@ function Register() {
       [name]: value,
     }));
   };
+
   const handleClick = async (e) => {
     if (
       !users.id_card ||
@@ -116,16 +119,17 @@ function Register() {
       const dataToSend = { ...users, age: age };
 
       if (result.isConfirmed) {
-        try {
-          if (dataToSend.birthday > new Date('2023-01-01')) {
-            Swal.fire({
-              title: "คำเตือน !",
-              text: "คุณไม่สามารถใส่วันเกิดก่อน 1 มกราคม 2023 ได้",
-              icon: "warning",
-            });
-            return;
-          }
+        // เพิ่มเงื่อนไขการตรวจสอบวันเกิดก่อนส่งไปยัง createPatient
+        // if (dataToSend.birthday > new Date('2023-01-01')) {
+        //   Swal.fire({
+        //     title: "คำเตือน !",
+        //     text: "คุณไม่สามารถใส่วันเกิดก่อน 1 มกราคม 2023 ได้",
+        //     icon: "warning",
+        //   });
+        //   return;
+        // }
 
+        try {
           await createPatient(
             dataToSend.users_id,
             dataToSend.id_card,
@@ -153,7 +157,6 @@ function Register() {
             dataToSend.role_id
           );
 
-
           Swal.fire({
             icon: "success",
             title: "สมัครสมาชิกสำเร็จ",
@@ -165,12 +168,11 @@ function Register() {
           setTimeout(() => {
             navigate("/");
           }, 1500);
-
         } catch (error) {
           console.error(error);
           let errorMessage = "เกิดข้อผิดพลาดในการสมัครสมาชิก";
-          let icon = "error"; // ไอคอนเริ่มต้นเป็น "error"
-
+          let icon = "error";
+  
           if (error.response) {
             if (error.response.status === 400) {
               errorMessage = "คุณมีบัญชีผู้ใช้ที่ใช้เลขประจำตัวนี้อยู่แล้ว";
@@ -189,7 +191,6 @@ function Register() {
           });
         }
       }
-
     } catch (error) {
       console.error(error);
       Swal.fire({
