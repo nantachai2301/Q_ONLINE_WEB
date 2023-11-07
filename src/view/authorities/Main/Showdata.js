@@ -8,8 +8,13 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { Formik } from "formik";
 import { format } from "date-fns";
-import { getQueue,updateQueue,updateQueueById,deleteQueueById,} from "../../../service/Queue.Service";
-import {getPatientById } from "../../../service/Patient.Service";
+import {
+  getQueue,
+  updateQueue,
+  updateQueueById,
+  deleteQueueById,
+} from "../../../service/Queue.Service";
+import { getPatientById } from "../../../service/Patient.Service";
 
 function ShowData({}) {
   const [data, setData] = useState(null);
@@ -19,7 +24,9 @@ function ShowData({}) {
   const [pageCount, setPageCount] = useState(0);
   const [pageSize, setPageSize] = useState(100);
   const [searchUsers, setSearchUsers] = useState("");
-  const [searchDate, setSearchDate] = useState(format(new Date(),"yyyy-MM-dd"));
+  const [searchDate, setSearchDate] = useState(
+    format(new Date(), "yyyy-MM-dd")
+  );
   const [userData, setUserData] = useState(null);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [editModalShow, setEditModalShow] = useState(false);
@@ -38,12 +45,14 @@ function ShowData({}) {
   useEffect(() => {
     getdataQ();
   }, []);
-const handlePageSizeChange = (event) => {
+
+  const handlePageSizeChange = (event) => {
     const newPageSize = parseInt(event.target.value);
     setPageSize(newPageSize);
     setPage(1);
   };
-const filterDataBySearchAndDate = (
+
+  const filterDataBySearchAndDate = (
     dataQ,
     searchDate,
     formattedCurrentDate
@@ -56,52 +65,52 @@ const filterDataBySearchAndDate = (
           return item.queue_date === formattedSearchDate;
         }
       }
-    return item.queue_date === formattedCurrentDate;
+      return item.queue_date === formattedCurrentDate;
     });
   };
 
   useEffect(() => {
-const currentDate = new Date(); 
-const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
-const filteredData = filterDataBySearchAndDate(
+    const currentDate = new Date();
+    const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
+    const filteredData = filterDataBySearchAndDate(
       dataQ,
       searchDate,
       formattedCurrentDate
     );
 
-const pagedatacount = Math.ceil(dataQ.length / pageSize);
+    const pagedatacount = Math.ceil(dataQ.length / pageSize);
     setPageCount(pagedatacount);
 
     if (page) {
-const LIMIT = pageSize;
-const skip = LIMIT * (page - 1);
-const dataToDisplay = filteredData.filter((dataItem) => {
-const firstName = dataItem.first_name || "";
-const lastName = dataItem.last_name || "";
-const departmentName = dataItem.department_name || "";
-const symptom = dataItem.symptom || "";
+      const LIMIT = pageSize;
+      const skip = LIMIT * (page - 1);
+      const dataToDisplay = filteredData.filter((dataItem) => {
+        const firstName = dataItem.first_name || "";
+        const lastName = dataItem.last_name || "";
+        const departmentName = dataItem.department_name || "";
+        const symptom = dataItem.symptom || "";
 
-const nameFilter =
-          firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-          lastName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-          departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-          symptom.toLowerCase().includes(searchUsers.toLowerCase());
+        const nameFilter =
+        (firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+        lastName.toLowerCase().includes(searchUsers.toLowerCase())) &&
+        (departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+        symptom.toLowerCase().includes(searchUsers.toLowerCase()));
 
-const departmentFilter =
+        const departmentFilter =
           !selectedDepartment || departmentName === selectedDepartment.value;
 
         return nameFilter && departmentFilter;
       });
 
-const sortedData = dataToDisplay
+      const sortedData = dataToDisplay
         .slice()
         .sort((a, b) => a.queue_id - b.queue_id);
 
-const pageStartIndex = skip >= sortedData.length ? 0 : skip;
-const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
-const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
+      const pageStartIndex = skip >= sortedData.length ? 0 : skip;
+      const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
+      const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
 
-const newData = slicedData.map((item) => ({
+      const newData = slicedData.map((item) => ({
         ...item,
         queue_id: item.queue_id,
       }));
@@ -110,35 +119,36 @@ const newData = slicedData.map((item) => ({
     }
   }, [dataQ, page, pageSize, searchUsers, selectedDepartment, searchDate]);
 
-const handleSearchChange = (event) => {
-const query = event.target.value;
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
     setSearchUsers(query);
     setSearchDate("");
     setPage(1);
-    getdataQ();
   };
-const handleDateSearch = (event) => {
-const query = event.target.value;
+
+  const handleDateSearch = (event) => {
+    const query = event.target.value;
     setSearchDate(query);
     setSearchUsers("");
     setPage(1);
     getdataQ();
   };
-const handleCancel = () => {
-    setSearchUsers("");
+
+  const handleCancel = () => {
+    setSearchUsers(format(new Date(), "a.first_name"));
     setSearchDate(format(new Date(), "yyyy-MM-dd"));
     setPage(1);
 
-const currentDate = new Date();
-const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
+    const currentDate = new Date();
+    const formattedCurrentDate = format(currentDate, "dd-MM-yyyy");
   };
 
-const formatDateToAPI = (dateString) => {
+  const formatDateToAPI = (dateString) => {
     const [day, month, year] = dateString.split("-");
     return `${year}-${month}-${day}`;
   };
 
-const handleCancelClick = (users_id, queue_date) => {
+  const handleCancelClick = (users_id, queue_date) => {
     Swal.fire({
       title: "คุณต้องการลบรายการนี้ใช่หรือไม่?",
       text: "หากยืนยันที่จะลบรายการนี้ เมื่อถูกลบจะไม่สามารถกู้คืนได้",
@@ -170,7 +180,7 @@ const handleCancelClick = (users_id, queue_date) => {
       }
     });
   };
-const changeStatus = (
+  const changeStatus = (
     queue_id,
     currentStatus,
     queue_date,
@@ -192,13 +202,13 @@ const changeStatus = (
     })();
 
     console.log(formattedQueueDate);
- const newStatus =
+    const newStatus =
       currentStatus === "ยืนยัน"
         ? "กำลังเข้ารับการรักษา"
         : currentStatus === "กำลังเข้ารับการรักษา"
         ? "รับการรักษาแล้ว"
         : "ยืนยัน";
-const newQueueStatusId =
+    const newQueueStatusId =
       currentStatus === "ยืนยัน"
         ? 3
         : currentStatus === "กำลังเข้ารับการรักษา"
@@ -215,7 +225,7 @@ const newQueueStatusId =
       if (result.isConfirmed) {
         const formattedQueueDate = formatDateToAPI(queue_date);
         const formattedDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
-        
+
         updateQueueById(
           users_id,
           queue_id,
@@ -298,7 +308,6 @@ const newQueueStatusId =
     pageStyle: "@page { size: 6in 5in; }",
   });
 
- 
   const handleEditClick = (item) => {
     setUserData(null);
     setSelectedQueueData(item);
@@ -328,6 +337,7 @@ const newQueueStatusId =
 
     fetchUserQueue();
   }, [userData]);
+
   const handleEditSubmit = async (values) => {
     try {
       if (!values.symptom) {
@@ -341,7 +351,7 @@ const newQueueStatusId =
       const updatedData = {
         symptom: values.symptom,
         queue_date: formatDateToAPI(values.queue_date),
-};
+      };
 
       console.log("Values received in handleEditSubmit:", values);
       console.log("Sending request with data:", updatedData);
@@ -386,7 +396,7 @@ const newQueueStatusId =
   };
   const formatDate = (dateString) => {
     if (!dateString) {
-      return ""; 
+      return "";
     }
 
     const [day, month, year] = dateString.split("-");
@@ -400,7 +410,7 @@ const newQueueStatusId =
           <label>ค้นหา</label>
           <input
             id="Manager_MainSearch"
-            name="firstName"
+            name="first_name"
             type="text"
             className="form-control"
             placeholder="Search..."
