@@ -117,10 +117,16 @@
   width: 80px;
   cursor: pointer;
 }
-
+.cardh{
+  width: 18rem;
+  
+}
+.imgs{
+  width: 95%;
+  height: 70%;
+}
 @media screen and (max-width: 600px) {
-
-  .Home-icon{
+.Home-icon{
     width: 10px;
     cursor: pointer;
   }
@@ -149,6 +155,15 @@
     cursor: pointer;
   }
 
-
+.Title-card{
+  font-size: 13px;
+}
+.button-New-primary{
+ margin-right: 65px;
+}
+.imgs{
+  width: 60%;
+  height: 60%;
+}
 
 }

@@ -6,7 +6,7 @@ const Newsdentalservice = () => {
   return (
     <div className="w-full">
       <div className="w-full mb-4" style={{ textAlign: "center" }}>
-        <h4 className="title-content">
+        <h4 className="dente title-content">
           ขั้นตอนการรับบริการทันตกรรม รพ.สมเด็จพระสังฆราชองค์ที่ 17
         </h4>
       </div>

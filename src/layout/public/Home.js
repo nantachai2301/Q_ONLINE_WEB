@@ -190,7 +190,7 @@ function Home() {
 
      <NavBarQueue/>
      <DesktopQueue/>
-      {/* <div class="container5 p-5 my-5 border">
+      <div class="container5 p-5 my-5 border">
         <div className="d-flex justify-content-center ">
           <Carousel variant="dark">
             <Carousel.Item>
@@ -207,11 +207,12 @@ function Home() {
         </div>
         <hr></hr>
         <div className="row">
-          <Card style={{ width: "18rem" }}>
+          <Card className="cardh" style={{ width: "18rem" }}>
             <Card.Img
               variant="top"
+              className="imgs"
               src={c1}
-              style={{ width: "95%", height: "70%" }}
+             
             />
             <div className="Title-card" id="HhNewsS">
               ขั้นตอนการรับบริการทันตกรรม รพ.สมเด็จพระสังฆราชองค์ที่ 17
@@ -229,7 +230,7 @@ function Home() {
             <Card.Img
               variant="top"
               src={c2}
-              style={{ width: "95%", height: "70%" }}
+              className="imgs"
             />
             <div className="Title-card">
               ฉีดวัคซีนไข้หวัดใหญ่” ฟรี สปสช.ชวนประชาชน 7
@@ -249,7 +250,7 @@ function Home() {
             <Card.Img
               variant="top"
               src={c3}
-              style={{ width: "95%", height: "70%" }}
+              className="imgs"
             />
             <div className="Title-card"id="ModernaBivalentN">
               ฉีดวัคซีนโควิด-19 Moderna Bivalent ตั้งแต่วันอังคารที่ 16 พฤษภาคม
@@ -269,7 +270,7 @@ function Home() {
             <Card.Img
               variant="top"
               src={c4}
-              style={{ width: "95%", height: "70%" }}
+              className="imgs"
             />
             <div className="Title-card">
              เด็กไทยวันนี้ สูงดีสมส่วน ด้วย 4 ข้อแนะนำ
@@ -285,7 +286,7 @@ function Home() {
               </div>
           </Card>
         </div>
-      </div> */}
+      </div>
       </div>
     </Fragment>
   );

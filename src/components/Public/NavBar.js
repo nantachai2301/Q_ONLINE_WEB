@@ -217,7 +217,7 @@ const Navbar = () => {
                 onClick={handleLogoClick}
                 style={{ marginRight: "1vw" }}
               />
-              <Link to="/" className="logo-title" id="Hospital.17"style={{ fontSize: "2.2vw" }}>
+              <Link to="/" className="logo-title" id="Hospital.17"style={{ fontSize: "2.1vw" }}>
                 โรงพยาบาลสมเด็จพระสังฆราช องค์ที่ ๑๗
               </Link>
             </div>
