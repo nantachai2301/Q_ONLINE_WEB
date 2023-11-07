@@ -52,7 +52,7 @@ function DepartmentQueue({ departmentData, selectedDate }) {
         src={departmentData.department_image}
         alt={departmentData.department_name}
         className="department-icon"
-        style={{ width: "200px", height: "200px" }}
+        
       />
     </div>
     <div className="info-container">
@@ -62,7 +62,7 @@ function DepartmentQueue({ departmentData, selectedDate }) {
           <FontAwesomeIcon icon={faUsers} className="queue-icon" />
         </div>
         <div className="queue-info">
-          <p>จำนวนคิวทั้งหมด: {departmentData.max_queue_number}</p>
+          <p >จำนวนคิวทั้งหมด: {departmentData.max_queue_number}</p>
         </div>
         <div className="icon-container">
           <FontAwesomeIcon icon={faUsers} className="queue-icon" />
