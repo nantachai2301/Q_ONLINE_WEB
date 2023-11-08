@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import {  useNavigate} from "react-router-dom";
 import Pagination from "react-js-pagination";
+import { useMediaQuery } from "@mui/material";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { Formik } from "formik";
@@ -34,7 +35,8 @@ function ShowData() {
   const [filteredData, setFilteredData] = useState([]);
   const [selectedStatusId, setSelectedStatusId] = useState("1");
   const [departments, setDepartments] = useState([]);
-
+  const isDesktop = useMediaQuery("(min-width:1024px");
+  const isMobile = useMediaQuery("(max-width:600px"); // Add this line to check for mobile screen size
   const [queue, setQueue] = useState({});
   console.log(queueList);
 
@@ -332,6 +334,7 @@ function ShowData() {
   });
   return (
     <div>
+      {isDesktop &&  (
       <div className="row justify-content-start mb-2">
         <div className="col-5 col-md-2 col-lg-3">
           <i className="fa-solid fa-calendar mx-1"></i>
@@ -377,7 +380,54 @@ function ShowData() {
           </button>
         </div>
       </div>
-
+)}
+     {isMobile &&  (
+      <div className="d-flex justify-content-between mb-2">
+        <div className="col-3 col-md-2 col-lg-3">
+          <i className="dates fa-solid fa-calendar mx-1"></i>
+          <label  className="dates" >ค้นหาตามวันที่</label>
+          <input
+            id="TableBookDate"
+            name="create_at"
+            type="date"
+            className="form-control"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+        </div>
+        <div className="col-5 p-4">
+          <select
+            id="TableBookselectedDepartment"
+            name="department_id"
+            className="form-select"
+            value={selectedDepartment}
+            onChange={(e) => setSelectedDepartment(e.target.value)}
+          >
+            <option value="">แผนก</option>
+            {departments.map((department) => (
+              <option
+                key={department.department_id}
+                value={department.department_id}
+              >
+                {department.department_name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-5 p-4">
+          <button
+            id="TableBookhandleCancel"
+            name="BookhandleCancel"
+            type="button"
+            className="btn btn-secondary ml-2"
+            onClick={handleCancel}
+          >
+            <i className="facon fa-solid fa-rotate-left"> ล้างค่า</i>
+          </button>
+        </div>
+      </div>
+)}
+{isDesktop &&  (
       <div className="col-2" style={{ marginBottom: "10px" }}>
         <select
           id="TableBookselectedStatusId"
@@ -391,6 +441,22 @@ function ShowData() {
           <option value="4">ประวัติการจองคิว</option>
         </select>
       </div>
+      )}
+      {isMobile &&  (
+      <div className="col-5" style={{ marginBottom: "10px" }}>
+        <select
+          id="TableBookselectedStatusId"
+          name="queue_status_id"
+          className="form-select"
+          value={selectedStatusId}
+          onChange={(e) => setSelectedStatusId(e.target.value)}
+        >
+          <option value="1">คิวที่จอง</option>
+          <option value="2">คิวที่กำลังดำเนินการ</option>
+          <option value="4">ประวัติการจองคิว</option>
+        </select>
+      </div>
+      )}
       <div className="overflow-auto">
         <table className="table">
           <thead>
@@ -704,7 +770,7 @@ function ShowData() {
         </table>
       </div>
       <div className="d-flex justify-content-between">
-        <div>จำนวน {pageData.length} รายการ</div>
+        <div className="numberp">จำนวน {pageData.length} รายการ</div>
         <div className="Pagination" id="TableBookPagination">
           <Pagination
             activePage={page}
