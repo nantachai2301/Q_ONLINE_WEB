@@ -3,14 +3,14 @@ import { useLocation, Link, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useFormik, Formik, Form, ErrorMessage } from "formik";
 import Schema from "./Validation";
-import axios from "axios";
-import Select from "react-select";
+import { useMediaQuery } from "@mui/material";
 import { getPatientById ,updatePatientById} from "../../../service/Patient.Service";
 
 function EditProfile() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [originalBirthday, setOriginalBirthday] = useState(""); 
+  const isDesktop = useMediaQuery("(min-width:1024px");
+  const isMobile = useMediaQuery("(max-width:600px"); 
   const [error, setError] = useState(false);
   const [age, setAge] = useState(null);
   const [users, setUsers] = useState({
@@ -250,14 +250,526 @@ function EditProfile() {
         >
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
-              <div className="container mt-6 ">
-                <div className="mb-5">
+              <div className="container57 mt-6 ">
+                <div className="mb-4">
+                {isDesktop &&  (
+                            <div className="card border-1 shadow p-2">
+                            <h6 className="font ">ข้อมูลทั่วไป</h6>
+                            <br></br>
+                            <div className="rounded border p-4">
+                              <div className="row gx-3 gy-2 align-items-center">
+                                <div className="col-4">
+                                  <label>เลขบัตรประชาชน</label>
+                                  <label className="red">*</label>
+                                  <br></br>
+                                  <input
+                                  id="ProfileId_card"
+                                    type="text"
+                                    name="id_card"
+                                    value={users.id_card}
+                                    className={`form-control ${
+                                      touched.id_card && errors.id_card && "is-invalid"
+                                    }`}
+                                    onChange={handleChange}
+                                  />
+                                  <ErrorMessage
+                                    name="id_card"
+                                    component="div"
+                                    className="error-message"
+                                  />
+                                </div>
+        
+                                <div className="col-auto">
+                                  <label>
+                                    คำนำหน้าชื่อ <label className="red">* &nbsp;</label>
+                                    :{" "}
+                                  </label>{" "}
+                                  <select
+                                     id="Profileprefix_name"
+                                    name="prefix_name"
+                                    className={`form-select ${
+                                      touched.prefix_name &&
+                                      errors.prefix_name &&
+                                      "is-invalid"
+                                    }`}
+                                    onChange={handleChange}
+                                  >
+                                    <option selected>{users.prefix_name}</option>
+                                    <option value="นาย">นาย</option>
+                                    <option value="นางสาว">นางสาว</option>
+                                    <option value="นาง">นาง</option>
+                                  </select>
+                                  <ErrorMessage
+                                    name="prefix_name"
+                                    component="div"
+                                    className="error-message"
+                                  />
+                                </div>
+                                <div className="col-auto">
+                                  <label>ชื่อ</label>
+                                  <label className="red">*</label>
+                                  <input
+                                    id="Profilefirst_name"
+                                    type="name"
+                                    name="first_name"
+                                    value={users.first_name}
+                                    className={`form-control ${
+                                      touched.first_name &&
+                                      errors.first_name &&
+                                      "is-invalid"
+                                    }`}
+                                    onChange={handleChange}
+                                  />
+                                  <ErrorMessage
+                                    name="first_name"
+                                    component="div"
+                                    className="error-message"
+                                  />
+                                </div>
+                                <div className="col-auto">
+                                  <label>นามสกุล</label>
+                                  <label className="red">*</label>
+                                  <input
+                                    id="Profilelast_name"
+                                    type="text"
+                                    name="last_name"
+                                    value={users.last_name}
+                                    className={`form-control ${
+                                      touched.last_name &&
+                                      errors.last_name &&
+                                      "is-invalid"
+                                    }`}
+                                    onChange={handleChange}
+                                  />
+                                  <ErrorMessage
+                                    name="last_name"
+                                    component="div"
+                                    className="error-message"
+                                  />
+                                </div>
+        
+                                <div className="col-auto">
+                                  <label>
+                                    เพศ <label className="red">* &nbsp;</label>:{" "}
+                                  </label>{" "}
+                                  <select
+                                   id="Profilegender"
+                                    name="gender"
+                                    className={`form-select ${
+                                      touched.gender && errors.gender && "is-invalid"
+                                    }`}
+                                    onChange={handleChange}
+                                  >
+                                    <option selected>{users.gender}</option>
+                                    <option value="ชาย">ชาย</option>
+                                    <option value="หญิง">หญิง</option>
+                                  </select>
+                                  <ErrorMessage
+                                    name="gender"
+                                    component="div"
+                                    className="error-message"
+                                  />
+                                </div>
+        
+                                <div className="col-sm-3">
+                                  <label>วันเดือนปีเกิด</label>
+                                  <label className="red">*</label>
+        
+                                  <input
+                                    id="Profilebirthday"
+                                    name="birthday"
+                                    type="date"
+                                    value={
+                                      users.birthday ? formatDate(users.birthday) : ""
+                                    }
+                                    className={`form-control ${
+                                      touched.birthday &&
+                                      errors.birthday &&
+                                      "is-invalid"
+                                    }`}
+                                    onChange={handleDateChange}
+                                  />
+                                </div>
+                                <div className="col-2 px-1 mt-2">
+                                  <label>อายุ</label>
+                                  <input
+                                    id="Profileage"
+                                    type="text"
+                                    name="age"
+                                    value={age !== null ? age : ""}
+                                    disabled
+                                  style={{ backgroundColor: 'lightgray' }} 
+                                    className="form-control"
+                                  />
+                                </div>
+                                <div className="col-sm-2">
+                                  <label>น้ำหนัก</label>
+                                  <label className="red">*</label>
+                                  <input
+                                   id="Profileweight"
+                                    type="weight"
+                                    name="weight"
+                                    value={users.weight}
+                                    className={`form-control ${
+                                      touched.weight && errors.weight && "is-invalid"
+                                    }`}
+                                    onChange={handleChange}
+                                  />
+                                  <ErrorMessage
+                                    name="weight"
+                                    component="div"
+                                    className="error-message"
+                                  />
+                                </div>
+        
+                                <div className="col-2">
+                                  <label>ส่วนสูง</label>
+                                  <label className="red">*</label>
+                                  <input
+                                   id="Profileheight"
+                                    type="height"
+                                    name="height"
+                                    value={users.height}
+                                    className={`form-control ${
+                                      touched.height && errors.height && "is-invalid"
+                                    }`}
+                                    onChange={handleChange}
+                                  />
+                                  <ErrorMessage
+                                    name="height"
+                                    component="div"
+                                    className="error-message"
+                                  />
+                                </div>
+        
+                                <div className="col-3">
+                                  <label>เบอร์โทร</label>
+                                  <label className="red">*</label>
+                                  <input
+                                     id="Profilephone"
+                                    type="phone"
+                                    name="phoneNumber"
+                                    value={users.phoneNumber}
+                                    className={`form-control ${
+                                      touched.phoneNumber &&
+                                      errors.phoneNumber &&
+                                      "is-invalid"
+                                    }`}
+                                    onChange={handleChange}
+                                  />
+        
+                                  <ErrorMessage
+                                    name="phoneNumber"
+                                    component="div"
+                                    className="error-message"
+                                  />
+                                </div>
+        
+                                <div className="col-sm-6">
+                                  <label>โรคประจำตัว</label>
+        
+                                  <input
+                                    id="Profilecongenital_disease"
+                                    type="text"
+                                    name="congenital_disease"
+                                    value={users.congenital_disease}
+                                    className="form-control"
+                                    onChange={handleChange}
+                                  />
+                                </div>
+        
+                                <div className="col-6">
+                                  <label>ประวัติแพ้ยา</label>
+        
+                                  <input
+                                     id="Profiledrugallergy"
+                                    type="text"
+                                    name="drugallergy"
+                                    value={users.drugallergy}
+                                    className="form-control"
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </div>
+                             
+                              <br></br>
+                              <h6>บุคคลที่ติดต่อได้</h6>
+                              <div className="rounded border p-4">
+                                <div className="row gx-3 gy-2 align-items-center">
+                                  <div className="col-4">
+                                    <label>ชื่อ</label>
+                                    <label className="red">*</label>
+                                    <input
+                                        id="Profilecontact_first_name"
+                                      type="contact_first_name"
+                                      name="contact_first_name"
+                                      value={users.contact_first_name}
+                                      className={`form-control ${
+                                        touched.contact_first_name &&
+                                        errors.contact_first_name &&
+                                        "is-invalid"
+                                      }`}
+                                      onChange={handleChange}
+                                    />
+                                    <ErrorMessage
+                                      name="contact_first_name"
+                                      component="div"
+                                      className="error-message"
+                                    />
+                                  </div>
+                                  <div className="col-4 px-1 mt-2">
+                                    <label>นามสกุล</label>
+                                    <label className="red">*</label>
+                                    <input
+                                      id="Profilecontact_last_name"
+                                      type="contact_last_name"
+                                      name="contact_last_name"
+                                      value={users.contact_last_name}
+                                      className={`form-control ${
+                                        touched.contact_last_name &&
+                                        errors.contact_last_name &&
+                                        "is-invalid"
+                                      }`}
+                                      onChange={handleChange}
+                                    />
+                                    <ErrorMessage
+                                      name="contact_last_name"
+                                      component="div"
+                                      className="error-message"
+                                    />
+                                  </div>
+                                  <div className="col-4 px-1 mt-2">
+                                    <label>
+                                      ความสัมพันธ์
+                                      <label className="red">* &nbsp;</label>:{" "}
+                                    </label>{" "}
+                                    <select
+                                     id="Profilecontact_relation_id"
+                                      name="contact_relation_id"
+                                      className={`form-select ${
+                                        touched.contact_relation_id &&
+                                        errors.contact_relation_id &&
+                                        "is-invalid"
+                                      }`}
+                                      onChange={handleChange}
+                                    >
+                                      <option selected>
+                                        {users.contact_relation_id}
+                                      </option>
+                                      <option value="บิดา">บิดา</option>
+                                      <option value="มารดา">มารดา</option>
+                                      <option value="สามี">สามี</option>
+                                      <option value="ภรรยา">ภรรยา</option>
+                                      <option value="พี่-น้อง">พี่-น้อง</option>
+                                      <option value="ญาติ">ญาติ</option>
+                                    </select>
+                                    <ErrorMessage
+                                      name="contact_relation_id"
+                                      component="div"
+                                      className="error-message"
+                                    />
+                                  </div>
+                                  <div className="col-4 px-1 mt-2">
+                                    <label>เบอร์โทร</label>
+                                    <label className="red">*</label>
+                                    <input
+                                     id="ProfilephoneNumber"
+                                      type="phoneNumber"
+                                      className="form-control"
+                                      name="contact_phoneNumber"
+                                      value={users.contact_phoneNumber}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <br></br>
+                              ข้อมูลที่อยู่
+                              <div className="rounded border p-4">
+                                <div className="row gx-3 gy-2 align-items-center">
+                                  <div className="col-3">
+                                    <label>รายละเอียดที่อยู่</label>
+                                    <label className="red">*</label>
+                                    <input
+                                      id="Profileaddress"
+                                      type="address"
+                                      className="form-control"
+                                      name="address"
+                                      value={users.address}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+        
+                                  <div className="col-2 ">
+                                    <label>
+                                      จังหวัด<label className="red">* &nbsp;</label>:{" "}
+                                    </label>{" "}
+                                    <select
+                                      id="Profileprovince"
+                                      name="province"
+                                      className="form-select"
+                                      onChange={handleChange}
+                                    >
+                                      <option selected>{users.province}</option>
+        
+                                      <option value="กรุงเทพมหานคร">
+                                        กรุงเทพมหานคร
+                                      </option>
+                                      <option value="กระบี่">กระบี่ </option>
+                                      <option value="กาญจนบุรี">กาญจนบุรี </option>
+                                      <option value="กาฬสินธุ์">กาฬสินธุ์ </option>
+                                      <option value="กำแพงเพชร">กำแพงเพชร </option>
+                                      <option value="ขอนแก่น">ขอนแก่น</option>
+                                      <option value="จันทบุรี">จันทบุรี</option>
+                                      <option value="ฉะเชิงเทรา">ฉะเชิงเทรา </option>
+                                      <option value="ชัยนาท">ชัยนาท </option>
+                                      <option value="ชัยภูมิ">ชัยภูมิ </option>
+                                      <option value="ชุมพร">ชุมพร </option>
+                                      <option value="ชลบุรี">ชลบุรี </option>
+                                      <option value="เชียงใหม่">เชียงใหม่ </option>
+                                      <option value="เชียงราย">เชียงราย </option>
+                                      <option value="ตรัง">ตรัง </option>
+                                      <option value="ตราด">ตราด </option>
+                                      <option value="ตาก">ตาก </option>
+                                      <option value="นครนายก">นครนายก </option>
+                                      <option value="นครปฐม">นครปฐม </option>
+                                      <option value="นครพนม">นครพนม </option>
+                                      <option value="นครราชสีมา">นครราชสีมา </option>
+                                      <option value="นครศรีธรรมราช">
+                                        นครศรีธรรมราช{" "}
+                                      </option>
+                                      <option value="นครสวรรค์">นครสวรรค์ </option>
+                                      <option value="นราธิวาส">นราธิวาส </option>
+                                      <option value="น่าน">น่าน </option>
+                                      <option value="นนทบุรี">นนทบุรี </option>
+                                      <option value="บึงกาฬ">บึงกาฬ</option>
+                                      <option value="บุรีรัมย์">บุรีรัมย์</option>
+                                      <option value="ประจวบคีรีขันธ์">
+                                        ประจวบคีรีขันธ์{" "}
+                                      </option>
+                                      <option value="ปทุมธานี">ปทุมธานี </option>
+                                      <option value="ปราจีนบุรี">ปราจีนบุรี </option>
+                                      <option value="ปัตตานี">ปัตตานี </option>
+                                      <option value="พะเยา">พะเยา </option>
+                                      <option value="พระนครศรีอยุธยา">
+                                        พระนครศรีอยุธยา{" "}
+                                      </option>
+                                      <option value="พังงา">พังงา </option>
+                                      <option value="พิจิตร">พิจิตร </option>
+                                      <option value="พิษณุโลก">พิษณุโลก </option>
+                                      <option value="เพชรบุรี">เพชรบุรี </option>
+                                      <option value="เพชรบูรณ์">เพชรบูรณ์ </option>
+                                      <option value="แพร่">แพร่ </option>
+                                      <option value="พัทลุง">พัทลุง </option>
+                                      <option value="ภูเก็ต">ภูเก็ต </option>
+                                      <option value="มหาสารคาม">มหาสารคาม </option>
+                                      <option value="มุกดาหาร">มุกดาหาร </option>
+                                      <option value="แม่ฮ่องสอน">แม่ฮ่องสอน </option>
+                                      <option value="ยโสธร">ยโสธร </option>
+                                      <option value="ยะลา">ยะลา </option>
+                                      <option value="ร้อยเอ็ด">ร้อยเอ็ด </option>
+                                      <option value="ระนอง">ระนอง </option>
+                                      <option value="ระยอง">ระยอง </option>
+                                      <option value="ราชบุรี">ราชบุรี</option>
+                                      <option value="ลพบุรี">ลพบุรี </option>
+                                      <option value="ลำปาง">ลำปาง </option>
+                                      <option value="ลำพูน">ลำพูน </option>
+                                      <option value="เลย">เลย </option>
+                                      <option value="ศรีสะเกษ">ศรีสะเกษ</option>
+                                      <option value="สกลนคร">สกลนคร</option>
+                                      <option value="สงขลา">สงขลา </option>
+                                      <option value="สมุทรสาคร">สมุทรสาคร </option>
+                                      <option value="สมุทรปราการ">สมุทรปราการ </option>
+                                      <option value="สมุทรสงคราม">สมุทรสงคราม </option>
+                                      <option value="สระแก้ว">สระแก้ว </option>
+                                      <option value="สระบุรี">สระบุรี </option>
+                                      <option value="สิงห์บุรี">สิงห์บุรี </option>
+                                      <option value="สุโขทัย">สุโขทัย </option>
+                                      <option value="สุพรรณบุรี">สุพรรณบุรี </option>
+                                      <option value="สุราษฎร์ธานี">
+                                        สุราษฎร์ธานี{" "}
+                                      </option>
+                                      <option value="สุรินทร์">สุรินทร์ </option>
+                                      <option value="สตูล">สตูล </option>
+                                      <option value="หนองคาย">หนองคาย </option>
+                                      <option value="หนองบัวลำภู">หนองบัวลำภู </option>
+                                      <option value="อำนาจเจริญ">อำนาจเจริญ </option>
+                                      <option value="อุดรธานี">อุดรธานี </option>
+                                      <option value="อุตรดิตถ์">อุตรดิตถ์ </option>
+                                      <option value="อุทัยธานี">อุทัยธานี </option>
+                                      <option value="อุบลราชธานี">อุบลราชธานี</option>
+                                      <option value="อ่างทอง">อ่างทอง </option>
+        
+                                      <div className="invalid-feedback">
+                                        กรุณาเลือกจังหวัด
+                                      </div>
+                                    </select>
+                                  </div>
+                                  <div className="col-2">
+                                    <label>อำเภอ</label>
+                                    <label className="red">*</label>
+                                    <input
+                                      id="Profiledistrict"
+                                      type="district"
+                                      className="form-control"
+                                      name="district"
+                                      value={users.district}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                  <div className="col-2">
+                                    <label>ตำบล</label>
+                                    <label className="red">*</label>
+                                    <input
+                                      id="Profilesubdistrict"
+                                      name="subdistrict"
+                                      className="form-control"
+                                      value={users.subdistrict}
+                                      placeholder="รายละเอียดที่อยู่"
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                  <div className="col-3">
+                                    <label>รหัสไปรษณีย์</label>
+                                    <label className="red">*</label>
+                                    <input
+                                      id="Profilepostcode"
+                                      name="postcode"
+                                      className="form-control"
+                                      value={users.postcode}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="d-flex justify-content-center mt-3">
+                                <button
+                                  id="Profilesubmit"
+                                  type="submit"
+                                  className="btn btn-success mx-1"
+                                  onClick={handleClick}
+                                >
+                                  บันทึก
+                                </button>
+        
+                                <button
+                                id="Profilecencel"
+                                  className="btn btn-danger mx-1"
+                                  onClick={() => navigate("/admin/user")}
+                                >
+                                  ยกเลิก
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                  )}
+                  {isMobile &&  (
                   <div className="card border-1 shadow p-2">
                     <h6 className="font ">ข้อมูลทั่วไป</h6>
                     <br></br>
                     <div className="rounded border p-4">
                       <div className="row gx-3 gy-2 align-items-center">
-                        <div className="col-4">
+                        <div className="col-sm-6">
                           <label>เลขบัตรประชาชน</label>
                           <label className="red">*</label>
                           <br></br>
@@ -278,7 +790,7 @@ function EditProfile() {
                           />
                         </div>
 
-                        <div className="col-auto">
+                        <div className="col-sm-6">
                           <label>
                             คำนำหน้าชื่อ <label className="red">* &nbsp;</label>
                             :{" "}
@@ -304,7 +816,7 @@ function EditProfile() {
                             className="error-message"
                           />
                         </div>
-                        <div className="col-auto">
+                        <div className="col-sm-6">
                           <label>ชื่อ</label>
                           <label className="red">*</label>
                           <input
@@ -325,7 +837,7 @@ function EditProfile() {
                             className="error-message"
                           />
                         </div>
-                        <div className="col-auto">
+                        <div className="col-sm-6">
                           <label>นามสกุล</label>
                           <label className="red">*</label>
                           <input
@@ -347,7 +859,7 @@ function EditProfile() {
                           />
                         </div>
 
-                        <div className="col-auto">
+                        <div className="col-sm-6">
                           <label>
                             เพศ <label className="red">* &nbsp;</label>:{" "}
                           </label>{" "}
@@ -370,7 +882,7 @@ function EditProfile() {
                           />
                         </div>
 
-                        <div className="col-sm-3">
+                        <div className="col-sm-6">
                           <label>วันเดือนปีเกิด</label>
                           <label className="red">*</label>
 
@@ -389,7 +901,7 @@ function EditProfile() {
                             onChange={handleDateChange}
                           />
                         </div>
-                        <div className="col-2 px-1 mt-2">
+                        <div className="col-sm-6">
                           <label>อายุ</label>
                           <input
                             id="Profileage"
@@ -401,7 +913,7 @@ function EditProfile() {
                             className="form-control"
                           />
                         </div>
-                        <div className="col-sm-2">
+                        <div className="col-sm-6">
                           <label>น้ำหนัก</label>
                           <label className="red">*</label>
                           <input
@@ -421,7 +933,7 @@ function EditProfile() {
                           />
                         </div>
 
-                        <div className="col-2">
+                        <div className="col-sm-6">
                           <label>ส่วนสูง</label>
                           <label className="red">*</label>
                           <input
@@ -441,7 +953,7 @@ function EditProfile() {
                           />
                         </div>
 
-                        <div className="col-3">
+                        <div className="col-sm-6">
                           <label>เบอร์โทร</label>
                           <label className="red">*</label>
                           <input
@@ -477,7 +989,7 @@ function EditProfile() {
                           />
                         </div>
 
-                        <div className="col-6">
+                        <div className="col-sm-6">
                           <label>ประวัติแพ้ยา</label>
 
                           <input
@@ -495,7 +1007,7 @@ function EditProfile() {
                       <h6>บุคคลที่ติดต่อได้</h6>
                       <div className="rounded border p-4">
                         <div className="row gx-3 gy-2 align-items-center">
-                          <div className="col-4">
+                          <div className="col-sm-6">
                             <label>ชื่อ</label>
                             <label className="red">*</label>
                             <input
@@ -516,7 +1028,7 @@ function EditProfile() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-4 px-1 mt-2">
+                          <div className="col-sm-6">
                             <label>นามสกุล</label>
                             <label className="red">*</label>
                             <input
@@ -537,7 +1049,7 @@ function EditProfile() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-4 px-1 mt-2">
+                          <div className="col-sm-6">
                             <label>
                               ความสัมพันธ์
                               <label className="red">* &nbsp;</label>:{" "}
@@ -568,7 +1080,7 @@ function EditProfile() {
                               className="error-message"
                             />
                           </div>
-                          <div className="col-4 px-1 mt-2">
+                          <div className="col-sm-6">
                             <label>เบอร์โทร</label>
                             <label className="red">*</label>
                             <input
@@ -586,7 +1098,7 @@ function EditProfile() {
                       ข้อมูลที่อยู่
                       <div className="rounded border p-4">
                         <div className="row gx-3 gy-2 align-items-center">
-                          <div className="col-3">
+                          <div className="col-sm-6">
                             <label>รายละเอียดที่อยู่</label>
                             <label className="red">*</label>
                             <input
@@ -599,7 +1111,7 @@ function EditProfile() {
                             />
                           </div>
 
-                          <div className="col-2 ">
+                          <div className="col-sm-6">
                             <label>
                               จังหวัด<label className="red">* &nbsp;</label>:{" "}
                             </label>{" "}
@@ -704,7 +1216,7 @@ function EditProfile() {
                               </div>
                             </select>
                           </div>
-                          <div className="col-2">
+                          <div className="col-sm-6">
                             <label>อำเภอ</label>
                             <label className="red">*</label>
                             <input
@@ -716,7 +1228,7 @@ function EditProfile() {
                               onChange={handleChange}
                             />
                           </div>
-                          <div className="col-2">
+                          <div className="col-sm-6">
                             <label>ตำบล</label>
                             <label className="red">*</label>
                             <input
@@ -728,7 +1240,7 @@ function EditProfile() {
                               onChange={handleChange}
                             />
                           </div>
-                          <div className="col-3">
+                          <div className="col-sm-6">
                             <label>รหัสไปรษณีย์</label>
                             <label className="red">*</label>
                             <input
@@ -761,6 +1273,7 @@ function EditProfile() {
                       </div>
                     </div>
                   </div>
+                  )}
                 </div>
               </div>
             </Form>

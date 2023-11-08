@@ -48,8 +48,8 @@ const Profile = () => {
     <div className="w-full">
       <div className="d-flex justify-content-center">
         <h2 className="title-contentProfile">โปรไฟล์</h2>
-      </div>
-
+    </div>
+    <div className="d-flex justify-content-center">
       {/* แสดงข้อมูลผู้ใช้ที่ได้รับมา */}
       {isLoggedIn && userData && (
         <div
@@ -255,6 +255,7 @@ const Profile = () => {
       )}
       {!isLoggedIn && <div>Please login to view profile.</div>}
       {/* หากยังไม่ได้ล็อกอิน แสดงข้อความ "Please login to view profile." */}
+    </div>
     </div>
   );
 };

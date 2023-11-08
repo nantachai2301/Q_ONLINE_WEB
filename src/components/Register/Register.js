@@ -4,10 +4,13 @@ import province from "../../data/province.json";
 import { Formik, Form, ErrorMessage } from "formik";
 import Schema from "./Validation";
 import Swal from "sweetalert2";
+import { useMediaQuery } from "@mui/material";
 import { createPatient } from "../../service/Patient.Service";
 
 function Register() {
   const navigate = useNavigate();
+  const isDesktop = useMediaQuery("(min-width:1024px");
+  const isMobile = useMediaQuery("(max-width:600px"); 
   const [age, setAge] = useState(0);
   const [users, setUsers] = useState({
     users_id: null,
@@ -220,6 +223,7 @@ function Register() {
             <Form>
               <div className="container57 mt-2 ">
                 <div className="mb-4">
+                {isDesktop &&(
                   <div className="card1 card  border-0 shadow p-4">
                     <h6 className="font ">ข้อมูลทั่วไป</h6>
                     <br></br>
@@ -745,6 +749,534 @@ function Register() {
                       </div>
                     </div>
                   </div>
+                   )}
+                    {isMobile &&(
+                  <div className="card1 card  border-0 shadow p-4">
+                    <h6 className="font ">ข้อมูลทั่วไป</h6>
+                    <br></br>
+                    <div className="rounded border p-4">
+                      <div className="row gx-3 gy-2 align-items-center">
+                        <div className="col-sm-6">
+                          <label>เลขบัตรประชาชน</label>
+                          <label className="red">*</label>
+                          <br></br>
+                          <input
+                            type="text"
+                            id="user_id_card"
+                            name="id_card"
+                            value={users.id_card}
+                            placeholder="เลขบัตรประชาชน 13 หลัก"
+                            className={`form-control ${
+                              touched.id_card && errors.id_card && "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="id_card"
+                            component="div"
+                            className="error-message"
+                          />
+                        </div>
+
+                        <div className="col-sm-6">
+                          <label>
+                            คำนำหน้าชื่อ <label className="red">* &nbsp;</label>
+                            :{" "}
+                          </label>{" "}
+                          <select
+                            id="user_prefix_name"
+                            name="prefix_name"
+                            className={`form-select ${
+                              touched.prefix_name &&
+                              errors.prefix_name &&
+                              "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          >
+                            <option value="" selected>
+                              เลือกคำนำหน้าชื่อ
+                            </option>
+                            <option value="นาย">นาย</option>
+                            <option value="นางสาว">นางสาว</option>
+                            <option value="นาง">นาง</option>
+                          </select>
+                          <ErrorMessage
+                            name="prefix_name"
+                            component="div"
+                            className="error-message"
+                          />
+                        </div>
+                        <div className="col-sm-6">
+                          <label>ชื่อ</label>
+                          <label className="red">*</label>
+                          <input
+                            id="user_first_name"
+                            type="text"
+                            name="first_name"
+                            placeholder="ชื่อ"
+                            value={users.first_name}
+                            className={`form-control ${
+                              touched.first_name &&
+                              errors.first_name &&
+                              "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="first_name"
+                            component="div"
+                            className="error-message"
+                          />
+                        </div>
+                        <div className="col-sm-6">
+                          <label>นามสกุล</label>
+                          <label className="red">*</label>
+                          <input
+                            id="user_last_name"
+                            type="text"
+                            name="last_name"
+                            placeholder="นามสกุล"
+                            value={users.last_name}
+                            className={`form-control ${
+                              touched.last_name &&
+                              errors.last_name &&
+                              "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="last_name"
+                            component="div"
+                            className="error-message"
+                          />
+                        </div>
+                        <div className="col-sm-6">
+                          <label>
+                            เพศ <label className="red">* &nbsp;</label>:{" "}
+                          </label>{" "}
+                          <select
+                            id="user_gender"
+                            name="gender"
+                            className={`form-select ${
+                              touched.gender && errors.gender && "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          >
+                            <option value="" selected>
+                              เลือกเพศ
+                            </option>
+                            <option value="ชาย">ชาย</option>
+                            <option value="หญิง">หญิง</option>
+                          </select>
+                          <ErrorMessage
+                            name="gender"
+                            component="div"
+                            className="error-message"
+                          />
+                        </div>
+
+                        <div className="col-sm-6">
+                          <label>วันเดือนปีเกิด</label>
+                          <label className="red">*</label>
+
+                          <input
+                            id="user_birthday"
+                            name="birthday"
+                            type="date"
+                            value={users.birthday}
+                            className={`form-control ${
+                              touched.birthday &&
+                              errors.birthday &&
+                              "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          />
+                          {touched.birthday && errors.birthday && (
+                            <div className="error-message">
+                              {errors.birthday}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col-sm-6">
+                          <input
+                            id="user_age"
+                            type="text"
+                            name="age"
+                            value={age !== null ? age : ""}
+                            readOnly
+                            disabled
+                            style={{ backgroundColor: "lightgray" }}
+                            className="form-control"
+                          />
+                        </div>
+                        <div className="col-sm-6">
+                          <label>น้ำหนัก</label>
+                          <label className="red">*</label>
+                          <input
+                            id="user_weight"
+                            type="text"
+                            name="weight"
+                            placeholder="น้ำหนัก"
+                            value={users.weight}
+                            className={`form-control ${
+                              touched.weight && errors.weight && "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="weight"
+                            component="div"
+                            className="error-message"
+                          />
+                        </div>
+                        <div className="col-sm-6">
+                          <label>ส่วนสูง</label>
+                          <label className="red">*</label>
+                          <input
+                            id="user_height"
+                            type="text"
+                            name="height"
+                            placeholder="ส่วนสูง"
+                            value={users.height}
+                            className={`form-control ${
+                              touched.height && errors.height && "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="height"
+                            component="div"
+                            className="error-message"
+                          />
+                        </div>
+                        <div className="col-sm-6">
+                          <label>เบอร์โทร</label>
+                          <label className="red">*</label>
+                          <input
+                            id="user_phoneNumbe"
+                            type="phone"
+                            name="phoneNumber"
+                            placeholder="เบอร์โทร"
+                            value={users.phoneNumber}
+                            className={`form-control ${
+                              touched.phoneNumber &&
+                              errors.phoneNumber &&
+                              "is-invalid"
+                            }`}
+                            onChange={handleChange}
+                          />
+                          <ErrorMessage
+                            name="phoneNumber"
+                            component="div"
+                            className="error-message"
+                          />
+                        </div>
+                        <div className="col-sm-6">
+                          <label>โรคประจำตัว</label>
+
+                          <input
+                            id="user_congenital_disease"
+                            type="text"
+                            placeholder="โรคประจำตัว"
+                            name="congenital_disease"
+                            value={users.congenital_disease}
+                            className="form-control"
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="col-sm-6">
+                          <label>ประวัติแพ้ยา</label>
+
+                          <input
+                            id="user_drugallergy"
+                            type="text"
+                            placeholder="ประวัติแพ้ยา"
+                            name="drugallergy"
+                            value={users.drugallergy}
+                            className="form-control"
+                            onChange={handleChange}
+                          />
+                        </div>
+                      </div>
+                      <br></br>
+                      <h6>รหัสผ่าน</h6>
+                      <div className="rounded border p-4">
+                        <div className="col-8 ">
+                          <div className="row">
+                            <div className="col-sm-6">
+                              <label>รหัสผ่าน</label>
+                              <label className="red">*</label>
+                              <input
+                                id="user_password"
+                                type="password"
+                                placeholder="รหัสผ่าน"
+                                name="password"
+                                value={users.password}
+                                className={`form-control ${
+                                  touched.password &&
+                                  errors.password &&
+                                  "is-invalid"
+                                }`}
+                                onChange={handleChange}
+                              />
+                              <ErrorMessage
+                                name="password"
+                                component="div"
+                                className="error-message"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <br></br>
+                      <h6>บุคคลที่ติดต่อได้</h6>
+                      <div className="rounded border p-4">
+                        <div className="row gx-3 gy-2 align-items-center">
+                          <div className="col-sm-6">
+                            <label>ชื่อ</label>
+                            <label className="red">*</label>
+                            <input
+                              placeholder="ชื่อ"
+                              id="user_contact_first_name"
+                              type="text"
+                              name="contact_first_name"
+                              value={users.contact_first_name}
+                              className={`form-control ${
+                                touched.contact_first_name &&
+                                errors.contact_first_name &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="contact_first_name"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+                          <div className="col-sm-6">
+                            <label>นามสกุล</label>
+                            <label className="red">*</label>
+                            <input
+                              id="user_contact_last_name"
+                              placeholder="นามสกุล"
+                              type="text"
+                              name="contact_last_name"
+                              value={users.contact_last_name}
+                              className={`form-control ${
+                                touched.contact_last_name &&
+                                errors.contact_last_name &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="contact_last_name"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+                          <div className="col-sm-6">
+                            <label>
+                              ความสัมพันธ์
+                              <label className="red">* &nbsp;</label>:{" "}
+                            </label>{" "}
+                            <select
+                              id="user_contact_relation_id"
+                              type="text"
+                              name="contact_relation_id"
+                              className={`form-select ${
+                                touched.contact_relation_id &&
+                                errors.contact_relation_id &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            >
+                              <option value="" selected>
+                                {" "}
+                                เลือกความสัมพันธ์
+                              </option>
+                              <option value="บิดา">บิดา</option>
+                              <option value="มารดา">มารดา</option>
+                              <option value="สามี">สามี</option>
+                              <option value="ภรรยา">ภรรยา</option>
+                              <option value="พี่-น้อง">พี่-น้อง</option>
+                              <option value="ญาติ">ญาติ</option>
+                            </select>
+                            <ErrorMessage
+                              name="contact_relation_id"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+                          <div className="col-sm-6">
+                            <label>เบอร์โทร</label>
+                            <label className="red">*</label>
+                            <input
+                              id="user_contact_phoneNumber"
+                              type="phone"
+                              name="contact_phoneNumber"
+                              placeholder="เบอร์โทร"
+                              value={users.contact_phoneNumber}
+                              className={`form-control ${
+                                touched.contact_phoneNumber &&
+                                errors.contact_phoneNumber &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="phoneNumber"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <br></br>
+                      ข้อมูลที่อยู่
+                      <div className="rounded border p-4">
+                        <div className="row gx-3 gy-2 align-items-center">
+                          <div className="col-sm-6">
+                            <label>รายละเอียดที่อยู่</label>
+                            <label className="red">*</label>
+                            <input
+                              id="user_address"
+                              type="text"
+                              name="address"
+                              placeholder="บ้านเลขที่"
+                              value={users.address}
+                              className={`form-control ${
+                                touched.address &&
+                                errors.address &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="address"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+
+                          <div className="col-sm-6">
+                            <label>
+                              จังหวัด<label className="red">* &nbsp;</label>:{" "}
+                            </label>{" "}
+                            <select
+                              id="province"
+                              name="province"
+                              value={users.province}
+                              className={`form-control ${
+                                touched.province &&
+                                errors.province &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            >
+                              <option value="" disabled>
+                                เลือกจังหวัด
+                              </option>
+                              {province.map((prov) => (
+                                <option key={prov.id} value={prov.Provinces}>
+                                  {prov.Provinces}
+                                </option>
+                              ))}
+                            </select>
+                            <ErrorMessage
+                              name="province"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+                          <div className="col-sm-6">
+                            <label>อำเภอ</label>
+                            <label className="red">*</label>
+                            <input
+                              id="user_district"
+                              placeholder="อำเภอ"
+                              type="text"
+                              name="district"
+                              value={users.district}
+                              className={`form-control ${
+                                touched.district &&
+                                errors.district &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="district"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+                          <div className="col-sm-6">
+                            <label>ตำบล</label>
+                            <label className="red">*</label>
+                            <input
+                              id="user_subdistrict"
+                              type="text"
+                              name="subdistrict"
+                              placeholder="ตำบล"
+                              value={users.subdistrict}
+                              className={`form-control ${
+                                touched.subdistrict &&
+                                errors.subdistrict &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="subdistrict"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+                          <div className="col-sm-6">
+                            <label>รหัสไปรษณีย์</label>
+                            <label className="red">*</label>
+                            <input
+                              id="user_postcode"
+                              placeholder="รหัสไปรษณีย์"
+                              name="postcode"
+                              value={users.postcode}
+                              className={`form-control ${
+                                touched.postcode &&
+                                errors.postcode &&
+                                "is-invalid"
+                              }`}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name="postcode"
+                              component="div"
+                              className="error-message"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="d-flex justify-content-center mt-3">
+                        <button
+                          id="buttonRegisterUser"
+                          type="submit"
+                          className="btn btn-success mx-1"
+                          onClick={handleClick}
+                        >
+                          บันทึก
+                        </button>
+                        <button
+                          id="buttonCancelUser"
+                          className="btn btn-danger mx-1"
+                          onClick={() => navigate("/")}
+                        >
+                          ยกเลิก
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                   )}
                 </div>
               </div>
             </Form>
