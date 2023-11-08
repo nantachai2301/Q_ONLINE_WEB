@@ -31,6 +31,9 @@
 #public .nav-active {
   color: #f8bc07 !important;
 }
+.red{
+  color:red;
+}
 @media screen and (max-width: 1250px) {
   .p-layout {
     padding-left: 20px !important;
@@ -85,7 +88,9 @@
   background-color: #133C55;
   text-align: center;
 }
+.card1{
 
+}
   }
 
 

@@ -220,7 +220,7 @@ function Register() {
             <Form>
               <div className="container57 mt-2 ">
                 <div className="mb-4">
-                  <div className="card  border-0 shadow p-4">
+                  <div className="card1 card  border-0 shadow p-4">
                     <h6 className="font ">ข้อมูลทั่วไป</h6>
                     <br></br>
                     <div className="rounded border p-4">

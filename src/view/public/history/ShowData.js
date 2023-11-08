@@ -15,7 +15,7 @@ import {
 import { getPatient } from "../../../service/Patient.Service";
 import { getDepartment } from "../../../service/DepartmentType.Service";
 import _ from "lodash";
-
+import '../../../style/tablebook.css'
 
 function ShowData() {
   const navigate = useNavigate();
@@ -407,29 +407,29 @@ function ShowData() {
               }}
             >
            
-              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
+              <th  className='text22'scope="col" style={{ width: "5%", textAlign: "center" }}>
                 รายการ
               </th>
-              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
+              <th className='text22' scope="col" style={{ width: "15%", textAlign: "center" }}>
                 อาการเบื้องต้น
               </th>
-              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+              <th className='text22' scope="col" style={{ width: "10%", textAlign: "center" }}>
                 แผนก
               </th>
-              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+              <th className='text22' scope="col" style={{ width: "10%", textAlign: "center" }}>
                 วันที่เข้ารับการรักษา
               </th>
-              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
+              <th className='text22' scope="col" style={{ width: "15%", textAlign: "center" }}>
                 วันที่จอง
               </th>
 
-              <th scope="col" style={{ width: "15%", textAlign: "center" }}>
+              <th className='text22' scope="col" style={{ width: "15%", textAlign: "center" }}>
                 สถานะ
               </th>
-              <th scope="col" style={{ width: "5%", textAlign: "center" }}>
+              <th className='text22' scope="col" style={{ width: "5%", textAlign: "center" }}>
                 ลำดับคิว
               </th>
-              <th scope="col" style={{ width: "10%", textAlign: "center" }}>
+              <th className='text22' scope="col" style={{ width: "10%", textAlign: "center" }}>
                 <span>จัดการ</span>
               </th>
             </tr>
@@ -446,29 +446,29 @@ function ShowData() {
               .slice(0, 10) 
               .map((queue, index) => (
                 <tr key={queue.id}>
-                  <td style={{ textAlign: "center" }}>
+                  <td className='text223' style={{ textAlign: "center" }}>
                     {(page - 1) * 10 + index + 1}
                   </td>{" "}
                  
-                  <td style={{ textAlign: "center" }}>{queue.symptom}</td>
-                  <td style={{ textAlign: "center" }}>
+                  <td  className='text223'style={{ textAlign: "center" }}>{queue.symptom}</td>
+                  <td className='text223'style={{ textAlign: "center" }}>
                     {queue.department_name}
                   </td>
-                  <td style={{ textAlign: "center" }}>{queue.queue_date}</td>
-                  <td style={{ textAlign: "center" }}>{queue.create_at}</td>
-                  <td style={{ textAlign: "center" }}>
+                  <td className='text223' style={{ textAlign: "center" }}>{queue.queue_date}</td>
+                  <td className='text223'style={{ textAlign: "center" }}>{queue.create_at}</td>
+                  <td className='text223'style={{ textAlign: "center" }}>
                     {queue.queue_status_name}
                   </td>
                   <td style={{ textAlign: "center" }}>
                     <button
                       id="Manager_button_status"
                       type="button"
-                      className="btn btn-primary"
+                      className="btnh btn btn-primary"
                       onClick={() => {
                         setData(queue);
                       }}
                     >
-                      <i className="fa-solid fa-print text-white"></i>
+                      <i className="fadd fa-solid fa-print text-white"></i>
                     </button>
                   </td>
                   <td style={{ textAlign: "center" }}>
@@ -481,20 +481,20 @@ function ShowData() {
                         <button
                           id="EditQueue"
                           type="button"
-                          className="btn btn-warning text-white mx-1 mt-1"
+                          className="btnh btn btn-warning text-white mx-1 mt-1"
                           onClick={() => handleEditClick(queue)}
                         >
-                          <i className="fa-solid fa-pen-to-square"></i>
+                          <i className="fadd fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
                           id="RemoveQueue"
                           type="button"
-                          className="btn btn-danger text-white mx-1 mt-1"
+                          className="btnh btn btn-danger text-white mx-1 mt-1"
                           onClick={() => {
                             removeQueue(queue.users_id, queue.queue_date);
                           }}
                         >
-                          <i className="fa-solid fa-trash-can"></i>
+                          <i className="fadd fa-solid fa-trash-can"></i>
                         </button>
                       </div>
                     )}

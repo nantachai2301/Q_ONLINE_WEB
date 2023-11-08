@@ -177,6 +177,7 @@ const LoginModal = (props) => {
               <Form>
                 <Form.Group className="mb-3">
                   <Form.Label>รหัสบัตรประจำตัวประชาชน</Form.Label>
+                  <label className="red">*</label>
                   <Form.Control
                     id="LoginID_Card"
                     type="text"
@@ -196,6 +197,7 @@ const LoginModal = (props) => {
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>รหัสผ่าน</Form.Label>
+                  <label className="red">*</label>
                   <Form.Control
                     id="LoginPassword"
                     type="password"
