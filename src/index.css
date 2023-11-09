@@ -114,3 +114,54 @@ body {
   margin-top: -10px;
   margin-bottom: -5px;
 }
+@media screen and (max-width: 600px) {
+  .pagination {
+    width: 65%;
+  }
+  
+  .pagination li {
+    border-radius: 5px;
+    height: 20px;
+    width: 20px;
+    margin-left: 1px;
+    margin-right: 1px;
+    text-align: center;
+    padding-top: 5px;
+    font-size: 5px;
+    cursor: pointer;
+    border: 1px solid #e7e7e7;
+  }
+  
+  .pagination li a {
+    color: #000000;
+    text-decoration: none;
+  }
+  
+  .pagination .disabled {
+    cursor: default;
+    background-color: #e7e7e7 !important;
+    
+  }
+  
+  .pagination .disabled a {
+    cursor: default;
+  }
+  
+  .pagination .active {
+    cursor: default;
+    color: #ffff;
+    background-color:  #1b7bd0 !important;
+  }
+  
+  .pagination .active a {
+    cursor: default;
+    color: #ffff;
+    background-color:  #1b7bd0 !important;
+  }
+
+.numberp{
+  font-size: 12px;
+}
+
+
+}

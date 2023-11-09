@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useMediaQuery } from "@mui/material";
 import "../../../style/queuepage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faCheck, faClock } from "@fortawesome/free-solid-svg-icons";
@@ -10,7 +10,7 @@ import { getDepartment} from "../../../service/DepartmentType.Service";
 function DepartmentQueue({ departmentData, selectedDate }) {
   const [bookedQueues, setBookedQueues] = useState(0);
   const [availableQueues, setAvailableQueues] = useState(0);
-
+  
   useEffect(() => {
     const fetchQueueInfo = async () => {
       try {
@@ -52,17 +52,17 @@ function DepartmentQueue({ departmentData, selectedDate }) {
         src={departmentData.department_image}
         alt={departmentData.department_name}
         className="department-icon"
-        style={{ width: "200px", height: "200px" }}
+        
       />
     </div>
     <div className="info-container">
-      <h3 className="department-name">{departmentData.department_name}</h3>
+      <h3 className="department-name" >{departmentData.department_name}</h3>
       <div className="queue-card">
         <div className="icon-container">
           <FontAwesomeIcon icon={faUsers} className="queue-icon" />
         </div>
         <div className="queue-info">
-          <p>จำนวนคิวทั้งหมด: {departmentData.max_queue_number}</p>
+          <p >จำนวนคิวทั้งหมด: {departmentData.max_queue_number}</p>
         </div>
         <div className="icon-container">
           <FontAwesomeIcon icon={faUsers} className="queue-icon" />
@@ -88,7 +88,8 @@ function QueuePage() {
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
-  
+  const isDesktop = useMediaQuery("(min-width:1024px");
+  const isMobile = useMediaQuery("(max-width:600px"); // Add this line to check for mobile screen size
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
@@ -143,7 +144,7 @@ function QueuePage() {
         ))}
       </div>
 
-      <div className="row justify-content-start mb-2">
+      {isDesktop &&  (<div className="row justify-content-start mb-2">
         <div className="col-5 col-md-2 col-lg-3">
           <i className="fa-solid fa-calendar mx-1"></i>
           <label>ค้นหาตามวันที่</label>
@@ -164,7 +165,33 @@ function QueuePage() {
             ล้างค่า
           </button>
         </div>
+        
       </div>
+       )}
+       {isMobile &&  (
+        <div className="d-flex justify-content-between mb-2">
+        <div className="col-7">
+       <i className="dates fa-solid fa-calendar mx-1"></i>
+       <label className="dates">ค้นหาตามวันที่</label>
+       <input
+         type="date"
+         className="form-control"
+         value={selectedDate}
+         onChange={(e) => handleDateChange(e.target.value)}
+       />
+     </div>
+     <div className="col-6 p-4">
+     <button
+       type="button"
+       className="btn btn-secondary"
+       onClick={handleCancel}
+     >
+       <i className="facon fa-solid fa-rotate-left"> ล้างค่า</i>
+      
+     </button>
+   </div></div>
+       
+       )}
       <div className="queue-details mt-3">
         {selectedDepartment && selectedDate && (
           <DepartmentQueue
