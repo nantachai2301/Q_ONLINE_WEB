@@ -91,15 +91,20 @@ function ShowData({}) {
         const symptom = dataItem.symptom || "";
 
         const nameFilter =
-        (firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-        lastName.toLowerCase().includes(searchUsers.toLowerCase())) &&
-        (departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-        symptom.toLowerCase().includes(searchUsers.toLowerCase()));
+          firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+          lastName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+          departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+          symptom.toLowerCase().includes(searchUsers.toLowerCase());
+
 
         const departmentFilter =
           !selectedDepartment || departmentName === selectedDepartment.value;
 
-        return nameFilter && departmentFilter;
+      if (filterDataBySearchAndDate) {
+        return nameFilter && departmentFilter && filterDataBySearchAndDate;
+      }
+
+            return nameFilter && departmentFilter;
       });
 
       const sortedData = dataToDisplay
@@ -131,7 +136,6 @@ function ShowData({}) {
     setSearchDate(query);
     setSearchUsers("");
     setPage(1);
-    getdataQ();
   };
 
   const handleCancel = () => {
@@ -407,7 +411,7 @@ function ShowData({}) {
     <div className="w-full">
       <div className="row justify-content-start mb-2">
         <div className="col-5 col-md-2 col-lg-3">
-          <label>ค้นหา</label>
+          <label>ค้นหาชื่อ</label>
           <input
             id="Manager_MainSearch"
             name="first_name"

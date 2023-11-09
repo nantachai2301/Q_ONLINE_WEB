@@ -19,10 +19,12 @@ function ShowData({}) {
     format(new Date(), "yyyy-MM-dd")
   );
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedSearchDate, setSelectedSearchDate] = useState(format(new Date(), "yyyy-MM-dd"));
 
   const getdataQ = async () => {
     const response = await getQueue();
-    const filteredData = response.data.filter((item) => item.queue_status_id === 4);
+    const filteredData = response.data.filter(
+      (item) => item.queue_status_id === 4);
     setDataQ(filteredData);
   };
 
@@ -40,15 +42,22 @@ function ShowData({}) {
     setPage(1);
   };
 
-  const filterDataBySearchAndDate = (dataQ, searchDate, formattedCurrentDate) => {
-    return dataQ.filter((item) => {
-      if (searchDate !== "") {
-        const formattedSearchDate = formatDateToAPI(searchDate);
-        return item.queue_date === formattedSearchDate;
-      }
-      return item.queue_date === formattedCurrentDate;
-    });
-  };
+  const filterDataBySearchAndDate = (
+    dataQ, 
+    searchDate, 
+    formattedCurrentDate
+    ) => {
+      return dataQ.filter((item) => {
+        if (searchDate !== "") {
+          const formattedSearchDate = formatDateToAPI(searchDate);
+  
+          if (formattedSearchDate >= formattedCurrentDate) {
+            return item.queue_date === formattedSearchDate;
+          }
+        }
+        return item.queue_date === formattedCurrentDate;
+      });
+    };
 
   useEffect(() => {
     const currentDate = new Date();
@@ -66,23 +75,27 @@ function ShowData({}) {
     if (page) {
       const LIMIT = pageSize;
       const skip = LIMIT * (page - 1);
-      const dataToDisplay = filteredData.filter((dataItem) => {
+  
+      const dataToDisplay = dataQ.filter((dataItem) => {
         const firstName = dataItem.first_name || "";
         const lastName = dataItem.last_name || "";
         const departmentName = dataItem.department_name || "";
         const symptom = dataItem.symptom || "";
   
         const nameFilter =
-       
-        firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-        lastName.toLowerCase().includes(searchUsers.toLowerCase())
-        departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
-        symptom.toLowerCase().includes(searchUsers.toLowerCase());
+          firstName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+          lastName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+          departmentName.toLowerCase().includes(searchUsers.toLowerCase()) ||
+          symptom.toLowerCase().includes(searchUsers.toLowerCase());
   
         const departmentFilter =
           !selectedDepartment || departmentName === selectedDepartment.value;
   
-        return nameFilter && departmentFilter && filterDataBySearchAndDate;
+        const dateFilter = searchDate
+          ? dataItem.queue_date === formatDateToAPI(searchDate)
+          : true; // Always true if no date is selected in the search
+  
+        return nameFilter && departmentFilter && dateFilter;
       });
   
       const sortedData = dataToDisplay
@@ -90,10 +103,7 @@ function ShowData({}) {
         .sort((a, b) => a.queue_id - b.queue_id);
   
       const pageStartIndex = skip >= sortedData.length ? 0 : skip;
-      const pageEndIndex = Math.min(
-        pageStartIndex + LIMIT,
-        sortedData.length
-      );
+      const pageEndIndex = Math.min(pageStartIndex + LIMIT, sortedData.length);
       const slicedData = sortedData.slice(pageStartIndex, pageEndIndex);
   
       const newData = slicedData.map((item) => ({
@@ -109,17 +119,21 @@ function ShowData({}) {
   const handleSearchChange = (event) => {
     const query = event.target.value;
     setSearchUsers(query);
-    setSearchDate("");
+    if (searchDate === "") {
+      setSearchDate(selectedSearchDate); // Keep the currently selected date if the date field is empty
+    }
+    setPage(1);
   };
-
-
+  
   const handleDateSearch = (event) => {
     const query = event.target.value;
-    setSearchDate(query);
-    setSearchUsers("");
+    if (query !== "") {
+      setSearchDate(query); // Set searchDate only if a new date is chosen
+      setSelectedSearchDate(query); // Update selectedSearchDate
+    }
     setPage(1);
-    getdataQ();
   };
+  
 
   const handleCancel = () => {
     setSearchUsers("");

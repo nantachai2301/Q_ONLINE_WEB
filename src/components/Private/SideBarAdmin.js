@@ -4,7 +4,7 @@ import { Menu } from './Menu';
 import { checkActive } from '../../helper/Check';
 
 function SideBarAdmin() {
-  const ref = useRef();
+  const ref = useRef();  
   const navigate = useNavigate();
   const location = useLocation();
   const [key, setKey] = useState('');
@@ -13,7 +13,7 @@ function SideBarAdmin() {
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (key && ref.current && !ref.current.contains(e.target)) {
-        setKey('');
+         
       }
     };
     document.addEventListener('mousedown', checkIfClickedOutside);

@@ -23,13 +23,13 @@ const Schema = Yup.object().shape({
 
 
   birthday: Yup.string().required("กรุณากรอก วันเดือนปีเกิด")
-  .test("birthdate-not-before-2566", "ไม่สามารถใส่วันเกิดก่อนปี 2566", (value) => {
+  .test("birthdate-not-before-2559", "ไม่สามารถใส่วันเกิดก่อนปี 2559", (value) => {
     if (!value) {
       return true; // ถ้าไม่ได้ใส่วันเกิด ให้ผ่านเช็คนี้
     }
     
     const selectedDate = new Date(value);
-    const limitDate = new Date("2023-01-01"); // วันเริ่มต้นของปี 2566
+    const limitDate = new Date("2016-01-01"); // วันเริ่มต้นของปี 2566
     
     return selectedDate >= limitDate;
   }),
