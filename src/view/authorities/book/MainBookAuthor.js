@@ -33,7 +33,7 @@ function FormCreateUser() {
     province: "",
     postcode: "",
     img: "",
-    role_id: 3,
+    role_id: 0,
     department_id: null,
     birthday: "",
   });
