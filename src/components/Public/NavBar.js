@@ -17,7 +17,7 @@ import { styled } from "@mui/system";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import Swal from "sweetalert2";
 import Logo from "../../image/logo.png";
 import { useMediaQuery } from "@mui/material";
@@ -186,7 +186,7 @@ const Navbar = () => {
       <List sx={{ paddingTop: "75px" ,fontSize :"10px",color:"#000"}}>
         <ListItem    id="registerNavbar"  aria-label="สมัครสมาชิก"   button  onClick={handleRegister}>
          
-          <ExitToAppIcon style={{marginRight:"2vw"}}/>
+          <AppRegistrationIcon style={{marginRight:"2vw"}}/>
           
           <ListItemText id="registerNavbar" primary="สมัครสมาชิก" />
         </ListItem>
@@ -241,7 +241,7 @@ const Navbar = () => {
                   onClick={handleRegister}
                   sx={{ marginLeft: "auto"}}
                 >
-                  <ExitToAppIcon />
+                  <AppRegistrationIcon />
                   <ListItemText className="registerNavbar" id="registerNavbar" style={{ fontSize:"0vw"}}>สมัครสมาชิก</ListItemText>
                 </IconButton>
                 <IconButton
