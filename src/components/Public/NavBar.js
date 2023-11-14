@@ -17,6 +17,7 @@ import { styled } from "@mui/system";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import Swal from "sweetalert2";
 import Logo from "../../image/logo.png";
