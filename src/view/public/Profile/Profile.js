@@ -63,7 +63,9 @@ const Profile = () => {
           }}
         >
           <div className="col-12">
+          <div className="rounded border p-4">
             <div className="row">
+            
               <h6
                 className="title-content1"
                 style={{ textAlign: "center", width: "100%" }}
@@ -237,7 +239,8 @@ const Profile = () => {
 
              
             </div>
-          </div> 
+        
+          
           <div className="d-flex justify-content-center mt-2">
                 {/* ใช้ onClick เพื่อเรียกใช้งานฟังก์ชัน handleEditProfile เมื่อกดปุ่ม */}
                 <button
@@ -252,6 +255,8 @@ const Profile = () => {
                 </button>
               </div>
         </div>
+        </div>
+        </div> 
       )}
       {!isLoggedIn && <div>Please login to view profile.</div>}
       {/* หากยังไม่ได้ล็อกอิน แสดงข้อความ "Please login to view profile." */}
