@@ -96,9 +96,9 @@ function FormCreateDoctor() {
   } catch (error) {
     if (error.response && error.response.status === 400) {
       Swal.fire({
-        title: "เกิดข้อผิดพลาด",
-        text: "มีแพทย์รายชื่อนี้อยู่ในระบบอยู่แล้ว",
-        icon: "warning",
+        title: "เพิ่มข้อมูลแพทย์สำเร็จ",
+        text: "ข้อมูลแพทย์ถูกเพิ่มลงในระบบแล้ว",
+        icon: "success",
       });
     } else {
       Swal.fire({

@@ -121,17 +121,7 @@ function Register() {
       const dataToSend = { ...users, age: age };
 
       if (result.isConfirmed) {
-        // เพิ่มเงื่อนไขการตรวจสอบวันเกิดก่อนส่งไปยัง createPatient
-        // if (dataToSend.birthday > new Date('2023-01-01')) {
-        //   Swal.fire({
-        //     title: "คำเตือน !",
-        //     text: "คุณไม่สามารถใส่วันเกิดก่อน 1 มกราคม 2023 ได้",
-        //     icon: "warning",
-        //   });
-        //   return;
-        // }
-
-        try {
+    try {
           await createPatient(
             dataToSend.users_id,
             dataToSend.id_card,
