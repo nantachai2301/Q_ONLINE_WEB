@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useMediaQuery } from "@mui/material";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { getPatient } from "../../../service/Patient.Service";
@@ -7,7 +8,8 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-
+  const isDesktop = useMediaQuery("(min-width:1024px");
+  const isMobile = useMediaQuery("(max-width:600px"); 
   useEffect(() => {
     // ตรวจสอบสถานะการล็อกอินเมื่อโหลดหน้า Profile
     const storedUserData = localStorage.getItem("userData");
@@ -49,6 +51,7 @@ const Profile = () => {
       <div className="d-flex justify-content-center">
         <h2 className="title-contentProfile">โปรไฟล์</h2>
     </div>
+    {isDesktop &&  (
     <div className="d-flex justify-content-center">
       {/* แสดงข้อมูลผู้ใช้ที่ได้รับมา */}
       {isLoggedIn && userData && (
@@ -261,6 +264,222 @@ const Profile = () => {
       {!isLoggedIn && <div>Please login to view profile.</div>}
       {/* หากยังไม่ได้ล็อกอิน แสดงข้อความ "Please login to view profile." */}
     </div>
+         )}
+         {isMobile && (
+    <div className="d-flex justify-content-center">
+      {/* แสดงข้อมูลผู้ใช้ที่ได้รับมา */}
+      {isLoggedIn && userData && (
+        <div
+          className="containerProfile"
+          style={{
+            width: "550px",
+            height: "850px",
+            background: "#f9f9f9",
+            borderRadius: "10px",
+            padding: "20px",
+          }}
+        >
+          <div className="col-12">
+          <div className="rounded border p-4">
+            <div className="row">
+            
+              <h6
+                className="title-content1"
+                style={{ textAlign: "center", width: "100%" }}
+              >
+                ข้อมูลทั่วไป
+              </h6>
+              
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>เลขบัตรประชาชน :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.id_card}
+                </label>
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>ชื่อเต็ม : </label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.prefix_name} {userData.first_name}{" "}
+                  {userData.last_name}
+                </label>
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>เพศ :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.gender}
+                </label>
+                
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>วันเดือนปีเกิด :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.birthday}
+                </label>
+                
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>ส่วนสูง :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.height}
+                </label>
+                
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>น้ำหนัก :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.weight}
+                </label>
+                
+              </div>
+              <div className="col-12 ">
+                <label className="label-content"style={{ fontSize: "13px" }}>เบอร์โทร :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.phoneNumber}
+                </label>
+               
+              </div>
+
+              <div className="col-12 px-1 mb-1 mt-3">
+                <h6
+                  className="title-content1"
+                  style={{ textAlign: "center", width: "100%" }}
+                >
+                  ข้อมูลสุขภาพ
+                </h6>
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>โรคประจำตัว :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.congenital_disease}
+                </label>
+                
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>ประวัติการแพ้ยา :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.drugallergy}
+                </label>
+                
+                
+              </div>
+              <div className="col-12 px-1 mb-1 mt-3">
+                <h6
+                  className="title-content1"
+                  style={{ textAlign: "center", width: "100%" }}
+                >
+                  บุคคลที่ติดต่อได้
+                </h6>
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>ชื่อเต็ม :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                  {" "}
+                  {userData.contact_first_name} {userData.contact_last_name}
+                </label>
+               
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>เบอร์โทรผู้ติดต่อ :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                 
+                  {userData.contact_phoneNumber}
+                </label>
+             
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>ความสัมพันธ์ :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                 
+                {userData.contact_relation_id}
+               </label>
+               
+              </div>
+              <div className="col-12 px-1 mb-1 mt-3">
+                <h6
+                  className="title-content1"
+                  style={{ textAlign: "center", width: "100%" }}
+                >
+                  ข้อมูลที่อยู่
+                </h6>
+              </div>
+              <div className="col-12 ">
+                <label className="label-content"style={{ fontSize: "13px" }}>ที่อยู่ :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                 
+                {userData.address}
+               </label>
+                
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>ตำบล :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                 
+                {userData.subdistrict}
+               </label>
+                
+                
+                
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>อำเภอ :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                 
+                {userData.district}
+               </label>
+                
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>จังหวัด :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                 
+                {userData.province}
+                </label>
+                 
+                
+              </div>
+              <div className="col-12">
+                <label className="label-content"style={{ fontSize: "13px" }}>รหัสไปรษณีย์ :</label>
+                <label style={{ textTransform: "uppercase", fontSize: "13px" }}>
+                 
+                {userData.postcode}
+                 </label>
+              
+              </div>
+
+             
+            </div>
+        
+          
+          <div className="d-flex justify-content-center mt-2">
+                {/* ใช้ onClick เพื่อเรียกใช้งานฟังก์ชัน handleEditProfile เมื่อกดปุ่ม */}
+                <button
+                id="ProfileloadEdit"
+                  type="button"
+                  className="btn btn-warning mx-1"
+                  onClick={() => {
+                    loadEdit(userData.users_id);
+                  }}
+                >
+                  แก้ไขโปรไฟล์
+                </button>
+              </div>
+        </div>
+        </div>
+        </div> 
+      )}
+      {!isLoggedIn && <div>Please login to view profile.</div>}
+      {/* หากยังไม่ได้ล็อกอิน แสดงข้อความ "Please login to view profile." */}
+    </div>
+         )}
     </div>
   );
 };
